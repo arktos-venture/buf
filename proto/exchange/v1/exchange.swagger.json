@@ -1,0 +1,343 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/exchange/v1/exchange.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Exchange"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Exchange_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Exchange"
+        ]
+      }
+    },
+    "/v1/exchange/{exchange}": {
+      "get": {
+        "operationId": "Exchange_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Exchange"
+        ]
+      }
+    },
+    "/v1/exchange/{exchange}/companies": {
+      "get": {
+        "operationId": "Exchange_Companies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Exchange"
+        ]
+      }
+    },
+    "/v1/exchange/{exchange}/isopen": {
+      "get": {
+        "operationId": "Exchange_IsOpen",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeIsOpenReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Exchange"
+        ]
+      }
+    },
+    "/v1/exchanges": {
+      "get": {
+        "operationId": "Exchange_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Exchange"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ExchangeReplyHoliday": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "dates": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "official": {
+          "type": "boolean"
+        }
+      }
+    },
+    "exchangev1Code": {
+      "type": "object",
+      "properties": {
+        "eod": {
+          "type": "string"
+        },
+        "ibkr": {
+          "type": "string"
+        },
+        "tradingview": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1ExchangeIsOpenReply": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "tradingHours": {
+          "$ref": "#/definitions/v1TradingHours"
+        },
+        "open": {
+          "type": "boolean"
+        },
+        "timeBeforeClosing": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ExchangeReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ExchangeRepliesCompany"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ExchangeRepliesCompany": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ExchangeReply": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "$ref": "#/definitions/exchangev1Code"
+        },
+        "country": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "holidays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExchangeReplyHoliday"
+          }
+        },
+        "tradingHours": {
+          "$ref": "#/definitions/v1TradingHours"
+        },
+        "companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ExchangeReplyCompany"
+          }
+        }
+      }
+    },
+    "v1ExchangeReplyCompany": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        }
+      }
+    },
+    "v1TradingHours": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "close": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "workingDays": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  }
+}

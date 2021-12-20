@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package eodata.company.v1.get;
+import "errors/errors.proto";
+
+option go_package = "grpc-api/api/eodata/company/v1/get;v1";
+option java_multiple_files = true;
+option java_package = "eodata.company.v1.errors";
+option objc_class_prefix = "APIEodataCompanyErrors";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  REQUEST_FORBIDDEN = 0 [(errors.code) = 403];
+  CONTENT_MISSING = 1 [(errors.code) = 400];
+  UNAVAILABLE = 2 [(errors.code) = 503];
+}

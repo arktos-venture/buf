@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package index.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/index/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.index.v1";
+option java_outer_classname = "IndexProtoV1";
+
+service Index {
+  rpc Get (IndexRequest) returns (IndexReply)  {
+    option (google.api.http) = {
+      get: "/v1/index/{name}"
+    };
+  }
+
+  rpc Search (IndexRequest) returns (IndexReplies)  {
+    option (google.api.http) = {
+      get: "/v1/index"
+    };
+  }
+
+  rpc Create (IndexRequest) returns (IndexReply)  {
+    option (google.api.http) = {
+      post: "/v1/index"
+      body: "*"
+    };
+  }
+
+  rpc Update (IndexRequest) returns (IndexReply)  {
+    option (google.api.http) = {
+      put: "/v1/index/{name}"
+      body: "*"
+    };
+  }
+
+  rpc Delete (IndexRequest) returns (IndexReply)  {
+    option (google.api.http) = {
+      delete: "/v1/index/{name}"
+    };
+  }
+
+  rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+// 
+// Request
+// 
+
+message IndexRequest {
+  string name = 1 [(validate.rules).string = {min_len: 3, max_len: 24}];
+}
+
+message IndexCreateRequest {
+  message Company {
+    string currency = 1;
+    string exchange = 2;
+    string ticker = 3;
+    float size = 4;
+  }
+
+  string name = 1 [(validate.rules).string = {min_len: 3, max_len: 24}];
+  string description = 2 [(validate.rules).string = {min_len: 16, max_len: 256}];
+  repeated Company companies = 3;
+}
+
+// 
+// Reply
+// 
+
+message IndexReply {
+  string name = 1;
+  string description = 2;
+}
+
+message IndexReplies {
+  repeated IndexReply results = 1;
+  int32 total = 2;
+}

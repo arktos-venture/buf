@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package quotes.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/quotes/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.quotes.v1";
+option java_outer_classname = "QuotesProtoV1";
+
+service Quotes {
+  rpc Company (QuotesCompanyRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/company"
+      body: "*"
+    };
+  }
+
+  rpc Currency (QuotesCurrencyRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/currency"
+      body: "*"
+    };
+  }
+
+  rpc Industry (QuotesIndustryRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/{country}/industry"
+      body: "*"
+    };
+  }
+
+  rpc Exchange (QuotesExchangeRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/exchange"
+      body: "*"
+    };
+  }
+
+  rpc Country (QuotesCountryRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/country"
+      body: "*"
+    };
+  }
+
+  rpc Index (QuotesIndexRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/index"
+      body: "*"
+    };
+  }
+
+  rpc Account (QuotesAccountRequest) returns (QuotesReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/account"
+      body: "*"
+    };
+  }
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    option (google.api.http) = {
+      get: "/healthz"
+    };
+  }
+}
+
+// 
+// Request
+// 
+
+message Date {
+  enum Interval {
+	  d = 0;
+	  w = 1;
+	  m = 2;
+  }
+
+  Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
+  string period = 5 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
+}
+
+message QuotesCompanyRequest {
+  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 2 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+  string currency = 3 [(validate.rules).string.len = 3];
+  Date date = 4;
+}
+
+message QuotesCurrencyRequest {
+  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  Date date = 2;
+}
+
+message QuotesIndustryRequest {
+  string country = 1 [(validate.rules).string.len = 2];; 
+  int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
+  Date date = 3;
+}
+
+message QuotesExchangeRequest {
+  string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+  Date date = 2;
+}
+
+message QuotesCountryRequest {
+  string country = 1 [(validate.rules).string.len = 2];
+  Date date = 2;
+}
+
+message QuotesIndexRequest {
+  string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  Date date = 2;
+}
+
+message QuotesAccountRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 16}];
+  Date date = 2;
+}
+
+// 
+// Reply
+// 
+
+message QuotesReply {
+	repeated float open = 1;
+	repeated float close = 2;
+	repeated float low = 3;
+	repeated float high = 4;
+	repeated float volume = 5;
+	repeated int64 date = 6;
+}

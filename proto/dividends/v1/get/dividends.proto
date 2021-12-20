@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package dividends.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/dividend/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.dividend.v1";
+option java_outer_classname = "DividendProtoV1";
+
+service Dividends {
+  	rpc Search (DividendsRequest) returns (DividendsReply)  {
+        option (google.api.http) = {
+            post: "/v1/dividends"
+			body: "*"
+        };
+    }
+
+	rpc Analytics (DividendsRequest) returns (DividendsReply)  {
+        option (google.api.http) = {
+            post: "/v1/dividends/analytics"
+			body: "*"
+        };
+    }
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+message DividendsRequest {
+	enum Interval {
+		none = 0;
+		q = 1;
+		y = 2;
+	}
+
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string exchange = 2 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+	string currency = 3 [(validate.rules).string.len = 3];
+	Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
+	string period = 5 [(validate.rules).string = {in: ["last", "1m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
+}
+
+message DividendsReply {
+	string ticker = 1;
+	string exchange = 2;
+	string currency = 3;
+	repeated float values = 4;
+	repeated int64 declarationDate = 5;
+	repeated int64 recordDate = 6;
+	repeated int64 paymentDate = 7;
+	repeated int64 date = 8;
+}

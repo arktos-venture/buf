@@ -1,0 +1,452 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/quotes/v1/quotes.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Quotes"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Quotes_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/account": {
+      "post": {
+        "operationId": "Quotes_Account",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/company": {
+      "post": {
+        "operationId": "Quotes_Company",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCompanyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/country": {
+      "post": {
+        "operationId": "Quotes_Country",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCountryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/currency": {
+      "post": {
+        "operationId": "Quotes_Currency",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCurrencyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/exchange": {
+      "post": {
+        "operationId": "Quotes_Exchange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesExchangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/index": {
+      "post": {
+        "operationId": "Quotes_Index",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesIndexRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/{country}/industry": {
+      "post": {
+        "operationId": "Quotes_Industry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "country",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "industry": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "date": {
+                  "$ref": "#/definitions/v1Date"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Date": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/v1DateInterval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DateInterval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "d"
+    },
+    "v1QuotesAccountRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesCompanyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesCountryRequest": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesCurrencyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesExchangeRequest": {
+      "type": "object",
+      "properties": {
+        "exchange": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesIndexRequest": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
+        }
+      }
+    },
+    "v1QuotesReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "low": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "high": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "volume": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "date": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    }
+  }
+}

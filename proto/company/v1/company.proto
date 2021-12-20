@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package company.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/company/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.company.v1";
+option java_outer_classname = "CompanyProtoV1";
+
+service Company {
+	rpc Get (CompanyRequest) returns (CompanyReply)  {
+		option (google.api.http) = {
+		  	get: "/v1/company/{currency}/{exchange}/{ticker}"
+		};
+	}
+
+  	rpc Search (CompanySearchRequest) returns (CompanyReplies)  {
+        option (google.api.http) = {
+            post: "/v1/company"
+            body: "*"
+        };
+   	}
+
+	rpc SearchTrendId (CompanyRequest) returns (CompanyTrendIdReply)  {
+		option (google.api.http) = {
+			post: "/v1/company/trendId"
+			body: "*"
+		};
+	}
+
+	rpc SearchTrends (CompanyRequest) returns (CompanyTrendReply)  {
+		option (google.api.http) = {
+		  	post: "/v1/company/trends"
+			body: "*"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+// 
+// Request
+// 
+
+message CompanyRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string currency = 2 [(validate.rules).string.len = 3];
+	string exchange = 3 [(validate.rules).string = {min_len: 2, max_len: 8}];
+}
+
+message CompanySearchByIDsRequest {
+	enum Broker {
+		IBKR = 0;
+	}
+
+	Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
+	string currency = 2 [(validate.rules).string.len = 3];
+	repeated int64 ids = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+}
+
+message CompanySearchRequest {
+	string currency = 1 [(validate.rules).string.len = 3];
+  	map<string, string> filterString = 2;
+  	map<string, int64> filterInt = 3;
+  	int32 limit = 4 [(validate.rules).int32 = {gte: 5, lte: 150}];
+}
+
+message CompanyAddress {
+	string street = 1;
+	string city = 2;
+	string state = 3;
+	string country = 4;
+}
+
+message CompanyContact {
+	string phone = 1;
+	string website = 2;
+	string email = 3;
+}
+
+// 
+// Reply
+// 
+
+message CompanyReply {
+	message Broker {
+		int64 id = 1;
+		string ticker = 2;
+		string routing = 3;
+	}
+
+	string ticker = 1; 
+	string name = 2; 
+	string description = 3;
+	string exchange = 4;
+	string isin = 5;
+	int64 activity = 6;   
+	string currencyReport = 7;
+	int64 fiscalYearEnd = 8;
+	CompanyContact contact = 9;
+	CompanyAddress address = 10;
+	map<string, Broker> brokers = 11;
+	bool active = 12;
+}
+
+message CompanyReplies {
+  	repeated CompanyReply results = 1;
+  	int32 total = 2;
+}
+
+message CompanyTrendIdReply {
+	message Trend {
+		string name = 1;
+		string ref = 2;
+	}
+
+	string ticker = 1;
+	string currency = 2;
+	string exchange = 3;
+	Trend result = 4;
+	repeated Trend related = 5;
+}
+
+message CompanyTrendReply {
+	message Related {
+		string title = 1;
+		string mid = 2;
+		string link = 3;
+		int32 value = 4;
+	}
+
+	message GeoMap {
+		string code = 1;
+		int32 value = 2;
+	}
+
+	string ref = 1;
+	repeated Related related = 2;
+	repeated GeoMap geomap = 3;
+}

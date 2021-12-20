@@ -1,0 +1,193 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/strategy/v1/strategy.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Strategy"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Strategy_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Strategy"
+        ]
+      }
+    },
+    "/v1/strategy": {
+      "post": {
+        "operationId": "Strategy_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategyReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StrategyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Strategy"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "StrategyRequestStrategyType": {
+      "type": "string",
+      "enum": [
+        "AKTrend",
+        "MACD"
+      ],
+      "default": "AKTrend"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1StrategyReply": {
+      "type": "object",
+      "properties": {
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1StrategyReplyAction"
+          }
+        },
+        "delta": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "date": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1StrategyReplyAction": {
+      "type": "string",
+      "enum": [
+        "HOLD",
+        "BUY",
+        "SELL"
+      ],
+      "default": "HOLD"
+    },
+    "v1StrategyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "interval": {
+          "$ref": "#/definitions/v1StrategyRequestInterval"
+        },
+        "period": {
+          "type": "string"
+        },
+        "strategy": {
+          "$ref": "#/definitions/StrategyRequestStrategyType"
+        }
+      }
+    },
+    "v1StrategyRequestInterval": {
+      "type": "string",
+      "enum": [
+        "mm",
+        "h",
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "mm"
+    }
+  }
+}

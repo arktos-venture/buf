@@ -1,0 +1,257 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/positions/v1/position.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Position"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Position_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Position"
+        ]
+      }
+    },
+    "/v1/{broker}/positions/{account}/companies": {
+      "get": {
+        "operationId": "Position_SearchCompanies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PositionCompanyReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "IBKR"
+            ]
+          },
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Position"
+        ]
+      }
+    },
+    "/v1/{broker}/positions/{account}/currencies": {
+      "get": {
+        "operationId": "Position_SearchCurrencies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PositionCurrencyReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "IBKR"
+            ]
+          },
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Position"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "positionsv1Broker": {
+      "type": "string",
+      "enum": [
+        "IBKR"
+      ],
+      "default": "IBKR"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1PositionCompanyReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1PositionCompanyReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PositionCompanyReply": {
+      "type": "object",
+      "properties": {
+        "conid": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "average_cost": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_price": {
+          "type": "number",
+          "format": "float"
+        },
+        "performance": {
+          "type": "number",
+          "format": "float"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PositionCurrencyReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1PositionCurrencyReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PositionCurrencyReply": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

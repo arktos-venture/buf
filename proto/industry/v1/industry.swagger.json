@@ -1,0 +1,166 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/industry/v1/industry.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Industry"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Industry_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Industry"
+        ]
+      }
+    },
+    "/v1/industries": {
+      "get": {
+        "operationId": "Industry_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndustryReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Industry"
+        ]
+      }
+    },
+    "/v1/industry/{ref}": {
+      "get": {
+        "operationId": "Industry_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndustryReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Industry"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "IndustryReplyRef": {
+      "type": "object",
+      "properties": {
+        "classication": {
+          "$ref": "#/definitions/RefClassication"
+        },
+        "name": {
+          "type": "string"
+        },
+        "next": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/IndustryReplyRef"
+          }
+        }
+      }
+    },
+    "RefClassication": {
+      "type": "string",
+      "enum": [
+        "EconomicSector",
+        "BusinessSector",
+        "IndustryGroup",
+        "Industry",
+        "Activity"
+      ],
+      "default": "EconomicSector"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1IndustryReply": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/IndustryReplyRef"
+          }
+        }
+      }
+    }
+  }
+}

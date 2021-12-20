@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package exchange.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/exchange/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.exchange.v1";
+option java_outer_classname = "ExchangeProtoV1";
+
+service Exchange {
+	rpc IsOpen (ExchangeRequest) returns (ExchangeIsOpenReply) {
+		option (google.api.http) = {
+            get: "/v1/exchange/{exchange}/isopen"
+        };
+	}
+
+  	rpc Get (ExchangeRequest) returns (ExchangeReply)  {
+        option (google.api.http) = {
+            get: "/v1/exchange/{exchange}"
+        };
+    }
+
+	rpc List (google.protobuf.Empty) returns (ExchangeReplies)  {
+        option (google.api.http) = {
+            get: "/v1/exchanges"
+        };
+    }
+
+  	rpc Companies (ExchangeRequest) returns (ExchangeReply)  {
+        option (google.api.http) = {
+            get: "/v1/exchange/{exchange}/companies"
+        };
+    }
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+// 
+// Request
+// 
+
+message ExchangeRequest {
+	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK", "COMM", "FOREX", "INDX", "CC"]}];
+}
+  
+message Code {
+	string eod = 1;
+	string ibkr = 2;
+	string tradingview = 3;
+}
+  
+message TradingHours {
+	map<string, int32> open = 1;
+	map<string, int32> close = 2;
+	repeated int32 workingDays = 3;
+}
+
+// 
+// Reply
+// 
+  
+message ExchangeReply {
+	message Holiday {
+		string name = 1;
+		repeated float dates = 2;
+		bool official = 3;
+	}
+  
+	message Company {
+		string ticker = 1;
+		string name = 2;
+		string isin = 3;
+	}
+  
+	string name = 1;
+	Code code = 2;
+	string country = 3;
+	string currency = 4;
+	string timezone = 5;
+	repeated Holiday holidays = 6;
+	TradingHours tradingHours = 7;
+	repeated Company companies = 8;
+}
+  
+message ExchangeIsOpenReply {
+	string name = 1;
+	string timezone = 3;
+	TradingHours tradingHours = 4;
+	bool open = 5;
+	int32 timeBeforeClosing = 6;
+}
+  
+message ExchangeShortReply {
+	string name = 1;
+	string country = 2;
+	string currency = 3;
+	Code code = 4;
+}
+  
+message ExchangeShortReplies {
+	repeated ExchangeShortReply results = 1;
+	int32 total = 2;
+}
+
+message ExchangeReplies {
+	message Company {
+		string ticker = 1;
+		string name = 2;
+		string isin = 3;
+	}
+
+	repeated Company results = 1;
+	int32 total = 2;
+}

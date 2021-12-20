@@ -1,0 +1,311 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/order/v1/order.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Order"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Order_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/v1/order/{broker}": {
+      "post": {
+        "operationId": "Order_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/orderv1AccountReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "IBKR"
+            ]
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "account": {
+                  "type": "string"
+                },
+                "action": {
+                  "$ref": "#/definitions/orderv1Action"
+                },
+                "ticker": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "routing": {
+                  "$ref": "#/definitions/v1Routing"
+                },
+                "orderType": {
+                  "$ref": "#/definitions/v1OrderType"
+                },
+                "size": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "duration": {
+                  "$ref": "#/definitions/orderv1Duration"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/v1/orders/{broker}/{account}": {
+      "post": {
+        "operationId": "Order_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AccountReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "IBKR"
+            ]
+          },
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "interval": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Order"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "orderv1AccountReply": {
+      "type": "object",
+      "properties": {
+        "conid": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/definitions/orderv1Action"
+        },
+        "orderType": {
+          "$ref": "#/definitions/v1OrderType"
+        },
+        "routing": {
+          "$ref": "#/definitions/v1Routing"
+        },
+        "duration": {
+          "$ref": "#/definitions/orderv1Duration"
+        },
+        "askSize": {
+          "type": "number",
+          "format": "float"
+        },
+        "buySize": {
+          "type": "number",
+          "format": "float"
+        },
+        "askPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "buyPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "commission": {
+          "type": "number",
+          "format": "float"
+        },
+        "status": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "orderv1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "ALL"
+      ],
+      "default": "BUY"
+    },
+    "orderv1Broker": {
+      "type": "string",
+      "enum": [
+        "IBKR"
+      ],
+      "default": "IBKR"
+    },
+    "orderv1Duration": {
+      "type": "string",
+      "enum": [
+        "DAY",
+        "GTC"
+      ],
+      "default": "DAY"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AccountReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orderv1AccountReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1OrderType": {
+      "type": "string",
+      "enum": [
+        "LMT",
+        "MKT",
+        "STP",
+        "IBALGO",
+        "MIDPRICE"
+      ],
+      "default": "LMT"
+    },
+    "v1Routing": {
+      "type": "string",
+      "enum": [
+        "SMART",
+        "SBF"
+      ],
+      "default": "SMART"
+    }
+  }
+}

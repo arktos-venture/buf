@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package index.info.v1.search;
+import "errors/errors.proto";
+
+option go_package = "grpc-api/api/index/info/v1/search;v1";
+option java_multiple_files = true;
+option java_package = "country.info.v1.errors";
+option objc_class_prefix = "APIIndexInfoSearchErrors";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  NOT_FOUND = 0 [(errors.code) = 404];
+  FORBIDDEN = 1 [(errors.code) = 403];
+  CONTENT_MISSING = 2 [(errors.code) = 400];
+  UNAVAILABLE = 3 [(errors.code) = 503];
+}

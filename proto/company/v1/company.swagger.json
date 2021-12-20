@@ -1,0 +1,442 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/company/v1/company.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Company"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Company_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Company"
+        ]
+      }
+    },
+    "/v1/company": {
+      "post": {
+        "operationId": "Company_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompanySearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Company"
+        ]
+      }
+    },
+    "/v1/company/trendId": {
+      "post": {
+        "operationId": "Company_SearchTrendId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyTrendIdReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompanyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Company"
+        ]
+      }
+    },
+    "/v1/company/trends": {
+      "post": {
+        "operationId": "Company_SearchTrends",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyTrendReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompanyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Company"
+        ]
+      }
+    },
+    "/v1/company/{currency}/{exchange}/{ticker}": {
+      "get": {
+        "operationId": "Company_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Company"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CompanyTrendIdReplyTrend": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        }
+      }
+    },
+    "CompanyTrendReplyGeoMap": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CompanyTrendReplyRelated": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "mid": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CompanyAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyContact": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CompanyReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CompanyReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currencyReport": {
+          "type": "string"
+        },
+        "fiscalYearEnd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "contact": {
+          "$ref": "#/definitions/v1CompanyContact"
+        },
+        "address": {
+          "$ref": "#/definitions/v1CompanyAddress"
+        },
+        "brokers": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1CompanyReplyBroker"
+          }
+        },
+        "active": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1CompanyReplyBroker": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanySearchRequest": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "filterString": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "filterInt": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CompanyTrendIdReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/definitions/CompanyTrendIdReplyTrend"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CompanyTrendIdReplyTrend"
+          }
+        }
+      }
+    },
+    "v1CompanyTrendReply": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CompanyTrendReplyRelated"
+          }
+        },
+        "geomap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CompanyTrendReplyGeoMap"
+          }
+        }
+      }
+    }
+  }
+}

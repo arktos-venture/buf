@@ -1,0 +1,241 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/notification/v1/notification.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Notification"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Notification_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Notification"
+        ]
+      }
+    },
+    "/v1/{account}/notification": {
+      "post": {
+        "operationId": "Notification_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1NotificationReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "level": {
+                  "$ref": "#/definitions/v1Level"
+                },
+                "subject": {
+                  "$ref": "#/definitions/v1Subject"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Notification"
+        ]
+      }
+    },
+    "/v1/{account}/notifications": {
+      "get": {
+        "operationId": "Notification_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1NotificationReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CRITICAL",
+              "URGENT",
+              "NORMAL",
+              "LOW",
+              "NONE"
+            ],
+            "default": "CRITICAL"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Notification"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Level": {
+      "type": "string",
+      "enum": [
+        "CRITICAL",
+        "URGENT",
+        "NORMAL",
+        "LOW",
+        "NONE"
+      ],
+      "default": "CRITICAL"
+    },
+    "v1NotificationReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1NotificationReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1NotificationReply": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "$ref": "#/definitions/v1Subject"
+        },
+        "level": {
+          "$ref": "#/definitions/v1Level"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1Subject": {
+      "type": "string",
+      "enum": [
+        "LOW_CASH",
+        "HIGH_CASH",
+        "UPTO_2P_VARIATION",
+        "UPTO_5P_VARIATION",
+        "UPTO_10P_VARIATION",
+        "DOWNTO_2P_VARIATION",
+        "DOWNTO_5P_VARIATION",
+        "DOWNTO_10P_VARIATION"
+      ],
+      "default": "LOW_CASH"
+    }
+  }
+}

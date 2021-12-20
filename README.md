@@ -1,1 +1,1 @@
-# buf
+# gRPC Protobuf definitions

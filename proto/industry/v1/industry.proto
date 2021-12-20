@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package industry.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/industry/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.industry.v1";
+option java_outer_classname = "IndustryProtoV1";
+
+service Industry {
+  rpc Get (IndustryRequest) returns (IndustryReply)  {
+    option (google.api.http) = {
+      get: "/v1/industry/{ref}"
+    };
+  }
+
+  rpc List (google.protobuf.Empty) returns (IndustryReply)  {
+    option (google.api.http) = {
+      get: "/v1/industries"
+    };
+  }
+
+  rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    option (google.api.http) = {
+        get: "/healthz"
+    };
+  }
+}
+
+message IndustryRequest {
+  int64 ref = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
+}
+
+message IndustryReply {
+  message Ref {
+    enum Classication {
+      EconomicSector = 0;
+      BusinessSector = 1;
+      IndustryGroup = 2;
+      Industry = 3;
+      Activity = 4;
+    }
+
+    Classication classication = 1;
+    string name = 2;
+    map<int64, Ref> next = 3;
+  }
+
+  map<int64, Ref> results = 1;
+}
