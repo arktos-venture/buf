@@ -68,36 +68,6 @@
         ]
       }
     },
-    "/v1/exchange/{exchange}/companies": {
-      "get": {
-        "operationId": "Exchange_Companies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ExchangeReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Exchange"
-        ]
-      }
-    },
     "/v1/exchange/{exchange}/isopen": {
       "get": {
         "operationId": "Exchange_IsOpen",
@@ -241,26 +211,12 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1ExchangeRepliesCompany"
+            "$ref": "#/definitions/v1ExchangeShortReply"
           }
         },
         "total": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "v1ExchangeRepliesCompany": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
         }
       }
     },
@@ -310,6 +266,23 @@
         },
         "isin": {
           "type": "string"
+        }
+      }
+    },
+    "v1ExchangeShortReply": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "code": {
+          "$ref": "#/definitions/exchangev1Code"
         }
       }
     },

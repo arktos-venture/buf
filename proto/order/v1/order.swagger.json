@@ -45,7 +45,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/orderv1AccountReply"
+              "$ref": "#/definitions/v1OrderReply"
             }
           },
           "default": {
@@ -117,7 +117,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AccountReplies"
+              "$ref": "#/definitions/v1OrderReplies"
             }
           },
           "default": {
@@ -164,57 +164,6 @@
     }
   },
   "definitions": {
-    "orderv1AccountReply": {
-      "type": "object",
-      "properties": {
-        "conid": {
-          "type": "string",
-          "format": "int64"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "action": {
-          "$ref": "#/definitions/orderv1Action"
-        },
-        "orderType": {
-          "$ref": "#/definitions/v1OrderType"
-        },
-        "routing": {
-          "$ref": "#/definitions/v1Routing"
-        },
-        "duration": {
-          "$ref": "#/definitions/orderv1Duration"
-        },
-        "askSize": {
-          "type": "number",
-          "format": "float"
-        },
-        "buySize": {
-          "type": "number",
-          "format": "float"
-        },
-        "askPrice": {
-          "type": "number",
-          "format": "float"
-        },
-        "buyPrice": {
-          "type": "number",
-          "format": "float"
-        },
-        "commission": {
-          "type": "number",
-          "format": "float"
-        },
-        "status": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "orderv1Action": {
       "type": "string",
       "enum": [
@@ -269,18 +218,76 @@
         }
       }
     },
-    "v1AccountReplies": {
+    "v1OrderReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/orderv1AccountReply"
+            "$ref": "#/definitions/v1OrderReply"
           }
         },
         "total": {
           "type": "integer",
           "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1OrderReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "conid": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/definitions/orderv1Action"
+        },
+        "orderType": {
+          "$ref": "#/definitions/v1OrderType"
+        },
+        "routing": {
+          "$ref": "#/definitions/v1Routing"
+        },
+        "duration": {
+          "$ref": "#/definitions/orderv1Duration"
+        },
+        "askSize": {
+          "type": "number",
+          "format": "float"
+        },
+        "buySize": {
+          "type": "number",
+          "format": "float"
+        },
+        "askPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "buyPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "commission": {
+          "type": "number",
+          "format": "float"
+        },
+        "status": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
         },
         "date": {
           "type": "string",

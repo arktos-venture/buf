@@ -677,6 +677,18 @@ func (m *QuotesExchangeRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if utf8.RuneCountInString(m.GetCountry()) != 2 {
+		err := QuotesExchangeRequestValidationError{
+			field:  "Country",
+			reason: "value length must be 2 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:

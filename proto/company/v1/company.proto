@@ -25,20 +25,6 @@ service Company {
         };
    	}
 
-	rpc SearchTrendId (CompanyRequest) returns (CompanyTrendIdReply)  {
-		option (google.api.http) = {
-			post: "/v1/company/trendId"
-			body: "*"
-		};
-	}
-
-	rpc SearchTrends (CompanyRequest) returns (CompanyTrendReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/company/trends"
-			body: "*"
-		};
-	}
-
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
@@ -114,35 +100,4 @@ message CompanyReply {
 message CompanyReplies {
   	repeated CompanyReply results = 1;
   	int32 total = 2;
-}
-
-message CompanyTrendIdReply {
-	message Trend {
-		string name = 1;
-		string ref = 2;
-	}
-
-	string ticker = 1;
-	string currency = 2;
-	string exchange = 3;
-	Trend result = 4;
-	repeated Trend related = 5;
-}
-
-message CompanyTrendReply {
-	message Related {
-		string title = 1;
-		string mid = 2;
-		string link = 3;
-		int32 value = 4;
-	}
-
-	message GeoMap {
-		string code = 1;
-		int32 value = 2;
-	}
-
-	string ref = 1;
-	repeated Related related = 2;
-	repeated GeoMap geomap = 3;
 }

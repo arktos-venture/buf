@@ -103,7 +103,8 @@ message QuotesIndustryRequest {
 
 message QuotesExchangeRequest {
   string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
-  Date date = 2;
+  string country = 2 [(validate.rules).string.len = 2];
+  Date date = 3;
 }
 
 message QuotesCountryRequest {

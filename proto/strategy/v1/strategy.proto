@@ -12,12 +12,54 @@ option java_package = "dev.kratos.api.strategy.v1";
 option java_outer_classname = "StrategyProtoV1";
 
 service Strategy {
-	rpc Search (StrategyRequest) returns (StrategyReply)  {
+	rpc Company (StrategyCompanyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-			post: "/v1/strategy"
-			body: "*"
+		  post: "/v1/strategy/company"
+		  body: "*"
 		};
-	}
+	  }
+	
+	  rpc Currency (StrategyCurrencyRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/currency"
+		  body: "*"
+		};
+	  }
+	
+	  rpc Industry (StrategyIndustryRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/{country}/industry"
+		  body: "*"
+		};
+	  }
+	
+	  rpc Exchange (StrategyExchangeRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/exchange"
+		  body: "*"
+		};
+	  }
+	
+	  rpc Country (StrategyCountryRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/country"
+		  body: "*"
+		};
+	  }
+	
+	  rpc Index (StrategyIndexRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/index"
+		  body: "*"
+		};
+	  }
+	
+	  rpc Account (StrategyAccountRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  post: "/v1/strategy/account"
+		  body: "*"
+		};
+	  }
 
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
@@ -26,30 +68,64 @@ service Strategy {
 	}
 }
 
+enum StrategyType {
+	AKTrend = 0;
+	MACD = 1;
+}
+
+enum Interval {
+	d = 0;
+	w = 1;
+	m = 2;
+}
+
 // 
 // Request
 // 
 
-message StrategyRequest {
-	enum StrategyType {
-		AKTrend = 0;
-		MACD = 1;
-	}
+message Parameters {
+	Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
+	string period = 5 [(validate.rules).string = {in: ["1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
+	StrategyType strategy = 6 [(validate.rules).enum = {defined_only: true}]; 
+}
 
-	enum Interval {
-		mm = 0;
-		h = 1;
-		d = 2;
-		w = 3;
-		m = 4;
-	}
-
+message StrategyCompanyRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string exchange = 2 [(validate.rules).string = {min_len: 2, max_len: 8}];
 	string currency = 3 [(validate.rules).string.len = 3];
-	Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
-	string period = 5 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
-	StrategyType strategy = 6 [(validate.rules).enum = {defined_only: true}]; 
+	Parameters parameters = 4;
+}
+
+message StrategyCurrencyRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	Parameters parameters = 2;
+}
+
+message StrategyIndustryRequest {
+	int64 industry = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
+	string country = 2 [(validate.rules).string.len = 2];
+	Parameters parameters = 3;
+}
+
+message StrategyExchangeRequest {
+	string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 8}];
+	string country = 2 [(validate.rules).string.len = 2];
+	Parameters parameters = 3;
+}
+
+message StrategyCountryRequest {
+	string country = 1 [(validate.rules).string.len = 2];
+	Parameters parameters = 2;
+}
+
+message StrategyIndexRequest {
+	string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+	Parameters parameters = 2;
+}
+
+message StrategyAccountRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+	Parameters parameters = 2;
 }
 
 // 

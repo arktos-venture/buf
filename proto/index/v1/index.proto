@@ -24,16 +24,16 @@ service Index {
     };
   }
 
-  rpc Create (IndexRequest) returns (IndexReply)  {
+  rpc Create (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       post: "/v1/index"
       body: "*"
     };
   }
 
-  rpc Update (IndexRequest) returns (IndexReply)  {
+  rpc Update (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
-      put: "/v1/index/{name}"
+      put: "/v1/index"
       body: "*"
     };
   }

@@ -18,64 +18,64 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-type DividendsHTTPServer interface {
-	Analytics(context.Context, *DividendsRequest) (*DividendsReply, error)
+type TrendHTTPServer interface {
+	GetTrendId(context.Context, *TrendRequest) (*TrendIdReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Search(context.Context, *DividendsRequest) (*DividendsReply, error)
+	SearchTrends(context.Context, *TrendRequest) (*TrendReply, error)
 }
 
-func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
+func RegisterTrendHTTPServer(s *http.Server, srv TrendHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/dividends", _Dividends_Search4_HTTP_Handler(srv))
-	r.POST("/v1/dividends/analytics", _Dividends_Analytics0_HTTP_Handler(srv))
-	r.GET("/healthz", _Dividends_Health11_HTTP_Handler(srv))
+	r.POST("/v1/trend/trendId", _Trend_GetTrendId0_HTTP_Handler(srv))
+	r.POST("/v1/trend/trends", _Trend_SearchTrends0_HTTP_Handler(srv))
+	r.GET("/healthz", _Trend_Health6_HTTP_Handler(srv))
 }
 
-func _Dividends_Search4_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Trend_GetTrendId0_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in DividendsRequest
+		var in TrendRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/dividends.v1.Dividends/Search")
+		http.SetOperation(ctx, "/trend.v1.Trend/GetTrendId")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Search(ctx, req.(*DividendsRequest))
+			return srv.GetTrendId(ctx, req.(*TrendRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*DividendsReply)
+		reply := out.(*TrendIdReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Dividends_Analytics0_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Trend_SearchTrends0_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in DividendsRequest
+		var in TrendRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/dividends.v1.Dividends/Analytics")
+		http.SetOperation(ctx, "/trend.v1.Trend/SearchTrends")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Analytics(ctx, req.(*DividendsRequest))
+			return srv.SearchTrends(ctx, req.(*TrendRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*DividendsReply)
+		reply := out.(*TrendReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Dividends_Health11_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Trend_Health6_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/dividends.v1.Dividends/Health")
+		http.SetOperation(ctx, "/trend.v1.Trend/Health")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Health(ctx, req.(*emptypb.Empty))
 		})
@@ -88,25 +88,25 @@ func _Dividends_Health11_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Con
 	}
 }
 
-type DividendsHTTPClient interface {
-	Analytics(ctx context.Context, req *DividendsRequest, opts ...http.CallOption) (rsp *DividendsReply, err error)
+type TrendHTTPClient interface {
+	GetTrendId(ctx context.Context, req *TrendRequest, opts ...http.CallOption) (rsp *TrendIdReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Search(ctx context.Context, req *DividendsRequest, opts ...http.CallOption) (rsp *DividendsReply, err error)
+	SearchTrends(ctx context.Context, req *TrendRequest, opts ...http.CallOption) (rsp *TrendReply, err error)
 }
 
-type DividendsHTTPClientImpl struct {
+type TrendHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewDividendsHTTPClient(client *http.Client) DividendsHTTPClient {
-	return &DividendsHTTPClientImpl{client}
+func NewTrendHTTPClient(client *http.Client) TrendHTTPClient {
+	return &TrendHTTPClientImpl{client}
 }
 
-func (c *DividendsHTTPClientImpl) Analytics(ctx context.Context, in *DividendsRequest, opts ...http.CallOption) (*DividendsReply, error) {
-	var out DividendsReply
-	pattern := "/v1/dividends/analytics"
+func (c *TrendHTTPClientImpl) GetTrendId(ctx context.Context, in *TrendRequest, opts ...http.CallOption) (*TrendIdReply, error) {
+	var out TrendIdReply
+	pattern := "/v1/trend/trendId"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/dividends.v1.Dividends/Analytics"))
+	opts = append(opts, http.Operation("/trend.v1.Trend/GetTrendId"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -115,11 +115,11 @@ func (c *DividendsHTTPClientImpl) Analytics(ctx context.Context, in *DividendsRe
 	return &out, err
 }
 
-func (c *DividendsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+func (c *TrendHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/dividends.v1.Dividends/Health"))
+	opts = append(opts, http.Operation("/trend.v1.Trend/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -128,11 +128,11 @@ func (c *DividendsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty,
 	return &out, err
 }
 
-func (c *DividendsHTTPClientImpl) Search(ctx context.Context, in *DividendsRequest, opts ...http.CallOption) (*DividendsReply, error) {
-	var out DividendsReply
-	pattern := "/v1/dividends"
+func (c *TrendHTTPClientImpl) SearchTrends(ctx context.Context, in *TrendRequest, opts ...http.CallOption) (*TrendReply, error) {
+	var out TrendReply
+	pattern := "/v1/trend/trends"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/dividends.v1.Dividends/Search"))
+	opts = append(opts, http.Operation("/trend.v1.Trend/SearchTrends"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

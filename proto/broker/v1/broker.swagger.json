@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/dividends/v1/get/dividends.proto",
+    "title": "proto/broker/v1/broker.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Dividends"
+      "name": "Broker"
     }
   ],
   "consumes": [
@@ -18,7 +18,7 @@
   "paths": {
     "/healthz": {
       "get": {
-        "operationId": "Dividends_Health",
+        "operationId": "Broker_Health",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,18 +34,18 @@
           }
         },
         "tags": [
-          "Dividends"
+          "Broker"
         ]
       }
     },
-    "/v1/dividends": {
+    "/v1/broker": {
       "post": {
-        "operationId": "Dividends_Search",
+        "operationId": "Broker_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DividendsReply"
+              "$ref": "#/definitions/v1BrokerReply"
             }
           },
           "default": {
@@ -61,23 +61,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1DividendsRequest"
+              "$ref": "#/definitions/v1BrokerCreateRequest"
             }
           }
         ],
         "tags": [
-          "Dividends"
+          "Broker"
         ]
       }
     },
-    "/v1/dividends/analytics": {
-      "post": {
-        "operationId": "Dividends_Analytics",
+    "/v1/broker/{broker}": {
+      "get": {
+        "operationId": "Broker_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DividendsReply"
+              "$ref": "#/definitions/v1BrokerReply"
             }
           },
           "default": {
@@ -89,16 +89,76 @@
         },
         "parameters": [
           {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Broker"
+        ]
+      },
+      "put": {
+        "operationId": "Broker_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BrokerReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "broker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1DividendsRequest"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "website": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "exchanges": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         ],
         "tags": [
-          "Dividends"
+          "Broker"
         ]
       }
     }
@@ -134,83 +194,61 @@
         }
       }
     },
-    "v1DividendsReply": {
+    "v1BrokerCreateRequest": {
       "type": "object",
       "properties": {
-        "ticker": {
+        "broker": {
           "type": "string"
         },
-        "exchange": {
+        "name": {
           "type": "string"
         },
-        "currency": {
+        "description": {
           "type": "string"
         },
-        "values": {
+        "website": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "exchanges": {
           "type": "array",
           "items": {
-            "type": "number",
-            "format": "float"
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1BrokerReply": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         },
-        "declarationDate": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "recordDate": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "paymentDate": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
+        "active": {
+          "type": "boolean"
         },
         "date": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
+          "type": "string",
+          "format": "int64"
         }
       }
-    },
-    "v1DividendsRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "interval": {
-          "$ref": "#/definitions/v1DividendsRequestInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "v1DividendsRequestInterval": {
-      "type": "string",
-      "enum": [
-        "none",
-        "q",
-        "y"
-      ],
-      "default": "none"
     }
   }
 }

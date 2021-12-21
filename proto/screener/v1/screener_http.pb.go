@@ -25,11 +25,11 @@ type ScreenerHTTPServer interface {
 
 func RegisterScreenerHTTPServer(s *http.Server, srv ScreenerHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/screener", _Screener_Get1_HTTP_Handler(srv))
-	r.GET("/healthz", _Screener_Health2_HTTP_Handler(srv))
+	r.POST("/v1/screener", _Screener_Get2_HTTP_Handler(srv))
+	r.GET("/healthz", _Screener_Health3_HTTP_Handler(srv))
 }
 
-func _Screener_Get1_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
+func _Screener_Get2_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ScreenerRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -48,7 +48,7 @@ func _Screener_Get1_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Screener_Health2_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
+func _Screener_Health3_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

@@ -19,7 +19,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type ExchangeHTTPServer interface {
-	Companies(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	IsOpen(context.Context, *ExchangeRequest) (*ExchangeIsOpenReply, error)
@@ -31,7 +30,6 @@ func RegisterExchangeHTTPServer(s *http.Server, srv ExchangeHTTPServer) {
 	r.GET("/v1/exchange/{exchange}/isopen", _Exchange_IsOpen0_HTTP_Handler(srv))
 	r.GET("/v1/exchange/{exchange}", _Exchange_Get0_HTTP_Handler(srv))
 	r.GET("/v1/exchanges", _Exchange_List0_HTTP_Handler(srv))
-	r.GET("/v1/exchange/{exchange}/companies", _Exchange_Companies0_HTTP_Handler(srv))
 	r.GET("/healthz", _Exchange_Health1_HTTP_Handler(srv))
 }
 
@@ -98,28 +96,6 @@ func _Exchange_List0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Exchange_Companies0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in ExchangeRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/exchange.v1.Exchange/Companies")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Companies(ctx, req.(*ExchangeRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ExchangeReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 func _Exchange_Health1_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
@@ -140,7 +116,6 @@ func _Exchange_Health1_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Contex
 }
 
 type ExchangeHTTPClient interface {
-	Companies(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	IsOpen(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeIsOpenReply, err error)
@@ -153,19 +128,6 @@ type ExchangeHTTPClientImpl struct {
 
 func NewExchangeHTTPClient(client *http.Client) ExchangeHTTPClient {
 	return &ExchangeHTTPClientImpl{client}
-}
-
-func (c *ExchangeHTTPClientImpl) Companies(ctx context.Context, in *ExchangeRequest, opts ...http.CallOption) (*ExchangeReply, error) {
-	var out ExchangeReply
-	pattern := "/v1/exchange/{exchange}/companies"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/exchange.v1.Exchange/Companies"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *ExchangeHTTPClientImpl) Get(ctx context.Context, in *ExchangeRequest, opts ...http.CallOption) (*ExchangeReply, error) {

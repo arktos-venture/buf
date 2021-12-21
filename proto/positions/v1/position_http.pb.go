@@ -19,19 +19,19 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type PositionHTTPServer interface {
+	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
+	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	SearchCompanies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
-	SearchCurrencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
 }
 
 func RegisterPositionHTTPServer(s *http.Server, srv PositionHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/{broker}/positions/{account}/companies", _Position_SearchCompanies0_HTTP_Handler(srv))
-	r.GET("/v1/{broker}/positions/{account}/currencies", _Position_SearchCurrencies0_HTTP_Handler(srv))
-	r.GET("/healthz", _Position_Health8_HTTP_Handler(srv))
+	r.GET("/v1/{broker}/positions/{account}/companies", _Position_Companies0_HTTP_Handler(srv))
+	r.GET("/v1/{broker}/positions/{account}/currencies", _Position_Currencies0_HTTP_Handler(srv))
+	r.GET("/healthz", _Position_Health10_HTTP_Handler(srv))
 }
 
-func _Position_SearchCompanies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Position_Companies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PositionRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -40,9 +40,9 @@ func _Position_SearchCompanies0_HTTP_Handler(srv PositionHTTPServer) func(ctx ht
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/positions.v1.Position/SearchCompanies")
+		http.SetOperation(ctx, "/positions.v1.Position/Companies")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SearchCompanies(ctx, req.(*PositionRequest))
+			return srv.Companies(ctx, req.(*PositionRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -53,7 +53,7 @@ func _Position_SearchCompanies0_HTTP_Handler(srv PositionHTTPServer) func(ctx ht
 	}
 }
 
-func _Position_SearchCurrencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Position_Currencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PositionRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -62,9 +62,9 @@ func _Position_SearchCurrencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx h
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/positions.v1.Position/SearchCurrencies")
+		http.SetOperation(ctx, "/positions.v1.Position/Currencies")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SearchCurrencies(ctx, req.(*PositionRequest))
+			return srv.Currencies(ctx, req.(*PositionRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -75,7 +75,7 @@ func _Position_SearchCurrencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx h
 	}
 }
 
-func _Position_Health8_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Position_Health10_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -95,9 +95,9 @@ func _Position_Health8_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Contex
 }
 
 type PositionHTTPClient interface {
+	Companies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCompanyReplies, err error)
+	Currencies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCurrencyReplies, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	SearchCompanies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCompanyReplies, err error)
-	SearchCurrencies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCurrencyReplies, err error)
 }
 
 type PositionHTTPClientImpl struct {
@@ -108,37 +108,37 @@ func NewPositionHTTPClient(client *http.Client) PositionHTTPClient {
 	return &PositionHTTPClientImpl{client}
 }
 
+func (c *PositionHTTPClientImpl) Companies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCompanyReplies, error) {
+	var out PositionCompanyReplies
+	pattern := "/v1/{broker}/positions/{account}/companies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/positions.v1.Position/Companies"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *PositionHTTPClientImpl) Currencies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCurrencyReplies, error) {
+	var out PositionCurrencyReplies
+	pattern := "/v1/{broker}/positions/{account}/currencies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/positions.v1.Position/Currencies"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *PositionHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Position/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *PositionHTTPClientImpl) SearchCompanies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCompanyReplies, error) {
-	var out PositionCompanyReplies
-	pattern := "/v1/{broker}/positions/{account}/companies"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/SearchCompanies"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *PositionHTTPClientImpl) SearchCurrencies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCurrencyReplies, error) {
-	var out PositionCurrencyReplies
-	pattern := "/v1/{broker}/positions/{account}/currencies"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/SearchCurrencies"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -21,8 +21,8 @@ const _ = grpc.SupportPackageIsVersion7
 type IndexClient interface {
 	Get(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
 	Search(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReplies, error)
-	Create(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
-	Update(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
+	Create(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
+	Update(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
 	Delete(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -53,7 +53,7 @@ func (c *indexClient) Search(ctx context.Context, in *IndexRequest, opts ...grpc
 	return out, nil
 }
 
-func (c *indexClient) Create(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error) {
+func (c *indexClient) Create(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error) {
 	out := new(IndexReply)
 	err := c.cc.Invoke(ctx, "/index.v1.Index/Create", in, out, opts...)
 	if err != nil {
@@ -62,7 +62,7 @@ func (c *indexClient) Create(ctx context.Context, in *IndexRequest, opts ...grpc
 	return out, nil
 }
 
-func (c *indexClient) Update(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error) {
+func (c *indexClient) Update(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error) {
 	out := new(IndexReply)
 	err := c.cc.Invoke(ctx, "/index.v1.Index/Update", in, out, opts...)
 	if err != nil {
@@ -95,8 +95,8 @@ func (c *indexClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grp
 type IndexServer interface {
 	Get(context.Context, *IndexRequest) (*IndexReply, error)
 	Search(context.Context, *IndexRequest) (*IndexReplies, error)
-	Create(context.Context, *IndexRequest) (*IndexReply, error)
-	Update(context.Context, *IndexRequest) (*IndexReply, error)
+	Create(context.Context, *IndexCreateRequest) (*IndexReply, error)
+	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
 	Delete(context.Context, *IndexRequest) (*IndexReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedIndexServer()
@@ -112,10 +112,10 @@ func (UnimplementedIndexServer) Get(context.Context, *IndexRequest) (*IndexReply
 func (UnimplementedIndexServer) Search(context.Context, *IndexRequest) (*IndexReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedIndexServer) Create(context.Context, *IndexRequest) (*IndexReply, error) {
+func (UnimplementedIndexServer) Create(context.Context, *IndexCreateRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedIndexServer) Update(context.Context, *IndexRequest) (*IndexReply, error) {
+func (UnimplementedIndexServer) Update(context.Context, *IndexCreateRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedIndexServer) Delete(context.Context, *IndexRequest) (*IndexReply, error) {
@@ -174,7 +174,7 @@ func _Index_Search_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _Index_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexRequest)
+	in := new(IndexCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -186,13 +186,13 @@ func _Index_Create_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/index.v1.Index/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexServer).Create(ctx, req.(*IndexRequest))
+		return srv.(IndexServer).Create(ctx, req.(*IndexCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Index_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexRequest)
+	in := new(IndexCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -204,7 +204,7 @@ func _Index_Update_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/index.v1.Index/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexServer).Update(ctx, req.(*IndexRequest))
+		return srv.(IndexServer).Update(ctx, req.(*IndexCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -12,13 +12,13 @@ option java_package = "dev.kratos.api.positions.v1";
 option java_outer_classname = "PositionProtoV1";
 
 service Position {
-  rpc SearchCompanies (PositionRequest) returns (PositionCompanyReplies)  {
+  rpc Companies (PositionRequest) returns (PositionCompanyReplies)  {
     option (google.api.http) = {
       get: "/v1/{broker}/positions/{account}/companies"
     };
   }
 
-  rpc SearchCurrencies (PositionRequest) returns (PositionCurrencyReplies)  {
+  rpc Currencies (PositionRequest) returns (PositionCurrencyReplies)  {
     option (google.api.http) = {
       get: "/v1/{broker}/positions/{account}/currencies"
     };

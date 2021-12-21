@@ -30,12 +30,6 @@ service Exchange {
         };
     }
 
-  	rpc Companies (ExchangeRequest) returns (ExchangeReply)  {
-        option (google.api.http) = {
-            get: "/v1/exchange/{exchange}/companies"
-        };
-    }
-
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
@@ -104,11 +98,6 @@ message ExchangeShortReply {
 	string currency = 3;
 	Code code = 4;
 }
-  
-message ExchangeShortReplies {
-	repeated ExchangeShortReply results = 1;
-	int32 total = 2;
-}
 
 message ExchangeReplies {
 	message Company {
@@ -117,6 +106,6 @@ message ExchangeReplies {
 		string isin = 3;
 	}
 
-	repeated Company results = 1;
+	repeated ExchangeShortReply results = 1;
 	int32 total = 2;
 }

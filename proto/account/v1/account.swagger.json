@@ -45,7 +45,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/accountv1AccountReply"
+              "$ref": "#/definitions/v1AccountReply"
             }
           },
           "default": {
@@ -94,7 +94,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/accountv1AccountReply"
+              "$ref": "#/definitions/v1AccountReply"
             }
           },
           "default": {
@@ -134,27 +134,6 @@
     }
   },
   "definitions": {
-    "accountv1AccountReply": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "user": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "active": {
-          "type": "boolean"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "accountv1Broker": {
       "type": "string",
       "enum": [
@@ -189,6 +168,27 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1AccountReply": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

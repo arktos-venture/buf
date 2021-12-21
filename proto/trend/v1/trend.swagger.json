@@ -1,0 +1,236 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/trend/v1/trend.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Trend"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Trend_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Trend"
+        ]
+      }
+    },
+    "/v1/trend/trendId": {
+      "post": {
+        "operationId": "Trend_GetTrendId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TrendIdReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TrendRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Trend"
+        ]
+      }
+    },
+    "/v1/trend/trends": {
+      "post": {
+        "operationId": "Trend_SearchTrends",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TrendReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TrendRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Trend"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "TrendIdReplyTrend": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        }
+      }
+    },
+    "TrendReplyGeoMap": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TrendReplyRelated": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "mid": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1TrendIdReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/definitions/TrendIdReplyTrend"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrendIdReplyTrend"
+          }
+        }
+      }
+    },
+    "v1TrendReply": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrendReplyRelated"
+          }
+        },
+        "geomap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrendReplyGeoMap"
+          }
+        }
+      }
+    },
+    "v1TrendRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

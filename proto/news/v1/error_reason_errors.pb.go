@@ -20,13 +20,13 @@ func ErrorContentMissing(format string, args ...interface{}) *errors.Error {
 	return errors.New(400, ErrorReason_CONTENT_MISSING.String(), fmt.Sprintf(format, args...))
 }
 
-func IsForbiddenAccess(err error) bool {
+func IsFORBIDDEN(err error) bool {
 	e := errors.FromError(err)
-	return e.Reason == ErrorReason_FORBIDDEN_ACCESS.String() && e.Code == 403
+	return e.Reason == ErrorReason_FORBIDDEN.String() && e.Code == 403
 }
 
-func ErrorForbiddenAccess(format string, args ...interface{}) *errors.Error {
-	return errors.New(403, ErrorReason_FORBIDDEN_ACCESS.String(), fmt.Sprintf(format, args...))
+func ErrorFORBIDDEN(format string, args ...interface{}) *errors.Error {
+	return errors.New(403, ErrorReason_FORBIDDEN.String(), fmt.Sprintf(format, args...))
 }
 
 func IsNotFound(err error) bool {
@@ -36,6 +36,24 @@ func IsNotFound(err error) bool {
 
 func ErrorNotFound(format string, args ...interface{}) *errors.Error {
 	return errors.New(404, ErrorReason_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsCONFLICT(err error) bool {
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_CONFLICT.String() && e.Code == 409
+}
+
+func ErrorCONFLICT(format string, args ...interface{}) *errors.Error {
+	return errors.New(409, ErrorReason_CONFLICT.String(), fmt.Sprintf(format, args...))
+}
+
+func IsNotImplemented(err error) bool {
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_NOT_IMPLEMENTED.String() && e.Code == 501
+}
+
+func ErrorNotImplemented(format string, args ...interface{}) *errors.Error {
+	return errors.New(501, ErrorReason_NOT_IMPLEMENTED.String(), fmt.Sprintf(format, args...))
 }
 
 func IsUNAVAILABLE(err error) bool {

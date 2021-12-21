@@ -19,9 +19,9 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type OrderHTTPServer interface {
-	Create(context.Context, *OrderCreateRequest) (*AccountReply, error)
+	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Search(context.Context, *OrderSearchRequest) (*AccountReplies, error)
+	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
 }
 
 func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
@@ -48,7 +48,7 @@ func _Order_Search0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) err
 		if err != nil {
 			return err
 		}
-		reply := out.(*AccountReplies)
+		reply := out.(*OrderReplies)
 		return ctx.Result(200, reply)
 	}
 }
@@ -70,7 +70,7 @@ func _Order_Create0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) err
 		if err != nil {
 			return err
 		}
-		reply := out.(*AccountReply)
+		reply := out.(*OrderReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -95,9 +95,9 @@ func _Order_Health0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) err
 }
 
 type OrderHTTPClient interface {
-	Create(ctx context.Context, req *OrderCreateRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
+	Create(ctx context.Context, req *OrderCreateRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Search(ctx context.Context, req *OrderSearchRequest, opts ...http.CallOption) (rsp *AccountReplies, err error)
+	Search(ctx context.Context, req *OrderSearchRequest, opts ...http.CallOption) (rsp *OrderReplies, err error)
 }
 
 type OrderHTTPClientImpl struct {
@@ -108,8 +108,8 @@ func NewOrderHTTPClient(client *http.Client) OrderHTTPClient {
 	return &OrderHTTPClientImpl{client}
 }
 
-func (c *OrderHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*AccountReply, error) {
-	var out AccountReply
+func (c *OrderHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderReply, error) {
+	var out OrderReply
 	pattern := "/v1/order/{broker}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/order.v1.Order/Create"))
@@ -134,8 +134,8 @@ func (c *OrderHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opt
 	return &out, err
 }
 
-func (c *OrderHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*AccountReplies, error) {
-	var out AccountReplies
+func (c *OrderHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*OrderReplies, error) {
+	var out OrderReplies
 	pattern := "/v1/orders/{broker}/{account}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/order.v1.Order/Search"))

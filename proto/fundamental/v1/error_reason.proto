@@ -11,7 +11,10 @@ option objc_class_prefix = "APICompanyFundamentalErrors";
 enum ErrorReason {
   option (errors.default_code) = 500;
 
-  REQUEST_FORBIDDEN = 0 [(errors.code) = 403];
-  CONTENT_MISSING = 1 [(errors.code) = 400];
-  UNAVAILABLE = 2 [(errors.code) = 503];
+  CONTENT_MISSING = 0 [(errors.code) = 400];
+  FORBIDDEN = 1 [(errors.code) = 403];
+  NOT_FOUND = 2 [(errors.code) = 404];
+  CONFLICT = 3 [(errors.code) = 409];
+  NOT_IMPLEMENTED = 4 [(errors.code) = 501];
+  UNAVAILABLE = 5 [(errors.code) = 503];
 }

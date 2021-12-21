@@ -22,7 +22,6 @@ type ExchangeClient interface {
 	IsOpen(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeIsOpenReply, error)
 	Get(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ExchangeReplies, error)
-	Companies(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -61,15 +60,6 @@ func (c *exchangeClient) List(ctx context.Context, in *emptypb.Empty, opts ...gr
 	return out, nil
 }
 
-func (c *exchangeClient) Companies(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error) {
-	out := new(ExchangeReply)
-	err := c.cc.Invoke(ctx, "/exchange.v1.Exchange/Companies", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *exchangeClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/exchange.v1.Exchange/Health", in, out, opts...)
@@ -86,7 +76,6 @@ type ExchangeServer interface {
 	IsOpen(context.Context, *ExchangeRequest) (*ExchangeIsOpenReply, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	List(context.Context, *emptypb.Empty) (*ExchangeReplies, error)
-	Companies(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedExchangeServer()
 }
@@ -103,9 +92,6 @@ func (UnimplementedExchangeServer) Get(context.Context, *ExchangeRequest) (*Exch
 }
 func (UnimplementedExchangeServer) List(context.Context, *emptypb.Empty) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedExchangeServer) Companies(context.Context, *ExchangeRequest) (*ExchangeReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Companies not implemented")
 }
 func (UnimplementedExchangeServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -177,24 +163,6 @@ func _Exchange_List_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Exchange_Companies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExchangeServer).Companies(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/exchange.v1.Exchange/Companies",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExchangeServer).Companies(ctx, req.(*ExchangeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Exchange_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -231,10 +199,6 @@ var Exchange_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Exchange_List_Handler,
-		},
-		{
-			MethodName: "Companies",
-			Handler:    _Exchange_Companies_Handler,
 		},
 		{
 			MethodName: "Health",

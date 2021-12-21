@@ -19,8 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderClient interface {
-	Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*AccountReplies, error)
-	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*OrderReplies, error)
+	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -32,8 +32,8 @@ func NewOrderClient(cc grpc.ClientConnInterface) OrderClient {
 	return &orderClient{cc}
 }
 
-func (c *orderClient) Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*AccountReplies, error) {
-	out := new(AccountReplies)
+func (c *orderClient) Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*OrderReplies, error) {
+	out := new(OrderReplies)
 	err := c.cc.Invoke(ctx, "/order.v1.Order/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -41,8 +41,8 @@ func (c *orderClient) Search(ctx context.Context, in *OrderSearchRequest, opts .
 	return out, nil
 }
 
-func (c *orderClient) Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*AccountReply, error) {
-	out := new(AccountReply)
+func (c *orderClient) Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error) {
+	out := new(OrderReply)
 	err := c.cc.Invoke(ctx, "/order.v1.Order/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +63,8 @@ func (c *orderClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grp
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
 type OrderServer interface {
-	Search(context.Context, *OrderSearchRequest) (*AccountReplies, error)
-	Create(context.Context, *OrderCreateRequest) (*AccountReply, error)
+	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
+	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedOrderServer()
 }
@@ -73,10 +73,10 @@ type OrderServer interface {
 type UnimplementedOrderServer struct {
 }
 
-func (UnimplementedOrderServer) Search(context.Context, *OrderSearchRequest) (*AccountReplies, error) {
+func (UnimplementedOrderServer) Search(context.Context, *OrderSearchRequest) (*OrderReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedOrderServer) Create(context.Context, *OrderCreateRequest) (*AccountReply, error) {
+func (UnimplementedOrderServer) Create(context.Context, *OrderCreateRequest) (*OrderReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedOrderServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {

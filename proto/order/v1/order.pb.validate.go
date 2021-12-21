@@ -515,27 +515,29 @@ var _ interface {
 	ErrorName() string
 } = OrderCreateRequestValidationError{}
 
-// Validate checks the field values on AccountReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on OrderReply with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *AccountReply) Validate() error {
+func (m *OrderReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AccountReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in AccountReplyMultiError, or
+// ValidateAll checks the field values on OrderReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in OrderReplyMultiError, or
 // nil if none found.
-func (m *AccountReply) ValidateAll() error {
+func (m *OrderReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AccountReply) validate(all bool) error {
+func (m *OrderReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
+
+	// no validation rules for Ticker
 
 	// no validation rules for Conid
 
@@ -561,20 +563,22 @@ func (m *AccountReply) validate(all bool) error {
 
 	// no validation rules for Status
 
+	// no validation rules for Size
+
 	// no validation rules for Date
 
 	if len(errors) > 0 {
-		return AccountReplyMultiError(errors)
+		return OrderReplyMultiError(errors)
 	}
 	return nil
 }
 
-// AccountReplyMultiError is an error wrapping multiple validation errors
-// returned by AccountReply.ValidateAll() if the designated constraints aren't met.
-type AccountReplyMultiError []error
+// OrderReplyMultiError is an error wrapping multiple validation errors
+// returned by OrderReply.ValidateAll() if the designated constraints aren't met.
+type OrderReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AccountReplyMultiError) Error() string {
+func (m OrderReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -583,11 +587,11 @@ func (m AccountReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AccountReplyMultiError) AllErrors() []error { return m }
+func (m OrderReplyMultiError) AllErrors() []error { return m }
 
-// AccountReplyValidationError is the validation error returned by
-// AccountReply.Validate if the designated constraints aren't met.
-type AccountReplyValidationError struct {
+// OrderReplyValidationError is the validation error returned by
+// OrderReply.Validate if the designated constraints aren't met.
+type OrderReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -595,22 +599,22 @@ type AccountReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e AccountReplyValidationError) Field() string { return e.field }
+func (e OrderReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AccountReplyValidationError) Reason() string { return e.reason }
+func (e OrderReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AccountReplyValidationError) Cause() error { return e.cause }
+func (e OrderReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AccountReplyValidationError) Key() bool { return e.key }
+func (e OrderReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AccountReplyValidationError) ErrorName() string { return "AccountReplyValidationError" }
+func (e OrderReplyValidationError) ErrorName() string { return "OrderReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AccountReplyValidationError) Error() string {
+func (e OrderReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -622,14 +626,14 @@ func (e AccountReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAccountReply.%s: %s%s",
+		"invalid %sOrderReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AccountReplyValidationError{}
+var _ error = OrderReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -637,24 +641,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AccountReplyValidationError{}
+} = OrderReplyValidationError{}
 
-// Validate checks the field values on AccountReplies with the rules defined in
+// Validate checks the field values on OrderReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *AccountReplies) Validate() error {
+func (m *OrderReplies) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AccountReplies with the rules defined
+// ValidateAll checks the field values on OrderReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in AccountRepliesMultiError,
-// or nil if none found.
-func (m *AccountReplies) ValidateAll() error {
+// result is a list of violation errors wrapped in OrderRepliesMultiError, or
+// nil if none found.
+func (m *OrderReplies) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AccountReplies) validate(all bool) error {
+func (m *OrderReplies) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -668,7 +672,7 @@ func (m *AccountReplies) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, AccountRepliesValidationError{
+					errors = append(errors, OrderRepliesValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -676,7 +680,7 @@ func (m *AccountReplies) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, AccountRepliesValidationError{
+					errors = append(errors, OrderRepliesValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -685,7 +689,7 @@ func (m *AccountReplies) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return AccountRepliesValidationError{
+				return OrderRepliesValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -700,18 +704,17 @@ func (m *AccountReplies) validate(all bool) error {
 	// no validation rules for Date
 
 	if len(errors) > 0 {
-		return AccountRepliesMultiError(errors)
+		return OrderRepliesMultiError(errors)
 	}
 	return nil
 }
 
-// AccountRepliesMultiError is an error wrapping multiple validation errors
-// returned by AccountReplies.ValidateAll() if the designated constraints
-// aren't met.
-type AccountRepliesMultiError []error
+// OrderRepliesMultiError is an error wrapping multiple validation errors
+// returned by OrderReplies.ValidateAll() if the designated constraints aren't met.
+type OrderRepliesMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AccountRepliesMultiError) Error() string {
+func (m OrderRepliesMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -720,11 +723,11 @@ func (m AccountRepliesMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AccountRepliesMultiError) AllErrors() []error { return m }
+func (m OrderRepliesMultiError) AllErrors() []error { return m }
 
-// AccountRepliesValidationError is the validation error returned by
-// AccountReplies.Validate if the designated constraints aren't met.
-type AccountRepliesValidationError struct {
+// OrderRepliesValidationError is the validation error returned by
+// OrderReplies.Validate if the designated constraints aren't met.
+type OrderRepliesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -732,22 +735,22 @@ type AccountRepliesValidationError struct {
 }
 
 // Field function returns field value.
-func (e AccountRepliesValidationError) Field() string { return e.field }
+func (e OrderRepliesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AccountRepliesValidationError) Reason() string { return e.reason }
+func (e OrderRepliesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AccountRepliesValidationError) Cause() error { return e.cause }
+func (e OrderRepliesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AccountRepliesValidationError) Key() bool { return e.key }
+func (e OrderRepliesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AccountRepliesValidationError) ErrorName() string { return "AccountRepliesValidationError" }
+func (e OrderRepliesValidationError) ErrorName() string { return "OrderRepliesValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AccountRepliesValidationError) Error() string {
+func (e OrderRepliesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -759,14 +762,14 @@ func (e AccountRepliesValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAccountReplies.%s: %s%s",
+		"invalid %sOrderReplies.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AccountRepliesValidationError{}
+var _ error = OrderRepliesValidationError{}
 
 var _ interface {
 	Field() string
@@ -774,4 +777,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AccountRepliesValidationError{}
+} = OrderRepliesValidationError{}

@@ -385,6 +385,9 @@
         "exchange": {
           "type": "string"
         },
+        "country": {
+          "type": "string"
+        },
         "date": {
           "$ref": "#/definitions/v1Date"
         }

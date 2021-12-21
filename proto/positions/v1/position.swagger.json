@@ -40,7 +40,7 @@
     },
     "/v1/{broker}/positions/{account}/companies": {
       "get": {
-        "operationId": "Position_SearchCompanies",
+        "operationId": "Position_Companies",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -85,7 +85,7 @@
     },
     "/v1/{broker}/positions/{account}/currencies": {
       "get": {
-        "operationId": "Position_SearchCurrencies",
+        "operationId": "Position_Currencies",
         "responses": {
           "200": {
             "description": "A successful response.",

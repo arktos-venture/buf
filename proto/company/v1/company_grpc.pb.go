@@ -21,8 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 type CompanyClient interface {
 	Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error)
 	Search(ctx context.Context, in *CompanySearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
-	SearchTrendId(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyTrendIdReply, error)
-	SearchTrends(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyTrendReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -52,24 +50,6 @@ func (c *companyClient) Search(ctx context.Context, in *CompanySearchRequest, op
 	return out, nil
 }
 
-func (c *companyClient) SearchTrendId(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyTrendIdReply, error) {
-	out := new(CompanyTrendIdReply)
-	err := c.cc.Invoke(ctx, "/company.v1.Company/SearchTrendId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *companyClient) SearchTrends(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyTrendReply, error) {
-	out := new(CompanyTrendReply)
-	err := c.cc.Invoke(ctx, "/company.v1.Company/SearchTrends", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *companyClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/company.v1.Company/Health", in, out, opts...)
@@ -85,8 +65,6 @@ func (c *companyClient) Health(ctx context.Context, in *emptypb.Empty, opts ...g
 type CompanyServer interface {
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
-	SearchTrendId(context.Context, *CompanyRequest) (*CompanyTrendIdReply, error)
-	SearchTrends(context.Context, *CompanyRequest) (*CompanyTrendReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCompanyServer()
 }
@@ -100,12 +78,6 @@ func (UnimplementedCompanyServer) Get(context.Context, *CompanyRequest) (*Compan
 }
 func (UnimplementedCompanyServer) Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedCompanyServer) SearchTrendId(context.Context, *CompanyRequest) (*CompanyTrendIdReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchTrendId not implemented")
-}
-func (UnimplementedCompanyServer) SearchTrends(context.Context, *CompanyRequest) (*CompanyTrendReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchTrends not implemented")
 }
 func (UnimplementedCompanyServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -159,42 +131,6 @@ func _Company_Search_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Company_SearchTrendId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CompanyServer).SearchTrendId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/company.v1.Company/SearchTrendId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompanyServer).SearchTrendId(ctx, req.(*CompanyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Company_SearchTrends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CompanyServer).SearchTrends(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/company.v1.Company/SearchTrends",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompanyServer).SearchTrends(ctx, req.(*CompanyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Company_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -227,14 +163,6 @@ var Company_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Company_Search_Handler,
-		},
-		{
-			MethodName: "SearchTrendId",
-			Handler:    _Company_SearchTrendId_Handler,
-		},
-		{
-			MethodName: "SearchTrends",
-			Handler:    _Company_SearchTrends_Handler,
 		},
 		{
 			MethodName: "Health",

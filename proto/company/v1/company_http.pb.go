@@ -22,20 +22,16 @@ type CompanyHTTPServer interface {
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
-	SearchTrendId(context.Context, *CompanyRequest) (*CompanyTrendIdReply, error)
-	SearchTrends(context.Context, *CompanyRequest) (*CompanyTrendReply, error)
 }
 
 func RegisterCompanyHTTPServer(s *http.Server, srv CompanyHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/company/{currency}/{exchange}/{ticker}", _Company_Get7_HTTP_Handler(srv))
+	r.GET("/v1/company/{currency}/{exchange}/{ticker}", _Company_Get8_HTTP_Handler(srv))
 	r.POST("/v1/company", _Company_Search6_HTTP_Handler(srv))
-	r.POST("/v1/company/trendId", _Company_SearchTrendId0_HTTP_Handler(srv))
-	r.POST("/v1/company/trends", _Company_SearchTrends0_HTTP_Handler(srv))
-	r.GET("/healthz", _Company_Health13_HTTP_Handler(srv))
+	r.GET("/healthz", _Company_Health15_HTTP_Handler(srv))
 }
 
-func _Company_Get7_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
+func _Company_Get8_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -76,45 +72,7 @@ func _Company_Search6_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Company_SearchTrendId0_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in CompanyRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/company.v1.Company/SearchTrendId")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SearchTrendId(ctx, req.(*CompanyRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*CompanyTrendIdReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Company_SearchTrends0_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in CompanyRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/company.v1.Company/SearchTrends")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SearchTrends(ctx, req.(*CompanyRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*CompanyTrendReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Company_Health13_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
+func _Company_Health15_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -137,8 +95,6 @@ type CompanyHTTPClient interface {
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *CompanySearchRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
-	SearchTrendId(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyTrendIdReply, err error)
-	SearchTrends(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyTrendReply, err error)
 }
 
 type CompanyHTTPClientImpl struct {
@@ -180,32 +136,6 @@ func (c *CompanyHTTPClientImpl) Search(ctx context.Context, in *CompanySearchReq
 	pattern := "/v1/company"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/company.v1.Company/Search"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *CompanyHTTPClientImpl) SearchTrendId(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyTrendIdReply, error) {
-	var out CompanyTrendIdReply
-	pattern := "/v1/company/trendId"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/company.v1.Company/SearchTrendId"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *CompanyHTTPClientImpl) SearchTrends(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyTrendReply, error) {
-	var out CompanyTrendReply
-	pattern := "/v1/company/trends"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/company.v1.Company/SearchTrends"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

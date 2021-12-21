@@ -19,8 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PositionClient interface {
-	SearchCompanies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error)
-	SearchCurrencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error)
+	Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error)
+	Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -32,18 +32,18 @@ func NewPositionClient(cc grpc.ClientConnInterface) PositionClient {
 	return &positionClient{cc}
 }
 
-func (c *positionClient) SearchCompanies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error) {
+func (c *positionClient) Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error) {
 	out := new(PositionCompanyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Position/SearchCompanies", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/positions.v1.Position/Companies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *positionClient) SearchCurrencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error) {
+func (c *positionClient) Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error) {
 	out := new(PositionCurrencyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Position/SearchCurrencies", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/positions.v1.Position/Currencies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +63,8 @@ func (c *positionClient) Health(ctx context.Context, in *emptypb.Empty, opts ...
 // All implementations must embed UnimplementedPositionServer
 // for forward compatibility
 type PositionServer interface {
-	SearchCompanies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
-	SearchCurrencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
+	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
+	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPositionServer()
 }
@@ -73,11 +73,11 @@ type PositionServer interface {
 type UnimplementedPositionServer struct {
 }
 
-func (UnimplementedPositionServer) SearchCompanies(context.Context, *PositionRequest) (*PositionCompanyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchCompanies not implemented")
+func (UnimplementedPositionServer) Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Companies not implemented")
 }
-func (UnimplementedPositionServer) SearchCurrencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchCurrencies not implemented")
+func (UnimplementedPositionServer) Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Currencies not implemented")
 }
 func (UnimplementedPositionServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -95,38 +95,38 @@ func RegisterPositionServer(s grpc.ServiceRegistrar, srv PositionServer) {
 	s.RegisterService(&Position_ServiceDesc, srv)
 }
 
-func _Position_SearchCompanies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Position_Companies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionServer).SearchCompanies(ctx, in)
+		return srv.(PositionServer).Companies(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Position/SearchCompanies",
+		FullMethod: "/positions.v1.Position/Companies",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServer).SearchCompanies(ctx, req.(*PositionRequest))
+		return srv.(PositionServer).Companies(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Position_SearchCurrencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Position_Currencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionServer).SearchCurrencies(ctx, in)
+		return srv.(PositionServer).Currencies(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Position/SearchCurrencies",
+		FullMethod: "/positions.v1.Position/Currencies",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServer).SearchCurrencies(ctx, req.(*PositionRequest))
+		return srv.(PositionServer).Currencies(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -157,12 +157,12 @@ var Position_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PositionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SearchCompanies",
-			Handler:    _Position_SearchCompanies_Handler,
+			MethodName: "Companies",
+			Handler:    _Position_Companies_Handler,
 		},
 		{
-			MethodName: "SearchCurrencies",
-			Handler:    _Position_SearchCurrencies_Handler,
+			MethodName: "Currencies",
+			Handler:    _Position_Currencies_Handler,
 		},
 		{
 			MethodName: "Health",

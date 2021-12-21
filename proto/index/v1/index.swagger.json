@@ -89,7 +89,37 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexRequest"
+              "$ref": "#/definitions/v1IndexCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Index"
+        ]
+      },
+      "put": {
+        "operationId": "Index_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndexReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndexCreateRequest"
             }
           }
         ],
@@ -154,42 +184,6 @@
         "tags": [
           "Index"
         ]
-      },
-      "put": {
-        "operationId": "Index_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndexReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
-        "tags": [
-          "Index"
-        ]
       }
     }
   },
@@ -224,6 +218,41 @@
         }
       }
     },
+    "v1IndexCreateRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IndexCreateRequestCompany"
+          }
+        }
+      }
+    },
+    "v1IndexCreateRequestCompany": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "v1IndexReplies": {
       "type": "object",
       "properties": {
@@ -246,14 +275,6 @@
           "type": "string"
         },
         "description": {
-          "type": "string"
-        }
-      }
-    },
-    "v1IndexRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
           "type": "string"
         }
       }

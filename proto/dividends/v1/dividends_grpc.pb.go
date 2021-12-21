@@ -170,5 +170,5 @@ var Dividends_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/dividends/v1/get/dividends.proto",
+	Metadata: "proto/dividends/v1/dividends.proto",
 }

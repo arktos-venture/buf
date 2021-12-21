@@ -38,7 +38,7 @@ func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r.POST("/v1/quotes/country", _Quotes_Country0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/index", _Quotes_Index0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/account", _Quotes_Account0_HTTP_Handler(srv))
-	r.GET("/healthz", _Quotes_Health3_HTTP_Handler(srv))
+	r.GET("/healthz", _Quotes_Health4_HTTP_Handler(srv))
 }
 
 func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
@@ -177,7 +177,7 @@ func _Quotes_Account0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Health3_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Health4_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

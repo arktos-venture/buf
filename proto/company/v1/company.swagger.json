@@ -70,70 +70,6 @@
         ]
       }
     },
-    "/v1/company/trendId": {
-      "post": {
-        "operationId": "Company_SearchTrendId",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyTrendIdReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompanyRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Company"
-        ]
-      }
-    },
-    "/v1/company/trends": {
-      "post": {
-        "operationId": "Company_SearchTrends",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyTrendReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompanyRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Company"
-        ]
-      }
-    },
     "/v1/company/{currency}/{exchange}/{ticker}": {
       "get": {
         "operationId": "Company_Get",
@@ -178,47 +114,6 @@
     }
   },
   "definitions": {
-    "CompanyTrendIdReplyTrend": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "ref": {
-          "type": "string"
-        }
-      }
-    },
-    "CompanyTrendReplyGeoMap": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "value": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "CompanyTrendReplyRelated": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "mid": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        },
-        "value": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -356,20 +251,6 @@
         }
       }
     },
-    "v1CompanyRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        }
-      }
-    },
     "v1CompanySearchRequest": {
       "type": "object",
       "properties": {
@@ -392,49 +273,6 @@
         "limit": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "v1CompanyTrendIdReply": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "result": {
-          "$ref": "#/definitions/CompanyTrendIdReplyTrend"
-        },
-        "related": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CompanyTrendIdReplyTrend"
-          }
-        }
-      }
-    },
-    "v1CompanyTrendReply": {
-      "type": "object",
-      "properties": {
-        "ref": {
-          "type": "string"
-        },
-        "related": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CompanyTrendReplyRelated"
-          }
-        },
-        "geomap": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CompanyTrendReplyGeoMap"
-          }
         }
       }
     }

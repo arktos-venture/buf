@@ -19,25 +19,25 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type IndexHTTPServer interface {
-	Create(context.Context, *IndexRequest) (*IndexReply, error)
+	Create(context.Context, *IndexCreateRequest) (*IndexReply, error)
 	Delete(context.Context, *IndexRequest) (*IndexReply, error)
 	Get(context.Context, *IndexRequest) (*IndexReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *IndexRequest) (*IndexReplies, error)
-	Update(context.Context, *IndexRequest) (*IndexReply, error)
+	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
 }
 
 func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/index/{name}", _Index_Get4_HTTP_Handler(srv))
+	r.GET("/v1/index/{name}", _Index_Get5_HTTP_Handler(srv))
 	r.GET("/v1/index", _Index_Search3_HTTP_Handler(srv))
-	r.POST("/v1/index", _Index_Create2_HTTP_Handler(srv))
-	r.PUT("/v1/index/{name}", _Index_Update0_HTTP_Handler(srv))
+	r.POST("/v1/index", _Index_Create3_HTTP_Handler(srv))
+	r.PUT("/v1/index", _Index_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/index/{name}", _Index_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Index_Health9_HTTP_Handler(srv))
+	r.GET("/healthz", _Index_Health11_HTTP_Handler(srv))
 }
 
-func _Index_Get4_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Get5_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,15 +78,15 @@ func _Index_Search3_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Create2_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Create3_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in IndexRequest
+		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/index.v1.Index/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Create(ctx, req.(*IndexRequest))
+			return srv.Create(ctx, req.(*IndexCreateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -97,18 +97,15 @@ func _Index_Create2_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Update0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Update1_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in IndexRequest
+		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/index.v1.Index/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*IndexRequest))
+			return srv.Update(ctx, req.(*IndexCreateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -141,7 +138,7 @@ func _Index_Delete0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Health9_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Health11_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -161,12 +158,12 @@ func _Index_Health9_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 }
 
 type IndexHTTPClient interface {
-	Create(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
+	Create(ctx context.Context, req *IndexCreateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 	Delete(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 	Get(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReplies, err error)
-	Update(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
+	Update(ctx context.Context, req *IndexCreateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 }
 
 type IndexHTTPClientImpl struct {
@@ -177,7 +174,7 @@ func NewIndexHTTPClient(client *http.Client) IndexHTTPClient {
 	return &IndexHTTPClientImpl{client}
 }
 
-func (c *IndexHTTPClientImpl) Create(ctx context.Context, in *IndexRequest, opts ...http.CallOption) (*IndexReply, error) {
+func (c *IndexHTTPClientImpl) Create(ctx context.Context, in *IndexCreateRequest, opts ...http.CallOption) (*IndexReply, error) {
 	var out IndexReply
 	pattern := "/v1/index"
 	path := binding.EncodeURL(pattern, in, false)
@@ -242,9 +239,9 @@ func (c *IndexHTTPClientImpl) Search(ctx context.Context, in *IndexRequest, opts
 	return &out, err
 }
 
-func (c *IndexHTTPClientImpl) Update(ctx context.Context, in *IndexRequest, opts ...http.CallOption) (*IndexReply, error) {
+func (c *IndexHTTPClientImpl) Update(ctx context.Context, in *IndexCreateRequest, opts ...http.CallOption) (*IndexReply, error) {
 	var out IndexReply
-	pattern := "/v1/index/{name}"
+	pattern := "/v1/index"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/index.v1.Index/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

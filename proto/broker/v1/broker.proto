@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package broker.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/broker/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.broker.v1";
+option java_outer_classname = "BrokerProtoV1";
+
+service Broker {
+	rpc Get (BrokerRequest) returns (BrokerReply)  {
+		option (google.api.http) = {
+			get: "/v1/broker/{broker}"
+		};
+	}
+
+	rpc Create (BrokerCreateRequest) returns (BrokerReply)  {
+		option (google.api.http) = {
+			post: "/v1/broker"
+			body: "*"
+		};
+	}
+
+	rpc Update (BrokerCreateRequest) returns (BrokerReply)  {
+		option (google.api.http) = {
+			put: "/v1/broker/{broker}"
+			body: "*"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    	option (google.api.http) = {
+      		get: "/healthz"
+    	};
+  	}
+}
+
+// 
+// Request
+// 
+
+message BrokerRequest {
+	string broker = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string user = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
+}
+
+message BrokerCreateRequest {
+	string broker = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string name = 2 [(validate.rules).string = {min_len: 5, max_len: 30}];
+	string description = 3 [(validate.rules).string = {min_len: 15, max_len: 1024}];
+	string website = 4 [(validate.rules).string.uri = true];
+	string email = 5 [(validate.rules).string.email = true];
+	repeated string exchanges = 6 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
+}
+
+// 
+// Reply
+//
+
+message BrokerReply {
+	string ref = 1;
+	string name = 2;
+	string description = 3;
+	string website = 4;
+	repeated string exchanges = 5;
+	bool active = 6;
+	int64 date = 7;
+}
