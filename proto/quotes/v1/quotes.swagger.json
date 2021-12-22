@@ -265,6 +265,12 @@
                   "type": "string",
                   "format": "int64"
                 },
+                "indicators": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/quotesv1Indicator"
+                  }
+                },
                 "date": {
                   "$ref": "#/definitions/v1Date"
                 }
@@ -279,6 +285,170 @@
     }
   },
   "definitions": {
+    "IndicatorsBband": {
+      "type": "object",
+      "properties": {
+        "upper": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "middle": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "lower": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "QuotesReplyIndicators": {
+      "type": "object",
+      "properties": {
+        "macd": {
+          "$ref": "#/definitions/QuotesReplyIndicatorsMacd"
+        },
+        "rsi": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "obv": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "adx": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "beta": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "atr": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "bband": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IndicatorsBband"
+          }
+        },
+        "ema": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "linearreg": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "willr": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "stddev": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "sma10": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "sma20": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "sma50": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "sma100": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "sma200": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "QuotesReplyIndicatorsMacd": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "signal": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -290,6 +460,28 @@
           "format": "byte"
         }
       }
+    },
+    "quotesv1Indicator": {
+      "type": "string",
+      "enum": [
+        "Macd",
+        "Rsi",
+        "Obv",
+        "Adx",
+        "Beta",
+        "Atr",
+        "Bband",
+        "Ema",
+        "LinearReg",
+        "WillR",
+        "StdDev",
+        "Sma10",
+        "Sma20",
+        "Sma50",
+        "Sma100",
+        "Sma200"
+      ],
+      "default": "Macd"
     },
     "rpcStatus": {
       "type": "object",
@@ -335,6 +527,12 @@
         "account": {
           "type": "string"
         },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
         "date": {
           "$ref": "#/definitions/v1Date"
         }
@@ -352,6 +550,12 @@
         "currency": {
           "type": "string"
         },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
         "date": {
           "$ref": "#/definitions/v1Date"
         }
@@ -363,6 +567,12 @@
         "country": {
           "type": "string"
         },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
         "date": {
           "$ref": "#/definitions/v1Date"
         }
@@ -373,6 +583,12 @@
       "properties": {
         "ticker": {
           "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
         },
         "date": {
           "$ref": "#/definitions/v1Date"
@@ -388,6 +604,12 @@
         "country": {
           "type": "string"
         },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
         "date": {
           "$ref": "#/definitions/v1Date"
         }
@@ -398,6 +620,12 @@
       "properties": {
         "index": {
           "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
         },
         "date": {
           "$ref": "#/definitions/v1Date"
@@ -441,6 +669,9 @@
             "type": "number",
             "format": "float"
           }
+        },
+        "indicators": {
+          "$ref": "#/definitions/QuotesReplyIndicators"
         },
         "date": {
           "type": "array",

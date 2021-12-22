@@ -72,6 +72,25 @@ service Quotes {
 // Request
 // 
 
+enum Indicator {
+  Macd = 0;
+  Rsi = 1;
+  Obv = 2;
+  Adx = 3;
+  Beta = 4;
+  Atr = 5;
+  Bband = 6;
+  Ema = 7;
+  LinearReg = 8;
+  WillR = 9;
+  StdDev = 10;
+  Sma10 = 11;
+  Sma20 = 12;
+  Sma50 = 13;
+  Sma100 = 14;
+  Sma200 = 15;
+}
+
 message Date {
   enum Interval {
 	  d = 0;
@@ -87,39 +106,46 @@ message QuotesCompanyRequest {
   string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 2 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
   string currency = 3 [(validate.rules).string.len = 3];
-  Date date = 4;
+  repeated Indicator indicators = 4 [(validate.rules).repeated.unique = true];
+  Date date = 5;
 }
 
 message QuotesCurrencyRequest {
   string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  Date date = 2;
+  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
+  Date date = 3;
 }
 
 message QuotesIndustryRequest {
   string country = 1 [(validate.rules).string.len = 2];; 
   int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-  Date date = 3;
+  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
+  Date date = 4;
 }
 
 message QuotesExchangeRequest {
   string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
   string country = 2 [(validate.rules).string.len = 2];
-  Date date = 3;
+  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
+  Date date = 4;
 }
 
 message QuotesCountryRequest {
   string country = 1 [(validate.rules).string.len = 2];
-  Date date = 2;
+  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
+  Date date = 3;
 }
 
 message QuotesIndexRequest {
   string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  Date date = 2;
+  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
+  Date date = 3;
 }
 
 message QuotesAccountRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 16}];
-  Date date = 2;
+  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
+  Date date = 3;
 }
 
 // 
@@ -127,10 +153,42 @@ message QuotesAccountRequest {
 // 
 
 message QuotesReply {
+  message Indicators {
+    message Macd {
+      repeated float value = 1;
+      repeated float signal = 2;
+      repeated float history = 3;
+    }
+
+    message Bband {
+      repeated float upper = 1;
+      repeated float middle = 2;
+      repeated float lower = 3;
+    }
+
+    Macd macd = 1;
+    repeated float rsi = 2;
+    repeated float obv = 3;
+    repeated float adx = 4;
+    repeated float beta = 5;
+    repeated float atr = 6;
+    repeated Bband bband = 7;
+    repeated float ema = 8;
+    repeated float linearreg = 9;
+    repeated float willr = 10;
+    repeated float stddev = 11;
+    repeated float sma10 = 12;
+    repeated float sma20 = 13;
+    repeated float sma50 = 14;
+    repeated float sma100 = 15;
+    repeated float sma200 = 16;
+  }
+
 	repeated float open = 1;
 	repeated float close = 2;
 	repeated float low = 3;
 	repeated float high = 4;
 	repeated float volume = 5;
-	repeated int64 date = 6;
+  Indicators indicators = 6;
+	repeated int64 date = 7;
 }

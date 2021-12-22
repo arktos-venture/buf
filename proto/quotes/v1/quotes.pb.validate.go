@@ -228,6 +228,27 @@ func (m *QuotesCompanyRequest) validate(all bool) error {
 
 	}
 
+	_QuotesCompanyRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesCompanyRequest_Indicators_Unique[item]; exists {
+			err := QuotesCompanyRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesCompanyRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -383,6 +404,27 @@ func (m *QuotesCurrencyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	_QuotesCurrencyRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesCurrencyRequest_Indicators_Unique[item]; exists {
+			err := QuotesCurrencyRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesCurrencyRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -536,6 +578,27 @@ func (m *QuotesIndustryRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	_QuotesIndustryRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesIndustryRequest_Indicators_Unique[item]; exists {
+			err := QuotesIndustryRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesIndustryRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -687,6 +750,27 @@ func (m *QuotesExchangeRequest) validate(all bool) error {
 		}
 		errors = append(errors, err)
 
+	}
+
+	_QuotesExchangeRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesExchangeRequest_Indicators_Unique[item]; exists {
+			err := QuotesExchangeRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesExchangeRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
 	}
 
 	if all {
@@ -845,6 +929,27 @@ func (m *QuotesCountryRequest) validate(all bool) error {
 
 	}
 
+	_QuotesCountryRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesCountryRequest_Indicators_Unique[item]; exists {
+			err := QuotesCountryRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesCountryRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -984,6 +1089,27 @@ func (m *QuotesIndexRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	_QuotesIndexRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesIndexRequest_Indicators_Unique[item]; exists {
+			err := QuotesIndexRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesIndexRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
 	}
 
 	if all {
@@ -1127,6 +1253,27 @@ func (m *QuotesAccountRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	_QuotesAccountRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
+
+	for idx, item := range m.GetIndicators() {
+		_, _ = idx, item
+
+		if _, exists := _QuotesAccountRequest_Indicators_Unique[item]; exists {
+			err := QuotesAccountRequestValidationError{
+				field:  fmt.Sprintf("Indicators[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuotesAccountRequest_Indicators_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Indicators[idx]
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1257,6 +1404,35 @@ func (m *QuotesReply) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetIndicators()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QuotesReplyValidationError{
+					field:  "Indicators",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QuotesReplyValidationError{
+					field:  "Indicators",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIndicators()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QuotesReplyValidationError{
+				field:  "Indicators",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return QuotesReplyMultiError(errors)
 	}
@@ -1332,3 +1508,371 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = QuotesReplyValidationError{}
+
+// Validate checks the field values on QuotesReply_Indicators with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *QuotesReply_Indicators) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QuotesReply_Indicators with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QuotesReply_IndicatorsMultiError, or nil if none found.
+func (m *QuotesReply_Indicators) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QuotesReply_Indicators) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetMacd()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QuotesReply_IndicatorsValidationError{
+					field:  "Macd",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QuotesReply_IndicatorsValidationError{
+					field:  "Macd",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMacd()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QuotesReply_IndicatorsValidationError{
+				field:  "Macd",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetBband() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, QuotesReply_IndicatorsValidationError{
+						field:  fmt.Sprintf("Bband[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, QuotesReply_IndicatorsValidationError{
+						field:  fmt.Sprintf("Bband[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return QuotesReply_IndicatorsValidationError{
+					field:  fmt.Sprintf("Bband[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return QuotesReply_IndicatorsMultiError(errors)
+	}
+	return nil
+}
+
+// QuotesReply_IndicatorsMultiError is an error wrapping multiple validation
+// errors returned by QuotesReply_Indicators.ValidateAll() if the designated
+// constraints aren't met.
+type QuotesReply_IndicatorsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QuotesReply_IndicatorsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QuotesReply_IndicatorsMultiError) AllErrors() []error { return m }
+
+// QuotesReply_IndicatorsValidationError is the validation error returned by
+// QuotesReply_Indicators.Validate if the designated constraints aren't met.
+type QuotesReply_IndicatorsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QuotesReply_IndicatorsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QuotesReply_IndicatorsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QuotesReply_IndicatorsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QuotesReply_IndicatorsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QuotesReply_IndicatorsValidationError) ErrorName() string {
+	return "QuotesReply_IndicatorsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QuotesReply_IndicatorsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQuotesReply_Indicators.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QuotesReply_IndicatorsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QuotesReply_IndicatorsValidationError{}
+
+// Validate checks the field values on QuotesReply_Indicators_Macd with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *QuotesReply_Indicators_Macd) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QuotesReply_Indicators_Macd with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QuotesReply_Indicators_MacdMultiError, or nil if none found.
+func (m *QuotesReply_Indicators_Macd) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QuotesReply_Indicators_Macd) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return QuotesReply_Indicators_MacdMultiError(errors)
+	}
+	return nil
+}
+
+// QuotesReply_Indicators_MacdMultiError is an error wrapping multiple
+// validation errors returned by QuotesReply_Indicators_Macd.ValidateAll() if
+// the designated constraints aren't met.
+type QuotesReply_Indicators_MacdMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QuotesReply_Indicators_MacdMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QuotesReply_Indicators_MacdMultiError) AllErrors() []error { return m }
+
+// QuotesReply_Indicators_MacdValidationError is the validation error returned
+// by QuotesReply_Indicators_Macd.Validate if the designated constraints
+// aren't met.
+type QuotesReply_Indicators_MacdValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QuotesReply_Indicators_MacdValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QuotesReply_Indicators_MacdValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QuotesReply_Indicators_MacdValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QuotesReply_Indicators_MacdValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QuotesReply_Indicators_MacdValidationError) ErrorName() string {
+	return "QuotesReply_Indicators_MacdValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QuotesReply_Indicators_MacdValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQuotesReply_Indicators_Macd.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QuotesReply_Indicators_MacdValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QuotesReply_Indicators_MacdValidationError{}
+
+// Validate checks the field values on QuotesReply_Indicators_Bband with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *QuotesReply_Indicators_Bband) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QuotesReply_Indicators_Bband with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QuotesReply_Indicators_BbandMultiError, or nil if none found.
+func (m *QuotesReply_Indicators_Bband) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QuotesReply_Indicators_Bband) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return QuotesReply_Indicators_BbandMultiError(errors)
+	}
+	return nil
+}
+
+// QuotesReply_Indicators_BbandMultiError is an error wrapping multiple
+// validation errors returned by QuotesReply_Indicators_Bband.ValidateAll() if
+// the designated constraints aren't met.
+type QuotesReply_Indicators_BbandMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QuotesReply_Indicators_BbandMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QuotesReply_Indicators_BbandMultiError) AllErrors() []error { return m }
+
+// QuotesReply_Indicators_BbandValidationError is the validation error returned
+// by QuotesReply_Indicators_Bband.Validate if the designated constraints
+// aren't met.
+type QuotesReply_Indicators_BbandValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QuotesReply_Indicators_BbandValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QuotesReply_Indicators_BbandValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QuotesReply_Indicators_BbandValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QuotesReply_Indicators_BbandValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QuotesReply_Indicators_BbandValidationError) ErrorName() string {
+	return "QuotesReply_Indicators_BbandValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QuotesReply_Indicators_BbandValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQuotesReply_Indicators_Bband.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QuotesReply_Indicators_BbandValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QuotesReply_Indicators_BbandValidationError{}
