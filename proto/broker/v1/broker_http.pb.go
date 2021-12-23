@@ -22,7 +22,7 @@ type BrokerHTTPServer interface {
 	Create(context.Context, *BrokerCreateRequest) (*BrokerReply, error)
 	Get(context.Context, *BrokerRequest) (*BrokerReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Update(context.Context, *BrokerCreateRequest) (*BrokerReply, error)
+	Update(context.Context, *BrokerUpdateRequest) (*BrokerReply, error)
 }
 
 func RegisterBrokerHTTPServer(s *http.Server, srv BrokerHTTPServer) {
@@ -76,7 +76,7 @@ func _Broker_Create1_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) e
 
 func _Broker_Update0_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in BrokerCreateRequest
+		var in BrokerUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -85,7 +85,7 @@ func _Broker_Update0_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) e
 		}
 		http.SetOperation(ctx, "/broker.v1.Broker/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*BrokerCreateRequest))
+			return srv.Update(ctx, req.(*BrokerUpdateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -119,7 +119,7 @@ type BrokerHTTPClient interface {
 	Create(ctx context.Context, req *BrokerCreateRequest, opts ...http.CallOption) (rsp *BrokerReply, err error)
 	Get(ctx context.Context, req *BrokerRequest, opts ...http.CallOption) (rsp *BrokerReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Update(ctx context.Context, req *BrokerCreateRequest, opts ...http.CallOption) (rsp *BrokerReply, err error)
+	Update(ctx context.Context, req *BrokerUpdateRequest, opts ...http.CallOption) (rsp *BrokerReply, err error)
 }
 
 type BrokerHTTPClientImpl struct {
@@ -169,7 +169,7 @@ func (c *BrokerHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, op
 	return &out, err
 }
 
-func (c *BrokerHTTPClientImpl) Update(ctx context.Context, in *BrokerCreateRequest, opts ...http.CallOption) (*BrokerReply, error) {
+func (c *BrokerHTTPClientImpl) Update(ctx context.Context, in *BrokerUpdateRequest, opts ...http.CallOption) (*BrokerReply, error) {
 	var out BrokerReply
 	pattern := "/v1/broker/{broker}"
 	path := binding.EncodeURL(pattern, in, false)
