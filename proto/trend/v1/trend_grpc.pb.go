@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TrendClient interface {
 	GetTrendId(ctx context.Context, in *TrendRequest, opts ...grpc.CallOption) (*TrendIdReply, error)
-	SearchTrends(ctx context.Context, in *TrendRequest, opts ...grpc.CallOption) (*TrendReply, error)
+	Search(ctx context.Context, in *TrendRequest, opts ...grpc.CallOption) (*TrendReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -41,9 +41,9 @@ func (c *trendClient) GetTrendId(ctx context.Context, in *TrendRequest, opts ...
 	return out, nil
 }
 
-func (c *trendClient) SearchTrends(ctx context.Context, in *TrendRequest, opts ...grpc.CallOption) (*TrendReply, error) {
+func (c *trendClient) Search(ctx context.Context, in *TrendRequest, opts ...grpc.CallOption) (*TrendReply, error) {
 	out := new(TrendReply)
-	err := c.cc.Invoke(ctx, "/trend.v1.Trend/SearchTrends", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trend.v1.Trend/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (c *trendClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grp
 // for forward compatibility
 type TrendServer interface {
 	GetTrendId(context.Context, *TrendRequest) (*TrendIdReply, error)
-	SearchTrends(context.Context, *TrendRequest) (*TrendReply, error)
+	Search(context.Context, *TrendRequest) (*TrendReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTrendServer()
 }
@@ -76,8 +76,8 @@ type UnimplementedTrendServer struct {
 func (UnimplementedTrendServer) GetTrendId(context.Context, *TrendRequest) (*TrendIdReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTrendId not implemented")
 }
-func (UnimplementedTrendServer) SearchTrends(context.Context, *TrendRequest) (*TrendReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchTrends not implemented")
+func (UnimplementedTrendServer) Search(context.Context, *TrendRequest) (*TrendReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedTrendServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -113,20 +113,20 @@ func _Trend_GetTrendId_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trend_SearchTrends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Trend_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TrendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrendServer).SearchTrends(ctx, in)
+		return srv.(TrendServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trend.v1.Trend/SearchTrends",
+		FullMethod: "/trend.v1.Trend/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrendServer).SearchTrends(ctx, req.(*TrendRequest))
+		return srv.(TrendServer).Search(ctx, req.(*TrendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -161,8 +161,8 @@ var Trend_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Trend_GetTrendId_Handler,
 		},
 		{
-			MethodName: "SearchTrends",
-			Handler:    _Trend_SearchTrends_Handler,
+			MethodName: "Search",
+			Handler:    _Trend_Search_Handler,
 		},
 		{
 			MethodName: "Health",

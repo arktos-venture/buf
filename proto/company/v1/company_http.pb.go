@@ -27,7 +27,7 @@ type CompanyHTTPServer interface {
 func RegisterCompanyHTTPServer(s *http.Server, srv CompanyHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{currency}/{exchange}/{ticker}", _Company_Get8_HTTP_Handler(srv))
-	r.POST("/v1/company", _Company_Search6_HTTP_Handler(srv))
+	r.POST("/v1/company", _Company_Search7_HTTP_Handler(srv))
 	r.GET("/healthz", _Company_Health15_HTTP_Handler(srv))
 }
 
@@ -53,7 +53,7 @@ func _Company_Get8_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Company_Search6_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
+func _Company_Search7_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanySearchRequest
 		if err := ctx.Bind(&in); err != nil {

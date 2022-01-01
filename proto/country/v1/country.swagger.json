@@ -258,7 +258,7 @@
       "type": "object",
       "properties": {
         "indicator": {
-          "$ref": "#/definitions/getIndicator"
+          "$ref": "#/definitions/v1getIndicator"
         },
         "country": {
           "type": "string"
@@ -383,19 +383,6 @@
         }
       }
     },
-    "getIndicator": {
-      "type": "string",
-      "enum": [
-        "PMIM",
-        "PMIS",
-        "CC",
-        "TC",
-        "IPC",
-        "SPB",
-        "IPP"
-      ],
-      "default": "PMIM"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -425,6 +412,19 @@
           }
         }
       }
+    },
+    "v1getIndicator": {
+      "type": "string",
+      "enum": [
+        "PMIM",
+        "PMIS",
+        "CC",
+        "TC",
+        "IPC",
+        "SPB",
+        "IPP"
+      ],
+      "default": "PMIM"
     }
   }
 }

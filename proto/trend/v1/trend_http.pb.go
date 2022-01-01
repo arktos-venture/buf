@@ -21,13 +21,13 @@ const _ = http.SupportPackageIsVersion1
 type TrendHTTPServer interface {
 	GetTrendId(context.Context, *TrendRequest) (*TrendIdReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	SearchTrends(context.Context, *TrendRequest) (*TrendReply, error)
+	Search(context.Context, *TrendRequest) (*TrendReply, error)
 }
 
 func RegisterTrendHTTPServer(s *http.Server, srv TrendHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/trend/trendId", _Trend_GetTrendId0_HTTP_Handler(srv))
-	r.POST("/v1/trend/trends", _Trend_SearchTrends0_HTTP_Handler(srv))
+	r.POST("/v1/trend/trends", _Trend_Search2_HTTP_Handler(srv))
 	r.GET("/healthz", _Trend_Health6_HTTP_Handler(srv))
 }
 
@@ -50,15 +50,15 @@ func _Trend_GetTrendId0_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Trend_SearchTrends0_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
+func _Trend_Search2_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in TrendRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/trend.v1.Trend/SearchTrends")
+		http.SetOperation(ctx, "/trend.v1.Trend/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SearchTrends(ctx, req.(*TrendRequest))
+			return srv.Search(ctx, req.(*TrendRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -91,7 +91,7 @@ func _Trend_Health6_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) err
 type TrendHTTPClient interface {
 	GetTrendId(ctx context.Context, req *TrendRequest, opts ...http.CallOption) (rsp *TrendIdReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	SearchTrends(ctx context.Context, req *TrendRequest, opts ...http.CallOption) (rsp *TrendReply, err error)
+	Search(ctx context.Context, req *TrendRequest, opts ...http.CallOption) (rsp *TrendReply, err error)
 }
 
 type TrendHTTPClientImpl struct {
@@ -128,11 +128,11 @@ func (c *TrendHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opt
 	return &out, err
 }
 
-func (c *TrendHTTPClientImpl) SearchTrends(ctx context.Context, in *TrendRequest, opts ...http.CallOption) (*TrendReply, error) {
+func (c *TrendHTTPClientImpl) Search(ctx context.Context, in *TrendRequest, opts ...http.CallOption) (*TrendReply, error) {
 	var out TrendReply
 	pattern := "/v1/trend/trends"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/trend.v1.Trend/SearchTrends"))
+	opts = append(opts, http.Operation("/trend.v1.Trend/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
