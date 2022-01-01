@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type BrokerClient interface {
 	Get(ctx context.Context, in *BrokerRequest, opts ...grpc.CallOption) (*BrokerReply, error)
 	Create(ctx context.Context, in *BrokerCreateRequest, opts ...grpc.CallOption) (*BrokerReply, error)
-	Update(ctx context.Context, in *BrokerCreateRequest, opts ...grpc.CallOption) (*BrokerReply, error)
+	Update(ctx context.Context, in *BrokerUpdateRequest, opts ...grpc.CallOption) (*BrokerReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -51,7 +51,7 @@ func (c *brokerClient) Create(ctx context.Context, in *BrokerCreateRequest, opts
 	return out, nil
 }
 
-func (c *brokerClient) Update(ctx context.Context, in *BrokerCreateRequest, opts ...grpc.CallOption) (*BrokerReply, error) {
+func (c *brokerClient) Update(ctx context.Context, in *BrokerUpdateRequest, opts ...grpc.CallOption) (*BrokerReply, error) {
 	out := new(BrokerReply)
 	err := c.cc.Invoke(ctx, "/broker.v1.Broker/Update", in, out, opts...)
 	if err != nil {
@@ -75,7 +75,7 @@ func (c *brokerClient) Health(ctx context.Context, in *emptypb.Empty, opts ...gr
 type BrokerServer interface {
 	Get(context.Context, *BrokerRequest) (*BrokerReply, error)
 	Create(context.Context, *BrokerCreateRequest) (*BrokerReply, error)
-	Update(context.Context, *BrokerCreateRequest) (*BrokerReply, error)
+	Update(context.Context, *BrokerUpdateRequest) (*BrokerReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedBrokerServer()
 }
@@ -90,7 +90,7 @@ func (UnimplementedBrokerServer) Get(context.Context, *BrokerRequest) (*BrokerRe
 func (UnimplementedBrokerServer) Create(context.Context, *BrokerCreateRequest) (*BrokerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedBrokerServer) Update(context.Context, *BrokerCreateRequest) (*BrokerReply, error) {
+func (UnimplementedBrokerServer) Update(context.Context, *BrokerUpdateRequest) (*BrokerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedBrokerServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
@@ -146,7 +146,7 @@ func _Broker_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 }
 
 func _Broker_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BrokerCreateRequest)
+	in := new(BrokerUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func _Broker_Update_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/broker.v1.Broker/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BrokerServer).Update(ctx, req.(*BrokerCreateRequest))
+		return srv.(BrokerServer).Update(ctx, req.(*BrokerUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

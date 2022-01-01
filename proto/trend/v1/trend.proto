@@ -19,7 +19,7 @@ service Trend {
 		};
 	}
 
-	rpc SearchTrends (TrendRequest) returns (TrendReply)  {
+	rpc Search (TrendRequest) returns (TrendReply)  {
 		option (google.api.http) = {
 		  	post: "/v1/trend/trends"
 			body: "*"

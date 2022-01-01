@@ -85,19 +85,6 @@
         }
       }
     },
-    "QuoteMacd": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "number",
-          "format": "float"
-        },
-        "signal": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "QuoteVolume": {
       "type": "object",
       "properties": {
@@ -137,7 +124,7 @@
           "$ref": "#/definitions/QuoteVolume"
         },
         "macd": {
-          "$ref": "#/definitions/QuoteMacd"
+          "$ref": "#/definitions/ScreenerQuoteMacd"
         },
         "bbands": {
           "$ref": "#/definitions/QuoteBBands"
@@ -148,6 +135,19 @@
             "type": "number",
             "format": "float"
           }
+        }
+      }
+    },
+    "ScreenerQuoteMacd": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "float"
+        },
+        "signal": {
+          "type": "number",
+          "format": "float"
         }
       }
     },

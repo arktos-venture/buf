@@ -93,12 +93,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "user",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -152,6 +146,9 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "Active": {
+                  "type": "boolean"
                 }
               }
             }
@@ -223,7 +220,7 @@
     "v1BrokerReply": {
       "type": "object",
       "properties": {
-        "ref": {
+        "broker": {
           "type": "string"
         },
         "name": {
