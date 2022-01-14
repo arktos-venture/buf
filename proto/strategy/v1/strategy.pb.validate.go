@@ -93,6 +93,7 @@ func (m *Parameters) validate(all bool) error {
 	if len(errors) > 0 {
 		return ParametersMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -268,6 +269,7 @@ func (m *StrategyCompanyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyCompanyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -409,6 +411,7 @@ func (m *StrategyCurrencyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyCurrencyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -562,6 +565,7 @@ func (m *StrategyIndustryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyIndustryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -715,6 +719,7 @@ func (m *StrategyExchangeRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyExchangeRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -857,6 +862,7 @@ func (m *StrategyCountryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyCountryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -998,6 +1004,7 @@ func (m *StrategyIndexRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyIndexRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1139,6 +1146,7 @@ func (m *StrategyAccountRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyAccountRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1242,6 +1250,7 @@ func (m *StrategyReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return StrategyReplyMultiError(errors)
 	}
+
 	return nil
 }
 

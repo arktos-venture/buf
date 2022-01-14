@@ -116,6 +116,7 @@ func (m *DividendsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return DividendsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -249,6 +250,7 @@ func (m *DividendsReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return DividendsReplyMultiError(errors)
 	}
+
 	return nil
 }
 

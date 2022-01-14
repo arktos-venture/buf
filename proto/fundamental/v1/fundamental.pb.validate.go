@@ -82,6 +82,7 @@ func (m *FundamentalRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return FundamentalRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -239,6 +240,7 @@ func (m *FundamentalReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return FundamentalReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -340,6 +342,7 @@ func (m *FundamentalReply_Fundamental) validate(all bool) error {
 	if len(errors) > 0 {
 		return FundamentalReply_FundamentalMultiError(errors)
 	}
+
 	return nil
 }
 

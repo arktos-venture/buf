@@ -105,6 +105,7 @@ func (m *NewsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return NewsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -215,6 +216,7 @@ func (m *NewsReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return NewsReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -351,6 +353,7 @@ func (m *NewsReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return NewsRepliesMultiError(errors)
 	}
+
 	return nil
 }
 

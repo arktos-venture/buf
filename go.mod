@@ -3,10 +3,10 @@ module github.com/arktos-venture/buf
 go 1.17
 
 require (
-	github.com/envoyproxy/protoc-gen-validate v0.6.2
-	github.com/go-kratos/kratos/v2 v2.1.3
-	github.com/hashicorp/go-hclog v1.0.0
-	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
+	github.com/envoyproxy/protoc-gen-validate v0.6.3
+	github.com/go-kratos/kratos/v2 v2.1.4
+	github.com/hashicorp/go-hclog v1.1.0
+	google.golang.org/genproto v0.0.0-20220112215332-a9c7c0acf9f2
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 )

@@ -94,6 +94,7 @@ func (m *AccountRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return AccountRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -227,6 +228,7 @@ func (m *AccountCreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return AccountCreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -338,6 +340,7 @@ func (m *AccountReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return AccountReplyMultiError(errors)
 	}
+
 	return nil
 }
 

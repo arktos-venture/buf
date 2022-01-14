@@ -82,6 +82,7 @@ func (m *OrderRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return OrderRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -213,6 +214,7 @@ func (m *OrderSearchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return OrderSearchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -439,6 +441,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return OrderCreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -570,6 +573,7 @@ func (m *OrderReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return OrderReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -706,6 +710,7 @@ func (m *OrderReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return OrderRepliesMultiError(errors)
 	}
+
 	return nil
 }
 

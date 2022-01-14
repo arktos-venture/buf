@@ -93,6 +93,7 @@ func (m *PositionRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return PositionRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -220,6 +221,7 @@ func (m *PositionCompanyReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return PositionCompanyReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -359,6 +361,7 @@ func (m *PositionCompanyReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return PositionCompanyRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -466,6 +469,7 @@ func (m *PositionCurrencyReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return PositionCurrencyReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -605,6 +609,7 @@ func (m *PositionCurrencyReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return PositionCurrencyRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
