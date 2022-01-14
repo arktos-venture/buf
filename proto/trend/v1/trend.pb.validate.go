@@ -94,6 +94,7 @@ func (m *TrendRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -261,6 +262,7 @@ func (m *TrendIdReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendIdReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -429,6 +431,7 @@ func (m *TrendReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -531,6 +534,7 @@ func (m *TrendIdReply_Trend) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendIdReply_TrendMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -640,6 +644,7 @@ func (m *TrendReply_Related) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendReply_RelatedMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -745,6 +750,7 @@ func (m *TrendReply_GeoMap) validate(all bool) error {
 	if len(errors) > 0 {
 		return TrendReply_GeoMapMultiError(errors)
 	}
+
 	return nil
 }
 

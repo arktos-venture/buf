@@ -81,6 +81,7 @@ func (m *Date) validate(all bool) error {
 	if len(errors) > 0 {
 		return DateMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -281,6 +282,7 @@ func (m *QuotesCompanyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesCompanyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -457,6 +459,7 @@ func (m *QuotesCurrencyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesCurrencyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -631,6 +634,7 @@ func (m *QuotesIndustryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesIndustryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -805,6 +809,7 @@ func (m *QuotesExchangeRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesExchangeRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -982,6 +987,7 @@ func (m *QuotesCountryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesCountryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1144,6 +1150,7 @@ func (m *QuotesIndexRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesIndexRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1306,6 +1313,7 @@ func (m *QuotesAccountRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesAccountRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1436,6 +1444,7 @@ func (m *QuotesReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1597,6 +1606,7 @@ func (m *QuotesReply_Indicators) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesReply_IndicatorsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1698,6 +1708,7 @@ func (m *QuotesReply_Indicators_Macd) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesReply_Indicators_MacdMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1800,6 +1811,7 @@ func (m *QuotesReply_Indicators_Bband) validate(all bool) error {
 	if len(errors) > 0 {
 		return QuotesReply_Indicators_BbandMultiError(errors)
 	}
+
 	return nil
 }
 

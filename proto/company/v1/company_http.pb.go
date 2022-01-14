@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type CompanyHTTPServer interface {
+	BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error)
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
@@ -28,6 +29,7 @@ func RegisterCompanyHTTPServer(s *http.Server, srv CompanyHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{currency}/{exchange}/{ticker}", _Company_Get8_HTTP_Handler(srv))
 	r.POST("/v1/company", _Company_Search7_HTTP_Handler(srv))
+	r.POST("/v1/company/bulk", _Company_BulkSearch0_HTTP_Handler(srv))
 	r.GET("/healthz", _Company_Health15_HTTP_Handler(srv))
 }
 
@@ -72,6 +74,25 @@ func _Company_Search7_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context)
 	}
 }
 
+func _Company_BulkSearch0_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CompanyBulkSearchRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/company.v1.Company/BulkSearch")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.BulkSearch(ctx, req.(*CompanyBulkSearchRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CompanyReplies)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _Company_Health15_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
@@ -92,6 +113,7 @@ func _Company_Health15_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context
 }
 
 type CompanyHTTPClient interface {
+	BulkSearch(ctx context.Context, req *CompanyBulkSearchRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *CompanySearchRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
@@ -103,6 +125,19 @@ type CompanyHTTPClientImpl struct {
 
 func NewCompanyHTTPClient(client *http.Client) CompanyHTTPClient {
 	return &CompanyHTTPClientImpl{client}
+}
+
+func (c *CompanyHTTPClientImpl) BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...http.CallOption) (*CompanyReplies, error) {
+	var out CompanyReplies
+	pattern := "/v1/company/bulk"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/company.v1.Company/BulkSearch"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *CompanyHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyReply, error) {

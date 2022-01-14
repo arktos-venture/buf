@@ -71,6 +71,7 @@ func (m *IndexRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -225,6 +226,7 @@ func (m *IndexCreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexCreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -330,6 +332,7 @@ func (m *IndexReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -464,6 +467,7 @@ func (m *IndexReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -570,6 +574,7 @@ func (m *IndexCreateRequest_Company) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexCreateRequest_CompanyMultiError(errors)
 	}
+
 	return nil
 }
 

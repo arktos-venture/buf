@@ -71,6 +71,7 @@ func (m *IndustryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndustryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -216,6 +217,7 @@ func (m *IndustryReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndustryReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -365,6 +367,7 @@ func (m *IndustryReply_Ref) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndustryReply_RefMultiError(errors)
 	}
+
 	return nil
 }
 

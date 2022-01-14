@@ -72,6 +72,7 @@ func (m *CountryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -171,6 +172,7 @@ func (m *CountrySearchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountrySearchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -285,6 +287,7 @@ func (m *CountryIndicatorRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryIndicatorRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -515,6 +518,7 @@ func (m *CountryReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -649,6 +653,7 @@ func (m *CountryReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -783,6 +788,7 @@ func (m *CountryIndicatorReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryIndicatorReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -894,6 +900,7 @@ func (m *CountryReply_Geo) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReply_GeoMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1003,6 +1010,7 @@ func (m *CountryReply_Code) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReply_CodeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1104,6 +1112,7 @@ func (m *CountryReply_Exchange) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReply_ExchangeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1238,6 +1247,7 @@ func (m *CountryReply_Division) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReply_DivisionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1352,6 +1362,7 @@ func (m *CountryReply_Division_Coordinate) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryReply_Division_CoordinateMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1455,6 +1466,7 @@ func (m *CountryIndicatorReply_Result) validate(all bool) error {
 	if len(errors) > 0 {
 		return CountryIndicatorReply_ResultMultiError(errors)
 	}
+
 	return nil
 }
 

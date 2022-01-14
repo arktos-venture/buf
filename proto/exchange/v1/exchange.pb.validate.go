@@ -71,6 +71,7 @@ func (m *ExchangeRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -193,6 +194,7 @@ func (m *Code) validate(all bool) error {
 	if len(errors) > 0 {
 		return CodeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -295,6 +297,7 @@ func (m *TradingHours) validate(all bool) error {
 	if len(errors) > 0 {
 		return TradingHoursMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -527,6 +530,7 @@ func (m *ExchangeReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -663,6 +667,7 @@ func (m *ExchangeIsOpenReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeIsOpenReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -799,6 +804,7 @@ func (m *ExchangeShortReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeShortReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -936,6 +942,7 @@ func (m *ExchangeReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1039,6 +1046,7 @@ func (m *ExchangeReply_Holiday) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeReply_HolidayMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1146,6 +1154,7 @@ func (m *ExchangeReply_Company) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeReply_CompanyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1253,6 +1262,7 @@ func (m *ExchangeReplies_Company) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExchangeReplies_CompanyMultiError(errors)
 	}
+
 	return nil
 }
 

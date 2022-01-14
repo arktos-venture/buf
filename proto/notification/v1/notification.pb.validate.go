@@ -79,6 +79,7 @@ func (m *NotificationCreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return NotificationCreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -204,6 +205,7 @@ func (m *NotificationRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return NotificationRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -323,6 +325,7 @@ func (m *NotificationReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return NotificationReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -462,6 +465,7 @@ func (m *NotificationReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return NotificationRepliesMultiError(errors)
 	}
+
 	return nil
 }
 

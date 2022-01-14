@@ -202,6 +202,7 @@ func (m *ScreenerRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -349,6 +350,7 @@ func (m *ScreenerReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -470,6 +472,7 @@ func (m *ScreenerRequestBint64) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerRequestBint64MultiError(errors)
 	}
+
 	return nil
 }
 
@@ -573,6 +576,7 @@ func (m *ScreenerReply_Total) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_TotalMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -740,6 +744,7 @@ func (m *ScreenerReply_Screener) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_ScreenerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -938,6 +943,7 @@ func (m *ScreenerReply_Screener_Quote) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_Screener_QuoteMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1048,6 +1054,7 @@ func (m *ScreenerReply_Screener_Stats) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_Screener_StatsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1155,6 +1162,7 @@ func (m *ScreenerReply_Screener_Quote_Volume) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_Screener_Quote_VolumeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1263,6 +1271,7 @@ func (m *ScreenerReply_Screener_Quote_Macd) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_Screener_Quote_MacdMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1371,6 +1380,7 @@ func (m *ScreenerReply_Screener_Quote_BBands) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScreenerReply_Screener_Quote_BBandsMultiError(errors)
 	}
+
 	return nil
 }
 

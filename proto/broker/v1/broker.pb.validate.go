@@ -71,6 +71,7 @@ func (m *BrokerRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return BrokerRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -268,6 +269,7 @@ func (m *BrokerCreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return BrokerCreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -519,6 +521,7 @@ func (m *BrokerUpdateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return BrokerUpdateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -682,6 +685,7 @@ func (m *BrokerReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return BrokerReplyMultiError(errors)
 	}
+
 	return nil
 }
 
