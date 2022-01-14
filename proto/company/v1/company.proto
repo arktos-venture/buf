@@ -12,12 +12,14 @@ option java_package = "dev.kratos.api.company.v1";
 option java_outer_classname = "CompanyProtoV1";
 
 service Company {
+	// Public API
 	rpc Get (CompanyRequest) returns (CompanyReply)  {
 		option (google.api.http) = {
 		  	get: "/v1/company/{currency}/{exchange}/{ticker}"
 		};
 	}
 
+	// Public API
   	rpc Search (CompanySearchRequest) returns (CompanyReplies)  {
         option (google.api.http) = {
             post: "/v1/company"
@@ -25,6 +27,15 @@ service Company {
         };
    	}
 
+	// Private API
+  	rpc BulkSearch (CompanyBulkSearchRequest) returns (CompanyReplies)  {
+        option (google.api.http) = {
+            post: "/v1/company/bulk"
+            body: "*"
+        };
+   	}
+
+	// Private API
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
@@ -56,7 +67,15 @@ message CompanySearchRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
   	map<string, string> filterString = 2;
   	map<string, int64> filterInt = 3;
-  	int32 limit = 4 [(validate.rules).int32 = {gte: 5, lte: 150}];
+  	int32 limit = 4 [(validate.rules).int32 = {gte: 1, lte: 150}];
+	int32 page = 5 [(validate.rules).int32 = {gte: 1}];
+}
+
+message CompanyBulkSearchRequest {
+	string currency = 1 [(validate.rules).string.len = 3];
+  	map<string, string> filterString = 2;
+  	map<string, int64> filterInt = 3;
+  	int32 limit = 4 [(validate.rules).int32 = {gte: 1, lte: 30000}];
 }
 
 message CompanyAddress {

@@ -18,6 +18,7 @@
   "paths": {
     "/healthz": {
       "get": {
+        "summary": "Private API",
         "operationId": "Company_Health",
         "responses": {
           "200": {
@@ -40,6 +41,7 @@
     },
     "/v1/company": {
       "post": {
+        "summary": "Public API",
         "operationId": "Company_Search",
         "responses": {
           "200": {
@@ -70,8 +72,42 @@
         ]
       }
     },
+    "/v1/company/bulk": {
+      "post": {
+        "summary": "Private API",
+        "operationId": "Company_BulkSearch",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompanyBulkSearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Company"
+        ]
+      }
+    },
     "/v1/company/{currency}/{exchange}/{ticker}": {
       "get": {
+        "summary": "Public API",
         "operationId": "Company_Get",
         "responses": {
           "200": {
@@ -158,6 +194,31 @@
         },
         "country": {
           "type": "string"
+        }
+      }
+    },
+    "v1CompanyBulkSearchRequest": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "filterString": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "filterInt": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -271,6 +332,10 @@
           }
         },
         "limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "page": {
           "type": "integer",
           "format": "int32"
         }

@@ -19,8 +19,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CompanyClient interface {
+	// Public API
 	Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error)
+	// Public API
 	Search(ctx context.Context, in *CompanySearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
+	// Private API
+	BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
+	// Private API
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -50,6 +55,15 @@ func (c *companyClient) Search(ctx context.Context, in *CompanySearchRequest, op
 	return out, nil
 }
 
+func (c *companyClient) BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error) {
+	out := new(CompanyReplies)
+	err := c.cc.Invoke(ctx, "/company.v1.Company/BulkSearch", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *companyClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/company.v1.Company/Health", in, out, opts...)
@@ -63,8 +77,13 @@ func (c *companyClient) Health(ctx context.Context, in *emptypb.Empty, opts ...g
 // All implementations must embed UnimplementedCompanyServer
 // for forward compatibility
 type CompanyServer interface {
+	// Public API
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
+	// Public API
 	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
+	// Private API
+	BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error)
+	// Private API
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCompanyServer()
 }
@@ -78,6 +97,9 @@ func (UnimplementedCompanyServer) Get(context.Context, *CompanyRequest) (*Compan
 }
 func (UnimplementedCompanyServer) Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedCompanyServer) BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BulkSearch not implemented")
 }
 func (UnimplementedCompanyServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -131,6 +153,24 @@ func _Company_Search_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Company_BulkSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyBulkSearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompanyServer).BulkSearch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/company.v1.Company/BulkSearch",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompanyServer).BulkSearch(ctx, req.(*CompanyBulkSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Company_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -163,6 +203,10 @@ var Company_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Company_Search_Handler,
+		},
+		{
+			MethodName: "BulkSearch",
+			Handler:    _Company_BulkSearch_Handler,
 		},
 		{
 			MethodName: "Health",

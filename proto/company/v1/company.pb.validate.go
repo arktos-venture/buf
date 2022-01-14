@@ -94,6 +94,7 @@ func (m *CompanyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -227,6 +228,7 @@ func (m *CompanySearchByIDsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanySearchByIDsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -341,10 +343,21 @@ func (m *CompanySearchRequest) validate(all bool) error {
 
 	// no validation rules for FilterInt
 
-	if val := m.GetLimit(); val < 5 || val > 150 {
+	if val := m.GetLimit(); val < 1 || val > 150 {
 		err := CompanySearchRequestValidationError{
 			field:  "Limit",
-			reason: "value must be inside range [5, 150]",
+			reason: "value must be inside range [1, 150]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetPage() < 1 {
+		err := CompanySearchRequestValidationError{
+			field:  "Page",
+			reason: "value must be greater than or equal to 1",
 		}
 		if !all {
 			return err
@@ -355,6 +368,7 @@ func (m *CompanySearchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanySearchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -431,6 +445,135 @@ var _ interface {
 	ErrorName() string
 } = CompanySearchRequestValidationError{}
 
+// Validate checks the field values on CompanyBulkSearchRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyBulkSearchRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyBulkSearchRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyBulkSearchRequestMultiError, or nil if none found.
+func (m *CompanyBulkSearchRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyBulkSearchRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := CompanyBulkSearchRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	// no validation rules for FilterString
+
+	// no validation rules for FilterInt
+
+	if val := m.GetLimit(); val < 1 || val > 30000 {
+		err := CompanyBulkSearchRequestValidationError{
+			field:  "Limit",
+			reason: "value must be inside range [1, 30000]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CompanyBulkSearchRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyBulkSearchRequestMultiError is an error wrapping multiple validation
+// errors returned by CompanyBulkSearchRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyBulkSearchRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyBulkSearchRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyBulkSearchRequestMultiError) AllErrors() []error { return m }
+
+// CompanyBulkSearchRequestValidationError is the validation error returned by
+// CompanyBulkSearchRequest.Validate if the designated constraints aren't met.
+type CompanyBulkSearchRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyBulkSearchRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyBulkSearchRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyBulkSearchRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyBulkSearchRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyBulkSearchRequestValidationError) ErrorName() string {
+	return "CompanyBulkSearchRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyBulkSearchRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyBulkSearchRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyBulkSearchRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyBulkSearchRequestValidationError{}
+
 // Validate checks the field values on CompanyAddress with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -464,6 +607,7 @@ func (m *CompanyAddress) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyAddressMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -569,6 +713,7 @@ func (m *CompanyContact) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyContactMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -790,6 +935,7 @@ func (m *CompanyReply) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyReplyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -924,6 +1070,7 @@ func (m *CompanyReplies) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyRepliesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1029,6 +1176,7 @@ func (m *CompanyReply_Broker) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompanyReply_BrokerMultiError(errors)
 	}
+
 	return nil
 }
 
