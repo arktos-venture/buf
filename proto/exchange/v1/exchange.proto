@@ -42,7 +42,7 @@ service Exchange {
 // 
 
 message ExchangeRequest {
-	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK", "COMM", "FOREX", "INDX", "CC"]}];
+	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK", "LS", "MC", "F", "MI", "LU", "COMM", "FOREX", "INDX", "CC"]}];
 }
   
 message Code {
