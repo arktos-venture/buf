@@ -60,7 +60,7 @@ func (m *ExchangeRequest) validate(all bool) error {
 	if _, ok := _ExchangeRequest_Exchange_InLookup[m.GetExchange()]; !ok {
 		err := ExchangeRequestValidationError{
 			field:  "Exchange",
-			reason: "value must be in list [NASDAQ NYSE TO LSE PA BR AS SG SHE SHG HK COMM FOREX INDX CC]",
+			reason: "value must be in list [NASDAQ NYSE TO LSE PA BR AS SG SHE SHG HK LS MC F MI LU COMM FOREX INDX CC]",
 		}
 		if !all {
 			return err
@@ -158,6 +158,11 @@ var _ExchangeRequest_Exchange_InLookup = map[string]struct{}{
 	"SHE":    {},
 	"SHG":    {},
 	"HK":     {},
+	"LS":     {},
+	"MC":     {},
+	"F":      {},
+	"MI":     {},
+	"LU":     {},
 	"COMM":   {},
 	"FOREX":  {},
 	"INDX":   {},
