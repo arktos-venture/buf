@@ -214,10 +214,10 @@ func (m *StrategyCompanyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 2 || l > 8 {
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := StrategyCompanyRequestValidationError{
 			field:  "Exchange",
-			reason: "value length must be between 2 and 8 runes, inclusive",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err

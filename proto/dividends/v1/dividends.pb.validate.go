@@ -68,10 +68,10 @@ func (m *DividendsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _DividendsRequest_Exchange_InLookup[m.GetExchange()]; !ok {
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := DividendsRequestValidationError{
 			field:  "Exchange",
-			reason: "value must be in list [NASDAQ NYSE TO LSE PA BR AS SG SHE SHG HK]",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -190,20 +190,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DividendsRequestValidationError{}
-
-var _DividendsRequest_Exchange_InLookup = map[string]struct{}{
-	"NASDAQ": {},
-	"NYSE":   {},
-	"TO":     {},
-	"LSE":    {},
-	"PA":     {},
-	"BR":     {},
-	"AS":     {},
-	"SG":     {},
-	"SHE":    {},
-	"SHG":    {},
-	"HK":     {},
-}
 
 var _DividendsRequest_Period_InLookup = map[string]struct{}{
 	"last": {},

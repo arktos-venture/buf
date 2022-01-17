@@ -104,7 +104,7 @@ message Date {
 
 message QuotesCompanyRequest {
   string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 2 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string currency = 3 [(validate.rules).string.len = 3];
   repeated Indicator indicators = 4 [(validate.rules).repeated.unique = true];
   Date date = 5;
@@ -124,7 +124,7 @@ message QuotesIndustryRequest {
 }
 
 message QuotesExchangeRequest {
-  string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string country = 2 [(validate.rules).string.len = 2];
   repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
   Date date = 4;
