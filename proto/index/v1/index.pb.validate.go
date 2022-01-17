@@ -563,11 +563,39 @@ func (m *IndexCreateRequest_Company) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Currency
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := IndexCreateRequest_CompanyValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 
-	// no validation rules for Exchange
+	}
 
-	// no validation rules for Ticker
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
+		err := IndexCreateRequest_CompanyValidationError{
+			field:  "Exchange",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
+		err := IndexCreateRequest_CompanyValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for Size
 

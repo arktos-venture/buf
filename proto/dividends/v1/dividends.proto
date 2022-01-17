@@ -41,7 +41,7 @@ message DividendsRequest {
 	}
 
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string exchange = 2 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK"]}];
+	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string currency = 3 [(validate.rules).string.len = 3];
 	Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
 	string period = 5 [(validate.rules).string = {in: ["last", "1m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];

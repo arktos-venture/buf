@@ -61,9 +61,9 @@ message IndexRequest {
 
 message IndexCreateRequest {
   message Company {
-    string currency = 1;
-    string exchange = 2;
-    string ticker = 3;
+    string currency = 1 [(validate.rules).string.len = 3];
+    string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+    string ticker = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
     float size = 4;
   }
 
