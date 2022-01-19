@@ -72,6 +72,7 @@ message ExchangeReply {
 		string ticker = 1;
 		string name = 2;
 		string isin = 3;
+		int64 activity = 4;
 	}
   
 	string name = 1;

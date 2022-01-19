@@ -266,6 +266,10 @@
         },
         "isin": {
           "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
