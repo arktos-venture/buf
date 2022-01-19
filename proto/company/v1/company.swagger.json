@@ -203,18 +203,8 @@
         "currency": {
           "type": "string"
         },
-        "filterString": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "filterInt": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string",
-            "format": "int64"
-          }
+        "filters": {
+          "$ref": "#/definitions/v1Filter"
         },
         "limit": {
           "type": "integer",
@@ -318,18 +308,8 @@
         "currency": {
           "type": "string"
         },
-        "filterString": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "filterInt": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string",
-            "format": "int64"
-          }
+        "filters": {
+          "$ref": "#/definitions/v1Filter"
         },
         "limit": {
           "type": "integer",
@@ -338,6 +318,43 @@
         "page": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "industries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fiscalYearEnd": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "currencyReport": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

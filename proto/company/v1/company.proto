@@ -63,19 +63,25 @@ message CompanySearchByIDsRequest {
 	repeated int64 ids = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
+message Filter {
+	repeated string exchanges = 1 [(validate.rules).repeated = {ignore_empty: true, items: {string: {min_len: 1, max_len: 8}}}, (validate.rules).repeated.unique = true];
+	repeated int64 industries = 2 [(validate.rules).repeated = {ignore_empty: true, items: {int64: {gte: 5010101010, lte: 6310301010}}}, (validate.rules).repeated.unique = true];
+	repeated string countries = 3 [(validate.rules).repeated = {ignore_empty: true}, (validate.rules).repeated.items.string.len = 2, (validate.rules).repeated.unique = true];
+	repeated int64 fiscalYearEnd = 4 [(validate.rules).repeated = {ignore_empty: true, items: {int64: {gte: 1, lte: 12}}}, (validate.rules).repeated.unique = true];
+	repeated string currencyReport = 5 [(validate.rules).repeated = {ignore_empty: true}, (validate.rules).repeated.items.string.len = 3, (validate.rules).repeated.unique = true];
+}
+
 message CompanySearchRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
-  	map<string, string> filterString = 2;
-  	map<string, int64> filterInt = 3;
-  	int32 limit = 4 [(validate.rules).int32 = {gte: 1, lte: 150}];
-	int32 page = 5 [(validate.rules).int32 = {gte: 1}];
+  	Filter filters = 2 [(validate.rules).message.required = true];
+  	int32 limit = 3 [(validate.rules).int32 = {gte: 1, lte: 150}];
+	int32 page = 4 [(validate.rules).int32 = {gte: 1}];
 }
 
 message CompanyBulkSearchRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
-  	map<string, string> filterString = 2;
-  	map<string, int64> filterInt = 3;
-  	int32 limit = 4 [(validate.rules).int32 = {gte: 1, lte: 30000}];
+	Filter filters = 2 [(validate.rules).message.required = false];
+  	int32 limit = 3 [(validate.rules).int32 = {gte: 1, lte: 30000}];
 }
 
 message CompanyAddress {

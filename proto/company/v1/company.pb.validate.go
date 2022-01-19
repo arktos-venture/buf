@@ -305,6 +305,281 @@ var _ interface {
 	ErrorName() string
 } = CompanySearchByIDsRequestValidationError{}
 
+// Validate checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Filter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Filter) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetExchanges()) > 0 {
+
+		_Filter_Exchanges_Unique := make(map[string]struct{}, len(m.GetExchanges()))
+
+		for idx, item := range m.GetExchanges() {
+			_, _ = idx, item
+
+			if _, exists := _Filter_Exchanges_Unique[item]; exists {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Exchanges[%v]", idx),
+					reason: "repeated value must contain unique items",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			} else {
+				_Filter_Exchanges_Unique[item] = struct{}{}
+			}
+
+			if l := utf8.RuneCountInString(item); l < 1 || l > 8 {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Exchanges[%v]", idx),
+					reason: "value length must be between 1 and 8 runes, inclusive",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
+
+	}
+
+	if len(m.GetIndustries()) > 0 {
+
+		_Filter_Industries_Unique := make(map[int64]struct{}, len(m.GetIndustries()))
+
+		for idx, item := range m.GetIndustries() {
+			_, _ = idx, item
+
+			if _, exists := _Filter_Industries_Unique[item]; exists {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Industries[%v]", idx),
+					reason: "repeated value must contain unique items",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			} else {
+				_Filter_Industries_Unique[item] = struct{}{}
+			}
+
+			if val := item; val < 5010101010 || val > 6310301010 {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Industries[%v]", idx),
+					reason: "value must be inside range [5010101010, 6310301010]",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
+
+	}
+
+	if len(m.GetCountries()) > 0 {
+
+		_Filter_Countries_Unique := make(map[string]struct{}, len(m.GetCountries()))
+
+		for idx, item := range m.GetCountries() {
+			_, _ = idx, item
+
+			if _, exists := _Filter_Countries_Unique[item]; exists {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Countries[%v]", idx),
+					reason: "repeated value must contain unique items",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			} else {
+				_Filter_Countries_Unique[item] = struct{}{}
+			}
+
+			if utf8.RuneCountInString(item) != 2 {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("Countries[%v]", idx),
+					reason: "value length must be 2 runes",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+
+			}
+
+		}
+
+	}
+
+	if len(m.GetFiscalYearEnd()) > 0 {
+
+		_Filter_FiscalYearEnd_Unique := make(map[int64]struct{}, len(m.GetFiscalYearEnd()))
+
+		for idx, item := range m.GetFiscalYearEnd() {
+			_, _ = idx, item
+
+			if _, exists := _Filter_FiscalYearEnd_Unique[item]; exists {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("FiscalYearEnd[%v]", idx),
+					reason: "repeated value must contain unique items",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			} else {
+				_Filter_FiscalYearEnd_Unique[item] = struct{}{}
+			}
+
+			if val := item; val < 1 || val > 12 {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("FiscalYearEnd[%v]", idx),
+					reason: "value must be inside range [1, 12]",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
+
+	}
+
+	if len(m.GetCurrencyReport()) > 0 {
+
+		_Filter_CurrencyReport_Unique := make(map[string]struct{}, len(m.GetCurrencyReport()))
+
+		for idx, item := range m.GetCurrencyReport() {
+			_, _ = idx, item
+
+			if _, exists := _Filter_CurrencyReport_Unique[item]; exists {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("CurrencyReport[%v]", idx),
+					reason: "repeated value must contain unique items",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			} else {
+				_Filter_CurrencyReport_Unique[item] = struct{}{}
+			}
+
+			if utf8.RuneCountInString(item) != 3 {
+				err := FilterValidationError{
+					field:  fmt.Sprintf("CurrencyReport[%v]", idx),
+					reason: "value length must be 3 runes",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+
+			}
+
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return FilterMultiError(errors)
+	}
+
+	return nil
+}
+
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FilterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FilterMultiError) AllErrors() []error { return m }
+
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFilter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FilterValidationError{}
+
 // Validate checks the field values on CompanySearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -339,9 +614,45 @@ func (m *CompanySearchRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for FilterString
+	if m.GetFilters() == nil {
+		err := CompanySearchRequestValidationError{
+			field:  "Filters",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for FilterInt
+	if all {
+		switch v := interface{}(m.GetFilters()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanySearchRequestValidationError{
+					field:  "Filters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanySearchRequestValidationError{
+					field:  "Filters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanySearchRequestValidationError{
+				field:  "Filters",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if val := m.GetLimit(); val < 1 || val > 150 {
 		err := CompanySearchRequestValidationError{
@@ -479,9 +790,34 @@ func (m *CompanyBulkSearchRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for FilterString
-
-	// no validation rules for FilterInt
+	if all {
+		switch v := interface{}(m.GetFilters()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyBulkSearchRequestValidationError{
+					field:  "Filters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyBulkSearchRequestValidationError{
+					field:  "Filters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyBulkSearchRequestValidationError{
+				field:  "Filters",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if val := m.GetLimit(); val < 1 || val > 30000 {
 		err := CompanyBulkSearchRequestValidationError{
