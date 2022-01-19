@@ -1156,6 +1156,8 @@ func (m *ExchangeReply_Company) validate(all bool) error {
 
 	// no validation rules for Isin
 
+	// no validation rules for Activity
+
 	if len(errors) > 0 {
 		return ExchangeReply_CompanyMultiError(errors)
 	}
