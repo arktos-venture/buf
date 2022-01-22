@@ -1337,6 +1337,8 @@ func (m *Data_Postgres) validate(all bool) error {
 
 	// no validation rules for Database
 
+	// no validation rules for Schema
+
 	// no validation rules for Username
 
 	// no validation rules for Password
