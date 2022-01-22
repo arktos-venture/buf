@@ -1,6 +1,7 @@
 GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
-INTERNAL_PROTO_FILES=$(shell find app/*/*/internal config -name *.proto)
+INTERNAL_PROTO_FILES=$(shell find app/*/*/internal -name *.proto)
+CONFIG_PROTO_FILES=$(shell find config -name *.proto)
 API_PROTO_FILES=$(shell find proto -name *.proto)
 
 .PHONY: init
@@ -29,7 +30,7 @@ config:
 	       --proto_path=./third_party \
  	       --go_out=paths=source_relative:. \
 		   --validate_out=paths=source_relative,lang=go:. \
-	       $(INTERNAL_PROTO_FILES)
+	       $(CONFIG_PROTO_FILES)
 
 .PHONY: swagger
 # Generate api swagger
