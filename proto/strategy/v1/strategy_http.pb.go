@@ -33,12 +33,12 @@ func RegisterStrategyHTTPServer(s *http.Server, srv StrategyHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/strategy/company", _Strategy_Company1_HTTP_Handler(srv))
 	r.POST("/v1/strategy/currency", _Strategy_Currency1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/{country}/industry", _Strategy_Industry1_HTTP_Handler(srv))
+	r.POST("/v1/strategy/{exchange}/industry", _Strategy_Industry1_HTTP_Handler(srv))
 	r.POST("/v1/strategy/exchange", _Strategy_Exchange1_HTTP_Handler(srv))
 	r.POST("/v1/strategy/country", _Strategy_Country1_HTTP_Handler(srv))
 	r.POST("/v1/strategy/index", _Strategy_Index1_HTTP_Handler(srv))
 	r.POST("/v1/strategy/account", _Strategy_Account1_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategy_Health16_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategy_Health15_HTTP_Handler(srv))
 }
 
 func _Strategy_Company1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
@@ -177,7 +177,7 @@ func _Strategy_Account1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Health16_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Health15_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -308,7 +308,7 @@ func (c *StrategyHTTPClientImpl) Index(ctx context.Context, in *StrategyIndexReq
 
 func (c *StrategyHTTPClientImpl) Industry(ctx context.Context, in *StrategyIndustryRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/{country}/industry"
+	pattern := "/v1/strategy/{exchange}/industry"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/strategy.v1.Strategy/Industry"))
 	opts = append(opts, http.PathTemplate(pattern))

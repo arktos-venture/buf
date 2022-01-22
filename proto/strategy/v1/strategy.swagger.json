@@ -230,7 +230,7 @@
         ]
       }
     },
-    "/v1/strategy/{country}/industry": {
+    "/v1/strategy/{exchange}/industry": {
       "post": {
         "operationId": "Strategy_Industry",
         "responses": {
@@ -249,7 +249,7 @@
         },
         "parameters": [
           {
-            "name": "country",
+            "name": "exchange",
             "in": "path",
             "required": true,
             "type": "string"

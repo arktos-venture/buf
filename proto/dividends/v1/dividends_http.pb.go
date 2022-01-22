@@ -28,7 +28,7 @@ func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/dividends", _Dividends_Search5_HTTP_Handler(srv))
 	r.POST("/v1/dividends/analytics", _Dividends_Analytics0_HTTP_Handler(srv))
-	r.GET("/healthz", _Dividends_Health13_HTTP_Handler(srv))
+	r.GET("/healthz", _Dividends_Health12_HTTP_Handler(srv))
 }
 
 func _Dividends_Search5_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
@@ -69,7 +69,7 @@ func _Dividends_Analytics0_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.C
 	}
 }
 
-func _Dividends_Health13_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Health12_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

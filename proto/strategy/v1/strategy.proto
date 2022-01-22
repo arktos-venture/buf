@@ -28,7 +28,7 @@ service Strategy {
 	
 	  rpc Industry (StrategyIndustryRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/{country}/industry"
+		  post: "/v1/strategy/{exchange}/industry"
 		  body: "*"
 		};
 	  }
@@ -103,12 +103,12 @@ message StrategyCurrencyRequest {
 
 message StrategyIndustryRequest {
 	int64 industry = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-	string country = 2 [(validate.rules).string.len = 2];
+	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	Parameters parameters = 3;
 }
 
 message StrategyExchangeRequest {
-	string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 8}];
+	string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string country = 2 [(validate.rules).string.len = 2];
 	Parameters parameters = 3;
 }

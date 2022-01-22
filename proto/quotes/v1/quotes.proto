@@ -28,7 +28,7 @@ service Quotes {
 
   rpc Industry (QuotesIndustryRequest) returns (QuotesReply)  {
     option (google.api.http) = {
-      post: "/v1/quotes/{country}/industry"
+      post: "/v1/quotes/{exchange}/industry"
       body: "*"
     };
   }
@@ -117,7 +117,7 @@ message QuotesCurrencyRequest {
 }
 
 message QuotesIndustryRequest {
-  string country = 1 [(validate.rules).string.len = 2];; 
+  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
   int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
   repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
   Date date = 4;

@@ -230,7 +230,7 @@
         ]
       }
     },
-    "/v1/quotes/{country}/industry": {
+    "/v1/quotes/{exchange}/industry": {
       "post": {
         "operationId": "Quotes_Industry",
         "responses": {
@@ -249,7 +249,7 @@
         },
         "parameters": [
           {
-            "name": "country",
+            "name": "exchange",
             "in": "path",
             "required": true,
             "type": "string"
@@ -311,11 +311,37 @@
         }
       }
     },
+    "IndicatorsMacd": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "signal": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
     "QuotesReplyIndicators": {
       "type": "object",
       "properties": {
         "macd": {
-          "$ref": "#/definitions/QuotesReplyIndicatorsMacd"
+          "$ref": "#/definitions/IndicatorsMacd"
         },
         "rsi": {
           "type": "array",
@@ -415,32 +441,6 @@
           }
         },
         "sma200": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        }
-      }
-    },
-    "QuotesReplyIndicatorsMacd": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "signal": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "history": {
           "type": "array",
           "items": {
             "type": "number",

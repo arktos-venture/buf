@@ -33,12 +33,12 @@ func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/quotes/company", _Quotes_Company0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/currency", _Quotes_Currency0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/{country}/industry", _Quotes_Industry0_HTTP_Handler(srv))
+	r.POST("/v1/quotes/{exchange}/industry", _Quotes_Industry0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/exchange", _Quotes_Exchange0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/country", _Quotes_Country0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/index", _Quotes_Index0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/account", _Quotes_Account0_HTTP_Handler(srv))
-	r.GET("/healthz", _Quotes_Health4_HTTP_Handler(srv))
+	r.GET("/healthz", _Quotes_Health3_HTTP_Handler(srv))
 }
 
 func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
@@ -177,7 +177,7 @@ func _Quotes_Account0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Health4_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Health3_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -308,7 +308,7 @@ func (c *QuotesHTTPClientImpl) Index(ctx context.Context, in *QuotesIndexRequest
 
 func (c *QuotesHTTPClientImpl) Industry(ctx context.Context, in *QuotesIndustryRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
-	pattern := "/v1/quotes/{country}/industry"
+	pattern := "/v1/quotes/{exchange}/industry"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Industry"))
 	opts = append(opts, http.PathTemplate(pattern))

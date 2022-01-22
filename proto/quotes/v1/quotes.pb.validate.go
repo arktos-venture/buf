@@ -544,16 +544,15 @@ func (m *QuotesIndustryRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := QuotesIndustryRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
+			field:  "Exchange",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if val := m.GetIndustry(); val < 5010101010 || val > 6310301010 {

@@ -388,8 +388,6 @@ func (m *CountryReply) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for AlternativeName
-
 	if all {
 		switch v := interface{}(m.GetGeo()).(type) {
 		case interface{ ValidateAll() error }:
@@ -452,33 +450,38 @@ func (m *CountryReply) validate(all bool) error {
 
 	// no validation rules for Languages
 
-	if all {
-		switch v := interface{}(m.GetExchanges()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CountryReplyValidationError{
-					field:  "Exchanges",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetExchanges() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CountryReplyValidationError{
+						field:  fmt.Sprintf("Exchanges[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CountryReplyValidationError{
+						field:  fmt.Sprintf("Exchanges[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, CountryReplyValidationError{
-					field:  "Exchanges",
+				return CountryReplyValidationError{
+					field:  fmt.Sprintf("Exchanges[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetExchanges()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CountryReplyValidationError{
-				field:  "Exchanges",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	for idx, item := range m.GetSubDivision() {
@@ -1108,6 +1111,10 @@ func (m *CountryReply_Exchange) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
 		return CountryReply_ExchangeMultiError(errors)

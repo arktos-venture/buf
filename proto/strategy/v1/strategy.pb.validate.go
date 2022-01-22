@@ -521,16 +521,15 @@ func (m *StrategyIndustryRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := StrategyIndustryRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
+			field:  "Exchange",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if all {
@@ -664,10 +663,10 @@ func (m *StrategyExchangeRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 2 || l > 8 {
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := StrategyExchangeRequestValidationError{
 			field:  "Exchange",
-			reason: "value length must be between 2 and 8 runes, inclusive",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err
