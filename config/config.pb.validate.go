@@ -182,6 +182,7 @@ func (m *Bootstrap) validate(all bool) error {
 	if len(errors) > 0 {
 		return BootstrapMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -301,6 +302,7 @@ func (m *Logger) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoggerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -498,6 +500,7 @@ func (m *Server) validate(all bool) error {
 	if len(errors) > 0 {
 		return ServerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -622,11 +625,11 @@ func (m *Data) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetTdengine()).(type) {
+		switch v := interface{}(m.GetPostgres()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, DataValidationError{
-					field:  "Tdengine",
+					field:  "Postgres",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -634,16 +637,16 @@ func (m *Data) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, DataValidationError{
-					field:  "Tdengine",
+					field:  "Postgres",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetTdengine()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetPostgres()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DataValidationError{
-				field:  "Tdengine",
+				field:  "Postgres",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -728,6 +731,7 @@ func (m *Data) validate(all bool) error {
 	if len(errors) > 0 {
 		return DataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -859,6 +863,7 @@ func (m *Server_HTTP) validate(all bool) error {
 	if len(errors) > 0 {
 		return Server_HTTPMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -990,6 +995,7 @@ func (m *Server_GRPC) validate(all bool) error {
 	if len(errors) > 0 {
 		return Server_GRPCMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1092,6 +1098,7 @@ func (m *Server_Jaeger) validate(all bool) error {
 	if len(errors) > 0 {
 		return Server_JaegerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1226,6 +1233,7 @@ func (m *Data_Mongo) validate(all bool) error {
 	if len(errors) > 0 {
 		return Data_MongoMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1299,22 +1307,22 @@ var _ interface {
 	ErrorName() string
 } = Data_MongoValidationError{}
 
-// Validate checks the field values on Data_TDEngine with the rules defined in
+// Validate checks the field values on Data_Postgres with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Data_TDEngine) Validate() error {
+func (m *Data_Postgres) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Data_TDEngine with the rules defined
+// ValidateAll checks the field values on Data_Postgres with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in Data_TDEngineMultiError, or
+// result is a list of violation errors wrapped in Data_PostgresMultiError, or
 // nil if none found.
-func (m *Data_TDEngine) ValidateAll() error {
+func (m *Data_Postgres) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Data_TDEngine) validate(all bool) error {
+func (m *Data_Postgres) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1325,17 +1333,21 @@ func (m *Data_TDEngine) validate(all bool) error {
 
 	// no validation rules for Port
 
+	// no validation rules for Debug
+
 	// no validation rules for Database
 
 	// no validation rules for Username
 
 	// no validation rules for Password
 
+	// no validation rules for Ssl
+
 	if all {
 		switch v := interface{}(m.GetTimeout()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, Data_TDEngineValidationError{
+				errors = append(errors, Data_PostgresValidationError{
 					field:  "Timeout",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1343,7 +1355,7 @@ func (m *Data_TDEngine) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, Data_TDEngineValidationError{
+				errors = append(errors, Data_PostgresValidationError{
 					field:  "Timeout",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1352,7 +1364,7 @@ func (m *Data_TDEngine) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetTimeout()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return Data_TDEngineValidationError{
+			return Data_PostgresValidationError{
 				field:  "Timeout",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1361,18 +1373,19 @@ func (m *Data_TDEngine) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return Data_TDEngineMultiError(errors)
+		return Data_PostgresMultiError(errors)
 	}
+
 	return nil
 }
 
-// Data_TDEngineMultiError is an error wrapping multiple validation errors
-// returned by Data_TDEngine.ValidateAll() if the designated constraints
+// Data_PostgresMultiError is an error wrapping multiple validation errors
+// returned by Data_Postgres.ValidateAll() if the designated constraints
 // aren't met.
-type Data_TDEngineMultiError []error
+type Data_PostgresMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m Data_TDEngineMultiError) Error() string {
+func (m Data_PostgresMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1381,11 +1394,11 @@ func (m Data_TDEngineMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m Data_TDEngineMultiError) AllErrors() []error { return m }
+func (m Data_PostgresMultiError) AllErrors() []error { return m }
 
-// Data_TDEngineValidationError is the validation error returned by
-// Data_TDEngine.Validate if the designated constraints aren't met.
-type Data_TDEngineValidationError struct {
+// Data_PostgresValidationError is the validation error returned by
+// Data_Postgres.Validate if the designated constraints aren't met.
+type Data_PostgresValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1393,22 +1406,22 @@ type Data_TDEngineValidationError struct {
 }
 
 // Field function returns field value.
-func (e Data_TDEngineValidationError) Field() string { return e.field }
+func (e Data_PostgresValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Data_TDEngineValidationError) Reason() string { return e.reason }
+func (e Data_PostgresValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Data_TDEngineValidationError) Cause() error { return e.cause }
+func (e Data_PostgresValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Data_TDEngineValidationError) Key() bool { return e.key }
+func (e Data_PostgresValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Data_TDEngineValidationError) ErrorName() string { return "Data_TDEngineValidationError" }
+func (e Data_PostgresValidationError) ErrorName() string { return "Data_PostgresValidationError" }
 
 // Error satisfies the builtin error interface
-func (e Data_TDEngineValidationError) Error() string {
+func (e Data_PostgresValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1420,14 +1433,14 @@ func (e Data_TDEngineValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sData_TDEngine.%s: %s%s",
+		"invalid %sData_Postgres.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Data_TDEngineValidationError{}
+var _ error = Data_PostgresValidationError{}
 
 var _ interface {
 	Field() string
@@ -1435,7 +1448,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Data_TDEngineValidationError{}
+} = Data_PostgresValidationError{}
 
 // Validate checks the field values on Data_Redis with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -1501,6 +1514,7 @@ func (m *Data_Redis) validate(all bool) error {
 	if len(errors) > 0 {
 		return Data_RedisMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1632,6 +1646,7 @@ func (m *Data_Service) validate(all bool) error {
 	if len(errors) > 0 {
 		return Data_ServiceMultiError(errors)
 	}
+
 	return nil
 }
 

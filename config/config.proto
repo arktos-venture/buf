@@ -56,13 +56,22 @@ message Data {
     google.protobuf.Duration timeout = 5;
   }
 
-  message TDEngine {
+  message Postgres {
+    enum SSL {
+      disable = 0;
+      allow = 1;
+      prefer = 2;
+      require = 3;
+    }
+
     string hostname = 1;
     int32 port = 2;
-    string database = 3;
-    string username = 4;
-    string password = 5;
-    google.protobuf.Duration timeout = 6;
+    bool debug = 3;
+    string database = 4;
+    string username = 5;
+    string password = 6;
+    SSL ssl = 7;
+    google.protobuf.Duration timeout = 8;
   }
 
   message Redis {
@@ -81,7 +90,7 @@ message Data {
   }
 
   Mongo mongo = 1;
-  TDEngine tdengine = 2;
+  Postgres postgres = 2;
   Redis redis = 3;
   map<string, Service> services = 4;
 }
