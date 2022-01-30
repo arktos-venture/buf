@@ -54,13 +54,8 @@ message CompanyRequest {
 }
 
 message CompanySearchByIDsRequest {
-	enum Broker {
-		IBKR = 0;
-	}
-
-	Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-	string currency = 2 [(validate.rules).string.len = 3];
-	repeated int64 ids = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+	string currency = 1 [(validate.rules).string.len = 3];
+	repeated int64 ids = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message Filter {
@@ -102,24 +97,19 @@ message CompanyContact {
 // 
 
 message CompanyReply {
-	message Broker {
-		int64 id = 1;
-		string ticker = 2;
-		string routing = 3;
-	}
-
-	string ticker = 1; 
-	string name = 2; 
-	string description = 3;
-	string exchange = 4;
-	string isin = 5;
-	int64 activity = 6;   
-	string currencyReport = 7;
-	int64 fiscalYearEnd = 8;
-	CompanyContact contact = 9;
-	CompanyAddress address = 10;
-	map<string, Broker> brokers = 11;
-	bool active = 12;
+	int64 id = 1;
+	string ticker = 2;
+	string ticker_alternative = 3;
+	string name = 4;
+	string description = 5;
+	string exchange = 6;
+	string routing = 7;
+	string isin = 8;
+	int64 activity = 9;   
+	string currencyReport = 10;
+	int64 fiscalYearEnd = 11;
+	CompanyContact contact = 12;
+	CompanyAddress address = 13;
 }
 
 message CompanyReplies {

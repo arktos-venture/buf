@@ -244,7 +244,14 @@
     "v1CompanyReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
           "type": "string"
         },
         "name": {
@@ -254,6 +261,9 @@
           "type": "string"
         },
         "exchange": {
+          "type": "string"
+        },
+        "routing": {
           "type": "string"
         },
         "isin": {
@@ -275,30 +285,6 @@
         },
         "address": {
           "$ref": "#/definitions/v1CompanyAddress"
-        },
-        "brokers": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/v1CompanyReplyBroker"
-          }
-        },
-        "active": {
-          "type": "boolean"
-        }
-      }
-    },
-    "v1CompanyReplyBroker": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
         }
       }
     },
