@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -83,7 +83,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -113,7 +113,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -170,6 +170,32 @@
             "type": "string",
             "format": "int64"
           }
+        }
+      }
+    },
+    "CountryReplyCode": {
+      "type": "object",
+      "properties": {
+        "alpha2": {
+          "type": "string"
+        },
+        "alpha3": {
+          "type": "string"
+        },
+        "cioc": {
+          "type": "string"
+        },
+        "ccn3": {
+          "type": "string"
+        },
+        "callingCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "internationalPrefix": {
+          "type": "string"
         }
       }
     },
@@ -291,7 +317,7 @@
           "$ref": "#/definitions/CountryReplyGeo"
         },
         "code": {
-          "$ref": "#/definitions/getCountryReplyCode"
+          "$ref": "#/definitions/CountryReplyCode"
         },
         "euMember": {
           "type": "boolean"
@@ -334,32 +360,6 @@
         }
       }
     },
-    "getCountryReplyCode": {
-      "type": "object",
-      "properties": {
-        "alpha2": {
-          "type": "string"
-        },
-        "alpha3": {
-          "type": "string"
-        },
-        "cioc": {
-          "type": "string"
-        },
-        "ccn3": {
-          "type": "string"
-        },
-        "callingCodes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "internationalPrefix": {
-          "type": "string"
-        }
-      }
-    },
     "getCountrySearchRequest": {
       "type": "object",
       "properties": {
@@ -377,19 +377,7 @@
         }
       }
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -404,6 +392,18 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },

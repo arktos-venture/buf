@@ -34,7 +34,7 @@ func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
 	r.POST("/v1/index", _Index_Create3_HTTP_Handler(srv))
 	r.PUT("/v1/index", _Index_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/index/{name}", _Index_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Index_Health10_HTTP_Handler(srv))
+	r.GET("/healthz", _Index_Health11_HTTP_Handler(srv))
 }
 
 func _Index_Get4_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
@@ -138,7 +138,7 @@ func _Index_Delete0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Health10_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Health11_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

@@ -28,7 +28,7 @@ func RegisterNotificationHTTPServer(s *http.Server, srv NotificationHTTPServer) 
 	r := s.Route("/")
 	r.POST("/v1/{account}/notification", _Notification_Create2_HTTP_Handler(srv))
 	r.GET("/v1/{account}/notifications", _Notification_Search1_HTTP_Handler(srv))
-	r.GET("/healthz", _Notification_Health4_HTTP_Handler(srv))
+	r.GET("/healthz", _Notification_Health5_HTTP_Handler(srv))
 }
 
 func _Notification_Create2_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
@@ -75,7 +75,7 @@ func _Notification_Search1_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 	}
 }
 
-func _Notification_Health4_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
+func _Notification_Health5_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

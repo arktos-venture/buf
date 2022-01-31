@@ -26,7 +26,7 @@ type FundamentalHTTPServer interface {
 func RegisterFundamentalHTTPServer(s *http.Server, srv FundamentalHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/fundamentals", _Fundamental_Get2_HTTP_Handler(srv))
-	r.GET("/healthz", _Fundamental_Health6_HTTP_Handler(srv))
+	r.GET("/healthz", _Fundamental_Health7_HTTP_Handler(srv))
 }
 
 func _Fundamental_Get2_HTTP_Handler(srv FundamentalHTTPServer) func(ctx http.Context) error {
@@ -48,7 +48,7 @@ func _Fundamental_Get2_HTTP_Handler(srv FundamentalHTTPServer) func(ctx http.Con
 	}
 }
 
-func _Fundamental_Health6_HTTP_Handler(srv FundamentalHTTPServer) func(ctx http.Context) error {
+func _Fundamental_Health7_HTTP_Handler(srv FundamentalHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

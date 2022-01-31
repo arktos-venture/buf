@@ -32,18 +32,18 @@ type QuotesHTTPServer interface {
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/quotes/company", _Quotes_Company0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/currency", _Quotes_Currency0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/{exchange}/industry", _Quotes_Industry0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/exchange", _Quotes_Exchange0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/country", _Quotes_Country0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/index", _Quotes_Index0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/account", _Quotes_Account0_HTTP_Handler(srv))
+	r.POST("/v1/quotes/company", _Quotes_Company1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/currency", _Quotes_Currency1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/{exchange}/industry", _Quotes_Industry1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/exchange", _Quotes_Exchange1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/country", _Quotes_Country1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/index", _Quotes_Index1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/account", _Quotes_Account1_HTTP_Handler(srv))
 	r.POST("/v1/quotes/companies/splits", _Quotes_Split0_HTTP_Handler(srv))
-	r.GET("/healthz", _Quotes_Health3_HTTP_Handler(srv))
+	r.GET("/healthz", _Quotes_Health4_HTTP_Handler(srv))
 }
 
-func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Company1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCompanyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -62,7 +62,7 @@ func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Currency0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Currency1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCurrencyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -81,7 +81,7 @@ func _Quotes_Currency0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Industry0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Industry1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesIndustryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -103,7 +103,7 @@ func _Quotes_Industry0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Exchange0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Exchange1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesExchangeRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -122,7 +122,7 @@ func _Quotes_Exchange0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Country0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Country1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCountryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -141,7 +141,7 @@ func _Quotes_Country0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Index0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Index1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesIndexRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -160,7 +160,7 @@ func _Quotes_Index0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Quotes_Account0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Account1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesAccountRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -198,7 +198,7 @@ func _Quotes_Split0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Quotes_Health3_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Health4_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

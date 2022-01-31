@@ -542,7 +542,7 @@ func (m *OrderReply) validate(all bool) error {
 
 	// no validation rules for Ticker
 
-	// no validation rules for Conid
+	// no validation rules for TickerId
 
 	// no validation rules for Currency
 
@@ -554,19 +554,65 @@ func (m *OrderReply) validate(all bool) error {
 
 	// no validation rules for Duration
 
-	// no validation rules for AskSize
+	if all {
+		switch v := interface{}(m.GetSize()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderReplyValidationError{
+				field:  "Size",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for BuySize
-
-	// no validation rules for AskPrice
-
-	// no validation rules for BuyPrice
-
-	// no validation rules for Commission
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Status
-
-	// no validation rules for Size
 
 	// no validation rules for Date
 
@@ -783,3 +829,213 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OrderRepliesValidationError{}
+
+// Validate checks the field values on OrderReply_Size with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *OrderReply_Size) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderReply_Size with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OrderReply_SizeMultiError, or nil if none found.
+func (m *OrderReply_Size) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderReply_Size) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ask
+
+	// no validation rules for Buy
+
+	if len(errors) > 0 {
+		return OrderReply_SizeMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderReply_SizeMultiError is an error wrapping multiple validation errors
+// returned by OrderReply_Size.ValidateAll() if the designated constraints
+// aren't met.
+type OrderReply_SizeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderReply_SizeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderReply_SizeMultiError) AllErrors() []error { return m }
+
+// OrderReply_SizeValidationError is the validation error returned by
+// OrderReply_Size.Validate if the designated constraints aren't met.
+type OrderReply_SizeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderReply_SizeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderReply_SizeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderReply_SizeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderReply_SizeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderReply_SizeValidationError) ErrorName() string { return "OrderReply_SizeValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OrderReply_SizeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderReply_Size.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderReply_SizeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderReply_SizeValidationError{}
+
+// Validate checks the field values on OrderReply_Price with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *OrderReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OrderReply_PriceMultiError, or nil if none found.
+func (m *OrderReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ask
+
+	// no validation rules for Buy
+
+	// no validation rules for Commission
+
+	if len(errors) > 0 {
+		return OrderReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderReply_PriceMultiError is an error wrapping multiple validation errors
+// returned by OrderReply_Price.ValidateAll() if the designated constraints
+// aren't met.
+type OrderReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderReply_PriceMultiError) AllErrors() []error { return m }
+
+// OrderReply_PriceValidationError is the validation error returned by
+// OrderReply_Price.Validate if the designated constraints aren't met.
+type OrderReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderReply_PriceValidationError) ErrorName() string { return "OrderReply_PriceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OrderReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderReply_PriceValidationError{}

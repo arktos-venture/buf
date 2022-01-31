@@ -30,7 +30,7 @@ func RegisterBrokerHTTPServer(s *http.Server, srv BrokerHTTPServer) {
 	r.GET("/v1/broker/{broker}", _Broker_Get1_HTTP_Handler(srv))
 	r.POST("/v1/broker", _Broker_Create1_HTTP_Handler(srv))
 	r.PUT("/v1/broker/{broker}", _Broker_Update0_HTTP_Handler(srv))
-	r.GET("/healthz", _Broker_Health2_HTTP_Handler(srv))
+	r.GET("/healthz", _Broker_Health3_HTTP_Handler(srv))
 }
 
 func _Broker_Get1_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) error {
@@ -96,7 +96,7 @@ func _Broker_Update0_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Broker_Health2_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) error {
+func _Broker_Health3_HTTP_Handler(srv BrokerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

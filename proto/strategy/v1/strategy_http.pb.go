@@ -31,17 +31,17 @@ type StrategyHTTPServer interface {
 
 func RegisterStrategyHTTPServer(s *http.Server, srv StrategyHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/strategy/company", _Strategy_Company1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/currency", _Strategy_Currency1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/{exchange}/industry", _Strategy_Industry1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/exchange", _Strategy_Exchange1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/country", _Strategy_Country1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/index", _Strategy_Index1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/account", _Strategy_Account1_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategy_Health15_HTTP_Handler(srv))
+	r.POST("/v1/strategy/company", _Strategy_Company2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/currency", _Strategy_Currency2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/{exchange}/industry", _Strategy_Industry2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/exchange", _Strategy_Exchange2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/country", _Strategy_Country2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/index", _Strategy_Index2_HTTP_Handler(srv))
+	r.POST("/v1/strategy/account", _Strategy_Account2_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategy_Health16_HTTP_Handler(srv))
 }
 
-func _Strategy_Company1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Company2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCompanyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -60,7 +60,7 @@ func _Strategy_Company1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Currency1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Currency2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCurrencyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -79,7 +79,7 @@ func _Strategy_Currency1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Industry1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Industry2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndustryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -101,7 +101,7 @@ func _Strategy_Industry1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Exchange1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Exchange2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyExchangeRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -120,7 +120,7 @@ func _Strategy_Exchange1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Country1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Country2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCountryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -139,7 +139,7 @@ func _Strategy_Country1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Index1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Index2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndexRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -158,7 +158,7 @@ func _Strategy_Index1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Strategy_Account1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Account2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyAccountRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -177,7 +177,7 @@ func _Strategy_Account1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Health15_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Health16_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

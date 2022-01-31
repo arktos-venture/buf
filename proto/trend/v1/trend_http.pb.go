@@ -28,7 +28,7 @@ func RegisterTrendHTTPServer(s *http.Server, srv TrendHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/trend/trendId", _Trend_GetTrendId0_HTTP_Handler(srv))
 	r.POST("/v1/trend/trends", _Trend_Search2_HTTP_Handler(srv))
-	r.GET("/healthz", _Trend_Health5_HTTP_Handler(srv))
+	r.GET("/healthz", _Trend_Health6_HTTP_Handler(srv))
 }
 
 func _Trend_GetTrendId0_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
@@ -69,7 +69,7 @@ func _Trend_Search2_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Trend_Health5_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
+func _Trend_Health6_HTTP_Handler(srv TrendHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

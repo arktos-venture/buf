@@ -30,7 +30,7 @@ func RegisterExchangeHTTPServer(s *http.Server, srv ExchangeHTTPServer) {
 	r.GET("/v1/exchange/{exchange}/isopen", _Exchange_IsOpen0_HTTP_Handler(srv))
 	r.GET("/v1/exchange/{exchange}", _Exchange_Get0_HTTP_Handler(srv))
 	r.GET("/v1/exchanges", _Exchange_List0_HTTP_Handler(srv))
-	r.GET("/healthz", _Exchange_Health1_HTTP_Handler(srv))
+	r.GET("/healthz", _Exchange_Health2_HTTP_Handler(srv))
 }
 
 func _Exchange_IsOpen0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
@@ -96,7 +96,7 @@ func _Exchange_List0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Exchange_Health1_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
+func _Exchange_Health2_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

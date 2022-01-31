@@ -28,7 +28,7 @@ func RegisterIndustryHTTPServer(s *http.Server, srv IndustryHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/industry/{ref}", _Industry_Get3_HTTP_Handler(srv))
 	r.GET("/v1/industries", _Industry_List1_HTTP_Handler(srv))
-	r.GET("/healthz", _Industry_Health8_HTTP_Handler(srv))
+	r.GET("/healthz", _Industry_Health9_HTTP_Handler(srv))
 }
 
 func _Industry_Get3_HTTP_Handler(srv IndustryHTTPServer) func(ctx http.Context) error {
@@ -72,7 +72,7 @@ func _Industry_List1_HTTP_Handler(srv IndustryHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Industry_Health8_HTTP_Handler(srv IndustryHTTPServer) func(ctx http.Context) error {
+func _Industry_Health9_HTTP_Handler(srv IndustryHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

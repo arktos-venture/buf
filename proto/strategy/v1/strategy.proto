@@ -14,52 +14,52 @@ option java_outer_classname = "StrategyProtoV1";
 service Strategy {
 	rpc Company (StrategyCompanyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/company"
-		  body: "*"
+		  	post: "/v1/strategy/company"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Currency (StrategyCurrencyRequest) returns (StrategyReply)  {
+	rpc Currency (StrategyCurrencyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/currency"
-		  body: "*"
+		  	post: "/v1/strategy/currency"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Industry (StrategyIndustryRequest) returns (StrategyReply)  {
+	rpc Industry (StrategyIndustryRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/{exchange}/industry"
-		  body: "*"
+		  	post: "/v1/strategy/{exchange}/industry"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Exchange (StrategyExchangeRequest) returns (StrategyReply)  {
+	rpc Exchange (StrategyExchangeRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/exchange"
-		  body: "*"
+		  	post: "/v1/strategy/exchange"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Country (StrategyCountryRequest) returns (StrategyReply)  {
+	rpc Country (StrategyCountryRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/country"
-		  body: "*"
+		  	post: "/v1/strategy/country"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Index (StrategyIndexRequest) returns (StrategyReply)  {
+	rpc Index (StrategyIndexRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/index"
-		  body: "*"
+			post: "/v1/strategy/index"
+		  	body: "*"
 		};
-	  }
+	}
 	
-	  rpc Account (StrategyAccountRequest) returns (StrategyReply)  {
+	rpc Account (StrategyAccountRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  post: "/v1/strategy/account"
-		  body: "*"
+		  	post: "/v1/strategy/account"
+		  	body: "*"
 		};
-	  }
+	}
 
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {

@@ -30,7 +30,7 @@ func RegisterCountryHTTPServer(s *http.Server, srv CountryHTTPServer) {
 	r.GET("/v1/country/{country}", _Country_Get6_HTTP_Handler(srv))
 	r.POST("/v1/country", _Country_Search6_HTTP_Handler(srv))
 	r.GET("/v1/country/{country}/{indicator}", _Country_Indicator0_HTTP_Handler(srv))
-	r.GET("/healthz", _Country_Health13_HTTP_Handler(srv))
+	r.GET("/healthz", _Country_Health14_HTTP_Handler(srv))
 }
 
 func _Country_Get6_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) error {
@@ -96,7 +96,7 @@ func _Country_Indicator0_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Country_Health13_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) error {
+func _Country_Health14_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
