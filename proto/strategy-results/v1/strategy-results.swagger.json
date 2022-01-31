@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/strategy/v1/strategy.proto",
+    "title": "proto/strategy-results/v1/strategy-results.proto",
     "version": "version not set"
   },
   "tags": [
@@ -38,14 +38,14 @@
         ]
       }
     },
-    "/v1/strategy/account": {
+    "/v1/strategy/results/account": {
       "post": {
         "operationId": "Strategy_Account",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -61,7 +61,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyAccountRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyAccountRequest"
             }
           }
         ],
@@ -70,14 +70,14 @@
         ]
       }
     },
-    "/v1/strategy/company": {
+    "/v1/strategy/results/company": {
       "post": {
         "operationId": "Strategy_Company",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -93,7 +93,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyCompanyRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyCompanyRequest"
             }
           }
         ],
@@ -102,14 +102,14 @@
         ]
       }
     },
-    "/v1/strategy/country": {
+    "/v1/strategy/results/country": {
       "post": {
         "operationId": "Strategy_Country",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -125,7 +125,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyCountryRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyCountryRequest"
             }
           }
         ],
@@ -134,14 +134,14 @@
         ]
       }
     },
-    "/v1/strategy/currency": {
+    "/v1/strategy/results/currency": {
       "post": {
         "operationId": "Strategy_Currency",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -157,7 +157,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyCurrencyRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyCurrencyRequest"
             }
           }
         ],
@@ -166,14 +166,14 @@
         ]
       }
     },
-    "/v1/strategy/exchange": {
+    "/v1/strategy/results/exchange": {
       "post": {
         "operationId": "Strategy_Exchange",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -189,7 +189,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyExchangeRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyExchangeRequest"
             }
           }
         ],
@@ -198,14 +198,14 @@
         ]
       }
     },
-    "/v1/strategy/index": {
+    "/v1/strategy/results/index": {
       "post": {
         "operationId": "Strategy_Index",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -221,7 +221,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyIndexRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyIndexRequest"
             }
           }
         ],
@@ -230,14 +230,14 @@
         ]
       }
     },
-    "/v1/strategy/{exchange}/industry": {
+    "/v1/strategy/results/{exchange}/industry": {
       "post": {
         "operationId": "Strategy_Industry",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategyv1StrategyReply"
+              "$ref": "#/definitions/strategy_resultsv1StrategyReply"
             }
           },
           "default": {
@@ -265,8 +265,11 @@
                   "type": "string",
                   "format": "int64"
                 },
-                "parameters": {
-                  "$ref": "#/definitions/v1Parameters"
+                "interval": {
+                  "$ref": "#/definitions/strategy_resultsv1Interval"
+                },
+                "strategy": {
+                  "$ref": "#/definitions/strategy_resultsv1StrategyType"
                 }
               }
             }
@@ -309,7 +312,7 @@
         }
       }
     },
-    "strategyv1Interval": {
+    "strategy_resultsv1Interval": {
       "type": "string",
       "enum": [
         "d",
@@ -318,18 +321,21 @@
       ],
       "default": "d"
     },
-    "strategyv1StrategyAccountRequest": {
+    "strategy_resultsv1StrategyAccountRequest": {
       "type": "object",
       "properties": {
         "account": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyCompanyRequest": {
+    "strategy_resultsv1StrategyCompanyRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -341,34 +347,43 @@
         "currency": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyCountryRequest": {
+    "strategy_resultsv1StrategyCountryRequest": {
       "type": "object",
       "properties": {
         "country": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyCurrencyRequest": {
+    "strategy_resultsv1StrategyCurrencyRequest": {
       "type": "object",
       "properties": {
         "ticker": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyExchangeRequest": {
+    "strategy_resultsv1StrategyExchangeRequest": {
       "type": "object",
       "properties": {
         "exchange": {
@@ -377,59 +392,51 @@
         "country": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyIndexRequest": {
+    "strategy_resultsv1StrategyIndexRequest": {
       "type": "object",
       "properties": {
         "index": {
           "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
+        },
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         }
       }
     },
-    "strategyv1StrategyReply": {
+    "strategy_resultsv1StrategyReply": {
       "type": "object",
       "properties": {
-        "close": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+        "strategy": {
+          "$ref": "#/definitions/strategy_resultsv1StrategyType"
         },
-        "action": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1StrategyReplyAction"
-          }
+        "interval": {
+          "$ref": "#/definitions/strategy_resultsv1Interval"
         },
-        "delta": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+        "status": {
+          "$ref": "#/definitions/v1StrategyReplyStatus"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "int64"
         },
         "date": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
-    "strategyv1StrategyType": {
+    "strategy_resultsv1StrategyType": {
       "type": "string",
       "enum": [
         "AKTrend",
@@ -437,21 +444,7 @@
       ],
       "default": "AKTrend"
     },
-    "v1Parameters": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/strategyv1Interval"
-        },
-        "period": {
-          "type": "string"
-        },
-        "strategy": {
-          "$ref": "#/definitions/strategyv1StrategyType"
-        }
-      }
-    },
-    "v1StrategyReplyAction": {
+    "v1StrategyReplyStatus": {
       "type": "string",
       "enum": [
         "HOLD",

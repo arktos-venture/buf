@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -62,6 +62,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1QuotesAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/companies/splits": {
+      "post": {
+        "operationId": "Quotes_Split",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SplitRequest"
             }
           }
         ],
@@ -83,7 +115,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -115,7 +147,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -147,7 +179,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -179,7 +211,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -211,7 +243,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -230,7 +262,7 @@
         ]
       }
     },
-    "/v1/quotes/{country}/industry": {
+    "/v1/quotes/{exchange}/industry": {
       "post": {
         "operationId": "Quotes_Industry",
         "responses": {
@@ -243,13 +275,13 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "country",
+            "name": "exchange",
             "in": "path",
             "required": true,
             "type": "string"
@@ -311,11 +343,37 @@
         }
       }
     },
+    "IndicatorsMacd": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "signal": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
     "QuotesReplyIndicators": {
       "type": "object",
       "properties": {
         "macd": {
-          "$ref": "#/definitions/QuotesReplyIndicatorsMacd"
+          "$ref": "#/definitions/IndicatorsMacd"
         },
         "rsi": {
           "type": "array",
@@ -423,28 +481,37 @@
         }
       }
     },
-    "QuotesReplyIndicatorsMacd": {
+    "SplitRepliesSplitsReply": {
       "type": "object",
       "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+        "from": {
+          "type": "number",
+          "format": "float"
         },
-        "signal": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+        "to": {
+          "type": "number",
+          "format": "float"
         },
-        "history": {
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
           "type": "array",
           "items": {
-            "type": "number",
-            "format": "float"
+            "$ref": "#/definitions/protobufAny"
           }
         }
       }
@@ -482,24 +549,6 @@
         "Sma200"
       ],
       "default": "Macd"
-    },
-    "rpcStatus": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
     },
     "v1Date": {
       "type": "object",
@@ -679,6 +728,38 @@
             "type": "string",
             "format": "int64"
           }
+        }
+      }
+    },
+    "v1SplitReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SplitRepliesSplitsReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1SplitRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1Date"
         }
       }
     }

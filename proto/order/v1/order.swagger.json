@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -123,7 +123,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -164,6 +164,54 @@
     }
   },
   "definitions": {
+    "OrderReplyPrice": {
+      "type": "object",
+      "properties": {
+        "ask": {
+          "type": "number",
+          "format": "float"
+        },
+        "buy": {
+          "type": "number",
+          "format": "float"
+        },
+        "commission": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "OrderReplySize": {
+      "type": "object",
+      "properties": {
+        "ask": {
+          "type": "number",
+          "format": "float"
+        },
+        "buy": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
     "orderv1Action": {
       "type": "string",
       "enum": [
@@ -200,24 +248,6 @@
         }
       }
     },
-    "rpcStatus": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
-    },
     "v1OrderReplies": {
       "type": "object",
       "properties": {
@@ -243,7 +273,7 @@
         "ticker": {
           "type": "string"
         },
-        "conid": {
+        "ticker_id": {
           "type": "string",
           "format": "int64"
         },
@@ -262,32 +292,14 @@
         "duration": {
           "$ref": "#/definitions/orderv1Duration"
         },
-        "askSize": {
-          "type": "number",
-          "format": "float"
+        "size": {
+          "$ref": "#/definitions/OrderReplySize"
         },
-        "buySize": {
-          "type": "number",
-          "format": "float"
-        },
-        "askPrice": {
-          "type": "number",
-          "format": "float"
-        },
-        "buyPrice": {
-          "type": "number",
-          "format": "float"
-        },
-        "commission": {
-          "type": "number",
-          "format": "float"
+        "price": {
+          "$ref": "#/definitions/OrderReplyPrice"
         },
         "status": {
           "type": "string"
-        },
-        "size": {
-          "type": "number",
-          "format": "float"
         },
         "date": {
           "type": "string",

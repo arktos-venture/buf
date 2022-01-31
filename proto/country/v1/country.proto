@@ -89,8 +89,8 @@ message CountryReply {
   }
 
   message Exchange {
-    repeated string tradingview = 1;
-    repeated string eod = 2;
+    string name = 1;
+    string ticker = 2;
   }
 
   message Division {
@@ -109,16 +109,15 @@ message CountryReply {
   }
 
   string name = 1;
-  string alternativeName = 2;
-  Geo geo = 3;
-  Code code = 4;
-  bool euMember = 5;
-  repeated string tlds = 6;
-  map<string, string> languages = 7;
-  repeated string currencies = 8;
-  Exchange exchanges = 9;
-  repeated Division subDivision = 10;
-  repeated string borders = 11;
+  Geo geo = 2;
+  Code code = 3;
+  bool euMember = 4;
+  repeated string tlds = 5;
+  map<string, string> languages = 6;
+  repeated string currencies = 7;
+  repeated Exchange exchanges = 8;
+  repeated Division subDivision = 9;
+  repeated string borders = 10;
 }
 
 message CountryReplies {

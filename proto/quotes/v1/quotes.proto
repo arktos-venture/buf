@@ -28,7 +28,7 @@ service Quotes {
 
   rpc Industry (QuotesIndustryRequest) returns (QuotesReply)  {
     option (google.api.http) = {
-      post: "/v1/quotes/{country}/industry"
+      post: "/v1/quotes/{exchange}/industry"
       body: "*"
     };
   }
@@ -57,6 +57,13 @@ service Quotes {
   rpc Account (QuotesAccountRequest) returns (QuotesReply)  {
     option (google.api.http) = {
       post: "/v1/quotes/account"
+      body: "*"
+    };
+  }
+
+  rpc Split (SplitRequest) returns (SplitReplies)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/companies/splits"
       body: "*"
     };
   }
@@ -117,7 +124,7 @@ message QuotesCurrencyRequest {
 }
 
 message QuotesIndustryRequest {
-  string country = 1 [(validate.rules).string.len = 2];; 
+  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
   int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
   repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
   Date date = 4;
@@ -146,6 +153,13 @@ message QuotesAccountRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 16}];
   repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
   Date date = 3;
+}
+
+message SplitRequest {
+  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string currency = 3 [(validate.rules).string.len = 3];
+  Date date = 4;
 }
 
 // 
@@ -191,4 +205,15 @@ message QuotesReply {
 	repeated float volume = 5;
   Indicators indicators = 6;
 	repeated int64 date = 7;
+}
+
+message SplitReplies {
+  message SplitsReply {
+    float from = 1;
+    float to = 2;
+    int64 date = 3;
+  }
+
+  repeated SplitsReply results = 1;
+	int32 total = 2;
 }

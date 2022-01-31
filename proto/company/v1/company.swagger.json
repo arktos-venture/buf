@@ -30,7 +30,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -53,7 +53,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -86,7 +86,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -119,7 +119,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -150,19 +150,7 @@
     }
   },
   "definitions": {
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -177,6 +165,18 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },
@@ -244,7 +244,14 @@
     "v1CompanyReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
           "type": "string"
         },
         "name": {
@@ -254,6 +261,9 @@
           "type": "string"
         },
         "exchange": {
+          "type": "string"
+        },
+        "routing": {
           "type": "string"
         },
         "isin": {
@@ -275,30 +285,6 @@
         },
         "address": {
           "$ref": "#/definitions/v1CompanyAddress"
-        },
-        "brokers": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/v1CompanyReplyBroker"
-          }
-        },
-        "active": {
-          "type": "boolean"
-        }
-      }
-    },
-    "v1CompanyReplyBroker": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
         }
       }
     },

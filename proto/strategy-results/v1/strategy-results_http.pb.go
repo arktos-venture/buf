@@ -31,23 +31,23 @@ type StrategyHTTPServer interface {
 
 func RegisterStrategyHTTPServer(s *http.Server, srv StrategyHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/strategy/company", _Strategy_Company2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/currency", _Strategy_Currency2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/{exchange}/industry", _Strategy_Industry2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/exchange", _Strategy_Exchange2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/country", _Strategy_Country2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/index", _Strategy_Index2_HTTP_Handler(srv))
-	r.POST("/v1/strategy/account", _Strategy_Account2_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategy_Health16_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/company", _Strategy_Company0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/currency", _Strategy_Currency0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/{exchange}/industry", _Strategy_Industry0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/exchange", _Strategy_Exchange0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/country", _Strategy_Country0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/index", _Strategy_Index0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/results/account", _Strategy_Account0_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategy_Health1_HTTP_Handler(srv))
 }
 
-func _Strategy_Company2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Company0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCompanyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Company")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Company")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Company(ctx, req.(*StrategyCompanyRequest))
 		})
@@ -60,13 +60,13 @@ func _Strategy_Company2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Currency2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Currency0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCurrencyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Currency")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Currency")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Currency(ctx, req.(*StrategyCurrencyRequest))
 		})
@@ -79,7 +79,7 @@ func _Strategy_Currency2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Industry2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Industry0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndustryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -88,7 +88,7 @@ func _Strategy_Industry2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Industry")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Industry")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Industry(ctx, req.(*StrategyIndustryRequest))
 		})
@@ -101,13 +101,13 @@ func _Strategy_Industry2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Exchange2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Exchange0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyExchangeRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Exchange")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Exchange")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Exchange(ctx, req.(*StrategyExchangeRequest))
 		})
@@ -120,13 +120,13 @@ func _Strategy_Exchange2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategy_Country2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Country0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCountryRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Country")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Country")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Country(ctx, req.(*StrategyCountryRequest))
 		})
@@ -139,13 +139,13 @@ func _Strategy_Country2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Index2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Index0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndexRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Index")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Index")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Index(ctx, req.(*StrategyIndexRequest))
 		})
@@ -158,13 +158,13 @@ func _Strategy_Index2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Strategy_Account2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Account0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyAccountRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Account")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Account")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Account(ctx, req.(*StrategyAccountRequest))
 		})
@@ -177,13 +177,13 @@ func _Strategy_Account2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Health16_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Health1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/strategy.v1.Strategy/Health")
+		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Health")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Health(ctx, req.(*emptypb.Empty))
 		})
@@ -217,9 +217,9 @@ func NewStrategyHTTPClient(client *http.Client) StrategyHTTPClient {
 
 func (c *StrategyHTTPClientImpl) Account(ctx context.Context, in *StrategyAccountRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/account"
+	pattern := "/v1/strategy/results/account"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Account"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Account"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -230,9 +230,9 @@ func (c *StrategyHTTPClientImpl) Account(ctx context.Context, in *StrategyAccoun
 
 func (c *StrategyHTTPClientImpl) Company(ctx context.Context, in *StrategyCompanyRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/company"
+	pattern := "/v1/strategy/results/company"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Company"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Company"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -243,9 +243,9 @@ func (c *StrategyHTTPClientImpl) Company(ctx context.Context, in *StrategyCompan
 
 func (c *StrategyHTTPClientImpl) Country(ctx context.Context, in *StrategyCountryRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/country"
+	pattern := "/v1/strategy/results/country"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Country"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Country"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -256,9 +256,9 @@ func (c *StrategyHTTPClientImpl) Country(ctx context.Context, in *StrategyCountr
 
 func (c *StrategyHTTPClientImpl) Currency(ctx context.Context, in *StrategyCurrencyRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/currency"
+	pattern := "/v1/strategy/results/currency"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Currency"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Currency"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -269,9 +269,9 @@ func (c *StrategyHTTPClientImpl) Currency(ctx context.Context, in *StrategyCurre
 
 func (c *StrategyHTTPClientImpl) Exchange(ctx context.Context, in *StrategyExchangeRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/exchange"
+	pattern := "/v1/strategy/results/exchange"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Exchange"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Exchange"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -284,7 +284,7 @@ func (c *StrategyHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, 
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Health"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -295,9 +295,9 @@ func (c *StrategyHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, 
 
 func (c *StrategyHTTPClientImpl) Index(ctx context.Context, in *StrategyIndexRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/index"
+	pattern := "/v1/strategy/results/index"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Index"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Index"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -308,9 +308,9 @@ func (c *StrategyHTTPClientImpl) Index(ctx context.Context, in *StrategyIndexReq
 
 func (c *StrategyHTTPClientImpl) Industry(ctx context.Context, in *StrategyIndustryRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy/{exchange}/industry"
+	pattern := "/v1/strategy/results/{exchange}/industry"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategy.v1.Strategy/Industry"))
+	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Industry"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

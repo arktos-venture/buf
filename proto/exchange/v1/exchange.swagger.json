@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -61,6 +61,18 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "request.companies",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "request.holidays",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -81,7 +93,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -111,7 +123,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -128,45 +140,29 @@
         "name": {
           "type": "string"
         },
-        "dates": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
         },
         "official": {
           "type": "boolean"
         }
       }
     },
-    "exchangev1Code": {
+    "ExchangeRequestRequest": {
       "type": "object",
       "properties": {
-        "eod": {
-          "type": "string"
+        "companies": {
+          "type": "boolean"
         },
-        "ibkr": {
-          "type": "string"
-        },
-        "tradingview": {
-          "type": "string"
+        "holidays": {
+          "type": "boolean"
         }
       }
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -184,6 +180,18 @@
         }
       }
     },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
     "v1ExchangeIsOpenReply": {
       "type": "object",
       "properties": {
@@ -194,14 +202,10 @@
           "type": "string"
         },
         "tradingHours": {
-          "$ref": "#/definitions/v1TradingHours"
+          "type": "string"
         },
         "open": {
           "type": "boolean"
-        },
-        "timeBeforeClosing": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     },
@@ -223,11 +227,17 @@
     "v1ExchangeReply": {
       "type": "object",
       "properties": {
+        "ticker": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
-        "code": {
-          "$ref": "#/definitions/exchangev1Code"
+        "description": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
         },
         "country": {
           "type": "string"
@@ -245,7 +255,7 @@
           }
         },
         "tradingHours": {
-          "$ref": "#/definitions/v1TradingHours"
+          "type": "string"
         },
         "companies": {
           "type": "array",
@@ -258,6 +268,10 @@
     "v1ExchangeReplyCompany": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
           "type": "string"
         },
@@ -276,6 +290,12 @@
     "v1ExchangeShortReply": {
       "type": "object",
       "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -284,35 +304,6 @@
         },
         "currency": {
           "type": "string"
-        },
-        "code": {
-          "$ref": "#/definitions/exchangev1Code"
-        }
-      }
-    },
-    "v1TradingHours": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "close": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "workingDays": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "int32"
-          }
         }
       }
     }

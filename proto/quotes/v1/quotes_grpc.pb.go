@@ -26,6 +26,7 @@ type QuotesClient interface {
 	Country(ctx context.Context, in *QuotesCountryRequest, opts ...grpc.CallOption) (*QuotesReply, error)
 	Index(ctx context.Context, in *QuotesIndexRequest, opts ...grpc.CallOption) (*QuotesReply, error)
 	Account(ctx context.Context, in *QuotesAccountRequest, opts ...grpc.CallOption) (*QuotesReply, error)
+	Split(ctx context.Context, in *SplitRequest, opts ...grpc.CallOption) (*SplitReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -100,6 +101,15 @@ func (c *quotesClient) Account(ctx context.Context, in *QuotesAccountRequest, op
 	return out, nil
 }
 
+func (c *quotesClient) Split(ctx context.Context, in *SplitRequest, opts ...grpc.CallOption) (*SplitReplies, error) {
+	out := new(SplitReplies)
+	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Split", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *quotesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Health", in, out, opts...)
@@ -120,6 +130,7 @@ type QuotesServer interface {
 	Country(context.Context, *QuotesCountryRequest) (*QuotesReply, error)
 	Index(context.Context, *QuotesIndexRequest) (*QuotesReply, error)
 	Account(context.Context, *QuotesAccountRequest) (*QuotesReply, error)
+	Split(context.Context, *SplitRequest) (*SplitReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedQuotesServer()
 }
@@ -148,6 +159,9 @@ func (UnimplementedQuotesServer) Index(context.Context, *QuotesIndexRequest) (*Q
 }
 func (UnimplementedQuotesServer) Account(context.Context, *QuotesAccountRequest) (*QuotesReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Account not implemented")
+}
+func (UnimplementedQuotesServer) Split(context.Context, *SplitRequest) (*SplitReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Split not implemented")
 }
 func (UnimplementedQuotesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -291,6 +305,24 @@ func _Quotes_Account_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Quotes_Split_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SplitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuotesServer).Split(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/quotes.v1.Quotes/Split",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuotesServer).Split(ctx, req.(*SplitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Quotes_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -343,6 +375,10 @@ var Quotes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Account",
 			Handler:    _Quotes_Account_Handler,
+		},
+		{
+			MethodName: "Split",
+			Handler:    _Quotes_Split_Handler,
 		},
 		{
 			MethodName: "Health",

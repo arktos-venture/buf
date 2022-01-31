@@ -191,17 +191,6 @@ func (m *CompanySearchByIDsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := CompanySearchByIDsRequest_Broker_name[int32(m.GetBroker())]; !ok {
-		err := CompanySearchByIDsRequestValidationError{
-			field:  "Broker",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
 		err := CompanySearchByIDsRequestValidationError{
 			field:  "Currency",
@@ -1146,13 +1135,19 @@ func (m *CompanyReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	// no validation rules for Ticker
+
+	// no validation rules for TickerAlternative
 
 	// no validation rules for Name
 
 	// no validation rules for Description
 
 	// no validation rules for Exchange
+
+	// no validation rules for Routing
 
 	// no validation rules for Isin
 
@@ -1219,54 +1214,6 @@ func (m *CompanyReply) validate(all bool) error {
 			}
 		}
 	}
-
-	{
-		sorted_keys := make([]string, len(m.GetBrokers()))
-		i := 0
-		for key := range m.GetBrokers() {
-			sorted_keys[i] = key
-			i++
-		}
-		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
-		for _, key := range sorted_keys {
-			val := m.GetBrokers()[key]
-			_ = val
-
-			// no validation rules for Brokers[key]
-
-			if all {
-				switch v := interface{}(val).(type) {
-				case interface{ ValidateAll() error }:
-					if err := v.ValidateAll(); err != nil {
-						errors = append(errors, CompanyReplyValidationError{
-							field:  fmt.Sprintf("Brokers[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				case interface{ Validate() error }:
-					if err := v.Validate(); err != nil {
-						errors = append(errors, CompanyReplyValidationError{
-							field:  fmt.Sprintf("Brokers[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				}
-			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-				if err := v.Validate(); err != nil {
-					return CompanyReplyValidationError{
-						field:  fmt.Sprintf("Brokers[%v]", key),
-						reason: "embedded message failed validation",
-						cause:  err,
-					}
-				}
-			}
-
-		}
-	}
-
-	// no validation rules for Active
 
 	if len(errors) > 0 {
 		return CompanyReplyMultiError(errors)
@@ -1480,111 +1427,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyRepliesValidationError{}
-
-// Validate checks the field values on CompanyReply_Broker with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CompanyReply_Broker) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CompanyReply_Broker with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CompanyReply_BrokerMultiError, or nil if none found.
-func (m *CompanyReply_Broker) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CompanyReply_Broker) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Id
-
-	// no validation rules for Ticker
-
-	// no validation rules for Routing
-
-	if len(errors) > 0 {
-		return CompanyReply_BrokerMultiError(errors)
-	}
-
-	return nil
-}
-
-// CompanyReply_BrokerMultiError is an error wrapping multiple validation
-// errors returned by CompanyReply_Broker.ValidateAll() if the designated
-// constraints aren't met.
-type CompanyReply_BrokerMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CompanyReply_BrokerMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CompanyReply_BrokerMultiError) AllErrors() []error { return m }
-
-// CompanyReply_BrokerValidationError is the validation error returned by
-// CompanyReply_Broker.Validate if the designated constraints aren't met.
-type CompanyReply_BrokerValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CompanyReply_BrokerValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CompanyReply_BrokerValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CompanyReply_BrokerValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CompanyReply_BrokerValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CompanyReply_BrokerValidationError) ErrorName() string {
-	return "CompanyReply_BrokerValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CompanyReply_BrokerValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCompanyReply_Broker.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CompanyReply_BrokerValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CompanyReply_BrokerValidationError{}

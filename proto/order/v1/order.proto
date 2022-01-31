@@ -86,21 +86,28 @@ message OrderCreateRequest {
 }
 
 message OrderReply {
+  message Size {
+    float ask = 1;
+    float buy = 2;
+  }
+
+  message Price {
+    float ask = 1;
+    float buy = 2;
+    float commission = 3;
+  }
+
   string ticker = 1;
-  int64 conid = 2;
+  int64 ticker_id = 2;
   string currency = 3;
   Action action = 4;
   OrderType orderType = 5;
   Routing routing = 6;
   Duration duration = 7;
-  float askSize = 8;
-  float buySize = 9;
-  float askPrice = 10;
-  float buyPrice = 11;
-  float commission = 12;
-  string status = 13;
-  float size = 14;
-  int64 date = 15;
+  Size size = 8;
+  Price price = 9;
+  string status = 10;
+  int64 date = 11;
 }
 
 message OrderReplies {

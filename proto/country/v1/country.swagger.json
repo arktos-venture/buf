@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -83,7 +83,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -113,7 +113,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -173,6 +173,32 @@
         }
       }
     },
+    "CountryReplyCode": {
+      "type": "object",
+      "properties": {
+        "alpha2": {
+          "type": "string"
+        },
+        "alpha3": {
+          "type": "string"
+        },
+        "cioc": {
+          "type": "string"
+        },
+        "ccn3": {
+          "type": "string"
+        },
+        "callingCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "internationalPrefix": {
+          "type": "string"
+        }
+      }
+    },
     "CountryReplyDivision": {
       "type": "object",
       "properties": {
@@ -190,17 +216,11 @@
     "CountryReplyExchange": {
       "type": "object",
       "properties": {
-        "tradingview": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "name": {
+          "type": "string"
         },
-        "eod": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "ticker": {
+          "type": "string"
         }
       }
     },
@@ -293,14 +313,11 @@
         "name": {
           "type": "string"
         },
-        "alternativeName": {
-          "type": "string"
-        },
         "geo": {
           "$ref": "#/definitions/CountryReplyGeo"
         },
         "code": {
-          "$ref": "#/definitions/getCountryReplyCode"
+          "$ref": "#/definitions/CountryReplyCode"
         },
         "euMember": {
           "type": "boolean"
@@ -324,7 +341,10 @@
           }
         },
         "exchanges": {
-          "$ref": "#/definitions/CountryReplyExchange"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CountryReplyExchange"
+          }
         },
         "subDivision": {
           "type": "array",
@@ -337,32 +357,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "getCountryReplyCode": {
-      "type": "object",
-      "properties": {
-        "alpha2": {
-          "type": "string"
-        },
-        "alpha3": {
-          "type": "string"
-        },
-        "cioc": {
-          "type": "string"
-        },
-        "ccn3": {
-          "type": "string"
-        },
-        "callingCodes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "internationalPrefix": {
-          "type": "string"
         }
       }
     },
@@ -383,19 +377,7 @@
         }
       }
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -410,6 +392,18 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },

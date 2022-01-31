@@ -27,21 +27,23 @@ type QuotesHTTPServer interface {
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Index(context.Context, *QuotesIndexRequest) (*QuotesReply, error)
 	Industry(context.Context, *QuotesIndustryRequest) (*QuotesReply, error)
+	Split(context.Context, *SplitRequest) (*SplitReplies, error)
 }
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/quotes/company", _Quotes_Company0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/currency", _Quotes_Currency0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/{country}/industry", _Quotes_Industry0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/exchange", _Quotes_Exchange0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/country", _Quotes_Country0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/index", _Quotes_Index0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/account", _Quotes_Account0_HTTP_Handler(srv))
+	r.POST("/v1/quotes/company", _Quotes_Company1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/currency", _Quotes_Currency1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/{exchange}/industry", _Quotes_Industry1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/exchange", _Quotes_Exchange1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/country", _Quotes_Country1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/index", _Quotes_Index1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/account", _Quotes_Account1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/companies/splits", _Quotes_Split0_HTTP_Handler(srv))
 	r.GET("/healthz", _Quotes_Health4_HTTP_Handler(srv))
 }
 
-func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Company1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCompanyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -60,7 +62,7 @@ func _Quotes_Company0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Currency0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Currency1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCurrencyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -79,7 +81,7 @@ func _Quotes_Currency0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Industry0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Industry1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesIndustryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -101,7 +103,7 @@ func _Quotes_Industry0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Exchange0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Exchange1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesExchangeRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -120,7 +122,7 @@ func _Quotes_Exchange0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Quotes_Country0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Country1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesCountryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -139,7 +141,7 @@ func _Quotes_Country0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Quotes_Index0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Index1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesIndexRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -158,7 +160,7 @@ func _Quotes_Index0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Quotes_Account0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Account1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesAccountRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -173,6 +175,25 @@ func _Quotes_Account0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 			return err
 		}
 		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_Split0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SplitRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/Split")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Split(ctx, req.(*SplitRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SplitReplies)
 		return ctx.Result(200, reply)
 	}
 }
@@ -205,6 +226,7 @@ type QuotesHTTPClient interface {
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Index(ctx context.Context, req *QuotesIndexRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
 	Industry(ctx context.Context, req *QuotesIndustryRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Split(ctx context.Context, req *SplitRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
 }
 
 type QuotesHTTPClientImpl struct {
@@ -308,9 +330,22 @@ func (c *QuotesHTTPClientImpl) Index(ctx context.Context, in *QuotesIndexRequest
 
 func (c *QuotesHTTPClientImpl) Industry(ctx context.Context, in *QuotesIndustryRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
-	pattern := "/v1/quotes/{country}/industry"
+	pattern := "/v1/quotes/{exchange}/industry"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Industry"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Split(ctx context.Context, in *SplitRequest, opts ...http.CallOption) (*SplitReplies, error) {
+	var out SplitReplies
+	pattern := "/v1/quotes/companies/splits"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/Split"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
