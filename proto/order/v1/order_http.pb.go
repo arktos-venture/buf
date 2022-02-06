@@ -26,8 +26,8 @@ type OrderHTTPServer interface {
 
 func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/orders/{broker}/{account}", _Order_Search0_HTTP_Handler(srv))
-	r.POST("/v1/order/{broker}", _Order_Create0_HTTP_Handler(srv))
+	r.POST("/v1/orders/{account}", _Order_Search0_HTTP_Handler(srv))
+	r.POST("/v1/orders", _Order_Create0_HTTP_Handler(srv))
 	r.GET("/healthz", _Order_Health0_HTTP_Handler(srv))
 }
 
@@ -57,9 +57,6 @@ func _Order_Create0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) err
 	return func(ctx http.Context) error {
 		var in OrderCreateRequest
 		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/order.v1.Order/Create")
@@ -110,7 +107,7 @@ func NewOrderHTTPClient(client *http.Client) OrderHTTPClient {
 
 func (c *OrderHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
-	pattern := "/v1/order/{broker}"
+	pattern := "/v1/orders"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/order.v1.Order/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -136,7 +133,7 @@ func (c *OrderHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opt
 
 func (c *OrderHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*OrderReplies, error) {
 	var out OrderReplies
-	pattern := "/v1/orders/{broker}/{account}"
+	pattern := "/v1/orders/{account}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/order.v1.Order/Search"))
 	opts = append(opts, http.PathTemplate(pattern))

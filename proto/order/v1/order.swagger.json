@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/order/{broker}": {
+    "/v1/orders": {
       "post": {
         "operationId": "Order_Create",
         "responses": {
@@ -57,51 +57,11 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "account": {
-                  "type": "string"
-                },
-                "action": {
-                  "$ref": "#/definitions/orderv1Action"
-                },
-                "ticker": {
-                  "type": "string"
-                },
-                "currency": {
-                  "type": "string"
-                },
-                "routing": {
-                  "$ref": "#/definitions/v1Routing"
-                },
-                "orderType": {
-                  "$ref": "#/definitions/v1OrderType"
-                },
-                "size": {
-                  "type": "number",
-                  "format": "float"
-                },
-                "duration": {
-                  "$ref": "#/definitions/orderv1Duration"
-                },
-                "price": {
-                  "type": "number",
-                  "format": "float"
-                }
-              }
+              "$ref": "#/definitions/v1OrderCreateRequest"
             }
           }
         ],
@@ -110,7 +70,7 @@
         ]
       }
     },
-    "/v1/orders/{broker}/{account}": {
+    "/v1/orders/{account}": {
       "post": {
         "operationId": "Order_Search",
         "responses": {
@@ -129,15 +89,6 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "account",
             "in": "path",
             "required": true,
@@ -150,8 +101,8 @@
             "schema": {
               "type": "object",
               "properties": {
-                "interval": {
-                  "type": "string"
+                "date": {
+                  "$ref": "#/definitions/orderv1Date"
                 }
               }
             }
@@ -221,12 +172,25 @@
       ],
       "default": "BUY"
     },
-    "orderv1Broker": {
+    "orderv1Date": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/orderv1DateInterval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "orderv1DateInterval": {
       "type": "string",
       "enum": [
-        "IBKR"
+        "none",
+        "q",
+        "y"
       ],
-      "default": "IBKR"
+      "default": "none"
     },
     "orderv1Duration": {
       "type": "string",
@@ -248,6 +212,40 @@
         }
       }
     },
+    "v1OrderCreateRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/definitions/orderv1Action"
+        },
+        "orderType": {
+          "$ref": "#/definitions/v1OrderType"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "duration": {
+          "$ref": "#/definitions/orderv1Duration"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "v1OrderReplies": {
       "type": "object",
       "properties": {
@@ -260,10 +258,6 @@
         "total": {
           "type": "integer",
           "format": "int32"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -273,9 +267,8 @@
         "ticker": {
           "type": "string"
         },
-        "ticker_id": {
-          "type": "string",
-          "format": "int64"
+        "exchange": {
+          "type": "string"
         },
         "currency": {
           "type": "string"
@@ -287,7 +280,7 @@
           "$ref": "#/definitions/v1OrderType"
         },
         "routing": {
-          "$ref": "#/definitions/v1Routing"
+          "type": "string"
         },
         "duration": {
           "$ref": "#/definitions/orderv1Duration"
@@ -317,14 +310,6 @@
         "MIDPRICE"
       ],
       "default": "LMT"
-    },
-    "v1Routing": {
-      "type": "string",
-      "enum": [
-        "SMART",
-        "SBF"
-      ],
-      "default": "SMART"
     }
   }
 }
