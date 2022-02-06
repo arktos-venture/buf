@@ -114,10 +114,6 @@
         "total": {
           "type": "integer",
           "format": "int32"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },

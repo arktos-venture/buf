@@ -348,8 +348,6 @@ func (m *NewsReplies) validate(all bool) error {
 
 	// no validation rules for Total
 
-	// no validation rules for Date
-
 	if len(errors) > 0 {
 		return NewsRepliesMultiError(errors)
 	}

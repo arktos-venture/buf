@@ -26,6 +26,7 @@ service News {
   	}
 }
 
+
 // 
 // Request
 // 
@@ -36,6 +37,7 @@ message NewsRequest {
 	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string period = 4 [(validate.rules).string = {in: ["last", "3d", "1w"]}];
 }
+
 
 // 
 // Reply
@@ -51,5 +53,4 @@ message NewsReply {
 message NewsReplies {
 	repeated NewsReply results = 1;
 	int32 total = 2;
-	int64 date = 3;
 }
