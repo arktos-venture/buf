@@ -14,13 +14,19 @@ option java_outer_classname = "AccountProtoV1";
 service Account {
 	rpc Get (AccountRequest) returns (AccountReply)  {
 		option (google.api.http) = {
-			get: "/v1/{broker}/account/{account}"
+			get: "/v1/account/{account}"
+		};
+	}
+
+	rpc List (AccountListRequest) returns (AccountReplies)  {
+		option (google.api.http) = {
+			get: "/v1/accounts"
 		};
 	}
 
 	rpc Create (AccountCreateRequest) returns (AccountReply)  {
 		option (google.api.http) = {
-			post: "/v1/{broker}/account"
+			post: "/v1/account"
 			body: "*"
 		};
 	}
@@ -32,21 +38,34 @@ service Account {
   	}
 }
 
-enum Broker {
-	IBKR = 0;
+
+// 
+// Request
+// 
+
+message Page {
+	int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
+	int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
 }
 
 message AccountRequest {
-	Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
-	string currency = 3 [(validate.rules).string.len = 3];
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+}
+
+message AccountListRequest {
+	string user = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+	Page page = 2 [(validate.rules).message.required = true];
 }
 
 message AccountCreateRequest {
-	Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
-	string currency = 3 [(validate.rules).string.len = 3];
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string currency = 2 [(validate.rules).string.len = 3];
 }
+
+
+// 
+// Reply
+// 
 
 message AccountReply {
 	string account = 1;
@@ -54,4 +73,9 @@ message AccountReply {
 	string currency = 3;
 	bool active = 4;
 	int64 date = 5;
+}
+
+message AccountReplies {
+	repeated AccountReply results = 1;
+	int32 total = 2;
 }

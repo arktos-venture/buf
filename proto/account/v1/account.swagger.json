@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/{broker}/account": {
+    "/v1/account": {
       "post": {
         "operationId": "Account_Create",
         "responses": {
@@ -57,28 +57,11 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "account": {
-                  "type": "string"
-                },
-                "currency": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/v1AccountCreateRequest"
             }
           }
         ],
@@ -87,7 +70,7 @@
         ]
       }
     },
-    "/v1/{broker}/account/{account}": {
+    "/v1/account/{account}": {
       "get": {
         "operationId": "Account_Get",
         "responses": {
@@ -106,25 +89,54 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/v1/accounts": {
+      "get": {
+        "operationId": "Account_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AccountReplies"
+            }
           },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
           {
-            "name": "currency",
+            "name": "user",
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "page.number",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -134,12 +146,18 @@
     }
   },
   "definitions": {
-    "accountv1Broker": {
-      "type": "string",
-      "enum": [
-        "IBKR"
-      ],
-      "default": "IBKR"
+    "accountv1Page": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
     "googlerpcStatus": {
       "type": "object",
@@ -168,6 +186,32 @@
         "value": {
           "type": "string",
           "format": "byte"
+        }
+      }
+    },
+    "v1AccountCreateRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AccountReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AccountReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
