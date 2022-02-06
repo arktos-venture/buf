@@ -105,7 +105,7 @@
         ]
       }
     },
-    "/v1/company/{currency}/{exchange}/{ticker}": {
+    "/v1/company/{exchange}/{ticker}": {
       "get": {
         "summary": "Public API",
         "operationId": "Company_Get",
@@ -124,12 +124,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "exchange",
             "in": "path",
@@ -150,6 +144,19 @@
     }
   },
   "definitions": {
+    "companyv1Page": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -200,9 +207,6 @@
     "v1CompanyBulkSearchRequest": {
       "type": "object",
       "properties": {
-        "currency": {
-          "type": "string"
-        },
         "filters": {
           "$ref": "#/definitions/v1Filter"
         },
@@ -291,25 +295,24 @@
     "v1CompanySearchRequest": {
       "type": "object",
       "properties": {
-        "currency": {
-          "type": "string"
-        },
         "filters": {
           "$ref": "#/definitions/v1Filter"
         },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        },
         "page": {
-          "type": "integer",
-          "format": "int32"
+          "$ref": "#/definitions/companyv1Page"
         }
       }
     },
     "v1Filter": {
       "type": "object",
       "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
         "exchanges": {
           "type": "array",
           "items": {
