@@ -127,6 +127,22 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page.number",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
         "tags": [
           "Exchange"
         ]
@@ -206,6 +222,19 @@
         },
         "open": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1ExchangeListRequestPage": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

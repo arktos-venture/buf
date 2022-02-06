@@ -334,6 +334,148 @@ var _ExchangeIsOpenRequest_Exchange_InLookup = map[string]struct{}{
 	"CC":     {},
 }
 
+// Validate checks the field values on ExchangeListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeListRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeListRequestMultiError, or nil if none found.
+func (m *ExchangeListRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeListRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetPage() == nil {
+		err := ExchangeListRequestValidationError{
+			field:  "Page",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeListRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeListRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeListRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ExchangeListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeListRequestMultiError is an error wrapping multiple validation
+// errors returned by ExchangeListRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ExchangeListRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeListRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeListRequestMultiError) AllErrors() []error { return m }
+
+// ExchangeListRequestValidationError is the validation error returned by
+// ExchangeListRequest.Validate if the designated constraints aren't met.
+type ExchangeListRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeListRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeListRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeListRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeListRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeListRequestValidationError) ErrorName() string {
+	return "ExchangeListRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeListRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeListRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeListRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeListRequestValidationError{}
+
 // Validate checks the field values on ExchangeReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -981,6 +1123,130 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ExchangeRequest_RequestValidationError{}
+
+// Validate checks the field values on ExchangeListRequest_Page with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeListRequest_Page) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeListRequest_Page with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeListRequest_PageMultiError, or nil if none found.
+func (m *ExchangeListRequest_Page) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeListRequest_Page) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+		err := ExchangeListRequest_PageValidationError{
+			field:  "Number",
+			reason: "value must be inside range (0, 10000)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetLimit(); val <= 1 || val >= 150 {
+		err := ExchangeListRequest_PageValidationError{
+			field:  "Limit",
+			reason: "value must be inside range (1, 150)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ExchangeListRequest_PageMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeListRequest_PageMultiError is an error wrapping multiple validation
+// errors returned by ExchangeListRequest_Page.ValidateAll() if the designated
+// constraints aren't met.
+type ExchangeListRequest_PageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeListRequest_PageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeListRequest_PageMultiError) AllErrors() []error { return m }
+
+// ExchangeListRequest_PageValidationError is the validation error returned by
+// ExchangeListRequest_Page.Validate if the designated constraints aren't met.
+type ExchangeListRequest_PageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeListRequest_PageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeListRequest_PageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeListRequest_PageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeListRequest_PageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeListRequest_PageValidationError) ErrorName() string {
+	return "ExchangeListRequest_PageValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeListRequest_PageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeListRequest_Page.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeListRequest_PageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeListRequest_PageValidationError{}
 
 // Validate checks the field values on ExchangeReply_Holiday with the rules
 // defined in the proto definition for this message. If any rules are

@@ -22,7 +22,7 @@ type ExchangeHTTPServer interface {
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
-	List(context.Context, *emptypb.Empty) (*ExchangeReplies, error)
+	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
 }
 
 func RegisterExchangeHTTPServer(s *http.Server, srv ExchangeHTTPServer) {
@@ -79,13 +79,13 @@ func _Exchange_Get0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) 
 
 func _Exchange_List0_HTTP_Handler(srv ExchangeHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in emptypb.Empty
+		var in ExchangeListRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/exchange.v1.Exchange/List")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*emptypb.Empty))
+			return srv.List(ctx, req.(*ExchangeListRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -119,7 +119,7 @@ type ExchangeHTTPClient interface {
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	IsOpen(ctx context.Context, req *ExchangeIsOpenRequest, opts ...http.CallOption) (rsp *ExchangeIsOpenReply, err error)
-	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
+	List(ctx context.Context, req *ExchangeListRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
 }
 
 type ExchangeHTTPClientImpl struct {
@@ -169,7 +169,7 @@ func (c *ExchangeHTTPClientImpl) IsOpen(ctx context.Context, in *ExchangeIsOpenR
 	return &out, err
 }
 
-func (c *ExchangeHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ExchangeReplies, error) {
+func (c *ExchangeHTTPClientImpl) List(ctx context.Context, in *ExchangeListRequest, opts ...http.CallOption) (*ExchangeReplies, error) {
 	var out ExchangeReplies
 	pattern := "/v1/exchanges"
 	path := binding.EncodeURL(pattern, in, true)

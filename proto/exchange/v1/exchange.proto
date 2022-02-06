@@ -24,7 +24,7 @@ service Exchange {
         };
     }
 
-	rpc List (google.protobuf.Empty) returns (ExchangeReplies)  {
+	rpc List (ExchangeListRequest) returns (ExchangeReplies)  {
         option (google.api.http) = {
             get: "/v1/exchanges"
         };
@@ -36,6 +36,7 @@ service Exchange {
 		};
 	}
 }
+
 
 // 
 // Request
@@ -54,6 +55,16 @@ message ExchangeRequest {
 message ExchangeIsOpenRequest {
 	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "TO", "LSE", "PA", "BR", "AS", "SG", "SHE", "SHG", "HK", "LS", "MC", "F", "MI", "LU", "COMM", "FOREX", "INDX", "CC"]}];
 }
+
+message ExchangeListRequest {
+	message Page {
+		int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
+		int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+	}
+
+	Page page = 1 [(validate.rules).message.required = true];
+}
+
 
 // 
 // Reply
