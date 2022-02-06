@@ -35,6 +35,126 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Page with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Page) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Page with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PageMultiError, or nil if none found.
+func (m *Page) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Page) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+		err := PageValidationError{
+			field:  "Number",
+			reason: "value must be inside range (0, 10000)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetLimit(); val <= 1 || val >= 150 {
+		err := PageValidationError{
+			field:  "Limit",
+			reason: "value must be inside range (1, 150)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PageMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageMultiError is an error wrapping multiple validation errors returned by
+// Page.ValidateAll() if the designated constraints aren't met.
+type PageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageMultiError) AllErrors() []error { return m }
+
+// PageValidationError is the validation error returned by Page.Validate if the
+// designated constraints aren't met.
+type PageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageValidationError) ErrorName() string { return "PageValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageValidationError{}
+
 // Validate checks the field values on NotificationCreateRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -156,22 +276,22 @@ var _ interface {
 	ErrorName() string
 } = NotificationCreateRequestValidationError{}
 
-// Validate checks the field values on NotificationRequest with the rules
+// Validate checks the field values on NotificationSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *NotificationRequest) Validate() error {
+func (m *NotificationSearchRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on NotificationRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on NotificationSearchRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// NotificationRequestMultiError, or nil if none found.
-func (m *NotificationRequest) ValidateAll() error {
+// NotificationSearchRequestMultiError, or nil if none found.
+func (m *NotificationSearchRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *NotificationRequest) validate(all bool) error {
+func (m *NotificationSearchRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -181,7 +301,7 @@ func (m *NotificationRequest) validate(all bool) error {
 	// no validation rules for Account
 
 	if _, ok := Level_name[int32(m.GetLevel())]; !ok {
-		err := NotificationRequestValidationError{
+		err := NotificationSearchRequestValidationError{
 			field:  "Level",
 			reason: "value must be one of the defined enum values",
 		}
@@ -191,8 +311,8 @@ func (m *NotificationRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _NotificationRequest_Date_InLookup[m.GetDate()]; !ok {
-		err := NotificationRequestValidationError{
+	if _, ok := _NotificationSearchRequest_Date_InLookup[m.GetDate()]; !ok {
+		err := NotificationSearchRequestValidationError{
 			field:  "Date",
 			reason: "value must be in list [last 3d 1w 2w 1m]",
 		}
@@ -202,20 +322,60 @@ func (m *NotificationRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetPage() == nil {
+		err := NotificationSearchRequestValidationError{
+			field:  "Page",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NotificationSearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NotificationSearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotificationSearchRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
-		return NotificationRequestMultiError(errors)
+		return NotificationSearchRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// NotificationRequestMultiError is an error wrapping multiple validation
-// errors returned by NotificationRequest.ValidateAll() if the designated
-// constraints aren't met.
-type NotificationRequestMultiError []error
+// NotificationSearchRequestMultiError is an error wrapping multiple validation
+// errors returned by NotificationSearchRequest.ValidateAll() if the
+// designated constraints aren't met.
+type NotificationSearchRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m NotificationRequestMultiError) Error() string {
+func (m NotificationSearchRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -224,11 +384,11 @@ func (m NotificationRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m NotificationRequestMultiError) AllErrors() []error { return m }
+func (m NotificationSearchRequestMultiError) AllErrors() []error { return m }
 
-// NotificationRequestValidationError is the validation error returned by
-// NotificationRequest.Validate if the designated constraints aren't met.
-type NotificationRequestValidationError struct {
+// NotificationSearchRequestValidationError is the validation error returned by
+// NotificationSearchRequest.Validate if the designated constraints aren't met.
+type NotificationSearchRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -236,24 +396,24 @@ type NotificationRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e NotificationRequestValidationError) Field() string { return e.field }
+func (e NotificationSearchRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e NotificationRequestValidationError) Reason() string { return e.reason }
+func (e NotificationSearchRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e NotificationRequestValidationError) Cause() error { return e.cause }
+func (e NotificationSearchRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e NotificationRequestValidationError) Key() bool { return e.key }
+func (e NotificationSearchRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e NotificationRequestValidationError) ErrorName() string {
-	return "NotificationRequestValidationError"
+func (e NotificationSearchRequestValidationError) ErrorName() string {
+	return "NotificationSearchRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e NotificationRequestValidationError) Error() string {
+func (e NotificationSearchRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -265,14 +425,14 @@ func (e NotificationRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sNotificationRequest.%s: %s%s",
+		"invalid %sNotificationSearchRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = NotificationRequestValidationError{}
+var _ error = NotificationSearchRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -280,9 +440,9 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = NotificationRequestValidationError{}
+} = NotificationSearchRequestValidationError{}
 
-var _NotificationRequest_Date_InLookup = map[string]struct{}{
+var _NotificationSearchRequest_Date_InLookup = map[string]struct{}{
 	"last": {},
 	"3d":   {},
 	"1w":   {},
@@ -459,8 +619,6 @@ func (m *NotificationReplies) validate(all bool) error {
 	}
 
 	// no validation rules for Total
-
-	// no validation rules for Date
 
 	if len(errors) > 0 {
 		return NotificationRepliesMultiError(errors)

@@ -19,7 +19,7 @@ service Notification {
 		};
 	}
 
-	rpc Search (NotificationRequest) returns (NotificationReplies)  {
+	rpc Search (NotificationSearchRequest) returns (NotificationReplies)  {
 		option (google.api.http) = {
 		  	get: "/v1/{account}/notifications"
 		};
@@ -31,6 +31,11 @@ service Notification {
     	};
   	}
 }
+
+
+// 
+// Request
+// 
 
 enum Level {
 	CRITICAL = 0;
@@ -51,9 +56,10 @@ enum Subject {
 	DOWNTO_10P_VARIATION = 7;
 }
 
-// 
-// Request
-// 
+message Page {
+	int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
+	int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+}
 
 message NotificationCreateRequest {
 	string account = 1;
@@ -63,11 +69,13 @@ message NotificationCreateRequest {
 	string description = 7;
 }
 
-message NotificationRequest {
+message NotificationSearchRequest {
 	string account = 1;
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
 	string date = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
+	Page page = 4 [(validate.rules).message.required = true];
 }
+
 
 // 
 // Reply
@@ -84,5 +92,4 @@ message NotificationReply {
 message NotificationReplies {
 	repeated NotificationReply results = 1;
 	int32 total = 2;
-	int64 date = 3;
 }

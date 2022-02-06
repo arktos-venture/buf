@@ -21,7 +21,7 @@ const _ = http.SupportPackageIsVersion1
 type NotificationHTTPServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Search(context.Context, *NotificationRequest) (*NotificationReplies, error)
+	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 }
 
 func RegisterNotificationHTTPServer(s *http.Server, srv NotificationHTTPServer) {
@@ -55,7 +55,7 @@ func _Notification_Create2_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 
 func _Notification_Search1_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in NotificationRequest
+		var in NotificationSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -64,7 +64,7 @@ func _Notification_Search1_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 		}
 		http.SetOperation(ctx, "/notification.v1.Notification/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Search(ctx, req.(*NotificationRequest))
+			return srv.Search(ctx, req.(*NotificationSearchRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -97,7 +97,7 @@ func _Notification_Health5_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 type NotificationHTTPClient interface {
 	Create(ctx context.Context, req *NotificationCreateRequest, opts ...http.CallOption) (rsp *NotificationReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Search(ctx context.Context, req *NotificationRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
+	Search(ctx context.Context, req *NotificationSearchRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
 }
 
 type NotificationHTTPClientImpl struct {
@@ -134,7 +134,7 @@ func (c *NotificationHTTPClientImpl) Health(ctx context.Context, in *emptypb.Emp
 	return &out, err
 }
 
-func (c *NotificationHTTPClientImpl) Search(ctx context.Context, in *NotificationRequest, opts ...http.CallOption) (*NotificationReplies, error) {
+func (c *NotificationHTTPClientImpl) Search(ctx context.Context, in *NotificationSearchRequest, opts ...http.CallOption) (*NotificationReplies, error) {
 	var out NotificationReplies
 	pattern := "/v1/{account}/notifications"
 	path := binding.EncodeURL(pattern, in, true)
