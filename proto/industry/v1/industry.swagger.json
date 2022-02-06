@@ -40,7 +40,7 @@
     },
     "/v1/industries": {
       "get": {
-        "operationId": "Industry_List",
+        "operationId": "Industry_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -55,6 +55,22 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page.number",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
         "tags": [
           "Industry"
         ]
@@ -159,6 +175,19 @@
           "additionalProperties": {
             "$ref": "#/definitions/IndustryReplyRef"
           }
+        }
+      }
+    },
+    "v1IndustrySearchRequestPage": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     }

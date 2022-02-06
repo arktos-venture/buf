@@ -18,7 +18,7 @@ service Industry {
     };
   }
 
-  rpc List (google.protobuf.Empty) returns (IndustryReply)  {
+  rpc Search (IndustrySearchRequest) returns (IndustryReply)  {
     option (google.api.http) = {
       get: "/v1/industries"
     };
@@ -31,9 +31,28 @@ service Industry {
   }
 }
 
+
+// 
+// Request
+// 
+
 message IndustryRequest {
   int64 ref = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
 }
+
+message IndustrySearchRequest {
+	message Page {
+		int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
+		int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+	}
+
+	Page page = 1 [(validate.rules).message.required = true];
+}
+
+
+// 
+// Reply
+// 
 
 message IndustryReply {
   message Ref {
