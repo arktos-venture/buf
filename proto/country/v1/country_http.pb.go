@@ -28,7 +28,7 @@ type CountryHTTPServer interface {
 func RegisterCountryHTTPServer(s *http.Server, srv CountryHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/country/{country}", _Country_Get6_HTTP_Handler(srv))
-	r.POST("/v1/country", _Country_Search6_HTTP_Handler(srv))
+	r.POST("/v1/country", _Country_Search7_HTTP_Handler(srv))
 	r.GET("/v1/country/{country}/{indicator}", _Country_Indicator0_HTTP_Handler(srv))
 	r.GET("/healthz", _Country_Health14_HTTP_Handler(srv))
 }
@@ -55,7 +55,7 @@ func _Country_Get6_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Country_Search6_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) error {
+func _Country_Search7_HTTP_Handler(srv CountryHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CountrySearchRequest
 		if err := ctx.Bind(&in); err != nil {
