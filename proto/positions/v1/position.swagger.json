@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/{broker}/positions/{account}/companies": {
+    "/v1/positions/{account}/companies": {
       "get": {
         "operationId": "Position_Companies",
         "responses": {
@@ -57,22 +57,25 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "interval",
+            "name": "date.interval",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "none",
+              "q",
+              "y"
+            ],
+            "default": "none"
+          },
+          {
+            "name": "date.period",
             "in": "query",
             "required": false,
             "type": "string"
@@ -83,7 +86,7 @@
         ]
       }
     },
-    "/v1/{broker}/positions/{account}/currencies": {
+    "/v1/positions/{account}/currencies": {
       "get": {
         "operationId": "Position_Currencies",
         "responses": {
@@ -102,22 +105,25 @@
         },
         "parameters": [
           {
-            "name": "broker",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "IBKR"
-            ]
-          },
-          {
             "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "interval",
+            "name": "date.interval",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "none",
+              "q",
+              "y"
+            ],
+            "default": "none"
+          },
+          {
+            "name": "date.period",
             "in": "query",
             "required": false,
             "type": "string"
@@ -148,12 +154,25 @@
         }
       }
     },
-    "positionsv1Broker": {
+    "positionsv1Date": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/positionsv1DateInterval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "positionsv1DateInterval": {
       "type": "string",
       "enum": [
-        "IBKR"
+        "none",
+        "q",
+        "y"
       ],
-      "default": "IBKR"
+      "default": "none"
     },
     "protobufAny": {
       "type": "object",
@@ -179,21 +198,16 @@
         "total": {
           "type": "integer",
           "format": "int32"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
     "v1PositionCompanyReply": {
       "type": "object",
       "properties": {
-        "conid": {
-          "type": "string",
-          "format": "int64"
+        "ticker": {
+          "type": "string"
         },
-        "currency": {
+        "exchange": {
           "type": "string"
         },
         "size": {
@@ -230,10 +244,6 @@
         "total": {
           "type": "integer",
           "format": "int32"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },

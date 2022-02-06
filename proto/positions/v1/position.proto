@@ -14,13 +14,13 @@ option java_outer_classname = "PositionProtoV1";
 service Position {
   rpc Companies (PositionRequest) returns (PositionCompanyReplies)  {
     option (google.api.http) = {
-      get: "/v1/{broker}/positions/{account}/companies"
+      get: "/v1/positions/{account}/companies"
     };
   }
 
   rpc Currencies (PositionRequest) returns (PositionCurrencyReplies)  {
     option (google.api.http) = {
-      get: "/v1/{broker}/positions/{account}/currencies"
+      get: "/v1/positions/{account}/currencies"
     };
   }
 
@@ -31,19 +31,35 @@ service Position {
   }
 }
 
-enum Broker {
-  IBKR = 0;
+
+// 
+// Request
+// 
+
+message Date {
+	enum Interval {
+		none = 0;
+		q = 1;
+		y = 2;
+	}
+  
+	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+	string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y"]}];
 }
 
 message PositionRequest {
-  Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-  string account = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  string interval = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "3m", "6m", "1y", "3y", "5y", "10y"]}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  Date date = 2 [(validate.rules).message.required = true];
 }
 
+
+// 
+// Reply
+// 
+
 message PositionCompanyReply {
-  int64 conid = 1;
-  string currency = 2;
+  string ticker = 1;
+  string exchange = 2;
   float size = 3;
   float average_cost = 4;
   float market_price = 5;
@@ -54,7 +70,6 @@ message PositionCompanyReply {
 message PositionCompanyReplies {
   repeated PositionCompanyReply results = 1;
   int32 total = 2;
-  int64 date = 3;
 }
 
 message PositionCurrencyReply {
@@ -66,5 +81,4 @@ message PositionCurrencyReply {
 message PositionCurrencyReplies {
   repeated PositionCurrencyReply results = 1;
   int32 total = 2;
-  int64 date = 3;
 }
