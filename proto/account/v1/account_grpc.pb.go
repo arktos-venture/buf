@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountClient interface {
 	Get(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	List(ctx context.Context, in *AccountListRequest, opts ...grpc.CallOption) (*AccountReplies, error)
 	Create(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -35,6 +36,15 @@ func NewAccountClient(cc grpc.ClientConnInterface) AccountClient {
 func (c *accountClient) Get(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountReply, error) {
 	out := new(AccountReply)
 	err := c.cc.Invoke(ctx, "/account.v1.Account/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountClient) List(ctx context.Context, in *AccountListRequest, opts ...grpc.CallOption) (*AccountReplies, error) {
+	out := new(AccountReplies)
+	err := c.cc.Invoke(ctx, "/account.v1.Account/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,6 +74,7 @@ func (c *accountClient) Health(ctx context.Context, in *emptypb.Empty, opts ...g
 // for forward compatibility
 type AccountServer interface {
 	Get(context.Context, *AccountRequest) (*AccountReply, error)
+	List(context.Context, *AccountListRequest) (*AccountReplies, error)
 	Create(context.Context, *AccountCreateRequest) (*AccountReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAccountServer()
@@ -75,6 +86,9 @@ type UnimplementedAccountServer struct {
 
 func (UnimplementedAccountServer) Get(context.Context, *AccountRequest) (*AccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedAccountServer) List(context.Context, *AccountListRequest) (*AccountReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedAccountServer) Create(context.Context, *AccountCreateRequest) (*AccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
@@ -109,6 +123,24 @@ func _Account_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AccountServer).Get(ctx, req.(*AccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Account_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/account.v1.Account/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServer).List(ctx, req.(*AccountListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,6 +191,10 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Account_Get_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _Account_List_Handler,
 		},
 		{
 			MethodName: "Create",

@@ -25,10 +25,20 @@ service Fundamental {
 	}
 }
 
+
+// 
+// Request
+// 
+
 message FundamentalRequest {
   	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
   	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
+
+
+// 
+// Reply
+// 
 
 message FundamentalReply {
 	message Fundamental {

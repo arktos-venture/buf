@@ -217,18 +217,6 @@ func (m *QuotesCompanyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := QuotesCompanyRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	_QuotesCompanyRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
 
 	for idx, item := range m.GetIndicators() {
@@ -248,6 +236,17 @@ func (m *QuotesCompanyRequest) validate(all bool) error {
 		}
 
 		// no validation rules for Indicators[idx]
+	}
+
+	if m.GetDate() == nil {
+		err := QuotesCompanyRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if all {
@@ -411,6 +410,17 @@ func (m *QuotesCurrencyRequest) validate(all bool) error {
 		}
 
 		// no validation rules for Indicators[idx]
+	}
+
+	if m.GetDate() == nil {
+		err := QuotesCurrencyRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if all {
@@ -585,6 +595,17 @@ func (m *QuotesIndustryRequest) validate(all bool) error {
 		}
 
 		// no validation rules for Indicators[idx]
+	}
+
+	if m.GetDate() == nil {
+		err := QuotesIndustryRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if all {
@@ -762,6 +783,17 @@ func (m *QuotesExchangeRequest) validate(all bool) error {
 		// no validation rules for Indicators[idx]
 	}
 
+	if m.GetDate() == nil {
+		err := QuotesExchangeRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -924,6 +956,17 @@ func (m *QuotesCountryRequest) validate(all bool) error {
 		}
 
 		// no validation rules for Indicators[idx]
+	}
+
+	if m.GetDate() == nil {
+		err := QuotesCountryRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if all {
@@ -1089,6 +1132,17 @@ func (m *QuotesIndexRequest) validate(all bool) error {
 		// no validation rules for Indicators[idx]
 	}
 
+	if m.GetDate() == nil {
+		err := QuotesIndexRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1252,6 +1306,17 @@ func (m *QuotesAccountRequest) validate(all bool) error {
 		// no validation rules for Indicators[idx]
 	}
 
+	if m.GetDate() == nil {
+		err := QuotesAccountRequestValidationError{
+			field:  "Date",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
 		switch v := interface{}(m.GetDate()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1405,16 +1470,15 @@ func (m *SplitRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+	if m.GetDate() == nil {
 		err := SplitRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
+			field:  "Date",
+			reason: "value is required",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if all {

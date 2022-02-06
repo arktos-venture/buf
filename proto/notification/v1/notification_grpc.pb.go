@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NotificationClient interface {
 	Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error)
-	Search(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
+	Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -41,7 +41,7 @@ func (c *notificationClient) Create(ctx context.Context, in *NotificationCreateR
 	return out, nil
 }
 
-func (c *notificationClient) Search(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationReplies, error) {
+func (c *notificationClient) Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error) {
 	out := new(NotificationReplies)
 	err := c.cc.Invoke(ctx, "/notification.v1.Notification/Search", in, out, opts...)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *notificationClient) Health(ctx context.Context, in *emptypb.Empty, opts
 // for forward compatibility
 type NotificationServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
-	Search(context.Context, *NotificationRequest) (*NotificationReplies, error)
+	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedNotificationServer()
 }
@@ -76,7 +76,7 @@ type UnimplementedNotificationServer struct {
 func (UnimplementedNotificationServer) Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedNotificationServer) Search(context.Context, *NotificationRequest) (*NotificationReplies, error) {
+func (UnimplementedNotificationServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedNotificationServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
@@ -114,7 +114,7 @@ func _Notification_Create_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Notification_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NotificationRequest)
+	in := new(NotificationSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func _Notification_Search_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/notification.v1.Notification/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServer).Search(ctx, req.(*NotificationRequest))
+		return srv.(NotificationServer).Search(ctx, req.(*NotificationSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

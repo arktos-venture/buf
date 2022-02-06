@@ -146,6 +146,148 @@ var _ interface {
 	ErrorName() string
 } = IndustryRequestValidationError{}
 
+// Validate checks the field values on IndustrySearchRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndustrySearchRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndustrySearchRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndustrySearchRequestMultiError, or nil if none found.
+func (m *IndustrySearchRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndustrySearchRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetPage() == nil {
+		err := IndustrySearchRequestValidationError{
+			field:  "Page",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndustrySearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndustrySearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndustrySearchRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return IndustrySearchRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndustrySearchRequestMultiError is an error wrapping multiple validation
+// errors returned by IndustrySearchRequest.ValidateAll() if the designated
+// constraints aren't met.
+type IndustrySearchRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndustrySearchRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndustrySearchRequestMultiError) AllErrors() []error { return m }
+
+// IndustrySearchRequestValidationError is the validation error returned by
+// IndustrySearchRequest.Validate if the designated constraints aren't met.
+type IndustrySearchRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndustrySearchRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndustrySearchRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndustrySearchRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndustrySearchRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndustrySearchRequestValidationError) ErrorName() string {
+	return "IndustrySearchRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndustrySearchRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndustrySearchRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndustrySearchRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndustrySearchRequestValidationError{}
+
 // Validate checks the field values on IndustryReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -291,6 +433,130 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndustryReplyValidationError{}
+
+// Validate checks the field values on IndustrySearchRequest_Page with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndustrySearchRequest_Page) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndustrySearchRequest_Page with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndustrySearchRequest_PageMultiError, or nil if none found.
+func (m *IndustrySearchRequest_Page) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndustrySearchRequest_Page) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+		err := IndustrySearchRequest_PageValidationError{
+			field:  "Number",
+			reason: "value must be inside range (0, 10000)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetLimit(); val <= 1 || val >= 150 {
+		err := IndustrySearchRequest_PageValidationError{
+			field:  "Limit",
+			reason: "value must be inside range (1, 150)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return IndustrySearchRequest_PageMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndustrySearchRequest_PageMultiError is an error wrapping multiple
+// validation errors returned by IndustrySearchRequest_Page.ValidateAll() if
+// the designated constraints aren't met.
+type IndustrySearchRequest_PageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndustrySearchRequest_PageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndustrySearchRequest_PageMultiError) AllErrors() []error { return m }
+
+// IndustrySearchRequest_PageValidationError is the validation error returned
+// by IndustrySearchRequest_Page.Validate if the designated constraints aren't met.
+type IndustrySearchRequest_PageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndustrySearchRequest_PageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndustrySearchRequest_PageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndustrySearchRequest_PageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndustrySearchRequest_PageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndustrySearchRequest_PageValidationError) ErrorName() string {
+	return "IndustrySearchRequest_PageValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndustrySearchRequest_PageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndustrySearchRequest_Page.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndustrySearchRequest_PageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndustrySearchRequest_PageValidationError{}
 
 // Validate checks the field values on IndustryReply_Ref with the rules defined
 // in the proto definition for this message. If any rules are violated, the

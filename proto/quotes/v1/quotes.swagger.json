@@ -304,7 +304,7 @@
                   }
                 },
                 "date": {
-                  "$ref": "#/definitions/v1Date"
+                  "$ref": "#/definitions/quotesv1Date"
                 }
               }
             }
@@ -528,6 +528,26 @@
         }
       }
     },
+    "quotesv1Date": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/quotesv1DateInterval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "quotesv1DateInterval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "d"
+    },
     "quotesv1Indicator": {
       "type": "string",
       "enum": [
@@ -550,26 +570,6 @@
       ],
       "default": "Macd"
     },
-    "v1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/v1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "v1DateInterval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m"
-      ],
-      "default": "d"
-    },
     "v1QuotesAccountRequest": {
       "type": "object",
       "properties": {
@@ -583,7 +583,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -596,9 +596,6 @@
         "exchange": {
           "type": "string"
         },
-        "currency": {
-          "type": "string"
-        },
         "indicators": {
           "type": "array",
           "items": {
@@ -606,7 +603,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -623,7 +620,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -640,7 +637,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -660,7 +657,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -677,7 +674,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     },
@@ -755,11 +752,8 @@
         "exchange": {
           "type": "string"
         },
-        "currency": {
-          "type": "string"
-        },
         "date": {
-          "$ref": "#/definitions/v1Date"
+          "$ref": "#/definitions/quotesv1Date"
         }
       }
     }

@@ -35,6 +35,126 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Page with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Page) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Page with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PageMultiError, or nil if none found.
+func (m *Page) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Page) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+		err := PageValidationError{
+			field:  "Number",
+			reason: "value must be inside range (0, 10000)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetLimit(); val <= 1 || val >= 150 {
+		err := PageValidationError{
+			field:  "Limit",
+			reason: "value must be inside range (1, 150)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PageMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageMultiError is an error wrapping multiple validation errors returned by
+// Page.ValidateAll() if the designated constraints aren't met.
+type PageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageMultiError) AllErrors() []error { return m }
+
+// PageValidationError is the validation error returned by Page.Validate if the
+// designated constraints aren't met.
+type PageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageValidationError) ErrorName() string { return "PageValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageValidationError{}
+
 // Validate checks the field values on CompanyRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -66,18 +186,6 @@ func (m *CompanyRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := CompanyRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
 	}
 
 	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
@@ -169,131 +277,6 @@ var _ interface {
 	ErrorName() string
 } = CompanyRequestValidationError{}
 
-// Validate checks the field values on CompanySearchByIDsRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CompanySearchByIDsRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CompanySearchByIDsRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CompanySearchByIDsRequestMultiError, or nil if none found.
-func (m *CompanySearchByIDsRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CompanySearchByIDsRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := CompanySearchByIDsRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	if l := len(m.GetIds()); l < 1 || l > 20 {
-		err := CompanySearchByIDsRequestValidationError{
-			field:  "Ids",
-			reason: "value must contain between 1 and 20 items, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return CompanySearchByIDsRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CompanySearchByIDsRequestMultiError is an error wrapping multiple validation
-// errors returned by CompanySearchByIDsRequest.ValidateAll() if the
-// designated constraints aren't met.
-type CompanySearchByIDsRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CompanySearchByIDsRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CompanySearchByIDsRequestMultiError) AllErrors() []error { return m }
-
-// CompanySearchByIDsRequestValidationError is the validation error returned by
-// CompanySearchByIDsRequest.Validate if the designated constraints aren't met.
-type CompanySearchByIDsRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CompanySearchByIDsRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CompanySearchByIDsRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CompanySearchByIDsRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CompanySearchByIDsRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CompanySearchByIDsRequestValidationError) ErrorName() string {
-	return "CompanySearchByIDsRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CompanySearchByIDsRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCompanySearchByIDsRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CompanySearchByIDsRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CompanySearchByIDsRequestValidationError{}
-
 // Validate checks the field values on Filter with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -314,6 +297,27 @@ func (m *Filter) validate(all bool) error {
 	}
 
 	var errors []error
+
+	_Filter_Ids_Unique := make(map[int64]struct{}, len(m.GetIds()))
+
+	for idx, item := range m.GetIds() {
+		_, _ = idx, item
+
+		if _, exists := _Filter_Ids_Unique[item]; exists {
+			err := FilterValidationError{
+				field:  fmt.Sprintf("Ids[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_Filter_Ids_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Ids[idx]
+	}
 
 	if len(m.GetExchanges()) > 0 {
 
@@ -591,18 +595,6 @@ func (m *CompanySearchRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := CompanySearchRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	if m.GetFilters() == nil {
 		err := CompanySearchRequestValidationError{
 			field:  "Filters",
@@ -643,10 +635,10 @@ func (m *CompanySearchRequest) validate(all bool) error {
 		}
 	}
 
-	if val := m.GetLimit(); val < 1 || val > 150 {
+	if m.GetPage() == nil {
 		err := CompanySearchRequestValidationError{
-			field:  "Limit",
-			reason: "value must be inside range [1, 150]",
+			field:  "Page",
+			reason: "value is required",
 		}
 		if !all {
 			return err
@@ -654,15 +646,33 @@ func (m *CompanySearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetPage() < 1 {
-		err := CompanySearchRequestValidationError{
-			field:  "Page",
-			reason: "value must be greater than or equal to 1",
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanySearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanySearchRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanySearchRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -766,18 +776,6 @@ func (m *CompanyBulkSearchRequest) validate(all bool) error {
 	}
 
 	var errors []error
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := CompanyBulkSearchRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
 
 	if all {
 		switch v := interface{}(m.GetFilters()).(type) {

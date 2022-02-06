@@ -27,8 +27,8 @@ type CompanyHTTPServer interface {
 
 func RegisterCompanyHTTPServer(s *http.Server, srv CompanyHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/company/{currency}/{exchange}/{ticker}", _Company_Get7_HTTP_Handler(srv))
-	r.POST("/v1/company", _Company_Search7_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}", _Company_Get7_HTTP_Handler(srv))
+	r.POST("/v1/company", _Company_Search8_HTTP_Handler(srv))
 	r.POST("/v1/company/bulk", _Company_BulkSearch0_HTTP_Handler(srv))
 	r.GET("/healthz", _Company_Health15_HTTP_Handler(srv))
 }
@@ -55,7 +55,7 @@ func _Company_Get7_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Company_Search7_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
+func _Company_Search8_HTTP_Handler(srv CompanyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanySearchRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -142,7 +142,7 @@ func (c *CompanyHTTPClientImpl) BulkSearch(ctx context.Context, in *CompanyBulkS
 
 func (c *CompanyHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyReply, error) {
 	var out CompanyReply
-	pattern := "/v1/company/{currency}/{exchange}/{ticker}"
+	pattern := "/v1/company/{exchange}/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/company.v1.Company/Get"))
 	opts = append(opts, http.PathTemplate(pattern))

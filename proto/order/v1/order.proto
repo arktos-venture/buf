@@ -14,14 +14,14 @@ option java_outer_classname = "OrderProtoV1";
 service Order {
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/orders/{broker}/{account}"
+      post: "/v1/orders/{account}"
       body: "*"
     };
   }
 
   rpc Create (OrderCreateRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      post: "/v1/order/{broker}"
+      post: "/v1/orders"
       body: "*"
     };
   }
@@ -32,6 +32,11 @@ service Order {
     };
   }
 }
+
+
+// 
+// Request
+// 
 
 enum OrderType {
   LMT = 0;
@@ -52,38 +57,42 @@ enum Action {
   ALL = 2;
 }
 
-enum Routing {
-  SMART = 0;
-  SBF = 1;
-}
-
-enum Broker {
-  IBKR = 0;
+message Date {
+	enum Interval {
+		none = 0;
+		q = 1;
+		y = 2;
+	}
+  
+	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+	string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y"]}];
 }
 
 message OrderRequest {
-  Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-  string account = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
 }
 
 message OrderSearchRequest {
-  Broker broker = 1 [(validate.rules).enum = {defined_only: true}];
-  string account = 2 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  string interval = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "3m", "6m", "1y", "3y", "5y", "10y"]}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  Date date = 2 [(validate.rules).message.required = true];
 }
 
 message OrderCreateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  Action action = 2 [(validate.rules).enum = {defined_only: true}];
-  Broker broker = 3 [(validate.rules).enum = {defined_only: true}];
-  string ticker = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string currency = 5 [(validate.rules).string.len = 3];
-  Routing routing = 6 [(validate.rules).enum = {defined_only: true}];
-  OrderType orderType = 7 [(validate.rules).enum = {defined_only: true}];
-  float size = 8 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
-  Duration duration = 9 [(validate.rules).enum = {defined_only: true}];
-  float price = 10 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
+  string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string currency = 4 [(validate.rules).string.len = 3];
+  Action action = 5 [(validate.rules).enum = {defined_only: true}];
+  OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
+  float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
+  Duration duration = 8 [(validate.rules).enum = {defined_only: true}];
+  float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
 }
+
+
+// 
+// Reply
+// 
 
 message OrderReply {
   message Size {
@@ -98,11 +107,11 @@ message OrderReply {
   }
 
   string ticker = 1;
-  int64 ticker_id = 2;
+  string exchange = 2;
   string currency = 3;
   Action action = 4;
   OrderType orderType = 5;
-  Routing routing = 6;
+  string routing = 6;
   Duration duration = 7;
   Size size = 8;
   Price price = 9;
@@ -113,5 +122,4 @@ message OrderReply {
 message OrderReplies {
   repeated OrderReply results = 1;
   int32 total = 2;
-  int64 date = 3;
 }

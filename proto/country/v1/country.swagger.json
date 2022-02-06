@@ -374,6 +374,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "page": {
+          "$ref": "#/definitions/v1getPage"
         }
       }
     },
@@ -419,6 +422,19 @@
         "IPP"
       ],
       "default": "PMIM"
+    },
+    "v1getPage": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     }
   }
 }
