@@ -51,12 +51,20 @@ service Index {
 	}
 }
 
+
 // 
 // Request
 // 
 
+message Page {
+  int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
+  int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+}
+
 message IndexRequest {
-  string name = 1 [(validate.rules).string = {min_len: 3, max_len: 24}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  Page page = 3 [(validate.rules).message.required = true];
 }
 
 message IndexCreateRequest {
@@ -71,6 +79,7 @@ message IndexCreateRequest {
   string description = 2 [(validate.rules).string = {min_len: 16, max_len: 256}];
   repeated Company companies = 3;
 }
+
 
 // 
 // Reply

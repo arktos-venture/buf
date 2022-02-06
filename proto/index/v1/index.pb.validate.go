@@ -35,6 +35,126 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Page with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Page) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Page with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PageMultiError, or nil if none found.
+func (m *Page) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Page) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+		err := PageValidationError{
+			field:  "Number",
+			reason: "value must be inside range (0, 10000)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetLimit(); val <= 1 || val >= 150 {
+		err := PageValidationError{
+			field:  "Limit",
+			reason: "value must be inside range (1, 150)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PageMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageMultiError is an error wrapping multiple validation errors returned by
+// Page.ValidateAll() if the designated constraints aren't met.
+type PageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageMultiError) AllErrors() []error { return m }
+
+// PageValidationError is the validation error returned by Page.Validate if the
+// designated constraints aren't met.
+type PageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageValidationError) ErrorName() string { return "PageValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageValidationError{}
+
 // Validate checks the field values on IndexRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -57,15 +177,66 @@ func (m *IndexRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 24 {
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 32 {
 		err := IndexRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 24 runes, inclusive",
+			field:  "Account",
+			reason: "value length must be between 3 and 32 runes, inclusive",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 32 {
+		err := IndexRequestValidationError{
+			field:  "Name",
+			reason: "value length must be between 3 and 32 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetPage() == nil {
+		err := IndexRequestValidationError{
+			field:  "Page",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {

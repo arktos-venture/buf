@@ -30,7 +30,7 @@ type IndexHTTPServer interface {
 func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/index/{name}", _Index_Get4_HTTP_Handler(srv))
-	r.GET("/v1/index", _Index_Search4_HTTP_Handler(srv))
+	r.GET("/v1/index", _Index_Search5_HTTP_Handler(srv))
 	r.POST("/v1/index", _Index_Create3_HTTP_Handler(srv))
 	r.PUT("/v1/index", _Index_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/index/{name}", _Index_Delete0_HTTP_Handler(srv))
@@ -59,7 +59,7 @@ func _Index_Get4_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error 
 	}
 }
 
-func _Index_Search4_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Search5_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexRequest
 		if err := ctx.BindQuery(&in); err != nil {
