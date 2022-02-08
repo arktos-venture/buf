@@ -441,9 +441,9 @@ func (m *AccountCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
+	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 15 {
 		err := AccountCreateRequestValidationError{
-			field:  "Account",
+			field:  "Name",
 			reason: "value length must be between 3 and 15 runes, inclusive",
 		}
 		if !all {
@@ -452,16 +452,26 @@ func (m *AccountCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 4 || l > 64 {
 		err := AccountCreateRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
+			field:  "Description",
+			reason: "value length must be between 4 and 64 runes, inclusive",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+	}
 
+	if _, ok := _AccountCreateRequest_Currency_InLookup[m.GetCurrency()]; !ok {
+		err := AccountCreateRequestValidationError{
+			field:  "Currency",
+			reason: "value must be in list [EUR USD CAD HKD GBP CNY SGD]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -543,6 +553,16 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AccountCreateRequestValidationError{}
+
+var _AccountCreateRequest_Currency_InLookup = map[string]struct{}{
+	"EUR": {},
+	"USD": {},
+	"CAD": {},
+	"HKD": {},
+	"GBP": {},
+	"CNY": {},
+	"SGD": {},
+}
 
 // Validate checks the field values on AccountReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

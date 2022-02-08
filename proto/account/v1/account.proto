@@ -58,8 +58,9 @@ message AccountListRequest {
 }
 
 message AccountCreateRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-	string currency = 2 [(validate.rules).string.len = 3];
+	string name = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 64}];
+	string currency = 3 [(validate.rules).string = {in: ["EUR", "USD", "CAD", "HKD", "GBP", "CNY", "SGD"]}];
 }
 
 

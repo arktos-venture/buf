@@ -36,20 +36,9 @@ service Position {
 // Request
 // 
 
-message Date {
-	enum Interval {
-		none = 0;
-		q = 1;
-		y = 2;
-	}
-  
-	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-	string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y"]}];
-}
-
 message PositionRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  Date date = 2 [(validate.rules).message.required = true];
+  string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y"]}];
 }
 
 
@@ -58,13 +47,32 @@ message PositionRequest {
 // 
 
 message PositionCompanyReply {
+  message Money {
+    message Unit {
+      float cost = 1;
+      float market = 2;
+    }
+
+    message Total {
+      float cost = 1;
+      float market = 2;
+    }
+
+    Unit unit = 1;
+    Total total = 2;
+  }
+
+  message Performance {
+    float percent = 1;
+    float money = 2;
+  }
+
   string ticker = 1;
   string exchange = 2;
   float size = 3;
-  float average_cost = 4;
-  float market_price = 5;
-  float performance = 6;
-  int64 date = 7;
+  Money money = 4;
+  Performance performance = 5;
+  int64 date = 6;
 }
 
 message PositionCompanyReplies {

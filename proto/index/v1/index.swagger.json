@@ -45,7 +45,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReplies"
+              "$ref": "#/definitions/v1IndexSearchReplies"
             }
           },
           "default": {
@@ -57,16 +57,16 @@
         },
         "parameters": [
           {
-            "name": "account",
+            "name": "currency",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "name",
+            "name": "public",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "boolean"
           },
           {
             "name": "page.number",
@@ -139,7 +139,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexCreateRequest"
+              "$ref": "#/definitions/v1IndexUpdateRequest"
             }
           }
         ],
@@ -148,7 +148,7 @@
         ]
       }
     },
-    "/v1/index/{name}": {
+    "/v1/index/{ref}": {
       "get": {
         "operationId": "Index_Get",
         "responses": {
@@ -167,30 +167,10 @@
         },
         "parameters": [
           {
-            "name": "name",
+            "name": "ref",
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "account",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page.number",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.limit",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
           }
         ],
         "tags": [
@@ -215,30 +195,10 @@
         },
         "parameters": [
           {
-            "name": "name",
+            "name": "ref",
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "account",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page.number",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.limit",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
           }
         ],
         "tags": [
@@ -291,34 +251,100 @@
         }
       }
     },
+    "v1Companies": {
+      "type": "object",
+      "properties": {
+        "add": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "update": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "delete": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
     "v1IndexCreateRequest": {
       "type": "object",
       "properties": {
+        "ref": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
+        "currency": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
         "companies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1IndexCreateRequestCompany"
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
           }
         }
       }
     },
-    "v1IndexCreateRequestCompany": {
+    "v1IndexReply": {
       "type": "object",
       "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "currency": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IndexReplyCompany"
+          }
+        }
+      }
+    },
+    "v1IndexReplyCompany": {
+      "type": "object",
+      "properties": {
+        "ticker": {
           "type": "string"
         },
         "exchange": {
           "type": "string"
         },
-        "ticker": {
+        "currency": {
           "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
         },
         "size": {
           "type": "number",
@@ -326,13 +352,13 @@
         }
       }
     },
-    "v1IndexReplies": {
+    "v1IndexSearchReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndexReply"
+            "$ref": "#/definitions/v1IndexSearchReply"
           }
         },
         "total": {
@@ -341,14 +367,40 @@
         }
       }
     },
-    "v1IndexReply": {
+    "v1IndexSearchReply": {
       "type": "object",
       "properties": {
+        "ref": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "v1IndexUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "companies": {
+          "$ref": "#/definitions/v1Companies"
         }
       }
     }

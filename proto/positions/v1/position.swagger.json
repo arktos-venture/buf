@@ -63,19 +63,7 @@
             "type": "string"
           },
           {
-            "name": "date.interval",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "none",
-              "q",
-              "y"
-            ],
-            "default": "none"
-          },
-          {
-            "name": "date.period",
+            "name": "period",
             "in": "query",
             "required": false,
             "type": "string"
@@ -111,19 +99,7 @@
             "type": "string"
           },
           {
-            "name": "date.interval",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "none",
-              "q",
-              "y"
-            ],
-            "default": "none"
-          },
-          {
-            "name": "date.period",
+            "name": "period",
             "in": "query",
             "required": false,
             "type": "string"
@@ -136,6 +112,56 @@
     }
   },
   "definitions": {
+    "MoneyTotal": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "number",
+          "format": "float"
+        },
+        "market": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "MoneyUnit": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "number",
+          "format": "float"
+        },
+        "market": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "PositionCompanyReplyMoney": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "$ref": "#/definitions/MoneyUnit"
+        },
+        "total": {
+          "$ref": "#/definitions/MoneyTotal"
+        }
+      }
+    },
+    "PositionCompanyReplyPerformance": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "number",
+          "format": "float"
+        },
+        "money": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -153,26 +179,6 @@
           }
         }
       }
-    },
-    "positionsv1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/positionsv1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "positionsv1DateInterval": {
-      "type": "string",
-      "enum": [
-        "none",
-        "q",
-        "y"
-      ],
-      "default": "none"
     },
     "protobufAny": {
       "type": "object",
@@ -214,17 +220,11 @@
           "type": "number",
           "format": "float"
         },
-        "average_cost": {
-          "type": "number",
-          "format": "float"
-        },
-        "market_price": {
-          "type": "number",
-          "format": "float"
+        "money": {
+          "$ref": "#/definitions/PositionCompanyReplyMoney"
         },
         "performance": {
-          "type": "number",
-          "format": "float"
+          "$ref": "#/definitions/PositionCompanyReplyPerformance"
         },
         "date": {
           "type": "string",
