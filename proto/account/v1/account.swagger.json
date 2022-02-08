@@ -192,7 +192,10 @@
     "v1AccountCreateRequest": {
       "type": "object",
       "properties": {
-        "account": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "currency": {
