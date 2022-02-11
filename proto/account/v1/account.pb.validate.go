@@ -441,9 +441,9 @@ func (m *AccountCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 15 {
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
 		err := AccountCreateRequestValidationError{
-			field:  "Name",
+			field:  "Account",
 			reason: "value length must be between 3 and 15 runes, inclusive",
 		}
 		if !all {
@@ -452,10 +452,10 @@ func (m *AccountCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetDescription()); l < 4 || l > 64 {
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 4 || l > 128 {
 		err := AccountCreateRequestValidationError{
 			field:  "Description",
-			reason: "value length must be between 4 and 64 runes, inclusive",
+			reason: "value length must be between 4 and 128 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -463,15 +463,16 @@ func (m *AccountCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _AccountCreateRequest_Currency_InLookup[m.GetCurrency()]; !ok {
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
 		err := AccountCreateRequestValidationError{
 			field:  "Currency",
-			reason: "value must be in list [EUR USD CAD HKD GBP CNY SGD]",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if len(errors) > 0 {
@@ -554,16 +555,6 @@ var _ interface {
 	ErrorName() string
 } = AccountCreateRequestValidationError{}
 
-var _AccountCreateRequest_Currency_InLookup = map[string]struct{}{
-	"EUR": {},
-	"USD": {},
-	"CAD": {},
-	"HKD": {},
-	"GBP": {},
-	"CNY": {},
-	"SGD": {},
-}
-
 // Validate checks the field values on AccountReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -585,6 +576,8 @@ func (m *AccountReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
 
 	// no validation rules for Account
 

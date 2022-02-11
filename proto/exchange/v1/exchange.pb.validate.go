@@ -498,6 +498,8 @@ func (m *ExchangeReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	// no validation rules for Ticker
 
 	// no validation rules for Name
@@ -681,6 +683,8 @@ func (m *ExchangeIsOpenReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
 
 	// no validation rules for Name
 
@@ -1491,6 +1495,8 @@ func (m *ExchangeReplies_Company) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
 
 	// no validation rules for Ticker
 

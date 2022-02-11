@@ -211,6 +211,10 @@
     "v1ExchangeIsOpenReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "name": {
           "type": "string"
         },
@@ -256,6 +260,10 @@
     "v1ExchangeReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
           "type": "string"
         },
