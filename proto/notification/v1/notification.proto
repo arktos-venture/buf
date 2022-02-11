@@ -72,7 +72,7 @@ message NotificationCreateRequest {
 message NotificationSearchRequest {
 	string account = 1;
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
-	string date = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
+	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
 	Page page = 4 [(validate.rules).message.required = true];
 }
 

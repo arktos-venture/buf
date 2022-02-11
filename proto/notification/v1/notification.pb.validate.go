@@ -311,9 +311,9 @@ func (m *NotificationSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _NotificationSearchRequest_Date_InLookup[m.GetDate()]; !ok {
+	if _, ok := _NotificationSearchRequest_Period_InLookup[m.GetPeriod()]; !ok {
 		err := NotificationSearchRequestValidationError{
-			field:  "Date",
+			field:  "Period",
 			reason: "value must be in list [last 3d 1w 2w 1m]",
 		}
 		if !all {
@@ -442,7 +442,7 @@ var _ interface {
 	ErrorName() string
 } = NotificationSearchRequestValidationError{}
 
-var _NotificationSearchRequest_Date_InLookup = map[string]struct{}{
+var _NotificationSearchRequest_Period_InLookup = map[string]struct{}{
 	"last": {},
 	"3d":   {},
 	"1w":   {},
