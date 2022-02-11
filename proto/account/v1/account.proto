@@ -58,9 +58,9 @@ message AccountListRequest {
 }
 
 message AccountCreateRequest {
-	string name = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 64}];
-	string currency = 3 [(validate.rules).string = {in: ["EUR", "USD", "CAD", "HKD", "GBP", "CNY", "SGD"]}];
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 128}];
+	string currency = 3 [(validate.rules).string.len = 3];
 }
 
 
@@ -69,11 +69,12 @@ message AccountCreateRequest {
 // 
 
 message AccountReply {
-	string account = 1;
-	string user = 2;
-	string currency = 3;
-	bool active = 4;
-	int64 date = 5;
+	int64 id = 1;
+	string account = 2;
+	string user = 3;
+	string currency = 4;
+	bool active = 5;
+	int64 date = 6;
 }
 
 message AccountReplies {

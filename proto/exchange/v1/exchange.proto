@@ -86,23 +86,25 @@ message ExchangeReply {
 		int64 activity = 5;
 	}
   
-	string ticker = 1;
-	string name = 2;
-	string description = 3;
-	string routing = 4;
-	string country = 5;
-	string currency = 6;
-	string timezone = 7;
-	repeated Holiday holidays = 8;
-	string tradingHours = 9;
-	repeated Company companies = 10;
+	int64 id = 1;
+	string ticker = 2;
+	string name = 3;
+	string description = 4;
+	string routing = 5;
+	string country = 6;
+	string currency = 7;
+	string timezone = 8;
+	repeated Holiday holidays = 9;
+	string tradingHours = 10;
+	repeated Company companies = 11;
 }
   
 message ExchangeIsOpenReply {
-	string name = 1;
-	string timezone = 2;
-	string tradingHours = 3;
-	bool open = 4;
+	int64 id = 1;
+	string name = 2;
+	string timezone = 3;
+	string tradingHours = 4;
+	bool open = 5;
 }
   
 message ExchangeShortReply {
@@ -115,9 +117,10 @@ message ExchangeShortReply {
 
 message ExchangeReplies {
 	message Company {
-		string ticker = 1;
-		string name = 2;
-		string isin = 3;
+		int64 id = 1;
+		string ticker = 2;
+		string name = 3;
+		string isin = 4;
 	}
 
 	repeated ExchangeShortReply results = 1;

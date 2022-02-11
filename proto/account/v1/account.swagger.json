@@ -192,7 +192,7 @@
     "v1AccountCreateRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "account": {
           "type": "string"
         },
         "description": {
@@ -221,6 +221,10 @@
     "v1AccountReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "account": {
           "type": "string"
         },

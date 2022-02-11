@@ -129,7 +129,7 @@
             "default": "CRITICAL"
           },
           {
-            "name": "date",
+            "name": "period",
             "in": "query",
             "required": false,
             "type": "string"
