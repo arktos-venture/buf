@@ -111,7 +111,18 @@ message CompanyReply {
 	CompanyAddress address = 13;
 }
 
+message CompanyListReply {
+	int64 id = 1;
+	string ticker = 2;
+	string ticker_alternative = 3;
+	string name = 4;
+	string exchange = 5;
+	string routing = 6;
+	string isin = 7;
+	int64 activity = 8;   
+}
+
 message CompanyReplies {
-  	repeated CompanyReply results = 1;
+  	repeated CompanyListReply results = 1;
   	int32 total = 2;
 }

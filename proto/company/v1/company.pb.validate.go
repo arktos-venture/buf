@@ -1290,6 +1290,122 @@ var _ interface {
 	ErrorName() string
 } = CompanyReplyValidationError{}
 
+// Validate checks the field values on CompanyListReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CompanyListReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyListReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyListReplyMultiError, or nil if none found.
+func (m *CompanyListReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyListReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Ticker
+
+	// no validation rules for TickerAlternative
+
+	// no validation rules for Name
+
+	// no validation rules for Exchange
+
+	// no validation rules for Routing
+
+	// no validation rules for Isin
+
+	// no validation rules for Activity
+
+	if len(errors) > 0 {
+		return CompanyListReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyListReplyMultiError is an error wrapping multiple validation errors
+// returned by CompanyListReply.ValidateAll() if the designated constraints
+// aren't met.
+type CompanyListReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyListReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyListReplyMultiError) AllErrors() []error { return m }
+
+// CompanyListReplyValidationError is the validation error returned by
+// CompanyListReply.Validate if the designated constraints aren't met.
+type CompanyListReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyListReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyListReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyListReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyListReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyListReplyValidationError) ErrorName() string { return "CompanyListReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CompanyListReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyListReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyListReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyListReplyValidationError{}
+
 // Validate checks the field values on CompanyReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
