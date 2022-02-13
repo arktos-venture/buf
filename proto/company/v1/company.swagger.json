@@ -230,13 +230,44 @@
         }
       }
     },
+    "v1CompanyListReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1CompanyReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CompanyReply"
+            "$ref": "#/definitions/v1CompanyListReply"
           }
         },
         "total": {
