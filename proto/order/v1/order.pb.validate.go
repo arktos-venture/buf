@@ -35,141 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Date with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
-func (m *Date) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Date with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in DateMultiError, or nil if none found.
-func (m *Date) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Date) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if _, ok := Date_Interval_name[int32(m.GetInterval())]; !ok {
-		err := DateValidationError{
-			field:  "Interval",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if _, ok := _Date_Period_InLookup[m.GetPeriod()]; !ok {
-		err := DateValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y 2y 3y 5y]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return DateMultiError(errors)
-	}
-
-	return nil
-}
-
-// DateMultiError is an error wrapping multiple validation errors returned by
-// Date.ValidateAll() if the designated constraints aren't met.
-type DateMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DateMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DateMultiError) AllErrors() []error { return m }
-
-// DateValidationError is the validation error returned by Date.Validate if the
-// designated constraints aren't met.
-type DateValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DateValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DateValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DateValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DateValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DateValidationError) ErrorName() string { return "DateValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DateValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDate.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DateValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DateValidationError{}
-
-var _Date_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-	"2y":   {},
-	"3y":   {},
-	"5y":   {},
-}
-
 // Validate checks the field values on OrderRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -313,10 +178,10 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetDate() == nil {
+	if _, ok := Action_name[int32(m.GetAction())]; !ok {
 		err := OrderSearchRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
+			field:  "Action",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -324,33 +189,37 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, OrderSearchRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, OrderSearchRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
+	if _, ok := Duration_name[int32(m.GetDuration())]; !ok {
+		err := OrderSearchRequestValidationError{
+			field:  "Duration",
+			reason: "value must be one of the defined enum values",
 		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OrderSearchRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+		if !all {
+			return err
 		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := OrderType_name[int32(m.GetOrderType())]; !ok {
+		err := OrderSearchRequestValidationError{
+			field:  "OrderType",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _OrderSearchRequest_Period_InLookup[m.GetPeriod()]; !ok {
+		err := OrderSearchRequestValidationError{
+			field:  "Period",
+			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -432,6 +301,18 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OrderSearchRequestValidationError{}
+
+var _OrderSearchRequest_Period_InLookup = map[string]struct{}{
+	"last": {},
+	"3d":   {},
+	"1w":   {},
+	"2w":   {},
+	"1m":   {},
+	"2m":   {},
+	"3m":   {},
+	"6m":   {},
+	"1y":   {},
+}
 
 // Validate checks the field values on OrderCreateRequest with the rules
 // defined in the proto definition for this message. If any rules are
