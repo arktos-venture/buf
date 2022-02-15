@@ -53,12 +53,12 @@ enum Indicator {
 }
 
 message Page {
-  int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
-  int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+  int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
+  int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
 }
 
 message CountryRequest {
-  string country = 1 [(validate.rules).string.len = 2];
+  string country = 1 [(validate.rules).string = {min_len: 2, max_len: 3}];
 }
 
 message CountrySearchRequest {

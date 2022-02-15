@@ -256,7 +256,9 @@
         "UPTO_10P_VARIATION",
         "DOWNTO_2P_VARIATION",
         "DOWNTO_5P_VARIATION",
-        "DOWNTO_10P_VARIATION"
+        "DOWNTO_10P_VARIATION",
+        "BUY_ORDER_SENT",
+        "SELL_ORDER_SENT"
       ],
       "default": "LOW_CASH"
     }

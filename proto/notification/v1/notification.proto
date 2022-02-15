@@ -54,11 +54,13 @@ enum Subject {
 	DOWNTO_2P_VARIATION = 5;
 	DOWNTO_5P_VARIATION = 6;
 	DOWNTO_10P_VARIATION = 7;
+	BUY_ORDER_SENT = 8;
+	SELL_ORDER_SENT = 9;
 }
 
 message Page {
-	int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
-	int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+	int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
+	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
 }
 
 message NotificationCreateRequest {

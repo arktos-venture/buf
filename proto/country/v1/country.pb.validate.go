@@ -56,10 +56,10 @@ func (m *Page) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+	if val := m.GetNumber(); val <= 0 || val > 10000 {
 		err := PageValidationError{
 			field:  "Number",
-			reason: "value must be inside range (0, 10000)",
+			reason: "value must be inside range (0, 10000]",
 		}
 		if !all {
 			return err
@@ -67,10 +67,10 @@ func (m *Page) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if val := m.GetLimit(); val <= 1 || val >= 150 {
+	if val := m.GetLimit(); val <= 0 || val > 150 {
 		err := PageValidationError{
 			field:  "Limit",
-			reason: "value must be inside range (1, 150)",
+			reason: "value must be inside range (0, 150]",
 		}
 		if !all {
 			return err
@@ -177,16 +177,15 @@ func (m *CountryRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
+	if l := utf8.RuneCountInString(m.GetCountry()); l < 2 || l > 3 {
 		err := CountryRequestValidationError{
 			field:  "Country",
-			reason: "value length must be 2 runes",
+			reason: "value length must be between 2 and 3 runes, inclusive",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

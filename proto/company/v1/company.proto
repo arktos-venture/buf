@@ -50,7 +50,7 @@ service Company {
 
 message Page {
 	int32 number = 1 [(validate.rules).int32 = {gt: 0, lt: 10000}];
-	int32 limit = 2 [(validate.rules).int32 = {gt: 1, lt: 150}];
+	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
 }
 
 message CompanyRequest {
@@ -74,7 +74,7 @@ message CompanySearchRequest {
 
 message CompanyBulkSearchRequest {
 	Filter filters = 1 [(validate.rules).message.required = false];
-  	int32 limit = 2 [(validate.rules).int32 = {gte: 1, lte: 30000}];
+  	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 30000}];
 }
 
 message CompanyAddress {
