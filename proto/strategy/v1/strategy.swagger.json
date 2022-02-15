@@ -338,9 +338,6 @@
         "exchange": {
           "type": "string"
         },
-        "currency": {
-          "type": "string"
-        },
         "parameters": {
           "$ref": "#/definitions/v1Parameters"
         }
