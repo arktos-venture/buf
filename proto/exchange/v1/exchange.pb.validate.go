@@ -1150,10 +1150,10 @@ func (m *ExchangeListRequest_Page) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetNumber(); val <= 0 || val >= 10000 {
+	if val := m.GetNumber(); val <= 0 || val > 10000 {
 		err := ExchangeListRequest_PageValidationError{
 			field:  "Number",
-			reason: "value must be inside range (0, 10000)",
+			reason: "value must be inside range (0, 10000]",
 		}
 		if !all {
 			return err
@@ -1161,10 +1161,10 @@ func (m *ExchangeListRequest_Page) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if val := m.GetLimit(); val <= 1 || val >= 150 {
+	if val := m.GetLimit(); val <= 0 || val > 150 {
 		err := ExchangeListRequest_PageValidationError{
 			field:  "Limit",
-			reason: "value must be inside range (1, 150)",
+			reason: "value must be inside range (0, 150]",
 		}
 		if !all {
 			return err

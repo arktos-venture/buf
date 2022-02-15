@@ -225,18 +225,6 @@ func (m *StrategyCompanyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := StrategyCompanyRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	if all {
 		switch v := interface{}(m.GetParameters()).(type) {
 		case interface{ ValidateAll() error }:

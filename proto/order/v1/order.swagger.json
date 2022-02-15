@@ -71,7 +71,7 @@
       }
     },
     "/v1/orders/{account}": {
-      "post": {
+      "get": {
         "operationId": "Order_Search",
         "responses": {
           "200": {
@@ -95,17 +95,49 @@
             "type": "string"
           },
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "date": {
-                  "$ref": "#/definitions/orderv1Date"
-                }
-              }
-            }
+            "name": "action",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "BUY",
+              "SELL",
+              "ALL"
+            ],
+            "default": "BUY"
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DAY",
+              "GTC",
+              "DALL"
+            ],
+            "default": "DAY"
+          },
+          {
+            "name": "orderType",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "LMT",
+              "MKT",
+              "STP",
+              "IBALGO",
+              "MIDPRICE",
+              "OALL"
+            ],
+            "default": "LMT"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -172,31 +204,12 @@
       ],
       "default": "BUY"
     },
-    "orderv1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/orderv1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "orderv1DateInterval": {
-      "type": "string",
-      "enum": [
-        "none",
-        "q",
-        "y"
-      ],
-      "default": "none"
-    },
     "orderv1Duration": {
       "type": "string",
       "enum": [
         "DAY",
-        "GTC"
+        "GTC",
+        "DALL"
       ],
       "default": "DAY"
     },
@@ -307,7 +320,8 @@
         "MKT",
         "STP",
         "IBALGO",
-        "MIDPRICE"
+        "MIDPRICE",
+        "OALL"
       ],
       "default": "LMT"
     }
