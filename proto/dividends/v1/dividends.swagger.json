@@ -104,26 +104,6 @@
     }
   },
   "definitions": {
-    "dividendsv1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/dividendsv1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "dividendsv1DateInterval": {
-      "type": "string",
-      "enum": [
-        "none",
-        "q",
-        "y"
-      ],
-      "default": "none"
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -153,6 +133,26 @@
           "format": "byte"
         }
       }
+    },
+    "v1Date": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/v1DateInterval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DateInterval": {
+      "type": "string",
+      "enum": [
+        "none",
+        "q",
+        "y"
+      ],
+      "default": "none"
     },
     "v1DividendsReply": {
       "type": "object",
@@ -204,7 +204,7 @@
           "type": "string"
         },
         "date": {
-          "$ref": "#/definitions/dividendsv1Date"
+          "$ref": "#/definitions/v1Date"
         }
       }
     }

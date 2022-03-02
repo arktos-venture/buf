@@ -61,7 +61,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesAccountRequest"
+              "$ref": "#/definitions/v1QuotesAccountPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/account/ts": {
+      "post": {
+        "operationId": "Quotes_AccountTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesAccountTimestampRequest"
             }
           }
         ],
@@ -93,7 +125,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1SplitRequest"
+              "$ref": "#/definitions/v1SplitPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/companies/splits/ts": {
+      "post": {
+        "operationId": "Quotes_SplitTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SplitTimestampRequest"
             }
           }
         ],
@@ -125,7 +189,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesCompanyRequest"
+              "$ref": "#/definitions/v1QuotesCompanyPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/company/ts": {
+      "post": {
+        "operationId": "Quotes_CompanyTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCompanyTimestampRequest"
             }
           }
         ],
@@ -157,7 +253,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesCountryRequest"
+              "$ref": "#/definitions/v1QuotesCountryPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/country/ts": {
+      "post": {
+        "operationId": "Quotes_CountryTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCountryTimestampRequest"
             }
           }
         ],
@@ -189,7 +317,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesCurrencyRequest"
+              "$ref": "#/definitions/v1QuotesCurrencyPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/currency/ts": {
+      "post": {
+        "operationId": "Quotes_CurrencyTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesCurrencyTimestampRequest"
             }
           }
         ],
@@ -221,7 +381,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesExchangeRequest"
+              "$ref": "#/definitions/v1QuotesExchangePeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/exchange/ts": {
+      "post": {
+        "operationId": "Quotes_ExchangeTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesExchangeTimestampRequest"
             }
           }
         ],
@@ -253,7 +445,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesIndexRequest"
+              "$ref": "#/definitions/v1QuotesIndexPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/index/ts": {
+      "post": {
+        "operationId": "Quotes_IndexTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1QuotesIndexTimestampRequest"
             }
           }
         ],
@@ -304,7 +528,60 @@
                   }
                 },
                 "date": {
-                  "$ref": "#/definitions/quotesv1Date"
+                  "$ref": "#/definitions/v1DatePeriod"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      }
+    },
+    "/v1/quotes/{exchange}/industry/ts": {
+      "post": {
+        "operationId": "Quotes_IndustryTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuotesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "industry": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "indicators": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/quotesv1Indicator"
+                  }
+                },
+                "date": {
+                  "$ref": "#/definitions/v1DateTimestamp"
                 }
               }
             }
@@ -528,26 +805,6 @@
         }
       }
     },
-    "quotesv1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/quotesv1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "quotesv1DateInterval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m"
-      ],
-      "default": "d"
-    },
     "quotesv1Indicator": {
       "type": "string",
       "enum": [
@@ -570,7 +827,39 @@
       ],
       "default": "Macd"
     },
-    "v1QuotesAccountRequest": {
+    "quotesv1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "d"
+    },
+    "v1DatePeriod": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/quotesv1Interval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DateTimestamp": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/quotesv1Interval"
+        },
+        "time": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1QuotesAccountPeriodRequest": {
       "type": "object",
       "properties": {
         "account": {
@@ -583,11 +872,28 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
         }
       }
     },
-    "v1QuotesCompanyRequest": {
+    "v1QuotesAccountTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
+        }
+      }
+    },
+    "v1QuotesCompanyPeriodRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -603,11 +909,31 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
         }
       }
     },
-    "v1QuotesCountryRequest": {
+    "v1QuotesCompanyTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
+        }
+      }
+    },
+    "v1QuotesCountryPeriodRequest": {
       "type": "object",
       "properties": {
         "country": {
@@ -620,11 +946,28 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
         }
       }
     },
-    "v1QuotesCurrencyRequest": {
+    "v1QuotesCountryTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
+        }
+      }
+    },
+    "v1QuotesCurrencyPeriodRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -637,11 +980,28 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
         }
       }
     },
-    "v1QuotesExchangeRequest": {
+    "v1QuotesCurrencyTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
+        }
+      }
+    },
+    "v1QuotesExchangePeriodRequest": {
       "type": "object",
       "properties": {
         "exchange": {
@@ -657,11 +1017,31 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
         }
       }
     },
-    "v1QuotesIndexRequest": {
+    "v1QuotesExchangeTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "exchange": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
+        }
+      }
+    },
+    "v1QuotesIndexPeriodRequest": {
       "type": "object",
       "properties": {
         "index": {
@@ -674,7 +1054,24 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DatePeriod"
+        }
+      }
+    },
+    "v1QuotesIndexTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "string"
+        },
+        "indicators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Indicator"
+          }
+        },
+        "date": {
+          "$ref": "#/definitions/v1DateTimestamp"
         }
       }
     },
@@ -728,6 +1125,20 @@
         }
       }
     },
+    "v1SplitPeriodRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/v1DatePeriod"
+        }
+      }
+    },
     "v1SplitReplies": {
       "type": "object",
       "properties": {
@@ -743,7 +1154,7 @@
         }
       }
     },
-    "v1SplitRequest": {
+    "v1SplitTimestampRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -753,7 +1164,7 @@
           "type": "string"
         },
         "date": {
-          "$ref": "#/definitions/quotesv1Date"
+          "$ref": "#/definitions/v1DateTimestamp"
         }
       }
     }
