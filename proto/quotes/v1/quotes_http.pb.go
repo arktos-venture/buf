@@ -19,39 +19,74 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type QuotesHTTPServer interface {
-	Account(context.Context, *QuotesAccountRequest) (*QuotesReply, error)
-	Company(context.Context, *QuotesCompanyRequest) (*QuotesReply, error)
-	Country(context.Context, *QuotesCountryRequest) (*QuotesReply, error)
-	Currency(context.Context, *QuotesCurrencyRequest) (*QuotesReply, error)
-	Exchange(context.Context, *QuotesExchangeRequest) (*QuotesReply, error)
+	Account(context.Context, *QuotesAccountPeriodRequest) (*QuotesReply, error)
+	AccountTimestamp(context.Context, *QuotesAccountTimestampRequest) (*QuotesReply, error)
+	Company(context.Context, *QuotesCompanyPeriodRequest) (*QuotesReply, error)
+	CompanyTimestamp(context.Context, *QuotesCompanyTimestampRequest) (*QuotesReply, error)
+	Country(context.Context, *QuotesCountryPeriodRequest) (*QuotesReply, error)
+	CountryTimestamp(context.Context, *QuotesCountryTimestampRequest) (*QuotesReply, error)
+	Currency(context.Context, *QuotesCurrencyPeriodRequest) (*QuotesReply, error)
+	CurrencyTimestamp(context.Context, *QuotesCurrencyTimestampRequest) (*QuotesReply, error)
+	Exchange(context.Context, *QuotesExchangePeriodRequest) (*QuotesReply, error)
+	ExchangeTimestamp(context.Context, *QuotesExchangeTimestampRequest) (*QuotesReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Index(context.Context, *QuotesIndexRequest) (*QuotesReply, error)
-	Industry(context.Context, *QuotesIndustryRequest) (*QuotesReply, error)
-	Split(context.Context, *SplitRequest) (*SplitReplies, error)
+	Index(context.Context, *QuotesIndexPeriodRequest) (*QuotesReply, error)
+	IndexTimestamp(context.Context, *QuotesIndexTimestampRequest) (*QuotesReply, error)
+	Industry(context.Context, *QuotesIndustryPeriodRequest) (*QuotesReply, error)
+	IndustryTimestamp(context.Context, *QuotesIndustryTimestampRequest) (*QuotesReply, error)
+	Split(context.Context, *SplitPeriodRequest) (*SplitReplies, error)
+	SplitTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error)
 }
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/quotes/company", _Quotes_Company1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/company/ts", _Quotes_CompanyTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/currency", _Quotes_Currency1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/currency/ts", _Quotes_CurrencyTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/{exchange}/industry", _Quotes_Industry1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/{exchange}/industry/ts", _Quotes_IndustryTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/exchange", _Quotes_Exchange1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/exchange/ts", _Quotes_ExchangeTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/country", _Quotes_Country1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/country/ts", _Quotes_CountryTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/index", _Quotes_Index1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/index/ts", _Quotes_IndexTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/account", _Quotes_Account1_HTTP_Handler(srv))
+	r.POST("/v1/quotes/account/ts", _Quotes_AccountTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/companies/splits", _Quotes_Split0_HTTP_Handler(srv))
+	r.POST("/v1/quotes/companies/splits/ts", _Quotes_SplitTimestamp0_HTTP_Handler(srv))
 	r.GET("/healthz", _Quotes_Health3_HTTP_Handler(srv))
 }
 
 func _Quotes_Company1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesCompanyRequest
+		var in QuotesCompanyPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Company")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Company(ctx, req.(*QuotesCompanyRequest))
+			return srv.Company(ctx, req.(*QuotesCompanyPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_CompanyTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesCompanyTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/CompanyTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CompanyTimestamp(ctx, req.(*QuotesCompanyTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -64,13 +99,32 @@ func _Quotes_Company1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 
 func _Quotes_Currency1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesCurrencyRequest
+		var in QuotesCurrencyPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Currency")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Currency(ctx, req.(*QuotesCurrencyRequest))
+			return srv.Currency(ctx, req.(*QuotesCurrencyPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_CurrencyTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesCurrencyTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/CurrencyTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CurrencyTimestamp(ctx, req.(*QuotesCurrencyTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -83,7 +137,7 @@ func _Quotes_Currency1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 
 func _Quotes_Industry1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesIndustryRequest
+		var in QuotesIndustryPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -92,7 +146,29 @@ func _Quotes_Industry1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Industry")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Industry(ctx, req.(*QuotesIndustryRequest))
+			return srv.Industry(ctx, req.(*QuotesIndustryPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_IndustryTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesIndustryTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/IndustryTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.IndustryTimestamp(ctx, req.(*QuotesIndustryTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -105,13 +181,32 @@ func _Quotes_Industry1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 
 func _Quotes_Exchange1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesExchangeRequest
+		var in QuotesExchangePeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Exchange")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Exchange(ctx, req.(*QuotesExchangeRequest))
+			return srv.Exchange(ctx, req.(*QuotesExchangePeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_ExchangeTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesExchangeTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/ExchangeTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ExchangeTimestamp(ctx, req.(*QuotesExchangeTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -124,13 +219,32 @@ func _Quotes_Exchange1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context)
 
 func _Quotes_Country1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesCountryRequest
+		var in QuotesCountryPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Country")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Country(ctx, req.(*QuotesCountryRequest))
+			return srv.Country(ctx, req.(*QuotesCountryPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_CountryTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesCountryTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/CountryTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CountryTimestamp(ctx, req.(*QuotesCountryTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -143,13 +257,32 @@ func _Quotes_Country1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 
 func _Quotes_Index1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesIndexRequest
+		var in QuotesIndexPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Index")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Index(ctx, req.(*QuotesIndexRequest))
+			return srv.Index(ctx, req.(*QuotesIndexPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_IndexTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesIndexTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/IndexTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.IndexTimestamp(ctx, req.(*QuotesIndexTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -162,13 +295,32 @@ func _Quotes_Index1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) er
 
 func _Quotes_Account1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesAccountRequest
+		var in QuotesAccountPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Account")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Account(ctx, req.(*QuotesAccountRequest))
+			return srv.Account(ctx, req.(*QuotesAccountPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuotesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_AccountTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuotesAccountTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/AccountTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.AccountTimestamp(ctx, req.(*QuotesAccountTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -181,13 +333,32 @@ func _Quotes_Account1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) 
 
 func _Quotes_Split0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in SplitRequest
+		var in SplitPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Split")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Split(ctx, req.(*SplitRequest))
+			return srv.Split(ctx, req.(*SplitPeriodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SplitReplies)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_SplitTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SplitTimestampRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/SplitTimestamp")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SplitTimestamp(ctx, req.(*SplitTimestampRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -218,15 +389,23 @@ func _Quotes_Health3_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) e
 }
 
 type QuotesHTTPClient interface {
-	Account(ctx context.Context, req *QuotesAccountRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Company(ctx context.Context, req *QuotesCompanyRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Country(ctx context.Context, req *QuotesCountryRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Currency(ctx context.Context, req *QuotesCurrencyRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Exchange(ctx context.Context, req *QuotesExchangeRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Account(ctx context.Context, req *QuotesAccountPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	AccountTimestamp(ctx context.Context, req *QuotesAccountTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Company(ctx context.Context, req *QuotesCompanyPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	CompanyTimestamp(ctx context.Context, req *QuotesCompanyTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Country(ctx context.Context, req *QuotesCountryPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	CountryTimestamp(ctx context.Context, req *QuotesCountryTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Currency(ctx context.Context, req *QuotesCurrencyPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	CurrencyTimestamp(ctx context.Context, req *QuotesCurrencyTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Exchange(ctx context.Context, req *QuotesExchangePeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	ExchangeTimestamp(ctx context.Context, req *QuotesExchangeTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Index(ctx context.Context, req *QuotesIndexRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Industry(ctx context.Context, req *QuotesIndustryRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Split(ctx context.Context, req *SplitRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
+	Index(ctx context.Context, req *QuotesIndexPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	IndexTimestamp(ctx context.Context, req *QuotesIndexTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Industry(ctx context.Context, req *QuotesIndustryPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	IndustryTimestamp(ctx context.Context, req *QuotesIndustryTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Split(ctx context.Context, req *SplitPeriodRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
+	SplitTimestamp(ctx context.Context, req *SplitTimestampRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
 }
 
 type QuotesHTTPClientImpl struct {
@@ -237,7 +416,7 @@ func NewQuotesHTTPClient(client *http.Client) QuotesHTTPClient {
 	return &QuotesHTTPClientImpl{client}
 }
 
-func (c *QuotesHTTPClientImpl) Account(ctx context.Context, in *QuotesAccountRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) Account(ctx context.Context, in *QuotesAccountPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/account"
 	path := binding.EncodeURL(pattern, in, false)
@@ -250,7 +429,20 @@ func (c *QuotesHTTPClientImpl) Account(ctx context.Context, in *QuotesAccountReq
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Company(ctx context.Context, in *QuotesCompanyRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) AccountTimestamp(ctx context.Context, in *QuotesAccountTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/account/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/AccountTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Company(ctx context.Context, in *QuotesCompanyPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/company"
 	path := binding.EncodeURL(pattern, in, false)
@@ -263,7 +455,20 @@ func (c *QuotesHTTPClientImpl) Company(ctx context.Context, in *QuotesCompanyReq
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Country(ctx context.Context, in *QuotesCountryRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) CompanyTimestamp(ctx context.Context, in *QuotesCompanyTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/company/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/CompanyTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Country(ctx context.Context, in *QuotesCountryPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/country"
 	path := binding.EncodeURL(pattern, in, false)
@@ -276,7 +481,20 @@ func (c *QuotesHTTPClientImpl) Country(ctx context.Context, in *QuotesCountryReq
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Currency(ctx context.Context, in *QuotesCurrencyRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) CountryTimestamp(ctx context.Context, in *QuotesCountryTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/country/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/CountryTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Currency(ctx context.Context, in *QuotesCurrencyPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/currency"
 	path := binding.EncodeURL(pattern, in, false)
@@ -289,11 +507,37 @@ func (c *QuotesHTTPClientImpl) Currency(ctx context.Context, in *QuotesCurrencyR
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Exchange(ctx context.Context, in *QuotesExchangeRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) CurrencyTimestamp(ctx context.Context, in *QuotesCurrencyTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/currency/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/CurrencyTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Exchange(ctx context.Context, in *QuotesExchangePeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/exchange"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Exchange"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) ExchangeTimestamp(ctx context.Context, in *QuotesExchangeTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/exchange/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/ExchangeTimestamp"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -315,7 +559,7 @@ func (c *QuotesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, op
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Index(ctx context.Context, in *QuotesIndexRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) Index(ctx context.Context, in *QuotesIndexPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/index"
 	path := binding.EncodeURL(pattern, in, false)
@@ -328,7 +572,20 @@ func (c *QuotesHTTPClientImpl) Index(ctx context.Context, in *QuotesIndexRequest
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Industry(ctx context.Context, in *QuotesIndustryRequest, opts ...http.CallOption) (*QuotesReply, error) {
+func (c *QuotesHTTPClientImpl) IndexTimestamp(ctx context.Context, in *QuotesIndexTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/index/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/IndexTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Industry(ctx context.Context, in *QuotesIndustryPeriodRequest, opts ...http.CallOption) (*QuotesReply, error) {
 	var out QuotesReply
 	pattern := "/v1/quotes/{exchange}/industry"
 	path := binding.EncodeURL(pattern, in, false)
@@ -341,11 +598,37 @@ func (c *QuotesHTTPClientImpl) Industry(ctx context.Context, in *QuotesIndustryR
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Split(ctx context.Context, in *SplitRequest, opts ...http.CallOption) (*SplitReplies, error) {
+func (c *QuotesHTTPClientImpl) IndustryTimestamp(ctx context.Context, in *QuotesIndustryTimestampRequest, opts ...http.CallOption) (*QuotesReply, error) {
+	var out QuotesReply
+	pattern := "/v1/quotes/{exchange}/industry/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/IndustryTimestamp"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Split(ctx context.Context, in *SplitPeriodRequest, opts ...http.CallOption) (*SplitReplies, error) {
 	var out SplitReplies
 	pattern := "/v1/quotes/companies/splits"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Split"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) SplitTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...http.CallOption) (*SplitReplies, error) {
+	var out SplitReplies
+	pattern := "/v1/quotes/companies/splits/ts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/SplitTimestamp"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
