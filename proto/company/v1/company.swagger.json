@@ -144,6 +144,31 @@
     }
   },
   "definitions": {
+    "CompanyReplyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "companyv1Page": {
       "type": "object",
       "properties": {
@@ -305,8 +330,7 @@
           "type": "string"
         },
         "activity": {
-          "type": "string",
-          "format": "int64"
+          "$ref": "#/definitions/CompanyReplyActivity"
         },
         "currencyReport": {
           "type": "string"

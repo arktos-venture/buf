@@ -1149,7 +1149,34 @@ func (m *CompanyReply) validate(all bool) error {
 
 	// no validation rules for Isin
 
-	// no validation rules for Activity
+	if all {
+		switch v := interface{}(m.GetActivity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Activity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Activity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetActivity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplyValidationError{
+				field:  "Activity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for CurrencyReport
 
@@ -1541,3 +1568,115 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyRepliesValidationError{}
+
+// Validate checks the field values on CompanyReply_Activity with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Activity) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Activity with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_ActivityMultiError, or nil if none found.
+func (m *CompanyReply_Activity) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Activity) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for EconomicSector
+
+	// no validation rules for BusinessSector
+
+	// no validation rules for IndustryGroup
+
+	// no validation rules for Industry
+
+	// no validation rules for Activity
+
+	if len(errors) > 0 {
+		return CompanyReply_ActivityMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_ActivityMultiError is an error wrapping multiple validation
+// errors returned by CompanyReply_Activity.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyReply_ActivityMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_ActivityMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_ActivityMultiError) AllErrors() []error { return m }
+
+// CompanyReply_ActivityValidationError is the validation error returned by
+// CompanyReply_Activity.Validate if the designated constraints aren't met.
+type CompanyReply_ActivityValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_ActivityValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_ActivityValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_ActivityValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_ActivityValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_ActivityValidationError) ErrorName() string {
+	return "CompanyReply_ActivityValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_ActivityValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Activity.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_ActivityValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_ActivityValidationError{}

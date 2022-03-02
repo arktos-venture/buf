@@ -96,6 +96,14 @@ message CompanyContact {
 // 
 
 message CompanyReply {
+	message Activity {
+		int64 economicSector = 1; 
+		int64 businessSector = 2;
+		int64 industryGroup = 3;
+		int64 industry = 4;
+		int64 activity = 5;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
@@ -104,7 +112,7 @@ message CompanyReply {
 	string exchange = 6;
 	string routing = 7;
 	string isin = 8;
-	int64 activity = 9;   
+	Activity activity = 9;   
 	string currencyReport = 10;
 	int64 fiscalYearEnd = 11;
 	CompanyContact contact = 12;
