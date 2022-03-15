@@ -169,6 +169,19 @@
         }
       }
     },
+    "CompanyReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "companyv1Page": {
       "type": "object",
       "properties": {
@@ -329,8 +342,15 @@
         "isin": {
           "type": "string"
         },
+        "employees": {
+          "type": "string",
+          "format": "int64"
+        },
         "activity": {
           "$ref": "#/definitions/CompanyReplyActivity"
+        },
+        "shares": {
+          "$ref": "#/definitions/CompanyReplyShares"
         },
         "currencyReport": {
           "type": "string"

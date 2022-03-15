@@ -104,6 +104,11 @@ message CompanyReply {
 		int64 activity = 5;
 	}
 
+	message Shares {
+		int64 outstanding = 1;
+		int64 float = 2;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
@@ -112,11 +117,13 @@ message CompanyReply {
 	string exchange = 6;
 	string routing = 7;
 	string isin = 8;
-	Activity activity = 9;   
-	string currencyReport = 10;
-	int64 fiscalYearEnd = 11;
-	CompanyContact contact = 12;
-	CompanyAddress address = 13;
+	int64 employees = 9; 
+	Activity activity = 10;
+	Shares shares = 11;
+	string currencyReport = 12;
+	int64 fiscalYearEnd = 13;
+	CompanyContact contact = 14;
+	CompanyAddress address = 15;
 }
 
 message CompanyListReply {
