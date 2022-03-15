@@ -1149,6 +1149,8 @@ func (m *CompanyReply) validate(all bool) error {
 
 	// no validation rules for Isin
 
+	// no validation rules for Employees
+
 	if all {
 		switch v := interface{}(m.GetActivity()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1172,6 +1174,35 @@ func (m *CompanyReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return CompanyReplyValidationError{
 				field:  "Activity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetShares()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplyValidationError{
+				field:  "Shares",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1680,3 +1711,109 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyReply_ActivityValidationError{}
+
+// Validate checks the field values on CompanyReply_Shares with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Shares) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Shares with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_SharesMultiError, or nil if none found.
+func (m *CompanyReply_Shares) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Shares) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Outstanding
+
+	// no validation rules for Float
+
+	if len(errors) > 0 {
+		return CompanyReply_SharesMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_SharesMultiError is an error wrapping multiple validation
+// errors returned by CompanyReply_Shares.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyReply_SharesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_SharesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_SharesMultiError) AllErrors() []error { return m }
+
+// CompanyReply_SharesValidationError is the validation error returned by
+// CompanyReply_Shares.Validate if the designated constraints aren't met.
+type CompanyReply_SharesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_SharesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_SharesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_SharesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_SharesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_SharesValidationError) ErrorName() string {
+	return "CompanyReply_SharesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_SharesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Shares.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_SharesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_SharesValidationError{}
