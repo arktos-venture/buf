@@ -48,20 +48,18 @@ message Server {
 }
 
 message Data {
-  message Mongo {
-    repeated string hostnames = 1;
-    string database = 2;
-    string username = 3;
-    string password = 4;
-    google.protobuf.Duration timeout = 5;
-  }
-
   message Postgres {
     enum SSL {
       disable = 0;
       allow = 1;
       prefer = 2;
       require = 3;
+    }
+
+    message Timeout {
+      google.protobuf.Duration dial = 1;
+      google.protobuf.Duration read = 2;
+      google.protobuf.Duration write = 3;
     }
 
     string hostname = 1;
@@ -72,16 +70,24 @@ message Data {
     string username = 6;
     string password = 7;
     SSL ssl = 8;
-    google.protobuf.Duration timeout = 9;
+    Timeout timeout = 9;
   }
 
   message Redis {
+    message Timeout {
+      google.protobuf.Duration dial = 1;
+      google.protobuf.Duration read = 2;
+      google.protobuf.Duration write = 3;
+      google.protobuf.Duration idle = 4;
+      google.protobuf.Duration idleCheckFrequency = 5;
+    }
+
     string hostname = 1;
     int32 port = 2;
     int64 database = 3;
     string username = 4;
     string password = 5;
-    google.protobuf.Duration timeout = 6;
+    Timeout timeout = 6;
   }
 
   message Service {
@@ -90,8 +96,7 @@ message Data {
     google.protobuf.Duration timeout = 3;
   }
 
-  Mongo mongo = 1;
-  Postgres postgres = 2;
-  Redis redis = 3;
-  map<string, Service> services = 4;
+  Postgres postgres = 1;
+  Redis redis = 2;
+  map<string, Service> services = 3;
 }

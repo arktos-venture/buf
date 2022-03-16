@@ -38,19 +38,26 @@ var (
 				Database: 1,
 				Username: "",
 				Password: "",
-				Timeout: &durationpb.Duration{
-					Seconds: 3,
+				Timeout: &Data_Redis_Timeout{
+					Dial:               &durationpb.Duration{Seconds: 5},
+					Read:               &durationpb.Duration{Seconds: 10},
+					Write:              &durationpb.Duration{Seconds: 10},
+					Idle:               &durationpb.Duration{Seconds: 30},
+					IdleCheckFrequency: &durationpb.Duration{Nanos: 500000},
 				},
 			},
-			Mongo: &Data_Mongo{
-				Hostnames: []string{
-					"mongo:27017",
-				},
-				Database: "mongo",
-				Username: "",
-				Password: "",
-				Timeout: &durationpb.Duration{
-					Seconds: 3,
+			Postgres: &Data_Postgres{
+				Hostname: "postgres",
+				Port:     5432,
+				Database: "postgres",
+				Schema:   "postgres",
+				Username: "postgres",
+				Password: "postgres",
+				Ssl:      Data_Postgres_disable,
+				Timeout: &Data_Postgres_Timeout{
+					Dial:  &durationpb.Duration{Seconds: 5},
+					Read:  &durationpb.Duration{Seconds: 10},
+					Write: &durationpb.Duration{Seconds: 10},
 				},
 			},
 		},
