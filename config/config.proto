@@ -48,14 +48,6 @@ message Server {
 }
 
 message Data {
-  message Mongo {
-    repeated string hostnames = 1;
-    string database = 2;
-    string username = 3;
-    string password = 4;
-    google.protobuf.Duration timeout = 5;
-  }
-
   message Postgres {
     enum SSL {
       disable = 0;
@@ -90,8 +82,7 @@ message Data {
     google.protobuf.Duration timeout = 3;
   }
 
-  Mongo mongo = 1;
-  Postgres postgres = 2;
-  Redis redis = 3;
-  map<string, Service> services = 4;
+  Postgres postgres = 1;
+  Redis redis = 2;
+  map<string, Service> services = 3;
 }

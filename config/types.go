@@ -42,17 +42,6 @@ var (
 					Seconds: 3,
 				},
 			},
-			Mongo: &Data_Mongo{
-				Hostnames: []string{
-					"mongo:27017",
-				},
-				Database: "mongo",
-				Username: "",
-				Password: "",
-				Timeout: &durationpb.Duration{
-					Seconds: 3,
-				},
-			},
 		},
 	}
 )
