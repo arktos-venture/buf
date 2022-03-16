@@ -56,6 +56,12 @@ message Data {
       require = 3;
     }
 
+    message Timeout {
+      google.protobuf.Duration dial = 1;
+      google.protobuf.Duration read = 2;
+      google.protobuf.Duration write = 3;
+    }
+
     string hostname = 1;
     int32 port = 2;
     bool debug = 3;
@@ -64,16 +70,24 @@ message Data {
     string username = 6;
     string password = 7;
     SSL ssl = 8;
-    google.protobuf.Duration timeout = 9;
+    Timeout timeout = 9;
   }
 
   message Redis {
+    message Timeout {
+      google.protobuf.Duration dial = 1;
+      google.protobuf.Duration read = 2;
+      google.protobuf.Duration write = 3;
+      google.protobuf.Duration idle = 4;
+      google.protobuf.Duration idleCheckFrequency = 5;
+    }
+
     string hostname = 1;
     int32 port = 2;
     int64 database = 3;
     string username = 4;
     string password = 5;
-    google.protobuf.Duration timeout = 6;
+    Timeout timeout = 6;
   }
 
   message Service {

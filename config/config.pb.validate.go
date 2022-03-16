@@ -1558,3 +1558,439 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Data_ServiceValidationError{}
+
+// Validate checks the field values on Data_Postgres_Timeout with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Data_Postgres_Timeout) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Data_Postgres_Timeout with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Data_Postgres_TimeoutMultiError, or nil if none found.
+func (m *Data_Postgres_Timeout) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Data_Postgres_Timeout) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetDial()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Dial",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Dial",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDial()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Postgres_TimeoutValidationError{
+				field:  "Dial",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetRead()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Read",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Read",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRead()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Postgres_TimeoutValidationError{
+				field:  "Read",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetWrite()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Write",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Postgres_TimeoutValidationError{
+					field:  "Write",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetWrite()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Postgres_TimeoutValidationError{
+				field:  "Write",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Data_Postgres_TimeoutMultiError(errors)
+	}
+
+	return nil
+}
+
+// Data_Postgres_TimeoutMultiError is an error wrapping multiple validation
+// errors returned by Data_Postgres_Timeout.ValidateAll() if the designated
+// constraints aren't met.
+type Data_Postgres_TimeoutMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Data_Postgres_TimeoutMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Data_Postgres_TimeoutMultiError) AllErrors() []error { return m }
+
+// Data_Postgres_TimeoutValidationError is the validation error returned by
+// Data_Postgres_Timeout.Validate if the designated constraints aren't met.
+type Data_Postgres_TimeoutValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Data_Postgres_TimeoutValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Data_Postgres_TimeoutValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Data_Postgres_TimeoutValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Data_Postgres_TimeoutValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Data_Postgres_TimeoutValidationError) ErrorName() string {
+	return "Data_Postgres_TimeoutValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Data_Postgres_TimeoutValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sData_Postgres_Timeout.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Data_Postgres_TimeoutValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Data_Postgres_TimeoutValidationError{}
+
+// Validate checks the field values on Data_Redis_Timeout with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Data_Redis_Timeout) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Data_Redis_Timeout with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Data_Redis_TimeoutMultiError, or nil if none found.
+func (m *Data_Redis_Timeout) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Data_Redis_Timeout) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetDial()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Dial",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Dial",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDial()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Redis_TimeoutValidationError{
+				field:  "Dial",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetRead()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Read",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Read",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRead()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Redis_TimeoutValidationError{
+				field:  "Read",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetWrite()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Write",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Write",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetWrite()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Redis_TimeoutValidationError{
+				field:  "Write",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetIdle()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Idle",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "Idle",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIdle()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Redis_TimeoutValidationError{
+				field:  "Idle",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetIdleCheckFrequency()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "IdleCheckFrequency",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_Redis_TimeoutValidationError{
+					field:  "IdleCheckFrequency",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIdleCheckFrequency()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_Redis_TimeoutValidationError{
+				field:  "IdleCheckFrequency",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Data_Redis_TimeoutMultiError(errors)
+	}
+
+	return nil
+}
+
+// Data_Redis_TimeoutMultiError is an error wrapping multiple validation errors
+// returned by Data_Redis_Timeout.ValidateAll() if the designated constraints
+// aren't met.
+type Data_Redis_TimeoutMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Data_Redis_TimeoutMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Data_Redis_TimeoutMultiError) AllErrors() []error { return m }
+
+// Data_Redis_TimeoutValidationError is the validation error returned by
+// Data_Redis_Timeout.Validate if the designated constraints aren't met.
+type Data_Redis_TimeoutValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Data_Redis_TimeoutValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Data_Redis_TimeoutValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Data_Redis_TimeoutValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Data_Redis_TimeoutValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Data_Redis_TimeoutValidationError) ErrorName() string {
+	return "Data_Redis_TimeoutValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Data_Redis_TimeoutValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sData_Redis_Timeout.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Data_Redis_TimeoutValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Data_Redis_TimeoutValidationError{}
