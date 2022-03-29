@@ -1,0 +1,150 @@
+syntax = "proto3";
+
+package orders.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/orders/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.orders.v1";
+option java_outer_classname = "OrdersProtoV1";
+
+service Orders {
+  rpc Search (OrderSearchRequest) returns (OrderReplies)  {
+    option (google.api.http) = {
+      get: "/v1/{account}/orders"
+    };
+  }
+
+  rpc Create (OrderCreateRequest) returns (OrderReply)  {
+    option (google.api.http) = {
+      post: "/v1/{account}/order"
+      body: "*"
+    };
+  }
+
+  rpc Update (OrderUpdateRequest) returns (OrderReply)  {
+    option (google.api.http) = {
+      put: "/v1/{account}/order/{orderId}"
+      body: "*"
+    };
+  }
+
+  rpc Delete (OrderDeleteRequest) returns (OrderDelete)  {
+    option (google.api.http) = {
+      delete: "/v1/{account}/order/{orderId}"
+    };
+  }
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    option (google.api.http) = {
+      get: "/healthz"
+    };
+  }
+}
+
+
+// 
+// Request
+// 
+
+enum OrderType {
+  LMT = 0;
+  MKT = 1;
+  STP = 2;
+  IBALGO = 3;
+  MIDPRICE = 4;
+  OALL = 5;
+}
+
+enum Duration {
+  DAY = 0;
+  GTC = 1;
+  DALL = 2;
+}
+
+enum Action {
+  BUY = 0;
+  SELL = 1;
+  ALL = 2;
+}
+
+message OrderRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+}
+
+message OrderSearchRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  Action action = 2 [(validate.rules).enum = {defined_only: true}];
+  Duration duration = 3 [(validate.rules).enum = {defined_only: true}];
+  OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
+  string period = 5 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y"]}];
+}
+
+message OrderCreateRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string currency = 4 [(validate.rules).string.len = 3];
+  Action action = 5 [(validate.rules).enum = {defined_only: true}];
+  OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
+  float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
+  Duration duration = 8 [(validate.rules).enum = {defined_only: true}];
+  float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
+}
+
+message OrderUpdateRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
+  Action action = 3 [(validate.rules).enum = {defined_only: true}];
+  OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
+  float size = 5 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
+  Duration duration = 6 [(validate.rules).enum = {defined_only: true}];
+  float price = 7 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
+}
+
+message OrderDeleteRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
+}
+
+
+// 
+// Reply
+// 
+
+message OrderReply {
+  message Size {
+    float ask = 1;
+    float buy = 2;
+  }
+
+  message Price {
+    float ask = 1;
+    float buy = 2;
+    float commission = 3;
+  }
+
+  string ticker = 1;
+  string exchange = 2;
+  string currency = 3;
+  Action action = 4;
+  OrderType orderType = 5;
+  string routing = 6;
+  Duration duration = 7;
+  Size size = 8;
+  Price price = 9;
+  string status = 10;
+  int64 date = 11;
+}
+
+message OrderReplies {
+  repeated OrderReply results = 1;
+  int32 total = 2;
+}
+
+message OrderDelete {
+  bool deleted = 1;
+}

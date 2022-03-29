@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package splits.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/splits/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.splits.v1";
+option java_outer_classname = "splitsProtoV1";
+
+service Splits {
+  rpc List (SplitPeriodRequest) returns (SplitReplies)  {
+    option (google.api.http) = {
+      post: "/v1/company/{exchange}/{ticker}/splits"
+      body: "*"
+    };
+  }
+
+  rpc ListByTimestamp (SplitTimestampRequest) returns (SplitReplies)  {
+    option (google.api.http) = {
+      post: "/v1/company/{exchange}/{ticker}/splits/ts"
+      body: "*"
+    };
+  }
+
+  rpc Bulk (SplitBulkRequest) returns (SplitBulkReplies)  {
+    option (google.api.http) = {
+      post: "/v1/exchange/{exchange}/splits/bulk"
+      body: "*"
+    };
+  }
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    option (google.api.http) = {
+      get: "/healthz"
+    };
+  }
+}
+
+// 
+// Request
+// 
+
+enum Interval {
+  d = 0;
+  w = 1;
+  m = 2;
+}
+
+message DatePeriod {
+  Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+  string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
+}
+
+message DateTimestamp {
+  Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+  int64 time = 2 [(validate.rules).int64 = {gte: 1}];
+}
+
+message SplitPeriodRequest {
+  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  DatePeriod date = 3 [(validate.rules).message.required = true];
+}
+
+message SplitTimestampRequest {
+  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  DateTimestamp date = 3 [(validate.rules).message.required = true];
+}
+
+message SplitBulkRequest {
+  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  DateTimestamp date = 2 [(validate.rules).message.required = true];
+}
+
+// 
+// Reply
+// 
+
+message SplitsReply {
+  float from = 1;
+  float to = 2;
+  int64 date = 3;
+}
+
+message SplitReplies {
+  repeated SplitsReply results = 1;
+	int32 total = 2;
+}
+
+message SplitBulkReplies {
+  message Company {
+    string ticker = 1;
+    string exchange = 2;
+    SplitsReply results = 3;
+  }
+
+  repeated Company companies = 1;
+	int32 total = 2;
+}

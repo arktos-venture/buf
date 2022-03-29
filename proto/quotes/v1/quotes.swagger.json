@@ -102,70 +102,6 @@
         ]
       }
     },
-    "/v1/quotes/companies/splits": {
-      "post": {
-        "operationId": "Quotes_Split",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SplitReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1SplitPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/companies/splits/ts": {
-      "post": {
-        "operationId": "Quotes_SplitTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SplitReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1SplitTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
     "/v1/quotes/company": {
       "post": {
         "operationId": "Quotes_Company",
@@ -528,7 +464,7 @@
                   }
                 },
                 "date": {
-                  "$ref": "#/definitions/v1DatePeriod"
+                  "$ref": "#/definitions/quotesv1DatePeriod"
                 }
               }
             }
@@ -581,7 +517,7 @@
                   }
                 },
                 "date": {
-                  "$ref": "#/definitions/v1DateTimestamp"
+                  "$ref": "#/definitions/quotesv1DateTimestamp"
                 }
               }
             }
@@ -758,23 +694,6 @@
         }
       }
     },
-    "SplitRepliesSplitsReply": {
-      "type": "object",
-      "properties": {
-        "from": {
-          "type": "number",
-          "format": "float"
-        },
-        "to": {
-          "type": "number",
-          "format": "float"
-        },
-        "date": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -802,6 +721,29 @@
         "value": {
           "type": "string",
           "format": "byte"
+        }
+      }
+    },
+    "quotesv1DatePeriod": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/quotesv1Interval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "quotesv1DateTimestamp": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/quotesv1Interval"
+        },
+        "time": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -836,29 +778,6 @@
       ],
       "default": "d"
     },
-    "v1DatePeriod": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "v1DateTimestamp": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
-        },
-        "time": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "v1QuotesAccountPeriodRequest": {
       "type": "object",
       "properties": {
@@ -872,7 +791,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -889,7 +808,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -909,7 +828,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -929,7 +848,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -946,7 +865,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -963,7 +882,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -980,7 +899,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -997,7 +916,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -1017,7 +936,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -1037,7 +956,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -1054,7 +973,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DatePeriod"
+          "$ref": "#/definitions/quotesv1DatePeriod"
         }
       }
     },
@@ -1071,7 +990,7 @@
           }
         },
         "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
+          "$ref": "#/definitions/quotesv1DateTimestamp"
         }
       }
     },
@@ -1122,49 +1041,6 @@
             "type": "string",
             "format": "int64"
           }
-        }
-      }
-    },
-    "v1SplitPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "date": {
-          "$ref": "#/definitions/v1DatePeriod"
-        }
-      }
-    },
-    "v1SplitReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/SplitRepliesSplitsReply"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1SplitTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "date": {
-          "$ref": "#/definitions/v1DateTimestamp"
         }
       }
     }

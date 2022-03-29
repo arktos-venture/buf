@@ -110,20 +110,6 @@ service Quotes {
     };
   }
 
-  rpc Split (SplitPeriodRequest) returns (SplitReplies)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/companies/splits"
-      body: "*"
-    };
-  }
-
-  rpc SplitTimestamp (SplitTimestampRequest) returns (SplitReplies)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/companies/splits/ts"
-      body: "*"
-    };
-  }
-
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
     option (google.api.http) = {
       get: "/healthz"
@@ -315,15 +301,4 @@ message QuotesReply {
 	repeated float volume = 5;
   Indicators indicators = 6;
 	repeated int64 date = 7;
-}
-
-message SplitReplies {
-  message SplitsReply {
-    float from = 1;
-    float to = 2;
-    int64 date = 3;
-  }
-
-  repeated SplitsReply results = 1;
-	int32 total = 2;
 }

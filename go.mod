@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
-	github.com/go-kratos/kratos/v2 v2.2.0
+	github.com/go-kratos/kratos/v2 v2.2.1
 	github.com/hashicorp/go-hclog v1.2.0
 	google.golang.org/genproto v0.0.0-20220302033224-9aa15565e42a
 	google.golang.org/grpc v1.44.0

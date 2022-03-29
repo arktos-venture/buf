@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package company.trends.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/company/trends/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.company.trends.v1";
+option java_outer_classname = "CompanyTrendsProtoV1";
+
+service CompanyTrends {
+	rpc Get (TrendRequest) returns (TrendIdReply)  {
+		option (google.api.http) = {
+			post: "/v1/company/trendId"
+			body: "*"
+		};
+	}
+
+	rpc Search (TrendRequest) returns (TrendReply)  {
+		option (google.api.http) = {
+		  	post: "/v1/company/trends"
+			body: "*"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+// 
+// Request
+// 
+
+message TrendRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string currency = 2 [(validate.rules).string.len = 3];
+	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+}
+
+// 
+// Reply
+// 
+
+message TrendIdReply {
+	message Trend {
+		string name = 1;
+		string ref = 2;
+	}
+
+	string ticker = 1;
+	string currency = 2;
+	string exchange = 3;
+	Trend result = 4;
+	repeated Trend related = 5;
+}
+
+message TrendReply {
+	message Related {
+		string title = 1;
+		string mid = 2;
+		string link = 3;
+		int32 value = 4;
+	}
+
+	message GeoMap {
+		string code = 1;
+		int32 value = 2;
+	}
+
+	string ref = 1;
+	repeated Related related = 2;
+	repeated GeoMap geomap = 3;
+}

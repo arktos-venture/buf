@@ -33,8 +33,6 @@ type QuotesClient interface {
 	IndexTimestamp(ctx context.Context, in *QuotesIndexTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
 	Account(ctx context.Context, in *QuotesAccountPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
 	AccountTimestamp(ctx context.Context, in *QuotesAccountTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Split(ctx context.Context, in *SplitPeriodRequest, opts ...grpc.CallOption) (*SplitReplies, error)
-	SplitTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...grpc.CallOption) (*SplitReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -172,24 +170,6 @@ func (c *quotesClient) AccountTimestamp(ctx context.Context, in *QuotesAccountTi
 	return out, nil
 }
 
-func (c *quotesClient) Split(ctx context.Context, in *SplitPeriodRequest, opts ...grpc.CallOption) (*SplitReplies, error) {
-	out := new(SplitReplies)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Split", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) SplitTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...grpc.CallOption) (*SplitReplies, error) {
-	out := new(SplitReplies)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/SplitTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *quotesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Health", in, out, opts...)
@@ -217,8 +197,6 @@ type QuotesServer interface {
 	IndexTimestamp(context.Context, *QuotesIndexTimestampRequest) (*QuotesReply, error)
 	Account(context.Context, *QuotesAccountPeriodRequest) (*QuotesReply, error)
 	AccountTimestamp(context.Context, *QuotesAccountTimestampRequest) (*QuotesReply, error)
-	Split(context.Context, *SplitPeriodRequest) (*SplitReplies, error)
-	SplitTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedQuotesServer()
 }
@@ -268,12 +246,6 @@ func (UnimplementedQuotesServer) Account(context.Context, *QuotesAccountPeriodRe
 }
 func (UnimplementedQuotesServer) AccountTimestamp(context.Context, *QuotesAccountTimestampRequest) (*QuotesReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AccountTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Split(context.Context, *SplitPeriodRequest) (*SplitReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Split not implemented")
-}
-func (UnimplementedQuotesServer) SplitTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SplitTimestamp not implemented")
 }
 func (UnimplementedQuotesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -543,42 +515,6 @@ func _Quotes_AccountTimestamp_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Quotes_Split_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SplitPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Split(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Split",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Split(ctx, req.(*SplitPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_SplitTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SplitTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).SplitTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/SplitTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).SplitTimestamp(ctx, req.(*SplitTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Quotes_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -659,14 +595,6 @@ var Quotes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AccountTimestamp",
 			Handler:    _Quotes_AccountTimestamp_Handler,
-		},
-		{
-			MethodName: "Split",
-			Handler:    _Quotes_Split_Handler,
-		},
-		{
-			MethodName: "SplitTimestamp",
-			Handler:    _Quotes_SplitTimestamp_Handler,
 		},
 		{
 			MethodName: "Health",

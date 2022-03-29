@@ -1,0 +1,440 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/countries/v1/countries.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Countries"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Countries_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Countries"
+        ]
+      }
+    },
+    "/v1/countries": {
+      "post": {
+        "operationId": "Countries_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CountryReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CountrySearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Countries"
+        ]
+      }
+    },
+    "/v1/country/{country}": {
+      "get": {
+        "operationId": "Countries_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CountryReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "country",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Countries"
+        ]
+      }
+    },
+    "/v1/country/{country}/{indicator}": {
+      "get": {
+        "operationId": "Countries_Indicator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CountryIndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "country",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "indicator",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "PMIM",
+              "PMIS",
+              "CC",
+              "TC",
+              "IPC",
+              "SPB",
+              "IPP"
+            ]
+          }
+        ],
+        "tags": [
+          "Countries"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CountryIndicatorReplyResult": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "forecast": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "date": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "CountryReplyCode": {
+      "type": "object",
+      "properties": {
+        "alpha2": {
+          "type": "string"
+        },
+        "alpha3": {
+          "type": "string"
+        },
+        "cioc": {
+          "type": "string"
+        },
+        "ccn3": {
+          "type": "string"
+        },
+        "callingCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "internationalPrefix": {
+          "type": "string"
+        }
+      }
+    },
+    "CountryReplyDivision": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "coordinates": {
+          "$ref": "#/definitions/DivisionCoordinate"
+        }
+      }
+    },
+    "CountryReplyExchange": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ticker": {
+          "type": "string"
+        }
+      }
+    },
+    "CountryReplyGeo": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string"
+        },
+        "subRegion": {
+          "type": "string"
+        },
+        "continent": {
+          "type": "string"
+        },
+        "capital": {
+          "type": "string"
+        },
+        "Area": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "DivisionCoordinate": {
+      "type": "object",
+      "properties": {
+        "minLongitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "minLatitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxLongitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxLatitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "countriesv1Indicator": {
+      "type": "string",
+      "enum": [
+        "PMIM",
+        "PMIS",
+        "CC",
+        "TC",
+        "IPC",
+        "SPB",
+        "IPP"
+      ],
+      "default": "PMIM"
+    },
+    "countriesv1Page": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "v1CountryIndicatorReply": {
+      "type": "object",
+      "properties": {
+        "indicator": {
+          "$ref": "#/definitions/countriesv1Indicator"
+        },
+        "country": {
+          "type": "string"
+        },
+        "results": {
+          "$ref": "#/definitions/CountryIndicatorReplyResult"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CountryReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CountryReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CountryReply": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "geo": {
+          "$ref": "#/definitions/CountryReplyGeo"
+        },
+        "code": {
+          "$ref": "#/definitions/CountryReplyCode"
+        },
+        "euMember": {
+          "type": "boolean"
+        },
+        "tlds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "languages": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "currencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CountryReplyExchange"
+          }
+        },
+        "subDivision": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CountryReplyDivision"
+          }
+        },
+        "borders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1CountrySearchRequest": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "continent": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "page": {
+          "$ref": "#/definitions/countriesv1Page"
+        }
+      }
+    }
+  }
+}
