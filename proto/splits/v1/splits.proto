@@ -12,23 +12,23 @@ option java_package = "dev.kratos.api.splits.v1";
 option java_outer_classname = "splitsProtoV1";
 
 service Splits {
-  rpc Get (SplitPeriodRequest) returns (SplitReplies)  {
+  rpc List (SplitPeriodRequest) returns (SplitReplies)  {
     option (google.api.http) = {
-      post: "/v1/splits/companies/splits"
+      post: "/v1/company/{exchange}/{ticker}/splits"
       body: "*"
     };
   }
 
-  rpc GetByTimestamp (SplitTimestampRequest) returns (SplitReplies)  {
+  rpc ListByTimestamp (SplitTimestampRequest) returns (SplitReplies)  {
     option (google.api.http) = {
-      post: "/v1/splits/companies/splits/ts"
+      post: "/v1/company/{exchange}/{ticker}/splits/ts"
       body: "*"
     };
   }
 
-  rpc Bulk (SplitBulkRequest) returns (SplitReplies)  {
+  rpc Bulk (SplitBulkRequest) returns (SplitBulkReplies)  {
     option (google.api.http) = {
-      post: "/v1/splits/bulk"
+      post: "/v1/exchange/{exchange}/splits/bulk"
       body: "*"
     };
   }
@@ -81,13 +81,24 @@ message SplitBulkRequest {
 // Reply
 // 
 
+message SplitsReply {
+  float from = 1;
+  float to = 2;
+  int64 date = 3;
+}
+
 message SplitReplies {
-  message SplitsReply {
-    float from = 1;
-    float to = 2;
-    int64 date = 3;
+  repeated SplitsReply results = 1;
+	int32 total = 2;
+}
+
+message SplitBulkReplies {
+  message Company {
+    string ticker = 1;
+    string exchange = 2;
+    SplitsReply results = 3;
   }
 
-  repeated SplitsReply results = 1;
+  repeated Company companies = 1;
 	int32 total = 2;
 }
