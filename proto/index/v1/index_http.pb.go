@@ -29,15 +29,15 @@ type IndexHTTPServer interface {
 
 func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/index/{ref}", _Index_Get3_HTTP_Handler(srv))
-	r.GET("/v1/index", _Index_Search5_HTTP_Handler(srv))
-	r.POST("/v1/index", _Index_Create2_HTTP_Handler(srv))
+	r.GET("/v1/index/{ref}", _Index_Get4_HTTP_Handler(srv))
+	r.GET("/v1/index", _Index_Search2_HTTP_Handler(srv))
+	r.POST("/v1/index", _Index_Create1_HTTP_Handler(srv))
 	r.PUT("/v1/index", _Index_Update0_HTTP_Handler(srv))
 	r.DELETE("/v1/index/{ref}", _Index_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Index_Health10_HTTP_Handler(srv))
+	r.GET("/healthz", _Index_Health9_HTTP_Handler(srv))
 }
 
-func _Index_Get3_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Get4_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -59,7 +59,7 @@ func _Index_Get3_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error 
 	}
 }
 
-func _Index_Search5_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Search2_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,7 +78,7 @@ func _Index_Search5_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Create2_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Create1_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -138,7 +138,7 @@ func _Index_Delete0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Index_Health10_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
+func _Index_Health9_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

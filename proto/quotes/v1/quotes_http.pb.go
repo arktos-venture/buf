@@ -34,8 +34,6 @@ type QuotesHTTPServer interface {
 	IndexTimestamp(context.Context, *QuotesIndexTimestampRequest) (*QuotesReply, error)
 	Industry(context.Context, *QuotesIndustryPeriodRequest) (*QuotesReply, error)
 	IndustryTimestamp(context.Context, *QuotesIndustryTimestampRequest) (*QuotesReply, error)
-	Split(context.Context, *SplitPeriodRequest) (*SplitReplies, error)
-	SplitTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error)
 }
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
@@ -54,9 +52,7 @@ func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r.POST("/v1/quotes/index/ts", _Quotes_IndexTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/account", _Quotes_Account1_HTTP_Handler(srv))
 	r.POST("/v1/quotes/account/ts", _Quotes_AccountTimestamp0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/companies/splits", _Quotes_Split0_HTTP_Handler(srv))
-	r.POST("/v1/quotes/companies/splits/ts", _Quotes_SplitTimestamp0_HTTP_Handler(srv))
-	r.GET("/healthz", _Quotes_Health3_HTTP_Handler(srv))
+	r.GET("/healthz", _Quotes_Health2_HTTP_Handler(srv))
 }
 
 func _Quotes_Company1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
@@ -331,45 +327,7 @@ func _Quotes_AccountTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.
 	}
 }
 
-func _Quotes_Split0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in SplitPeriodRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/quotes.v1.Quotes/Split")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Split(ctx, req.(*SplitPeriodRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SplitReplies)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Quotes_SplitTimestamp0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in SplitTimestampRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/quotes.v1.Quotes/SplitTimestamp")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SplitTimestamp(ctx, req.(*SplitTimestampRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SplitReplies)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Quotes_Health3_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Health2_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -404,8 +362,6 @@ type QuotesHTTPClient interface {
 	IndexTimestamp(ctx context.Context, req *QuotesIndexTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
 	Industry(ctx context.Context, req *QuotesIndustryPeriodRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
 	IndustryTimestamp(ctx context.Context, req *QuotesIndustryTimestampRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
-	Split(ctx context.Context, req *SplitPeriodRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
-	SplitTimestamp(ctx context.Context, req *SplitTimestampRequest, opts ...http.CallOption) (rsp *SplitReplies, err error)
 }
 
 type QuotesHTTPClientImpl struct {
@@ -603,32 +559,6 @@ func (c *QuotesHTTPClientImpl) IndustryTimestamp(ctx context.Context, in *Quotes
 	pattern := "/v1/quotes/{exchange}/industry/ts"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/IndustryTimestamp"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *QuotesHTTPClientImpl) Split(ctx context.Context, in *SplitPeriodRequest, opts ...http.CallOption) (*SplitReplies, error) {
-	var out SplitReplies
-	pattern := "/v1/quotes/companies/splits"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/quotes.v1.Quotes/Split"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *QuotesHTTPClientImpl) SplitTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...http.CallOption) (*SplitReplies, error) {
-	var out SplitReplies
-	pattern := "/v1/quotes/companies/splits/ts"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/quotes.v1.Quotes/SplitTimestamp"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

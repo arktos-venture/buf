@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package fundamentals.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/fundamentals/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.fundamentals.v1";
+option java_outer_classname = "FundamentalsProtoV1";
+
+service Fundamentals {
+	rpc Get (FundamentalRequest) returns (FundamentalReply)  {
+		option (google.api.http) = {
+			get: "/v1/company/fundamentals"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+
+// 
+// Request
+// 
+
+message FundamentalRequest {
+  	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+}
+
+
+// 
+// Reply
+// 
+
+message FundamentalReply {
+	message Fundamental {
+		string ok = 1;
+	}
+
+	string ticker = 1;
+	string exchange = 2;
+	repeated Fundamental results = 3;
+}

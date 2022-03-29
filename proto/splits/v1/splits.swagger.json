@@ -1,0 +1,273 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/splits/v1/splits.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Splits"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Splits_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Splits"
+        ]
+      }
+    },
+    "/v1/splits/bulk": {
+      "post": {
+        "operationId": "Splits_Bulk",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SplitBulkRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Splits"
+        ]
+      }
+    },
+    "/v1/splits/companies/splits": {
+      "post": {
+        "operationId": "Splits_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/splitsv1SplitPeriodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Splits"
+        ]
+      }
+    },
+    "/v1/splits/companies/splits/ts": {
+      "post": {
+        "operationId": "Splits_GetByTimestamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/splitsv1SplitTimestampRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Splits"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "SplitRepliesSplitsReply": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "number",
+          "format": "float"
+        },
+        "to": {
+          "type": "number",
+          "format": "float"
+        },
+        "date": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "splitsv1DatePeriod": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/splitsv1Interval"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "splitsv1DateTimestamp": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/splitsv1Interval"
+        },
+        "time": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "splitsv1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "d"
+    },
+    "splitsv1SplitPeriodRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/splitsv1DatePeriod"
+        }
+      }
+    },
+    "splitsv1SplitTimestampRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/splitsv1DateTimestamp"
+        }
+      }
+    },
+    "v1SplitBulkRequest": {
+      "type": "object",
+      "properties": {
+        "exchange": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/splitsv1DateTimestamp"
+        }
+      }
+    },
+    "v1SplitReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SplitRepliesSplitsReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}
