@@ -15,158 +15,158 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// NotificationClient is the client API for Notification service.
+// NotificationsClient is the client API for Notifications service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type NotificationClient interface {
+type NotificationsClient interface {
 	Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error)
 	Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type notificationClient struct {
+type notificationsClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewNotificationClient(cc grpc.ClientConnInterface) NotificationClient {
-	return &notificationClient{cc}
+func NewNotificationsClient(cc grpc.ClientConnInterface) NotificationsClient {
+	return &notificationsClient{cc}
 }
 
-func (c *notificationClient) Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error) {
+func (c *notificationsClient) Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error) {
 	out := new(NotificationReply)
-	err := c.cc.Invoke(ctx, "/notifications.v1.Notification/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *notificationClient) Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error) {
+func (c *notificationsClient) Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error) {
 	out := new(NotificationReplies)
-	err := c.cc.Invoke(ctx, "/notifications.v1.Notification/Search", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *notificationClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *notificationsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/notifications.v1.Notification/Health", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Health", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// NotificationServer is the server API for Notification service.
-// All implementations must embed UnimplementedNotificationServer
+// NotificationsServer is the server API for Notifications service.
+// All implementations must embed UnimplementedNotificationsServer
 // for forward compatibility
-type NotificationServer interface {
+type NotificationsServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	mustEmbedUnimplementedNotificationServer()
+	mustEmbedUnimplementedNotificationsServer()
 }
 
-// UnimplementedNotificationServer must be embedded to have forward compatible implementations.
-type UnimplementedNotificationServer struct {
+// UnimplementedNotificationsServer must be embedded to have forward compatible implementations.
+type UnimplementedNotificationsServer struct {
 }
 
-func (UnimplementedNotificationServer) Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error) {
+func (UnimplementedNotificationsServer) Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedNotificationServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
+func (UnimplementedNotificationsServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedNotificationServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+func (UnimplementedNotificationsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
-func (UnimplementedNotificationServer) mustEmbedUnimplementedNotificationServer() {}
+func (UnimplementedNotificationsServer) mustEmbedUnimplementedNotificationsServer() {}
 
-// UnsafeNotificationServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to NotificationServer will
+// UnsafeNotificationsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to NotificationsServer will
 // result in compilation errors.
-type UnsafeNotificationServer interface {
-	mustEmbedUnimplementedNotificationServer()
+type UnsafeNotificationsServer interface {
+	mustEmbedUnimplementedNotificationsServer()
 }
 
-func RegisterNotificationServer(s grpc.ServiceRegistrar, srv NotificationServer) {
-	s.RegisterService(&Notification_ServiceDesc, srv)
+func RegisterNotificationsServer(s grpc.ServiceRegistrar, srv NotificationsServer) {
+	s.RegisterService(&Notifications_ServiceDesc, srv)
 }
 
-func _Notification_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Notifications_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationServer).Create(ctx, in)
+		return srv.(NotificationsServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/notifications.v1.Notification/Create",
+		FullMethod: "/notifications.v1.Notifications/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServer).Create(ctx, req.(*NotificationCreateRequest))
+		return srv.(NotificationsServer).Create(ctx, req.(*NotificationCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Notification_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Notifications_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationServer).Search(ctx, in)
+		return srv.(NotificationsServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/notifications.v1.Notification/Search",
+		FullMethod: "/notifications.v1.Notifications/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServer).Search(ctx, req.(*NotificationSearchRequest))
+		return srv.(NotificationsServer).Search(ctx, req.(*NotificationSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Notification_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Notifications_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationServer).Health(ctx, in)
+		return srv.(NotificationsServer).Health(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/notifications.v1.Notification/Health",
+		FullMethod: "/notifications.v1.Notifications/Health",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationServer).Health(ctx, req.(*emptypb.Empty))
+		return srv.(NotificationsServer).Health(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Notification_ServiceDesc is the grpc.ServiceDesc for Notification service.
+// Notifications_ServiceDesc is the grpc.ServiceDesc for Notifications service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Notification_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "notifications.v1.Notification",
-	HandlerType: (*NotificationServer)(nil),
+var Notifications_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "notifications.v1.Notifications",
+	HandlerType: (*NotificationsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Create",
-			Handler:    _Notification_Create_Handler,
+			Handler:    _Notifications_Create_Handler,
 		},
 		{
 			MethodName: "Search",
-			Handler:    _Notification_Search_Handler,
+			Handler:    _Notifications_Search_Handler,
 		},
 		{
 			MethodName: "Health",
-			Handler:    _Notification_Health_Handler,
+			Handler:    _Notifications_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

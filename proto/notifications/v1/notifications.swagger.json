@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "Notification"
+      "name": "Notifications"
     }
   ],
   "consumes": [
@@ -18,7 +18,7 @@
   "paths": {
     "/healthz": {
       "get": {
-        "operationId": "Notification_Health",
+        "operationId": "Notifications_Health",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,13 +34,13 @@
           }
         },
         "tags": [
-          "Notification"
+          "Notifications"
         ]
       }
     },
     "/v1/{account}/notifications": {
       "get": {
-        "operationId": "Notification_Search",
+        "operationId": "Notifications_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -98,11 +98,11 @@
           }
         ],
         "tags": [
-          "Notification"
+          "Notifications"
         ]
       },
       "post": {
-        "operationId": "Notification_Create",
+        "operationId": "Notifications_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -148,7 +148,7 @@
           }
         ],
         "tags": [
-          "Notification"
+          "Notifications"
         ]
       }
     }

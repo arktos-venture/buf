@@ -18,20 +18,20 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-type NotificationHTTPServer interface {
+type NotificationsHTTPServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 }
 
-func RegisterNotificationHTTPServer(s *http.Server, srv NotificationHTTPServer) {
+func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/{account}/notifications", _Notification_Create3_HTTP_Handler(srv))
-	r.GET("/v1/{account}/notifications", _Notification_Search6_HTTP_Handler(srv))
-	r.GET("/healthz", _Notification_Health13_HTTP_Handler(srv))
+	r.POST("/v1/{account}/notifications", _Notifications_Create3_HTTP_Handler(srv))
+	r.GET("/v1/{account}/notifications", _Notifications_Search6_HTTP_Handler(srv))
+	r.GET("/healthz", _Notifications_Health13_HTTP_Handler(srv))
 }
 
-func _Notification_Create3_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
+func _Notifications_Create3_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -40,7 +40,7 @@ func _Notification_Create3_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/notifications.v1.Notification/Create")
+		http.SetOperation(ctx, "/notifications.v1.Notifications/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Create(ctx, req.(*NotificationCreateRequest))
 		})
@@ -53,7 +53,7 @@ func _Notification_Create3_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 	}
 }
 
-func _Notification_Search6_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
+func _Notifications_Search6_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -62,7 +62,7 @@ func _Notification_Search6_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/notifications.v1.Notification/Search")
+		http.SetOperation(ctx, "/notifications.v1.Notifications/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Search(ctx, req.(*NotificationSearchRequest))
 		})
@@ -75,13 +75,13 @@ func _Notification_Search6_HTTP_Handler(srv NotificationHTTPServer) func(ctx htt
 	}
 }
 
-func _Notification_Health13_HTTP_Handler(srv NotificationHTTPServer) func(ctx http.Context) error {
+func _Notifications_Health13_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/notifications.v1.Notification/Health")
+		http.SetOperation(ctx, "/notifications.v1.Notifications/Health")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Health(ctx, req.(*emptypb.Empty))
 		})
@@ -94,25 +94,25 @@ func _Notification_Health13_HTTP_Handler(srv NotificationHTTPServer) func(ctx ht
 	}
 }
 
-type NotificationHTTPClient interface {
+type NotificationsHTTPClient interface {
 	Create(ctx context.Context, req *NotificationCreateRequest, opts ...http.CallOption) (rsp *NotificationReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *NotificationSearchRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
 }
 
-type NotificationHTTPClientImpl struct {
+type NotificationsHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewNotificationHTTPClient(client *http.Client) NotificationHTTPClient {
-	return &NotificationHTTPClientImpl{client}
+func NewNotificationsHTTPClient(client *http.Client) NotificationsHTTPClient {
+	return &NotificationsHTTPClientImpl{client}
 }
 
-func (c *NotificationHTTPClientImpl) Create(ctx context.Context, in *NotificationCreateRequest, opts ...http.CallOption) (*NotificationReply, error) {
+func (c *NotificationsHTTPClientImpl) Create(ctx context.Context, in *NotificationCreateRequest, opts ...http.CallOption) (*NotificationReply, error) {
 	var out NotificationReply
 	pattern := "/v1/{account}/notifications"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/notifications.v1.Notification/Create"))
+	opts = append(opts, http.Operation("/notifications.v1.Notifications/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -121,11 +121,11 @@ func (c *NotificationHTTPClientImpl) Create(ctx context.Context, in *Notificatio
 	return &out, err
 }
 
-func (c *NotificationHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+func (c *NotificationsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/notifications.v1.Notification/Health"))
+	opts = append(opts, http.Operation("/notifications.v1.Notifications/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -134,11 +134,11 @@ func (c *NotificationHTTPClientImpl) Health(ctx context.Context, in *emptypb.Emp
 	return &out, err
 }
 
-func (c *NotificationHTTPClientImpl) Search(ctx context.Context, in *NotificationSearchRequest, opts ...http.CallOption) (*NotificationReplies, error) {
+func (c *NotificationsHTTPClientImpl) Search(ctx context.Context, in *NotificationSearchRequest, opts ...http.CallOption) (*NotificationReplies, error) {
 	var out NotificationReplies
 	pattern := "/v1/{account}/notifications"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/notifications.v1.Notification/Search"))
+	opts = append(opts, http.Operation("/notifications.v1.Notifications/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
