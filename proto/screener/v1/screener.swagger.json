@@ -1,0 +1,341 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/screener/v1/screener.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Screener"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Private API",
+        "operationId": "Screener_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Screener"
+        ]
+      }
+    },
+    "/v1/screener": {
+      "post": {
+        "summary": "Public API",
+        "operationId": "Screener_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ScreenerReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ScreenerRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Screener"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ScreenerReplyPricing": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "minYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "marketcap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ScreenerReplyStrategy": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScreenerReplyStrategyResult"
+          }
+        }
+      }
+    },
+    "ScreenerReplyStrategyResult": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string"
+        },
+        "signal": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
+        }
+      }
+    },
+    "SortOrientation": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC"
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "screenerv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StategyPeriod",
+        "StategyDecision",
+        "StategyDecisionAgo"
+      ],
+      "default": "Ticker"
+    },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "Between"
+      ],
+      "default": "Equal"
+    },
+    "v1ScreenerReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ScreenerReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ScreenerReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "activity": {
+          "$ref": "#/definitions/v1ScreenerReplyActivity"
+        },
+        "shares": {
+          "$ref": "#/definitions/v1ScreenerReplyShares"
+        },
+        "pricing": {
+          "$ref": "#/definitions/ScreenerReplyPricing"
+        },
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ScreenerReplyStrategy"
+          }
+        }
+      }
+    },
+    "v1ScreenerReplyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1ScreenerReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1ScreenerRequest": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/screenerv1Filter"
+          }
+        },
+        "sort": {
+          "$ref": "#/definitions/ScreenerRequestSort"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}
