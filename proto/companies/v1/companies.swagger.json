@@ -144,41 +144,47 @@
     }
   },
   "definitions": {
-    "CompanyReplyActivity": {
+    "companiesv1Filter": {
       "type": "object",
       "properties": {
-        "economicSector": {
-          "type": "string",
-          "format": "int64"
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
         },
-        "businessSector": {
-          "type": "string",
-          "format": "int64"
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "industryGroup": {
-          "type": "string",
-          "format": "int64"
+        "industries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
         },
-        "industry": {
-          "type": "string",
-          "format": "int64"
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "CompanyReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
+        "fiscalYearEnd": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
         },
-        "float": {
-          "type": "string",
-          "format": "int64"
+        "currencyReport": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -246,7 +252,7 @@
       "type": "object",
       "properties": {
         "filters": {
-          "$ref": "#/definitions/v1Filter"
+          "$ref": "#/definitions/companiesv1Filter"
         },
         "limit": {
           "type": "integer",
@@ -347,10 +353,10 @@
           "format": "int64"
         },
         "activity": {
-          "$ref": "#/definitions/CompanyReplyActivity"
+          "$ref": "#/definitions/v1CompanyReplyActivity"
         },
         "shares": {
-          "$ref": "#/definitions/CompanyReplyShares"
+          "$ref": "#/definitions/v1CompanyReplyShares"
         },
         "currencyReport": {
           "type": "string"
@@ -367,58 +373,52 @@
         }
       }
     },
+    "v1CompanyReplyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CompanyReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1CompanySearchRequest": {
       "type": "object",
       "properties": {
         "filters": {
-          "$ref": "#/definitions/v1Filter"
+          "$ref": "#/definitions/companiesv1Filter"
         },
         "page": {
           "$ref": "#/definitions/companiesv1Page"
-        }
-      }
-    },
-    "v1Filter": {
-      "type": "object",
-      "properties": {
-        "ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "exchanges": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "industries": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "countries": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "fiscalYearEnd": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "currencyReport": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       }
     }

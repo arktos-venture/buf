@@ -38,7 +38,7 @@ func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r.POST("/v1/strategy/country", _Strategies_Country2_HTTP_Handler(srv))
 	r.POST("/v1/strategy/index", _Strategies_Index2_HTTP_Handler(srv))
 	r.POST("/v1/strategy/account", _Strategies_Account2_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategies_Health4_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategies_Health5_HTTP_Handler(srv))
 }
 
 func _Strategies_Company2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
@@ -177,7 +177,7 @@ func _Strategies_Account2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.C
 	}
 }
 
-func _Strategies_Health4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Health5_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
