@@ -28,9 +28,9 @@ type CompaniesHTTPServer interface {
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get6_HTTP_Handler(srv))
-	r.POST("/v1/companies", _Companies_Search7_HTTP_Handler(srv))
+	r.POST("/v1/companies", _Companies_Search8_HTTP_Handler(srv))
 	r.POST("/v1/companies/bulk", _Companies_BulkSearch0_HTTP_Handler(srv))
-	r.GET("/healthz", _Companies_Health14_HTTP_Handler(srv))
+	r.GET("/healthz", _Companies_Health15_HTTP_Handler(srv))
 }
 
 func _Companies_Get6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
@@ -55,7 +55,7 @@ func _Companies_Get6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Companies_Search7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Search8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanySearchRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -93,7 +93,7 @@ func _Companies_BulkSearch0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.
 	}
 }
 
-func _Companies_Health14_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Health15_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

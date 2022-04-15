@@ -27,8 +27,8 @@ type NotificationsHTTPServer interface {
 func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/{account}/notifications", _Notifications_Create3_HTTP_Handler(srv))
-	r.GET("/v1/{account}/notifications", _Notifications_Search6_HTTP_Handler(srv))
-	r.GET("/healthz", _Notifications_Health13_HTTP_Handler(srv))
+	r.GET("/v1/{account}/notifications", _Notifications_Search7_HTTP_Handler(srv))
+	r.GET("/healthz", _Notifications_Health14_HTTP_Handler(srv))
 }
 
 func _Notifications_Create3_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
@@ -53,7 +53,7 @@ func _Notifications_Create3_HTTP_Handler(srv NotificationsHTTPServer) func(ctx h
 	}
 }
 
-func _Notifications_Search6_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+func _Notifications_Search7_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -75,7 +75,7 @@ func _Notifications_Search6_HTTP_Handler(srv NotificationsHTTPServer) func(ctx h
 	}
 }
 
-func _Notifications_Health13_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+func _Notifications_Health14_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

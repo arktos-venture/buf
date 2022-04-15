@@ -18,43 +18,43 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-type NewsHTTPServer interface {
+type ScreenerHTTPServer interface {
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Search(context.Context, *NewsRequest) (*NewsReplies, error)
+	Search(context.Context, *ScreenerRequest) (*ScreenerReplies, error)
 }
 
-func RegisterNewsHTTPServer(s *http.Server, srv NewsHTTPServer) {
+func RegisterScreenerHTTPServer(s *http.Server, srv ScreenerHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/news", _News_Search2_HTTP_Handler(srv))
-	r.GET("/healthz", _News_Health7_HTTP_Handler(srv))
+	r.POST("/v1/screener", _Screener_Search0_HTTP_Handler(srv))
+	r.GET("/healthz", _Screener_Health2_HTTP_Handler(srv))
 }
 
-func _News_Search2_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _Screener_Search0_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in NewsRequest
+		var in ScreenerRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/news.v1.News/Search")
+		http.SetOperation(ctx, "/screener.v1.Screener/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Search(ctx, req.(*NewsRequest))
+			return srv.Search(ctx, req.(*ScreenerRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*NewsReplies)
+		reply := out.(*ScreenerReplies)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _News_Health7_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _Screener_Health2_HTTP_Handler(srv ScreenerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/news.v1.News/Health")
+		http.SetOperation(ctx, "/screener.v1.Screener/Health")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Health(ctx, req.(*emptypb.Empty))
 		})
@@ -67,24 +67,24 @@ func _News_Health7_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error
 	}
 }
 
-type NewsHTTPClient interface {
+type ScreenerHTTPClient interface {
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Search(ctx context.Context, req *NewsRequest, opts ...http.CallOption) (rsp *NewsReplies, err error)
+	Search(ctx context.Context, req *ScreenerRequest, opts ...http.CallOption) (rsp *ScreenerReplies, err error)
 }
 
-type NewsHTTPClientImpl struct {
+type ScreenerHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewNewsHTTPClient(client *http.Client) NewsHTTPClient {
-	return &NewsHTTPClientImpl{client}
+func NewScreenerHTTPClient(client *http.Client) ScreenerHTTPClient {
+	return &ScreenerHTTPClientImpl{client}
 }
 
-func (c *NewsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+func (c *ScreenerHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/news.v1.News/Health"))
+	opts = append(opts, http.Operation("/screener.v1.Screener/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -93,11 +93,11 @@ func (c *NewsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts
 	return &out, err
 }
 
-func (c *NewsHTTPClientImpl) Search(ctx context.Context, in *NewsRequest, opts ...http.CallOption) (*NewsReplies, error) {
-	var out NewsReplies
-	pattern := "/v1/news"
+func (c *ScreenerHTTPClientImpl) Search(ctx context.Context, in *ScreenerRequest, opts ...http.CallOption) (*ScreenerReplies, error) {
+	var out ScreenerReplies
+	pattern := "/v1/screener"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/news.v1.News/Search"))
+	opts = append(opts, http.Operation("/screener.v1.Screener/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

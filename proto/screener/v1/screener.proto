@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package screener.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/screener/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.screener.v1";
+option java_outer_classname = "ScreenerProtoV1";
+
+service Screener {
+	// Public API
+	rpc Search (ScreenerRequest) returns (ScreenerReplies)  {
+		option (google.api.http) = {
+		  	post: "/v1/screener"
+			body: "*"
+		};
+	}
+
+	// Private API
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+
+// 
+// Request
+// 
+
+enum Operator {
+	Equal = 0;
+	NotEqual = 1;
+	Greater = 2;
+	GreaterEqual = 3;
+	Less = 4;
+	LessEqual = 5;
+	In = 6;
+	Between = 7;
+}
+
+enum Argument {
+	Ticker = 0;
+	Exchange = 1;
+	Industry = 2;
+	Currency = 4;
+	MarketCap = 5;
+	ReturnYear = 6;
+	Beta5Y = 7;
+	ShareVolumeRatio = 8;
+	DividendYield = 9;
+	Price = 10;
+	PriceLastChange = 11;
+	Strategy = 12;
+	StategyPeriod = 13;
+	StategyDecision = 14;
+	StategyDecisionAgo = 15;
+}
+
+message Filter {
+	Operator operator = 1;
+	Argument argument = 2;
+	repeated string values = 3;
+}
+
+message ScreenerRequest {
+	message Sort {
+		enum Orientation {
+			ASC = 0;
+			DESC = 1;
+		}
+
+		Argument argument = 1;
+		Orientation orientation = 2;
+	}
+
+	repeated Filter filters = 1;
+	Sort sort = 2;
+  	int32 limit = 3 [(validate.rules).int32 = {gt: 0, lte: 3000}];
+}
+
+
+// 
+// Reply
+// 
+
+message ScreenerReply {
+	message Activity {
+		int64 economicSector = 1; 
+		int64 businessSector = 2;
+		int64 industryGroup = 3;
+		int64 industry = 4;
+		int64 activity = 5;
+	}
+
+	message Shares {
+		int64 outstanding = 1;
+		int64 float = 2;
+	}
+
+	message Pricing {
+		float last = 1;
+		float minYear = 2;
+		float maxYear = 3;
+		float returnYear = 4;
+		int64 marketcap = 5;
+		float beta5y = 6;
+	}
+
+	message Strategy {
+		message Result {
+			string period = 1;
+			string signal = 2;
+			google.protobuf.Timestamp ts = 3;
+		}
+		
+		repeated Result results = 1;
+	}
+
+	int64 id = 1;
+	string ticker = 2;
+	string ticker_alternative = 3;
+	string name = 4;
+	string exchange = 5;
+	Activity activity = 6;
+	Shares shares = 7;
+	Pricing pricing = 8;
+	map<string, Strategy> strategies = 9;
+}
+
+message ScreenerReplies {
+	repeated ScreenerReply results = 1;
+	int32 total = 2;
+}
