@@ -12,15 +12,16 @@ option java_package = "dev.kratos.api.industries.v1";
 option java_outer_classname = "IndustryProtoV1";
 
 service Industries {
-  rpc Get (IndustryRequest) returns (IndustryReply)  {
+  rpc List (google.protobuf.Empty) returns (IndustryReply)  {
     option (google.api.http) = {
-      get: "/v1/industry/{ref}"
+      get: "/v1/industries"
     };
   }
 
-  rpc Search (IndustrySearchRequest) returns (IndustryReply)  {
+  rpc Search (IndustrySearchRequest) returns (IndustrySearchReply)  {
     option (google.api.http) = {
-      get: "/v1/industries"
+      post: "/v1/industries"
+      body: "*"
     };
   }
 
@@ -36,17 +37,8 @@ service Industries {
 // Request
 // 
 
-message IndustryRequest {
-  int64 ref = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-}
-
 message IndustrySearchRequest {
-	message Page {
-		int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-		int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-	}
-
-	Page page = 1 [(validate.rules).message.required = true];
+  repeated int64 refs = 1 [(validate.rules).repeated.unique = true];
 }
 
 
@@ -70,4 +62,8 @@ message IndustryReply {
   }
 
   map<int64, Ref> results = 1;
+}
+
+message IndustrySearchReply {
+  repeated int64 results = 1;
 }

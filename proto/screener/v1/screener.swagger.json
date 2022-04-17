@@ -103,29 +103,28 @@
         }
       }
     },
-    "ScreenerReplyStrategy": {
+    "ScreenerReplyVolume": {
       "type": "object",
       "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ScreenerReplyStrategyResult"
-          }
-        }
-      }
-    },
-    "ScreenerReplyStrategyResult": {
-      "type": "object",
-      "properties": {
-        "period": {
-          "type": "string"
+        "last": {
+          "type": "number",
+          "format": "float"
         },
-        "signal": {
-          "type": "string"
+        "avg10d": {
+          "type": "number",
+          "format": "float"
         },
-        "ts": {
-          "type": "string",
-          "format": "date-time"
+        "avg90d": {
+          "type": "number",
+          "format": "float"
+        },
+        "share10dRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "share90dRatio": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -216,7 +215,10 @@
         "StrategyDecisionAgo",
         "SharesFloatRatio",
         "SharesVolume10dRatio",
-        "SharesVolume90dRatio"
+        "SharesVolume90dRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg90d"
       ],
       "default": "Ticker"
     },
@@ -230,6 +232,7 @@
         "Less",
         "LessEqual",
         "In",
+        "NotIn",
         "Between"
       ],
       "default": "Equal"
@@ -277,11 +280,12 @@
         "pricing": {
           "$ref": "#/definitions/ScreenerReplyPricing"
         },
-        "strategies": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ScreenerReplyStrategy"
-          }
+        "volume": {
+          "$ref": "#/definitions/ScreenerReplyVolume"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
