@@ -42,7 +42,8 @@ enum Operator {
 	Less = 4;
 	LessEqual = 5;
 	In = 6;
-	Between = 7;
+	NotIn = 7;
+	Between = 8;
 }
 
 enum Argument {
@@ -65,6 +66,9 @@ enum Argument {
 	SharesFloatRatio = 16;
 	SharesVolume10dRatio = 17;
 	SharesVolume90dRatio = 18;
+	Volume = 19;
+	VolumeAvg10d = 20;
+	VolumeAvg90d = 21;
 }
 
 message Filter {
@@ -117,14 +121,12 @@ message ScreenerReply {
 		float beta5y = 6;
 	}
 
-	message Strategy {
-		message Result {
-			string period = 1;
-			string signal = 2;
-			google.protobuf.Timestamp ts = 3;
-		}
-		
-		repeated Result results = 1;
+	message Volume {
+		float last = 1;
+		float avg10d = 2;
+		float avg90d = 3;
+		float share10dRatio = 4;
+		float share90dRatio = 5;
 	}
 
 	int64 id = 1;
@@ -135,7 +137,8 @@ message ScreenerReply {
 	Activity activity = 6;
 	Shares shares = 7;
 	Pricing pricing = 8;
-	map<string, Strategy> strategies = 9;
+	Volume volume = 9;
+	google.protobuf.Timestamp date = 10; 
 }
 
 message ScreenerReplies {

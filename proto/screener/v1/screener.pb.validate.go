@@ -481,49 +481,61 @@ func (m *ScreenerReply) validate(all bool) error {
 		}
 	}
 
-	{
-		sorted_keys := make([]string, len(m.GetStrategies()))
-		i := 0
-		for key := range m.GetStrategies() {
-			sorted_keys[i] = key
-			i++
-		}
-		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
-		for _, key := range sorted_keys {
-			val := m.GetStrategies()[key]
-			_ = val
-
-			// no validation rules for Strategies[key]
-
-			if all {
-				switch v := interface{}(val).(type) {
-				case interface{ ValidateAll() error }:
-					if err := v.ValidateAll(); err != nil {
-						errors = append(errors, ScreenerReplyValidationError{
-							field:  fmt.Sprintf("Strategies[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				case interface{ Validate() error }:
-					if err := v.Validate(); err != nil {
-						errors = append(errors, ScreenerReplyValidationError{
-							field:  fmt.Sprintf("Strategies[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				}
-			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-				if err := v.Validate(); err != nil {
-					return ScreenerReplyValidationError{
-						field:  fmt.Sprintf("Strategies[%v]", key),
-						reason: "embedded message failed validation",
-						cause:  err,
-					}
-				}
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ScreenerReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ScreenerReplyValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -1197,76 +1209,52 @@ var _ interface {
 	ErrorName() string
 } = ScreenerReply_PricingValidationError{}
 
-// Validate checks the field values on ScreenerReply_Strategy with the rules
+// Validate checks the field values on ScreenerReply_Volume with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ScreenerReply_Strategy) Validate() error {
+func (m *ScreenerReply_Volume) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ScreenerReply_Strategy with the rules
+// ValidateAll checks the field values on ScreenerReply_Volume with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ScreenerReply_StrategyMultiError, or nil if none found.
-func (m *ScreenerReply_Strategy) ValidateAll() error {
+// ScreenerReply_VolumeMultiError, or nil if none found.
+func (m *ScreenerReply_Volume) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ScreenerReply_Strategy) validate(all bool) error {
+func (m *ScreenerReply_Volume) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	for idx, item := range m.GetResults() {
-		_, _ = idx, item
+	// no validation rules for Last
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ScreenerReply_StrategyValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ScreenerReply_StrategyValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ScreenerReply_StrategyValidationError{
-					field:  fmt.Sprintf("Results[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
+	// no validation rules for Avg10D
 
-	}
+	// no validation rules for Avg90D
+
+	// no validation rules for Share10DRatio
+
+	// no validation rules for Share90DRatio
 
 	if len(errors) > 0 {
-		return ScreenerReply_StrategyMultiError(errors)
+		return ScreenerReply_VolumeMultiError(errors)
 	}
 
 	return nil
 }
 
-// ScreenerReply_StrategyMultiError is an error wrapping multiple validation
-// errors returned by ScreenerReply_Strategy.ValidateAll() if the designated
+// ScreenerReply_VolumeMultiError is an error wrapping multiple validation
+// errors returned by ScreenerReply_Volume.ValidateAll() if the designated
 // constraints aren't met.
-type ScreenerReply_StrategyMultiError []error
+type ScreenerReply_VolumeMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ScreenerReply_StrategyMultiError) Error() string {
+func (m ScreenerReply_VolumeMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1275,11 +1263,11 @@ func (m ScreenerReply_StrategyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ScreenerReply_StrategyMultiError) AllErrors() []error { return m }
+func (m ScreenerReply_VolumeMultiError) AllErrors() []error { return m }
 
-// ScreenerReply_StrategyValidationError is the validation error returned by
-// ScreenerReply_Strategy.Validate if the designated constraints aren't met.
-type ScreenerReply_StrategyValidationError struct {
+// ScreenerReply_VolumeValidationError is the validation error returned by
+// ScreenerReply_Volume.Validate if the designated constraints aren't met.
+type ScreenerReply_VolumeValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1287,24 +1275,24 @@ type ScreenerReply_StrategyValidationError struct {
 }
 
 // Field function returns field value.
-func (e ScreenerReply_StrategyValidationError) Field() string { return e.field }
+func (e ScreenerReply_VolumeValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ScreenerReply_StrategyValidationError) Reason() string { return e.reason }
+func (e ScreenerReply_VolumeValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ScreenerReply_StrategyValidationError) Cause() error { return e.cause }
+func (e ScreenerReply_VolumeValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ScreenerReply_StrategyValidationError) Key() bool { return e.key }
+func (e ScreenerReply_VolumeValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ScreenerReply_StrategyValidationError) ErrorName() string {
-	return "ScreenerReply_StrategyValidationError"
+func (e ScreenerReply_VolumeValidationError) ErrorName() string {
+	return "ScreenerReply_VolumeValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ScreenerReply_StrategyValidationError) Error() string {
+func (e ScreenerReply_VolumeValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1316,14 +1304,14 @@ func (e ScreenerReply_StrategyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sScreenerReply_Strategy.%s: %s%s",
+		"invalid %sScreenerReply_Volume.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ScreenerReply_StrategyValidationError{}
+var _ error = ScreenerReply_VolumeValidationError{}
 
 var _ interface {
 	Field() string
@@ -1331,140 +1319,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ScreenerReply_StrategyValidationError{}
-
-// Validate checks the field values on ScreenerReply_Strategy_Result with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ScreenerReply_Strategy_Result) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ScreenerReply_Strategy_Result with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// ScreenerReply_Strategy_ResultMultiError, or nil if none found.
-func (m *ScreenerReply_Strategy_Result) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ScreenerReply_Strategy_Result) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Period
-
-	// no validation rules for Signal
-
-	if all {
-		switch v := interface{}(m.GetTs()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ScreenerReply_Strategy_ResultValidationError{
-					field:  "Ts",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ScreenerReply_Strategy_ResultValidationError{
-					field:  "Ts",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetTs()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ScreenerReply_Strategy_ResultValidationError{
-				field:  "Ts",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return ScreenerReply_Strategy_ResultMultiError(errors)
-	}
-
-	return nil
-}
-
-// ScreenerReply_Strategy_ResultMultiError is an error wrapping multiple
-// validation errors returned by ScreenerReply_Strategy_Result.ValidateAll()
-// if the designated constraints aren't met.
-type ScreenerReply_Strategy_ResultMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ScreenerReply_Strategy_ResultMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ScreenerReply_Strategy_ResultMultiError) AllErrors() []error { return m }
-
-// ScreenerReply_Strategy_ResultValidationError is the validation error
-// returned by ScreenerReply_Strategy_Result.Validate if the designated
-// constraints aren't met.
-type ScreenerReply_Strategy_ResultValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ScreenerReply_Strategy_ResultValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ScreenerReply_Strategy_ResultValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ScreenerReply_Strategy_ResultValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ScreenerReply_Strategy_ResultValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ScreenerReply_Strategy_ResultValidationError) ErrorName() string {
-	return "ScreenerReply_Strategy_ResultValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ScreenerReply_Strategy_ResultValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sScreenerReply_Strategy_Result.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ScreenerReply_Strategy_ResultValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ScreenerReply_Strategy_ResultValidationError{}
+} = ScreenerReply_VolumeValidationError{}

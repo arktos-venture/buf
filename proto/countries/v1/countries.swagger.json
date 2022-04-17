@@ -147,6 +147,32 @@
     }
   },
   "definitions": {
+    "CountryIndicatorReplyResult": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "forecast": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "date": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
     "CountryReplyCode": {
       "type": "object",
       "properties": {
@@ -314,37 +340,11 @@
           "type": "string"
         },
         "results": {
-          "$ref": "#/definitions/v1CountryIndicatorReplyResult"
+          "$ref": "#/definitions/CountryIndicatorReplyResult"
         },
         "total": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "v1CountryIndicatorReplyResult": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "forecast": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "date": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
         }
       }
     },
