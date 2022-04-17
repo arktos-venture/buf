@@ -201,6 +201,7 @@
         "Ticker",
         "Exchange",
         "Industry",
+        "Index",
         "Currency",
         "MarketCap",
         "ReturnYear",
@@ -210,9 +211,12 @@
         "Price",
         "PriceLastChange",
         "Strategy",
-        "StategyPeriod",
-        "StategyDecision",
-        "StategyDecisionAgo"
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "SharesVolume10dRatio",
+        "SharesVolume90dRatio"
       ],
       "default": "Ticker"
     },

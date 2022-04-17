@@ -56,9 +56,38 @@ func (m *Filter) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Operator
+	if _, ok := Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterValidationError{
+			field:  "Operator",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Argument
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := len(m.GetValues()); l < 1 || l > 100 {
+		err := FilterValidationError{
+			field:  "Values",
+			reason: "value must contain between 1 and 100 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return FilterMultiError(errors)
@@ -159,6 +188,17 @@ func (m *ScreenerRequest) validate(all bool) error {
 
 	var errors []error
 
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := ScreenerRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	for idx, item := range m.GetFilters() {
 		_, _ = idx, item
 
@@ -191,6 +231,17 @@ func (m *ScreenerRequest) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.GetSort() == nil {
+		err := ScreenerRequestValidationError{
+			field:  "Sort",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if all {
@@ -712,9 +763,27 @@ func (m *ScreenerRequest_Sort) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Argument
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := ScreenerRequest_SortValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Orientation
+	if _, ok := ScreenerRequest_Sort_Orientation_name[int32(m.GetOrientation())]; !ok {
+		err := ScreenerRequest_SortValidationError{
+			field:  "Orientation",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ScreenerRequest_SortMultiError(errors)
