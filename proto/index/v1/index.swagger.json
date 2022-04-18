@@ -139,7 +139,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexUpdateRequest"
+              "$ref": "#/definitions/v1IndexCreateRequest"
             }
           }
         ],
@@ -208,6 +208,31 @@
     }
   },
   "definitions": {
+    "IndexReplyCompanyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -226,19 +251,6 @@
         }
       }
     },
-    "indexv1Page": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -248,32 +260,6 @@
         "value": {
           "type": "string",
           "format": "byte"
-        }
-      }
-    },
-    "v1Companies": {
-      "type": "object",
-      "properties": {
-        "add": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "update": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "delete": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
         }
       }
     },
@@ -292,15 +278,11 @@
         "currency": {
           "type": "string"
         },
+        "request": {
+          "type": "string"
+        },
         "public": {
           "type": "boolean"
-        },
-        "companies": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "number",
-            "format": "float"
-          }
         }
       }
     },
@@ -333,20 +315,30 @@
     "v1IndexReplyCompany": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         },
         "exchange": {
           "type": "string"
         },
-        "currency": {
-          "type": "string"
-        },
         "activity": {
-          "type": "string",
-          "format": "int64"
+          "$ref": "#/definitions/IndexReplyCompanyActivity"
         },
-        "size": {
+        "price": {
+          "type": "number",
+          "format": "float"
+        },
+        "change": {
           "type": "number",
           "format": "float"
         }
@@ -381,26 +373,16 @@
         }
       }
     },
-    "v1IndexUpdateRequest": {
+    "v1IndexSearchRequestPage": {
       "type": "object",
       "properties": {
-        "ref": {
-          "type": "string"
+        "number": {
+          "type": "integer",
+          "format": "int32"
         },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "public": {
-          "type": "boolean"
-        },
-        "companies": {
-          "$ref": "#/definitions/v1Companies"
+        "limit": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     }

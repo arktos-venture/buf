@@ -31,7 +31,7 @@ service Index {
     };
   }
 
-  rpc Update (IndexUpdateRequest) returns (IndexReply)  {
+  rpc Update (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       put: "/v1/index"
       body: "*"
@@ -56,22 +56,16 @@ service Index {
 // Request
 // 
 
-message Page {
-  int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-  int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-}
-
-message Companies {
-  map<int64, float> add = 1 [(validate.rules).map.keys.int64 = {gt: 0}, (validate.rules).map.values.float = {gt: 0.01, lt: 99999999}];
-  map<int64, float> update = 2 [(validate.rules).map.keys.int64 = {gt: 0}, (validate.rules).map.values.float = {gt: 0.01, lt: 99999999}];
-  repeated int64 delete = 3 [(validate.rules).repeated.unique = true, (validate.rules).repeated.items.int64 = {gt: 0}];
-}
-
 message IndexRequest {
   string ref = 1 [(validate.rules).string = {min_len: 2, max_len: 32}];
 }
 
 message IndexSearchRequest {
+  message Page {
+    int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
+    int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
+  }
+  
   string currency = 1 [(validate.rules).string.len = 3];
   bool public = 2;
   Page page = 3 [(validate.rules).message.required = true];
@@ -82,17 +76,8 @@ message IndexCreateRequest {
   string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
   string description = 3 [(validate.rules).string = {min_len: 8, max_len: 128}];
   string currency = 4 [(validate.rules).string.len = 3];
-  bool public = 5;
-  map<int64, float> companies = 6 [(validate.rules).map.keys.int64 = {gt: 0}, (validate.rules).map.values.float = {gt: 0.01, lt: 99999999}];
-}
-
-message IndexUpdateRequest {
-  string ref = 1 [(validate.rules).string = {min_len: 1, max_len: 32}];
-  string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  string description = 3 [(validate.rules).string = {min_len: 8, max_len: 128}];
-  string currency = 4 [(validate.rules).string.len = 3];
-  bool public = 5;
-  Companies companies = 6;
+  string request = 5 [(validate.rules).string = {min_len: 8, max_len: 8196}];
+  bool public = 6;
 }
 
 
@@ -102,11 +87,22 @@ message IndexUpdateRequest {
 
 message IndexReply {
   message Company {
-    string ticker = 1;
-    string exchange = 2;
-    string currency = 3;
-    int64 activity = 4;
-    float size = 5;
+    message Activity {
+      int64 economicSector = 1; 
+      int64 businessSector = 2;
+      int64 industryGroup = 3;
+      int64 industry = 4;
+      int64 activity = 5;
+    }
+
+    int64 id = 1;
+    string ticker = 2;
+    string isin = 3;
+    string name = 4;
+    string exchange = 5;
+    Activity activity = 6;
+    float price = 7;
+    float change = 8;
   }
 
   string ref = 1;
