@@ -24,7 +24,7 @@ type IndexHTTPServer interface {
 	Get(context.Context, *IndexRequest) (*IndexReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error)
-	Update(context.Context, *IndexUpdateRequest) (*IndexReply, error)
+	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
 }
 
 func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
@@ -99,13 +99,13 @@ func _Index_Create1_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) err
 
 func _Index_Update0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in IndexUpdateRequest
+		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/index.v1.Index/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*IndexUpdateRequest))
+			return srv.Update(ctx, req.(*IndexCreateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -163,7 +163,7 @@ type IndexHTTPClient interface {
 	Get(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *IndexSearchRequest, opts ...http.CallOption) (rsp *IndexSearchReplies, err error)
-	Update(ctx context.Context, req *IndexUpdateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
+	Update(ctx context.Context, req *IndexCreateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 }
 
 type IndexHTTPClientImpl struct {
@@ -239,7 +239,7 @@ func (c *IndexHTTPClientImpl) Search(ctx context.Context, in *IndexSearchRequest
 	return &out, err
 }
 
-func (c *IndexHTTPClientImpl) Update(ctx context.Context, in *IndexUpdateRequest, opts ...http.CallOption) (*IndexReply, error) {
+func (c *IndexHTTPClientImpl) Update(ctx context.Context, in *IndexCreateRequest, opts ...http.CallOption) (*IndexReply, error) {
 	var out IndexReply
 	pattern := "/v1/index"
 	path := binding.EncodeURL(pattern, in, false)
