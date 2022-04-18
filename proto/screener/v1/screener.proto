@@ -69,6 +69,7 @@ enum Argument {
 	Volume = 19;
 	VolumeAvg10d = 20;
 	VolumeAvg90d = 21;
+	Isin = 22;
 }
 
 message Filter {
@@ -90,7 +91,7 @@ message ScreenerRequest {
 
 	repeated Filter filters = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 	Sort sort = 2 [(validate.rules).message.required = true];
-  	int32 limit = 3 [(validate.rules).int32 = {gt: 0, lte: 3000}];
+  	int32 limit = 3 [(validate.rules).int32 = {gt: 0, lte: 10000}];
 }
 
 
@@ -129,16 +130,24 @@ message ScreenerReply {
 		float share90dRatio = 5;
 	}
 
+	message Dividends {
+		float yield = 1;
+		float annual = 2;
+		float yieldAvg5y = 3;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
 	string name = 4;
-	string exchange = 5;
-	Activity activity = 6;
-	Shares shares = 7;
-	Pricing pricing = 8;
-	Volume volume = 9;
-	google.protobuf.Timestamp date = 10; 
+	string isin = 5;
+	string exchange = 6;
+	Activity activity = 7;
+	Shares shares = 8;
+	Pricing pricing = 9;
+	Dividends dividends = 10;
+	Volume volume = 11;
+	google.protobuf.Timestamp date = 12; 
 }
 
 message ScreenerReplies {

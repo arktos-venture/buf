@@ -19,17 +19,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type CompaniesHTTPServer interface {
-	BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error)
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
+	Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error)
+	Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error)
 }
 
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get5_HTTP_Handler(srv))
-	r.POST("/v1/companies", _Companies_Search8_HTTP_Handler(srv))
-	r.POST("/v1/companies/bulk", _Companies_BulkSearch0_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}/stats", _Companies_Stats0_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}/similars", _Companies_Similars0_HTTP_Handler(srv))
 	r.GET("/healthz", _Companies_Health15_HTTP_Handler(srv))
 }
 
@@ -55,40 +55,46 @@ func _Companies_Get5_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Companies_Search8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Stats0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CompanySearchRequest
-		if err := ctx.Bind(&in); err != nil {
+		var in CompanyRequest
+		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/companies.v1.Companies/Search")
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/companies.v1.Companies/Stats")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Search(ctx, req.(*CompanySearchRequest))
+			return srv.Stats(ctx, req.(*CompanyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*CompanyReplies)
+		reply := out.(*CompanyStatsReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Companies_BulkSearch0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Similars0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CompanyBulkSearchRequest
-		if err := ctx.Bind(&in); err != nil {
+		var in CompanyRequest
+		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/companies.v1.Companies/BulkSearch")
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/companies.v1.Companies/Similars")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.BulkSearch(ctx, req.(*CompanyBulkSearchRequest))
+			return srv.Similars(ctx, req.(*CompanyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*CompanyReplies)
+		reply := out.(*CompanySimilarsReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -113,10 +119,10 @@ func _Companies_Health15_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Con
 }
 
 type CompaniesHTTPClient interface {
-	BulkSearch(ctx context.Context, req *CompanyBulkSearchRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Search(ctx context.Context, req *CompanySearchRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
+	Similars(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanySimilarsReply, err error)
+	Stats(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyStatsReply, err error)
 }
 
 type CompaniesHTTPClientImpl struct {
@@ -125,19 +131,6 @@ type CompaniesHTTPClientImpl struct {
 
 func NewCompaniesHTTPClient(client *http.Client) CompaniesHTTPClient {
 	return &CompaniesHTTPClientImpl{client}
-}
-
-func (c *CompaniesHTTPClientImpl) BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...http.CallOption) (*CompanyReplies, error) {
-	var out CompanyReplies
-	pattern := "/v1/companies/bulk"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/companies.v1.Companies/BulkSearch"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *CompaniesHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyReply, error) {
@@ -166,13 +159,26 @@ func (c *CompaniesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty,
 	return &out, err
 }
 
-func (c *CompaniesHTTPClientImpl) Search(ctx context.Context, in *CompanySearchRequest, opts ...http.CallOption) (*CompanyReplies, error) {
-	var out CompanyReplies
-	pattern := "/v1/companies"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/companies.v1.Companies/Search"))
+func (c *CompaniesHTTPClientImpl) Similars(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanySimilarsReply, error) {
+	var out CompanySimilarsReply
+	pattern := "/v1/company/{exchange}/{ticker}/similars"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/companies.v1.Companies/Similars"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *CompaniesHTTPClientImpl) Stats(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyStatsReply, error) {
+	var out CompanyStatsReply
+	pattern := "/v1/company/{exchange}/{ticker}/stats"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/companies.v1.Companies/Stats"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

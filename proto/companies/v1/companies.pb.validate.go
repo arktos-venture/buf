@@ -35,126 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Page with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
-func (m *Page) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Page with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in PageMultiError, or nil if none found.
-func (m *Page) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Page) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if val := m.GetNumber(); val <= 0 || val >= 10000 {
-		err := PageValidationError{
-			field:  "Number",
-			reason: "value must be inside range (0, 10000)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetLimit(); val <= 0 || val > 150 {
-		err := PageValidationError{
-			field:  "Limit",
-			reason: "value must be inside range (0, 150]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return PageMultiError(errors)
-	}
-
-	return nil
-}
-
-// PageMultiError is an error wrapping multiple validation errors returned by
-// Page.ValidateAll() if the designated constraints aren't met.
-type PageMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PageMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PageMultiError) AllErrors() []error { return m }
-
-// PageValidationError is the validation error returned by Page.Validate if the
-// designated constraints aren't met.
-type PageValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PageValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PageValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PageValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PageValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PageValidationError) ErrorName() string { return "PageValidationError" }
-
-// Error satisfies the builtin error interface
-func (e PageValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPage.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PageValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PageValidationError{}
-
 // Validate checks the field values on CompanyRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -276,626 +156,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyRequestValidationError{}
-
-// Validate checks the field values on Filter with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Filter) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Filter with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in FilterMultiError, or nil if none found.
-func (m *Filter) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Filter) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	_Filter_Ids_Unique := make(map[int64]struct{}, len(m.GetIds()))
-
-	for idx, item := range m.GetIds() {
-		_, _ = idx, item
-
-		if _, exists := _Filter_Ids_Unique[item]; exists {
-			err := FilterValidationError{
-				field:  fmt.Sprintf("Ids[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_Filter_Ids_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Ids[idx]
-	}
-
-	if len(m.GetExchanges()) > 0 {
-
-		_Filter_Exchanges_Unique := make(map[string]struct{}, len(m.GetExchanges()))
-
-		for idx, item := range m.GetExchanges() {
-			_, _ = idx, item
-
-			if _, exists := _Filter_Exchanges_Unique[item]; exists {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Exchanges[%v]", idx),
-					reason: "repeated value must contain unique items",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			} else {
-				_Filter_Exchanges_Unique[item] = struct{}{}
-			}
-
-			if l := utf8.RuneCountInString(item); l < 1 || l > 8 {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Exchanges[%v]", idx),
-					reason: "value length must be between 1 and 8 runes, inclusive",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			}
-
-		}
-
-	}
-
-	if len(m.GetIndustries()) > 0 {
-
-		_Filter_Industries_Unique := make(map[int64]struct{}, len(m.GetIndustries()))
-
-		for idx, item := range m.GetIndustries() {
-			_, _ = idx, item
-
-			if _, exists := _Filter_Industries_Unique[item]; exists {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Industries[%v]", idx),
-					reason: "repeated value must contain unique items",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			} else {
-				_Filter_Industries_Unique[item] = struct{}{}
-			}
-
-			if val := item; val < 5010101010 || val > 6310301010 {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Industries[%v]", idx),
-					reason: "value must be inside range [5010101010, 6310301010]",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			}
-
-		}
-
-	}
-
-	if len(m.GetCountries()) > 0 {
-
-		_Filter_Countries_Unique := make(map[string]struct{}, len(m.GetCountries()))
-
-		for idx, item := range m.GetCountries() {
-			_, _ = idx, item
-
-			if _, exists := _Filter_Countries_Unique[item]; exists {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Countries[%v]", idx),
-					reason: "repeated value must contain unique items",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			} else {
-				_Filter_Countries_Unique[item] = struct{}{}
-			}
-
-			if utf8.RuneCountInString(item) != 2 {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("Countries[%v]", idx),
-					reason: "value length must be 2 runes",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-
-			}
-
-		}
-
-	}
-
-	if len(m.GetFiscalYearEnd()) > 0 {
-
-		_Filter_FiscalYearEnd_Unique := make(map[int64]struct{}, len(m.GetFiscalYearEnd()))
-
-		for idx, item := range m.GetFiscalYearEnd() {
-			_, _ = idx, item
-
-			if _, exists := _Filter_FiscalYearEnd_Unique[item]; exists {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("FiscalYearEnd[%v]", idx),
-					reason: "repeated value must contain unique items",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			} else {
-				_Filter_FiscalYearEnd_Unique[item] = struct{}{}
-			}
-
-			if val := item; val < 1 || val > 12 {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("FiscalYearEnd[%v]", idx),
-					reason: "value must be inside range [1, 12]",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			}
-
-		}
-
-	}
-
-	if len(m.GetCurrencyReport()) > 0 {
-
-		_Filter_CurrencyReport_Unique := make(map[string]struct{}, len(m.GetCurrencyReport()))
-
-		for idx, item := range m.GetCurrencyReport() {
-			_, _ = idx, item
-
-			if _, exists := _Filter_CurrencyReport_Unique[item]; exists {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("CurrencyReport[%v]", idx),
-					reason: "repeated value must contain unique items",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-			} else {
-				_Filter_CurrencyReport_Unique[item] = struct{}{}
-			}
-
-			if utf8.RuneCountInString(item) != 3 {
-				err := FilterValidationError{
-					field:  fmt.Sprintf("CurrencyReport[%v]", idx),
-					reason: "value length must be 3 runes",
-				}
-				if !all {
-					return err
-				}
-				errors = append(errors, err)
-
-			}
-
-		}
-
-	}
-
-	if len(errors) > 0 {
-		return FilterMultiError(errors)
-	}
-
-	return nil
-}
-
-// FilterMultiError is an error wrapping multiple validation errors returned by
-// Filter.ValidateAll() if the designated constraints aren't met.
-type FilterMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m FilterMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m FilterMultiError) AllErrors() []error { return m }
-
-// FilterValidationError is the validation error returned by Filter.Validate if
-// the designated constraints aren't met.
-type FilterValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e FilterValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e FilterValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e FilterValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e FilterValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
-
-// Error satisfies the builtin error interface
-func (e FilterValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sFilter.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = FilterValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = FilterValidationError{}
-
-// Validate checks the field values on CompanySearchRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CompanySearchRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CompanySearchRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CompanySearchRequestMultiError, or nil if none found.
-func (m *CompanySearchRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CompanySearchRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.GetFilters() == nil {
-		err := CompanySearchRequestValidationError{
-			field:  "Filters",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetFilters()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CompanySearchRequestValidationError{
-					field:  "Filters",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CompanySearchRequestValidationError{
-					field:  "Filters",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CompanySearchRequestValidationError{
-				field:  "Filters",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetPage() == nil {
-		err := CompanySearchRequestValidationError{
-			field:  "Page",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetPage()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CompanySearchRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CompanySearchRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CompanySearchRequestValidationError{
-				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return CompanySearchRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CompanySearchRequestMultiError is an error wrapping multiple validation
-// errors returned by CompanySearchRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CompanySearchRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CompanySearchRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CompanySearchRequestMultiError) AllErrors() []error { return m }
-
-// CompanySearchRequestValidationError is the validation error returned by
-// CompanySearchRequest.Validate if the designated constraints aren't met.
-type CompanySearchRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CompanySearchRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CompanySearchRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CompanySearchRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CompanySearchRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CompanySearchRequestValidationError) ErrorName() string {
-	return "CompanySearchRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CompanySearchRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCompanySearchRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CompanySearchRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CompanySearchRequestValidationError{}
-
-// Validate checks the field values on CompanyBulkSearchRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CompanyBulkSearchRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CompanyBulkSearchRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CompanyBulkSearchRequestMultiError, or nil if none found.
-func (m *CompanyBulkSearchRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CompanyBulkSearchRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetFilters()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CompanyBulkSearchRequestValidationError{
-					field:  "Filters",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CompanyBulkSearchRequestValidationError{
-					field:  "Filters",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CompanyBulkSearchRequestValidationError{
-				field:  "Filters",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if val := m.GetLimit(); val <= 0 || val > 30000 {
-		err := CompanyBulkSearchRequestValidationError{
-			field:  "Limit",
-			reason: "value must be inside range (0, 30000]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return CompanyBulkSearchRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CompanyBulkSearchRequestMultiError is an error wrapping multiple validation
-// errors returned by CompanyBulkSearchRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CompanyBulkSearchRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CompanyBulkSearchRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CompanyBulkSearchRequestMultiError) AllErrors() []error { return m }
-
-// CompanyBulkSearchRequestValidationError is the validation error returned by
-// CompanyBulkSearchRequest.Validate if the designated constraints aren't met.
-type CompanyBulkSearchRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CompanyBulkSearchRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CompanyBulkSearchRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CompanyBulkSearchRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CompanyBulkSearchRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CompanyBulkSearchRequestValidationError) ErrorName() string {
-	return "CompanyBulkSearchRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CompanyBulkSearchRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCompanyBulkSearchRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CompanyBulkSearchRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CompanyBulkSearchRequestValidationError{}
 
 // Validate checks the field values on CompanyAddress with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -1348,58 +608,187 @@ var _ interface {
 	ErrorName() string
 } = CompanyReplyValidationError{}
 
-// Validate checks the field values on CompanyListReply with the rules defined
+// Validate checks the field values on CompanyStatsReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *CompanyListReply) Validate() error {
+func (m *CompanyStatsReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CompanyListReply with the rules
+// ValidateAll checks the field values on CompanyStatsReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CompanyListReplyMultiError, or nil if none found.
-func (m *CompanyListReply) ValidateAll() error {
+// CompanyStatsReplyMultiError, or nil if none found.
+func (m *CompanyStatsReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CompanyListReply) validate(all bool) error {
+func (m *CompanyStatsReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Id
+	if all {
+		switch v := interface{}(m.GetShares()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyStatsReplyValidationError{
+				field:  "Shares",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for Ticker
+	if all {
+		switch v := interface{}(m.GetPricing()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Pricing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Pricing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPricing()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyStatsReplyValidationError{
+				field:  "Pricing",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for TickerAlternative
+	if all {
+		switch v := interface{}(m.GetDividends()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyStatsReplyValidationError{
+				field:  "Dividends",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for Name
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for Exchange
-
-	// no validation rules for Routing
-
-	// no validation rules for Isin
-
-	// no validation rules for Activity
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyStatsReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyStatsReplyValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
-		return CompanyListReplyMultiError(errors)
+		return CompanyStatsReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// CompanyListReplyMultiError is an error wrapping multiple validation errors
-// returned by CompanyListReply.ValidateAll() if the designated constraints
+// CompanyStatsReplyMultiError is an error wrapping multiple validation errors
+// returned by CompanyStatsReply.ValidateAll() if the designated constraints
 // aren't met.
-type CompanyListReplyMultiError []error
+type CompanyStatsReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CompanyListReplyMultiError) Error() string {
+func (m CompanyStatsReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1408,11 +797,11 @@ func (m CompanyListReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CompanyListReplyMultiError) AllErrors() []error { return m }
+func (m CompanyStatsReplyMultiError) AllErrors() []error { return m }
 
-// CompanyListReplyValidationError is the validation error returned by
-// CompanyListReply.Validate if the designated constraints aren't met.
-type CompanyListReplyValidationError struct {
+// CompanyStatsReplyValidationError is the validation error returned by
+// CompanyStatsReply.Validate if the designated constraints aren't met.
+type CompanyStatsReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1420,22 +809,24 @@ type CompanyListReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e CompanyListReplyValidationError) Field() string { return e.field }
+func (e CompanyStatsReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CompanyListReplyValidationError) Reason() string { return e.reason }
+func (e CompanyStatsReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CompanyListReplyValidationError) Cause() error { return e.cause }
+func (e CompanyStatsReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CompanyListReplyValidationError) Key() bool { return e.key }
+func (e CompanyStatsReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CompanyListReplyValidationError) ErrorName() string { return "CompanyListReplyValidationError" }
+func (e CompanyStatsReplyValidationError) ErrorName() string {
+	return "CompanyStatsReplyValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e CompanyListReplyValidationError) Error() string {
+func (e CompanyStatsReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1447,14 +838,14 @@ func (e CompanyListReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCompanyListReply.%s: %s%s",
+		"invalid %sCompanyStatsReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CompanyListReplyValidationError{}
+var _ error = CompanyStatsReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -1462,24 +853,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CompanyListReplyValidationError{}
+} = CompanyStatsReplyValidationError{}
 
-// Validate checks the field values on CompanyReplies with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *CompanyReplies) Validate() error {
+// Validate checks the field values on CompanySimilarsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanySimilarsReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CompanyReplies with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in CompanyRepliesMultiError,
-// or nil if none found.
-func (m *CompanyReplies) ValidateAll() error {
+// ValidateAll checks the field values on CompanySimilarsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanySimilarsReplyMultiError, or nil if none found.
+func (m *CompanySimilarsReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CompanyReplies) validate(all bool) error {
+func (m *CompanySimilarsReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1493,7 +884,7 @@ func (m *CompanyReplies) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, CompanyRepliesValidationError{
+					errors = append(errors, CompanySimilarsReplyValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1501,7 +892,7 @@ func (m *CompanyReplies) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, CompanyRepliesValidationError{
+					errors = append(errors, CompanySimilarsReplyValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1510,7 +901,7 @@ func (m *CompanyReplies) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return CompanyRepliesValidationError{
+				return CompanySimilarsReplyValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1523,19 +914,19 @@ func (m *CompanyReplies) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return CompanyRepliesMultiError(errors)
+		return CompanySimilarsReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// CompanyRepliesMultiError is an error wrapping multiple validation errors
-// returned by CompanyReplies.ValidateAll() if the designated constraints
-// aren't met.
-type CompanyRepliesMultiError []error
+// CompanySimilarsReplyMultiError is an error wrapping multiple validation
+// errors returned by CompanySimilarsReply.ValidateAll() if the designated
+// constraints aren't met.
+type CompanySimilarsReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CompanyRepliesMultiError) Error() string {
+func (m CompanySimilarsReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1544,11 +935,11 @@ func (m CompanyRepliesMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CompanyRepliesMultiError) AllErrors() []error { return m }
+func (m CompanySimilarsReplyMultiError) AllErrors() []error { return m }
 
-// CompanyRepliesValidationError is the validation error returned by
-// CompanyReplies.Validate if the designated constraints aren't met.
-type CompanyRepliesValidationError struct {
+// CompanySimilarsReplyValidationError is the validation error returned by
+// CompanySimilarsReply.Validate if the designated constraints aren't met.
+type CompanySimilarsReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1556,22 +947,24 @@ type CompanyRepliesValidationError struct {
 }
 
 // Field function returns field value.
-func (e CompanyRepliesValidationError) Field() string { return e.field }
+func (e CompanySimilarsReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CompanyRepliesValidationError) Reason() string { return e.reason }
+func (e CompanySimilarsReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CompanyRepliesValidationError) Cause() error { return e.cause }
+func (e CompanySimilarsReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CompanyRepliesValidationError) Key() bool { return e.key }
+func (e CompanySimilarsReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CompanyRepliesValidationError) ErrorName() string { return "CompanyRepliesValidationError" }
+func (e CompanySimilarsReplyValidationError) ErrorName() string {
+	return "CompanySimilarsReplyValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e CompanyRepliesValidationError) Error() string {
+func (e CompanySimilarsReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1583,14 +976,14 @@ func (e CompanyRepliesValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCompanyReplies.%s: %s%s",
+		"invalid %sCompanySimilarsReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CompanyRepliesValidationError{}
+var _ error = CompanySimilarsReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -1598,7 +991,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CompanyRepliesValidationError{}
+} = CompanySimilarsReplyValidationError{}
 
 // Validate checks the field values on CompanyReply_Activity with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1817,3 +1210,561 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyReply_SharesValidationError{}
+
+// Validate checks the field values on CompanyStatsReply_Shares with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyStatsReply_Shares) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyStatsReply_Shares with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyStatsReply_SharesMultiError, or nil if none found.
+func (m *CompanyStatsReply_Shares) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyStatsReply_Shares) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Outstanding
+
+	// no validation rules for Float
+
+	if len(errors) > 0 {
+		return CompanyStatsReply_SharesMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyStatsReply_SharesMultiError is an error wrapping multiple validation
+// errors returned by CompanyStatsReply_Shares.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyStatsReply_SharesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyStatsReply_SharesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyStatsReply_SharesMultiError) AllErrors() []error { return m }
+
+// CompanyStatsReply_SharesValidationError is the validation error returned by
+// CompanyStatsReply_Shares.Validate if the designated constraints aren't met.
+type CompanyStatsReply_SharesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyStatsReply_SharesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyStatsReply_SharesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyStatsReply_SharesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyStatsReply_SharesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyStatsReply_SharesValidationError) ErrorName() string {
+	return "CompanyStatsReply_SharesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyStatsReply_SharesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyStatsReply_Shares.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyStatsReply_SharesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyStatsReply_SharesValidationError{}
+
+// Validate checks the field values on CompanyStatsReply_Pricing with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyStatsReply_Pricing) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyStatsReply_Pricing with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyStatsReply_PricingMultiError, or nil if none found.
+func (m *CompanyStatsReply_Pricing) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyStatsReply_Pricing) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Last
+
+	// no validation rules for MinYear
+
+	// no validation rules for MaxYear
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for Marketcap
+
+	// no validation rules for Beta5Y
+
+	if len(errors) > 0 {
+		return CompanyStatsReply_PricingMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyStatsReply_PricingMultiError is an error wrapping multiple validation
+// errors returned by CompanyStatsReply_Pricing.ValidateAll() if the
+// designated constraints aren't met.
+type CompanyStatsReply_PricingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyStatsReply_PricingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyStatsReply_PricingMultiError) AllErrors() []error { return m }
+
+// CompanyStatsReply_PricingValidationError is the validation error returned by
+// CompanyStatsReply_Pricing.Validate if the designated constraints aren't met.
+type CompanyStatsReply_PricingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyStatsReply_PricingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyStatsReply_PricingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyStatsReply_PricingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyStatsReply_PricingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyStatsReply_PricingValidationError) ErrorName() string {
+	return "CompanyStatsReply_PricingValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyStatsReply_PricingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyStatsReply_Pricing.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyStatsReply_PricingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyStatsReply_PricingValidationError{}
+
+// Validate checks the field values on CompanyStatsReply_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyStatsReply_VolumeMultiError, or nil if none found.
+func (m *CompanyStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Last
+
+	// no validation rules for Avg10D
+
+	// no validation rules for Avg90D
+
+	// no validation rules for Share10DRatio
+
+	// no validation rules for Share90DRatio
+
+	if len(errors) > 0 {
+		return CompanyStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyStatsReply_VolumeMultiError is an error wrapping multiple validation
+// errors returned by CompanyStatsReply_Volume.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// CompanyStatsReply_VolumeValidationError is the validation error returned by
+// CompanyStatsReply_Volume.Validate if the designated constraints aren't met.
+type CompanyStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyStatsReply_VolumeValidationError) ErrorName() string {
+	return "CompanyStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyStatsReply_VolumeValidationError{}
+
+// Validate checks the field values on CompanyStatsReply_Dividends with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyStatsReply_Dividends) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyStatsReply_Dividends with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyStatsReply_DividendsMultiError, or nil if none found.
+func (m *CompanyStatsReply_Dividends) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyStatsReply_Dividends) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Yield
+
+	// no validation rules for Annual
+
+	// no validation rules for YieldAvg5Y
+
+	if len(errors) > 0 {
+		return CompanyStatsReply_DividendsMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyStatsReply_DividendsMultiError is an error wrapping multiple
+// validation errors returned by CompanyStatsReply_Dividends.ValidateAll() if
+// the designated constraints aren't met.
+type CompanyStatsReply_DividendsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyStatsReply_DividendsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyStatsReply_DividendsMultiError) AllErrors() []error { return m }
+
+// CompanyStatsReply_DividendsValidationError is the validation error returned
+// by CompanyStatsReply_Dividends.Validate if the designated constraints
+// aren't met.
+type CompanyStatsReply_DividendsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyStatsReply_DividendsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyStatsReply_DividendsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyStatsReply_DividendsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyStatsReply_DividendsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyStatsReply_DividendsValidationError) ErrorName() string {
+	return "CompanyStatsReply_DividendsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyStatsReply_DividendsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyStatsReply_Dividends.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyStatsReply_DividendsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyStatsReply_DividendsValidationError{}
+
+// Validate checks the field values on CompanySimilarsReply_Result with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanySimilarsReply_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanySimilarsReply_Result with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanySimilarsReply_ResultMultiError, or nil if none found.
+func (m *CompanySimilarsReply_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanySimilarsReply_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Ticker
+
+	// no validation rules for TickerAlternative
+
+	// no validation rules for Name
+
+	// no validation rules for Exchange
+
+	// no validation rules for Isin
+
+	// no validation rules for MarketCap
+
+	if len(errors) > 0 {
+		return CompanySimilarsReply_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanySimilarsReply_ResultMultiError is an error wrapping multiple
+// validation errors returned by CompanySimilarsReply_Result.ValidateAll() if
+// the designated constraints aren't met.
+type CompanySimilarsReply_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanySimilarsReply_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanySimilarsReply_ResultMultiError) AllErrors() []error { return m }
+
+// CompanySimilarsReply_ResultValidationError is the validation error returned
+// by CompanySimilarsReply_Result.Validate if the designated constraints
+// aren't met.
+type CompanySimilarsReply_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanySimilarsReply_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanySimilarsReply_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanySimilarsReply_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanySimilarsReply_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanySimilarsReply_ResultValidationError) ErrorName() string {
+	return "CompanySimilarsReply_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanySimilarsReply_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanySimilarsReply_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanySimilarsReply_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanySimilarsReply_ResultValidationError{}

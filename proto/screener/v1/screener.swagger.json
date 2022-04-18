@@ -74,60 +74,6 @@
     }
   },
   "definitions": {
-    "ScreenerReplyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg10d": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg90d": {
-          "type": "number",
-          "format": "float"
-        },
-        "share10dRatio": {
-          "type": "number",
-          "format": "float"
-        },
-        "share90dRatio": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "ScreenerRequestSort": {
       "type": "object",
       "properties": {
@@ -177,23 +123,6 @@
         }
       }
     },
-    "screenerv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/v1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "v1Argument": {
       "type": "string",
       "enum": [
@@ -218,9 +147,27 @@
         "SharesVolume90dRatio",
         "Volume",
         "VolumeAvg10d",
-        "VolumeAvg90d"
+        "VolumeAvg90d",
+        "Isin"
       ],
       "default": "Ticker"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1Operator": {
       "type": "string",
@@ -268,6 +215,9 @@
         "name": {
           "type": "string"
         },
+        "isin": {
+          "type": "string"
+        },
         "exchange": {
           "type": "string"
         },
@@ -278,10 +228,13 @@
           "$ref": "#/definitions/v1ScreenerReplyShares"
         },
         "pricing": {
-          "$ref": "#/definitions/ScreenerReplyPricing"
+          "$ref": "#/definitions/v1ScreenerReplyPricing"
+        },
+        "dividends": {
+          "$ref": "#/definitions/v1ScreenerReplyDividends"
         },
         "volume": {
-          "$ref": "#/definitions/ScreenerReplyVolume"
+          "$ref": "#/definitions/v1ScreenerReplyVolume"
         },
         "date": {
           "type": "string",
@@ -314,6 +267,52 @@
         }
       }
     },
+    "v1ScreenerReplyDividends": {
+      "type": "object",
+      "properties": {
+        "yield": {
+          "type": "number",
+          "format": "float"
+        },
+        "annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "yieldAvg5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1ScreenerReplyPricing": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "minYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "marketcap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "v1ScreenerReplyShares": {
       "type": "object",
       "properties": {
@@ -327,13 +326,38 @@
         }
       }
     },
+    "v1ScreenerReplyVolume": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg10d": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg90d": {
+          "type": "number",
+          "format": "float"
+        },
+        "share10dRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "share90dRatio": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "v1ScreenerRequest": {
       "type": "object",
       "properties": {
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/screenerv1Filter"
+            "$ref": "#/definitions/v1Filter"
           }
         },
         "sort": {

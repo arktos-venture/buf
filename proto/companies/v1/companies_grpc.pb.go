@@ -22,9 +22,9 @@ type CompaniesClient interface {
 	// Public API
 	Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error)
 	// Public API
-	Search(ctx context.Context, in *CompanySearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
-	// Private API
-	BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
+	Stats(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyStatsReply, error)
+	// Public API
+	Similars(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanySimilarsReply, error)
 	// Private API
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -46,18 +46,18 @@ func (c *companiesClient) Get(ctx context.Context, in *CompanyRequest, opts ...g
 	return out, nil
 }
 
-func (c *companiesClient) Search(ctx context.Context, in *CompanySearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error) {
-	out := new(CompanyReplies)
-	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Search", in, out, opts...)
+func (c *companiesClient) Stats(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyStatsReply, error) {
+	out := new(CompanyStatsReply)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Stats", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *companiesClient) BulkSearch(ctx context.Context, in *CompanyBulkSearchRequest, opts ...grpc.CallOption) (*CompanyReplies, error) {
-	out := new(CompanyReplies)
-	err := c.cc.Invoke(ctx, "/companies.v1.Companies/BulkSearch", in, out, opts...)
+func (c *companiesClient) Similars(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanySimilarsReply, error) {
+	out := new(CompanySimilarsReply)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Similars", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,9 +80,9 @@ type CompaniesServer interface {
 	// Public API
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	// Public API
-	Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error)
-	// Private API
-	BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error)
+	Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error)
+	// Public API
+	Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error)
 	// Private API
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCompaniesServer()
@@ -95,11 +95,11 @@ type UnimplementedCompaniesServer struct {
 func (UnimplementedCompaniesServer) Get(context.Context, *CompanyRequest) (*CompanyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCompaniesServer) Search(context.Context, *CompanySearchRequest) (*CompanyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+func (UnimplementedCompaniesServer) Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
 }
-func (UnimplementedCompaniesServer) BulkSearch(context.Context, *CompanyBulkSearchRequest) (*CompanyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BulkSearch not implemented")
+func (UnimplementedCompaniesServer) Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Similars not implemented")
 }
 func (UnimplementedCompaniesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -135,38 +135,38 @@ func _Companies_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Companies_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanySearchRequest)
+func _Companies_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CompaniesServer).Search(ctx, in)
+		return srv.(CompaniesServer).Stats(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/companies.v1.Companies/Search",
+		FullMethod: "/companies.v1.Companies/Stats",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompaniesServer).Search(ctx, req.(*CompanySearchRequest))
+		return srv.(CompaniesServer).Stats(ctx, req.(*CompanyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Companies_BulkSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanyBulkSearchRequest)
+func _Companies_Similars_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CompaniesServer).BulkSearch(ctx, in)
+		return srv.(CompaniesServer).Similars(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/companies.v1.Companies/BulkSearch",
+		FullMethod: "/companies.v1.Companies/Similars",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompaniesServer).BulkSearch(ctx, req.(*CompanyBulkSearchRequest))
+		return srv.(CompaniesServer).Similars(ctx, req.(*CompanyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -201,12 +201,12 @@ var Companies_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Companies_Get_Handler,
 		},
 		{
-			MethodName: "Search",
-			Handler:    _Companies_Search_Handler,
+			MethodName: "Stats",
+			Handler:    _Companies_Stats_Handler,
 		},
 		{
-			MethodName: "BulkSearch",
-			Handler:    _Companies_BulkSearch_Handler,
+			MethodName: "Similars",
+			Handler:    _Companies_Similars_Handler,
 		},
 		{
 			MethodName: "Health",
