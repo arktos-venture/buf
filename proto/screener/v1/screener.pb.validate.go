@@ -273,10 +273,10 @@ func (m *ScreenerRequest) validate(all bool) error {
 		}
 	}
 
-	if val := m.GetLimit(); val <= 0 || val > 3000 {
+	if val := m.GetLimit(); val <= 0 || val > 10000 {
 		err := ScreenerRequestValidationError{
 			field:  "Limit",
-			reason: "value must be inside range (0, 3000]",
+			reason: "value must be inside range (0, 10000]",
 		}
 		if !all {
 			return err
@@ -392,6 +392,8 @@ func (m *ScreenerReply) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for Isin
+
 	// no validation rules for Exchange
 
 	if all {
@@ -475,6 +477,35 @@ func (m *ScreenerReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return ScreenerReplyValidationError{
 				field:  "Pricing",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetDividends()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ScreenerReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ScreenerReplyValidationError{
+				field:  "Dividends",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1320,3 +1351,111 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ScreenerReply_VolumeValidationError{}
+
+// Validate checks the field values on ScreenerReply_Dividends with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ScreenerReply_Dividends) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ScreenerReply_Dividends with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ScreenerReply_DividendsMultiError, or nil if none found.
+func (m *ScreenerReply_Dividends) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ScreenerReply_Dividends) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Yield
+
+	// no validation rules for Annual
+
+	// no validation rules for YieldAvg5Y
+
+	if len(errors) > 0 {
+		return ScreenerReply_DividendsMultiError(errors)
+	}
+
+	return nil
+}
+
+// ScreenerReply_DividendsMultiError is an error wrapping multiple validation
+// errors returned by ScreenerReply_Dividends.ValidateAll() if the designated
+// constraints aren't met.
+type ScreenerReply_DividendsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ScreenerReply_DividendsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ScreenerReply_DividendsMultiError) AllErrors() []error { return m }
+
+// ScreenerReply_DividendsValidationError is the validation error returned by
+// ScreenerReply_Dividends.Validate if the designated constraints aren't met.
+type ScreenerReply_DividendsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScreenerReply_DividendsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScreenerReply_DividendsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScreenerReply_DividendsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScreenerReply_DividendsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScreenerReply_DividendsValidationError) ErrorName() string {
+	return "ScreenerReply_DividendsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScreenerReply_DividendsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScreenerReply_Dividends.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScreenerReply_DividendsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScreenerReply_DividendsValidationError{}
