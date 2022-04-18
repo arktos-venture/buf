@@ -39,72 +39,6 @@
         ]
       }
     },
-    "/v1/companies": {
-      "post": {
-        "summary": "Public API",
-        "operationId": "Companies_Search",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompanySearchRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Companies"
-        ]
-      }
-    },
-    "/v1/companies/bulk": {
-      "post": {
-        "summary": "Private API",
-        "operationId": "Companies_BulkSearch",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompanyBulkSearchRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Companies"
-        ]
-      }
-    },
     "/v1/company/{exchange}/{ticker}": {
       "get": {
         "summary": "Public API",
@@ -141,66 +75,83 @@
           "Companies"
         ]
       }
+    },
+    "/v1/company/{exchange}/{ticker}/similars": {
+      "get": {
+        "summary": "Public API",
+        "operationId": "Companies_Similars",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanySimilarsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Companies"
+        ]
+      }
+    },
+    "/v1/company/{exchange}/{ticker}/stats": {
+      "get": {
+        "summary": "Public API",
+        "operationId": "Companies_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Companies"
+        ]
+      }
     }
   },
   "definitions": {
-    "companiesv1Filter": {
-      "type": "object",
-      "properties": {
-        "ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "exchanges": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "industries": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "countries": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "fiscalYearEnd": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "currencyReport": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "companiesv1Page": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -248,18 +199,6 @@
         }
       }
     },
-    "v1CompanyBulkSearchRequest": {
-      "type": "object",
-      "properties": {
-        "filters": {
-          "$ref": "#/definitions/companiesv1Filter"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "v1CompanyContact": {
       "type": "object",
       "properties": {
@@ -271,52 +210,6 @@
         },
         "email": {
           "type": "string"
-        }
-      }
-    },
-    "v1CompanyListReply": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1CompanyReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1CompanyListReply"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     },
@@ -411,14 +304,151 @@
         }
       }
     },
-    "v1CompanySearchRequest": {
+    "v1CompanySimilarsReply": {
       "type": "object",
       "properties": {
-        "filters": {
-          "$ref": "#/definitions/companiesv1Filter"
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CompanySimilarsReplyResult"
+          }
         },
-        "page": {
-          "$ref": "#/definitions/companiesv1Page"
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CompanySimilarsReplyResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "marketCap": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CompanyStatsReply": {
+      "type": "object",
+      "properties": {
+        "shares": {
+          "$ref": "#/definitions/v1CompanyStatsReplyShares"
+        },
+        "pricing": {
+          "$ref": "#/definitions/v1CompanyStatsReplyPricing"
+        },
+        "dividends": {
+          "$ref": "#/definitions/v1CompanyStatsReplyDividends"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1CompanyStatsReplyVolume"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1CompanyStatsReplyDividends": {
+      "type": "object",
+      "properties": {
+        "yield": {
+          "type": "number",
+          "format": "float"
+        },
+        "annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "yieldAvg5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1CompanyStatsReplyPricing": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "minYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "marketcap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1CompanyStatsReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CompanyStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg10d": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg90d": {
+          "type": "number",
+          "format": "float"
+        },
+        "share10dRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "share90dRatio": {
+          "type": "number",
+          "format": "float"
         }
       }
     }
