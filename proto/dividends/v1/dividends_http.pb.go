@@ -19,19 +19,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type DividendsHTTPServer interface {
-	Analytics(context.Context, *DividendsRequest) (*DividendsReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *DividendsRequest) (*DividendsReply, error)
 }
 
 func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/dividends", _Dividends_Search6_HTTP_Handler(srv))
-	r.POST("/v1/dividends/analytics", _Dividends_Analytics0_HTTP_Handler(srv))
+	r.POST("/v1/dividends", _Dividends_Search7_HTTP_Handler(srv))
 	r.GET("/healthz", _Dividends_Health13_HTTP_Handler(srv))
 }
 
-func _Dividends_Search6_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Search7_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DividendsRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -40,25 +38,6 @@ func _Dividends_Search6_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Cont
 		http.SetOperation(ctx, "/dividends.v1.Dividends/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Search(ctx, req.(*DividendsRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*DividendsReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Dividends_Analytics0_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in DividendsRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/dividends.v1.Dividends/Analytics")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Analytics(ctx, req.(*DividendsRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -89,7 +68,6 @@ func _Dividends_Health13_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Con
 }
 
 type DividendsHTTPClient interface {
-	Analytics(ctx context.Context, req *DividendsRequest, opts ...http.CallOption) (rsp *DividendsReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *DividendsRequest, opts ...http.CallOption) (rsp *DividendsReply, err error)
 }
@@ -100,19 +78,6 @@ type DividendsHTTPClientImpl struct {
 
 func NewDividendsHTTPClient(client *http.Client) DividendsHTTPClient {
 	return &DividendsHTTPClientImpl{client}
-}
-
-func (c *DividendsHTTPClientImpl) Analytics(ctx context.Context, in *DividendsRequest, opts ...http.CallOption) (*DividendsReply, error) {
-	var out DividendsReply
-	pattern := "/v1/dividends/analytics"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/dividends.v1.Dividends/Analytics"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *DividendsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {

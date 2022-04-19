@@ -76,7 +76,7 @@
               "type": "object",
               "properties": {
                 "date": {
-                  "$ref": "#/definitions/splitsv1DatePeriod"
+                  "$ref": "#/definitions/v1DatePeriod"
                 }
               }
             }
@@ -125,7 +125,7 @@
               "type": "object",
               "properties": {
                 "date": {
-                  "$ref": "#/definitions/splitsv1DateTimestamp"
+                  "$ref": "#/definitions/v1DateTimestamp"
                 }
               }
             }
@@ -168,7 +168,7 @@
               "type": "object",
               "properties": {
                 "date": {
-                  "$ref": "#/definitions/splitsv1DateTimestamp"
+                  "$ref": "#/definitions/v1DateTimestamp"
                 }
               }
             }
@@ -211,7 +211,16 @@
         }
       }
     },
-    "splitsv1DatePeriod": {
+    "splitsv1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m"
+      ],
+      "default": "d"
+    },
+    "v1DatePeriod": {
       "type": "object",
       "properties": {
         "interval": {
@@ -222,7 +231,7 @@
         }
       }
     },
-    "splitsv1DateTimestamp": {
+    "v1DateTimestamp": {
       "type": "object",
       "properties": {
         "interval": {
@@ -233,15 +242,6 @@
           "format": "date-time"
         }
       }
-    },
-    "splitsv1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m"
-      ],
-      "default": "d"
     },
     "v1SplitBulkReplies": {
       "type": "object",

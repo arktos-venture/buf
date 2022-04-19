@@ -69,41 +69,52 @@
           "Dividends"
         ]
       }
-    },
-    "/v1/dividends/analytics": {
-      "post": {
-        "operationId": "Dividends_Analytics",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DividendsReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1DividendsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Dividends"
-        ]
-      }
     }
   },
   "definitions": {
+    "dividendsv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "dividendsv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/dividendsv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/dividendsv1Argument"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "dividendsv1Interval": {
+      "type": "string",
+      "enum": [
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "m"
+    },
+    "dividendsv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -134,26 +145,6 @@
         }
       }
     },
-    "v1Date": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/v1DateInterval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
-    },
-    "v1DateInterval": {
-      "type": "string",
-      "enum": [
-        "none",
-        "q",
-        "y"
-      ],
-      "default": "none"
-    },
     "v1DividendsReply": {
       "type": "object",
       "properties": {
@@ -168,21 +159,21 @@
           "type": "array",
           "items": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           }
         },
         "recordDate": {
           "type": "array",
           "items": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           }
         },
         "paymentDate": {
           "type": "array",
           "items": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           }
         },
         "date": {
@@ -197,14 +188,14 @@
     "v1DividendsRequest": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
+        "interval": {
+          "$ref": "#/definitions/dividendsv1Interval"
         },
-        "exchange": {
-          "type": "string"
-        },
-        "date": {
-          "$ref": "#/definitions/v1Date"
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dividendsv1Filter"
+          }
         }
       }
     }

@@ -13,100 +13,9 @@ option java_package = "dev.kratos.api.quotes.v1";
 option java_outer_classname = "QuotesProtoV1";
 
 service Quotes {
-  rpc Company (QuotesCompanyPeriodRequest) returns (QuotesReply)  {
+  rpc Search (QuotesRequest) returns (QuotesReply)  {
     option (google.api.http) = {
-      post: "/v1/quotes/company"
-      body: "*"
-    };
-  }
-
-  rpc CompanyTimestamp (QuotesCompanyTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/company/ts"
-      body: "*"
-    };
-  }
-
-  rpc Currency (QuotesCurrencyPeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/currency"
-      body: "*"
-    };
-  }
-
-  rpc CurrencyTimestamp (QuotesCurrencyTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/currency/ts"
-      body: "*"
-    };
-  }
-
-  rpc Industry (QuotesIndustryPeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/{exchange}/industry"
-      body: "*"
-    };
-  }
-
-  rpc IndustryTimestamp (QuotesIndustryTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/{exchange}/industry/ts"
-      body: "*"
-    };
-  }
-
-  rpc Exchange (QuotesExchangePeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/exchange"
-      body: "*"
-    };
-  }
-
-  rpc ExchangeTimestamp (QuotesExchangeTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/exchange/ts"
-      body: "*"
-    };
-  }
-
-  rpc Country (QuotesCountryPeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/country"
-      body: "*"
-    };
-  }
-
-  rpc CountryTimestamp (QuotesCountryTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/country/ts"
-      body: "*"
-    };
-  }
-
-  rpc Index (QuotesIndexPeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/index"
-      body: "*"
-    };
-  }
-
-  rpc IndexTimestamp (QuotesIndexTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/index/ts"
-      body: "*"
-    };
-  }
-
-  rpc Account (QuotesAccountPeriodRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/account"
-      body: "*"
-    };
-  }
-
-  rpc AccountTimestamp (QuotesAccountTimestampRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes/account/ts"
+      post: "/v1/quotes"
       body: "*"
     };
   }
@@ -121,6 +30,23 @@ service Quotes {
 // 
 // Request
 // 
+
+enum TSDB {
+  Companies = 0;
+  Currencies = 1;
+  Industries = 2;
+  Exchanges = 3;
+  Countries = 4;
+  Indexes = 5;
+  Accounts = 6;
+}
+
+enum Interval {
+  d = 0;
+  w = 1;
+  m = 2;
+  y = 3;
+}
 
 enum Indicator {
   Macd = 0;
@@ -141,165 +67,46 @@ enum Indicator {
   Sma200 = 15;
 }
 
-enum Interval {
-  d = 0;
-  w = 1;
-  m = 2;
+enum Operator {
+	Equal = 0;
+	Greater = 1;
+	GreaterEqual = 2;
+	Less = 3;
+	LessEqual = 4;
 }
 
-message DatePeriod {
-  Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-  string period = 2 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
+enum Argument {
+	Ticker = 0;
+	Exchange = 1;
+  Industry = 2;
+  Index = 3;
+  Country = 4;
+  Currency = 5;
+  Time = 6;
 }
 
-message DateTimestamp {
-  Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-  google.protobuf.Timestamp date = 2;
+message Filter {
+	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
+	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
+	string value = 3;
 }
 
-message QuotesCompanyPeriodRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 4 [(validate.rules).message.required = true];
+message QuotesRequest {
+  TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+  Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
+	repeated Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
-message QuotesCompanyTimestampRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 4 [(validate.rules).message.required = true];
-}
-
-message QuotesCurrencyPeriodRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesCurrencyTimestampRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesIndustryPeriodRequest {
-  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 4 [(validate.rules).message.required = true];
-}
-
-message QuotesIndustryTimestampRequest {
-  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  int64 industry = 2 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 4 [(validate.rules).message.required = true];
-}
-
-message QuotesExchangePeriodRequest {
-  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string country = 2 [(validate.rules).string.len = 2];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 4 [(validate.rules).message.required = true];
-}
-
-message QuotesExchangeTimestampRequest {
-  string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string country = 2 [(validate.rules).string.len = 2];
-  repeated Indicator indicators = 3 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 4 [(validate.rules).message.required = true];
-}
-
-message QuotesCountryPeriodRequest {
-  string country = 1 [(validate.rules).string.len = 2];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesCountryTimestampRequest {
-  string country = 1 [(validate.rules).string.len = 2];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesIndexPeriodRequest {
-  string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesIndexTimestampRequest {
-  string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesAccountPeriodRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 16}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DatePeriod date = 3 [(validate.rules).message.required = true];
-}
-
-message QuotesAccountTimestampRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 16}];
-  repeated Indicator indicators = 2 [(validate.rules).repeated.unique = true];
-  DateTimestamp date = 3 [(validate.rules).message.required = true];
-}
-
-message SplitPeriodRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  DatePeriod date = 3 [(validate.rules).message.required = true];
-}
-
-message SplitTimestampRequest {
-  string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  DateTimestamp date = 3 [(validate.rules).message.required = true];
-}
 
 // 
 // Reply
 // 
 
 message QuotesReply {
-  message Indicators {
-    message Macd {
-      repeated float value = 1;
-      repeated float signal = 2;
-      repeated float history = 3;
-    }
-
-    message Bband {
-      repeated float upper = 1;
-      repeated float middle = 2;
-      repeated float lower = 3;
-    }
-
-    Macd macd = 1;
-    repeated float rsi = 2;
-    repeated float obv = 3;
-    repeated float adx = 4;
-    repeated float beta = 5;
-    repeated float atr = 6;
-    repeated Bband bband = 7;
-    repeated float ema = 8;
-    repeated float linearreg = 9;
-    repeated float willr = 10;
-    repeated float stddev = 11;
-    repeated float sma10 = 12;
-    repeated float sma20 = 13;
-    repeated float sma50 = 14;
-    repeated float sma100 = 15;
-    repeated float sma200 = 16;
-  }
-
 	repeated float open = 1;
 	repeated float close = 2;
 	repeated float low = 3;
 	repeated float high = 4;
 	repeated float volume = 5;
-  Indicators indicators = 6;
 	repeated google.protobuf.Timestamp date = 7;
 }

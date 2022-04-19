@@ -78,7 +78,7 @@
       "type": "object",
       "properties": {
         "argument": {
-          "$ref": "#/definitions/v1Argument"
+          "$ref": "#/definitions/screenerv1Argument"
         },
         "orientation": {
           "$ref": "#/definitions/SortOrientation"
@@ -123,7 +123,7 @@
         }
       }
     },
-    "v1Argument": {
+    "screenerv1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
@@ -152,14 +152,14 @@
       ],
       "default": "Ticker"
     },
-    "v1Filter": {
+    "screenerv1Filter": {
       "type": "object",
       "properties": {
         "operator": {
-          "$ref": "#/definitions/v1Operator"
+          "$ref": "#/definitions/screenerv1Operator"
         },
         "argument": {
-          "$ref": "#/definitions/v1Argument"
+          "$ref": "#/definitions/screenerv1Argument"
         },
         "values": {
           "type": "array",
@@ -169,7 +169,7 @@
         }
       }
     },
-    "v1Operator": {
+    "screenerv1Operator": {
       "type": "string",
       "enum": [
         "Equal",
@@ -357,7 +357,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1Filter"
+            "$ref": "#/definitions/screenerv1Filter"
           }
         },
         "sort": {

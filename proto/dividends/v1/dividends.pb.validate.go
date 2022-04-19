@@ -35,30 +35,30 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Date with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
-func (m *Date) Validate() error {
+// Validate checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Filter) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Date with the rules defined in the
+// ValidateAll checks the field values on Filter with the rules defined in the
 // proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in DateMultiError, or nil if none found.
-func (m *Date) ValidateAll() error {
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Date) validate(all bool) error {
+func (m *Filter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if _, ok := Date_Interval_name[int32(m.GetInterval())]; !ok {
-		err := DateValidationError{
-			field:  "Interval",
+	if _, ok := Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterValidationError{
+			field:  "Operator",
 			reason: "value must be one of the defined enum values",
 		}
 		if !all {
@@ -67,10 +67,10 @@ func (m *Date) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _Date_Period_InLookup[m.GetPeriod()]; !ok {
-		err := DateValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y 2y 3y 5y 10y 20y 30y]",
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -78,19 +78,21 @@ func (m *Date) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Value
+
 	if len(errors) > 0 {
-		return DateMultiError(errors)
+		return FilterMultiError(errors)
 	}
 
 	return nil
 }
 
-// DateMultiError is an error wrapping multiple validation errors returned by
-// Date.ValidateAll() if the designated constraints aren't met.
-type DateMultiError []error
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DateMultiError) Error() string {
+func (m FilterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -99,11 +101,11 @@ func (m DateMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DateMultiError) AllErrors() []error { return m }
+func (m FilterMultiError) AllErrors() []error { return m }
 
-// DateValidationError is the validation error returned by Date.Validate if the
-// designated constraints aren't met.
-type DateValidationError struct {
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -111,22 +113,22 @@ type DateValidationError struct {
 }
 
 // Field function returns field value.
-func (e DateValidationError) Field() string { return e.field }
+func (e FilterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DateValidationError) Reason() string { return e.reason }
+func (e FilterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DateValidationError) Cause() error { return e.cause }
+func (e FilterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DateValidationError) Key() bool { return e.key }
+func (e FilterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DateValidationError) ErrorName() string { return "DateValidationError" }
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DateValidationError) Error() string {
+func (e FilterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -138,14 +140,14 @@ func (e DateValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDate.%s: %s%s",
+		"invalid %sFilter.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DateValidationError{}
+var _ error = FilterValidationError{}
 
 var _ interface {
 	Field() string
@@ -153,25 +155,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DateValidationError{}
-
-var _Date_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-	"2y":   {},
-	"3y":   {},
-	"5y":   {},
-	"10y":  {},
-	"20y":  {},
-	"30y":  {},
-}
+} = FilterValidationError{}
 
 // Validate checks the field values on DividendsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -195,10 +179,10 @@ func (m *DividendsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
+	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
 		err := DividendsRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
+			field:  "Interval",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -206,10 +190,10 @@ func (m *DividendsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
 		err := DividendsRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
 		}
 		if !all {
 			return err
@@ -217,44 +201,38 @@ func (m *DividendsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetDate() == nil {
-		err := DividendsRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
 
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DividendsRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DividendsRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DividendsRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, DividendsRequestValidationError{
-					field:  "Date",
+				return DividendsRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DividendsRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -356,6 +334,108 @@ func (m *DividendsReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	for idx, item := range m.GetDeclarationDate() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("DeclarationDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("DeclarationDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DividendsReplyValidationError{
+					field:  fmt.Sprintf("DeclarationDate[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetRecordDate() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("RecordDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("RecordDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DividendsReplyValidationError{
+					field:  fmt.Sprintf("RecordDate[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetPaymentDate() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("PaymentDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DividendsReplyValidationError{
+						field:  fmt.Sprintf("PaymentDate[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DividendsReplyValidationError{
+					field:  fmt.Sprintf("PaymentDate[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	for idx, item := range m.GetDate() {
 		_, _ = idx, item
