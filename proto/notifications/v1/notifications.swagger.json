@@ -240,7 +240,7 @@
         },
         "date": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },

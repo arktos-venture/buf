@@ -4,6 +4,7 @@ package quotes.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/quotes/v1;v1";
@@ -153,7 +154,7 @@ message DatePeriod {
 
 message DateTimestamp {
   Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-  int64 time = 2 [(validate.rules).int64 = {gte: 1}];
+  google.protobuf.Timestamp date = 2;
 }
 
 message QuotesCompanyPeriodRequest {
@@ -300,5 +301,5 @@ message QuotesReply {
 	repeated float high = 4;
 	repeated float volume = 5;
   Indicators indicators = 6;
-	repeated int64 date = 7;
+	repeated google.protobuf.Timestamp date = 7;
 }

@@ -4,6 +4,7 @@ package strategy_results.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/strategy_results/v1;v1";
@@ -144,5 +145,5 @@ message StrategyReply {
 	Interval interval = 2;
 	Status status = 3;
 	int64 status_ago = 4;
-	int64 date = 5;
+	google.protobuf.Timestamp date = 5;
 }

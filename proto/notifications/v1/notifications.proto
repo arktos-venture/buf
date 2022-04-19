@@ -4,6 +4,7 @@ package notifications.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/notifications/v1;v1";
@@ -88,7 +89,7 @@ message NotificationReply {
 	Level level = 2; 
 	string title = 3;
 	string description = 4;
-	int64 date = 5;
+	google.protobuf.Timestamp date = 5;
 }
 
 message NotificationReplies {

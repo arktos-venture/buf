@@ -228,9 +228,9 @@
         "interval": {
           "$ref": "#/definitions/splitsv1Interval"
         },
-        "time": {
+        "date": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },
@@ -300,7 +300,7 @@
         },
         "date": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     }

@@ -4,6 +4,7 @@ package dividends.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/dividend/v1;v1";
@@ -61,9 +62,9 @@ message DividendsRequest {
 // 
 
 message DividendsReply {
-	repeated float values = 4;
-	repeated int64 declarationDate = 5;
-	repeated int64 recordDate = 6;
-	repeated int64 paymentDate = 7;
-	repeated int64 date = 8;
+	repeated float values = 1;
+	repeated int64 declarationDate = 2;
+	repeated int64 recordDate = 3;
+	repeated int64 paymentDate = 4;
+	repeated google.protobuf.Timestamp date = 5;
 }
