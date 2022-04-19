@@ -4,6 +4,7 @@ package accounts.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/accounts/v1;v1";
@@ -74,7 +75,7 @@ message AccountReply {
 	string user = 3;
 	string currency = 4;
 	bool active = 5;
-	int64 date = 6;
+	google.protobuf.Timestamp date = 6;
 }
 
 message AccountReplies {

@@ -68,18 +68,6 @@ func (m *NewsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := NewsRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
 		err := NewsRequestValidationError{
 			field:  "Exchange",
@@ -207,11 +195,38 @@ func (m *NewsReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Date
-
 	// no validation rules for Title
 
 	// no validation rules for Link
+
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NewsReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NewsReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NewsReplyValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return NewsReplyMultiError(errors)

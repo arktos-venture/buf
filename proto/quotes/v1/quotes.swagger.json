@@ -741,9 +741,9 @@
         "interval": {
           "$ref": "#/definitions/quotesv1Interval"
         },
-        "time": {
+        "date": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },
@@ -1039,7 +1039,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           }
         }
       }

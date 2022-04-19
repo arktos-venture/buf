@@ -4,6 +4,7 @@ package splits.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/splits/v1;v1";
@@ -57,7 +58,7 @@ message DatePeriod {
 
 message DateTimestamp {
   Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-  int64 time = 2 [(validate.rules).int64 = {gte: 1}];
+  google.protobuf.Timestamp date = 2;
 }
 
 message SplitPeriodRequest {
@@ -84,7 +85,7 @@ message SplitBulkRequest {
 message SplitsReply {
   float from = 1;
   float to = 2;
-  int64 date = 3;
+  google.protobuf.Timestamp date = 3;
 }
 
 message SplitReplies {

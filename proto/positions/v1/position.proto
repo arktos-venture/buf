@@ -4,6 +4,7 @@ package positions.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/positions/v1;v1";
@@ -72,7 +73,7 @@ message PositionCompanyReply {
   float size = 3;
   Money money = 4;
   Performance performance = 5;
-  int64 date = 6;
+  google.protobuf.Timestamp date = 6;
 }
 
 message PositionCompanyReplies {
@@ -83,7 +84,7 @@ message PositionCompanyReplies {
 message PositionCurrencyReply {
   string currency = 1;
   float size = 2;
-  int64 date = 3;
+  google.protobuf.Timestamp date = 3;
 }
 
 message PositionCurrencyReplies {

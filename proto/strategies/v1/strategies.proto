@@ -4,6 +4,7 @@ package strategies.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/strategies/v1;v1";
@@ -141,6 +142,6 @@ message StrategyReply {
 	repeated float close = 1;
 	repeated Action action = 2;
 	repeated float delta = 3;
-	repeated int64 date = 4;
+	repeated google.protobuf.Timestamp date = 4;
 	int32 total = 5;
 }

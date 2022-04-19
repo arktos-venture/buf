@@ -4,6 +4,7 @@ package news.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/news/v1;v1";
@@ -33,9 +34,8 @@ service News {
 
 message NewsRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string currency = 2 [(validate.rules).string.len = 3];
-	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string period = 4 [(validate.rules).string = {in: ["last", "3d", "1w"]}];
+	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w"]}];
 }
 
 
@@ -44,10 +44,10 @@ message NewsRequest {
 // 
 
 message NewsReply {
-	int64 date = 1;
-	string title = 2;
-	string link = 3;
-	repeated string tags = 5;
+	string title = 1;
+	string link = 2;
+	repeated string tags = 3;
+	google.protobuf.Timestamp date = 4;
 }
 
 message NewsReplies {

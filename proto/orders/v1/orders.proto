@@ -4,6 +4,7 @@ package orders.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/orders/v1;v1";
@@ -137,7 +138,7 @@ message OrderReply {
   Size size = 8;
   Price price = 9;
   string status = 10;
-  int64 date = 11;
+  google.protobuf.Timestamp date = 11;
 }
 
 message OrderReplies {
