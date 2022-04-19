@@ -92,16 +92,6 @@ message Filter {
 }
 
 message QuotesRequest {
-	message Sort {
-		enum Orientation {
-			ASC = 0;
-			DESC = 1;
-		}
-
-		Argument argument = 1 [(validate.rules).enum = {defined_only: true}];
-		Orientation orientation = 2 [(validate.rules).enum = {defined_only: true}];
-	}
-
   TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
   Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
 	repeated Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
