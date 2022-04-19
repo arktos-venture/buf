@@ -35,31 +35,30 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on DatePeriod with the rules defined in the
+// Validate checks the field values on Filter with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *DatePeriod) Validate() error {
+func (m *Filter) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DatePeriod with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DatePeriodMultiError, or
-// nil if none found.
-func (m *DatePeriod) ValidateAll() error {
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DatePeriod) validate(all bool) error {
+func (m *Filter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
-		err := DatePeriodValidationError{
-			field:  "Interval",
+	if _, ok := Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterValidationError{
+			field:  "Operator",
 			reason: "value must be one of the defined enum values",
 		}
 		if !all {
@@ -68,10 +67,10 @@ func (m *DatePeriod) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _DatePeriod_Period_InLookup[m.GetPeriod()]; !ok {
-		err := DatePeriodValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y 2y 3y 5y 10y 20y 30y]",
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -79,19 +78,21 @@ func (m *DatePeriod) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Value
+
 	if len(errors) > 0 {
-		return DatePeriodMultiError(errors)
+		return FilterMultiError(errors)
 	}
 
 	return nil
 }
 
-// DatePeriodMultiError is an error wrapping multiple validation errors
-// returned by DatePeriod.ValidateAll() if the designated constraints aren't met.
-type DatePeriodMultiError []error
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DatePeriodMultiError) Error() string {
+func (m FilterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -100,11 +101,11 @@ func (m DatePeriodMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DatePeriodMultiError) AllErrors() []error { return m }
+func (m FilterMultiError) AllErrors() []error { return m }
 
-// DatePeriodValidationError is the validation error returned by
-// DatePeriod.Validate if the designated constraints aren't met.
-type DatePeriodValidationError struct {
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -112,22 +113,22 @@ type DatePeriodValidationError struct {
 }
 
 // Field function returns field value.
-func (e DatePeriodValidationError) Field() string { return e.field }
+func (e FilterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DatePeriodValidationError) Reason() string { return e.reason }
+func (e FilterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DatePeriodValidationError) Cause() error { return e.cause }
+func (e FilterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DatePeriodValidationError) Key() bool { return e.key }
+func (e FilterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DatePeriodValidationError) ErrorName() string { return "DatePeriodValidationError" }
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DatePeriodValidationError) Error() string {
+func (e FilterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -139,14 +140,14 @@ func (e DatePeriodValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDatePeriod.%s: %s%s",
+		"invalid %sFilter.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DatePeriodValidationError{}
+var _ error = FilterValidationError{}
 
 var _ interface {
 	Field() string
@@ -154,50 +155,43 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DatePeriodValidationError{}
+} = FilterValidationError{}
 
-var _DatePeriod_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-	"2y":   {},
-	"3y":   {},
-	"5y":   {},
-	"10y":  {},
-	"20y":  {},
-	"30y":  {},
-}
-
-// Validate checks the field values on DateTimestamp with the rules defined in
+// Validate checks the field values on QuotesRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *DateTimestamp) Validate() error {
+func (m *QuotesRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DateTimestamp with the rules defined
+// ValidateAll checks the field values on QuotesRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DateTimestampMultiError, or
+// result is a list of violation errors wrapped in QuotesRequestMultiError, or
 // nil if none found.
-func (m *DateTimestamp) ValidateAll() error {
+func (m *QuotesRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DateTimestamp) validate(all bool) error {
+func (m *QuotesRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	if _, ok := TSDB_name[int32(m.GetTsdb())]; !ok {
+		err := QuotesRequestValidationError{
+			field:  "Tsdb",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
-		err := DateTimestampValidationError{
+		err := QuotesRequestValidationError{
 			field:  "Interval",
 			reason: "value must be one of the defined enum values",
 		}
@@ -207,49 +201,65 @@ func (m *DateTimestamp) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DateTimestampValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := QuotesRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, QuotesRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, QuotesRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, DateTimestampValidationError{
-					field:  "Date",
+				return QuotesRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DateTimestampValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
-		return DateTimestampMultiError(errors)
+		return QuotesRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// DateTimestampMultiError is an error wrapping multiple validation errors
-// returned by DateTimestamp.ValidateAll() if the designated constraints
+// QuotesRequestMultiError is an error wrapping multiple validation errors
+// returned by QuotesRequest.ValidateAll() if the designated constraints
 // aren't met.
-type DateTimestampMultiError []error
+type QuotesRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DateTimestampMultiError) Error() string {
+func (m QuotesRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -258,11 +268,11 @@ func (m DateTimestampMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DateTimestampMultiError) AllErrors() []error { return m }
+func (m QuotesRequestMultiError) AllErrors() []error { return m }
 
-// DateTimestampValidationError is the validation error returned by
-// DateTimestamp.Validate if the designated constraints aren't met.
-type DateTimestampValidationError struct {
+// QuotesRequestValidationError is the validation error returned by
+// QuotesRequest.Validate if the designated constraints aren't met.
+type QuotesRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -270,22 +280,22 @@ type DateTimestampValidationError struct {
 }
 
 // Field function returns field value.
-func (e DateTimestampValidationError) Field() string { return e.field }
+func (e QuotesRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DateTimestampValidationError) Reason() string { return e.reason }
+func (e QuotesRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DateTimestampValidationError) Cause() error { return e.cause }
+func (e QuotesRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DateTimestampValidationError) Key() bool { return e.key }
+func (e QuotesRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DateTimestampValidationError) ErrorName() string { return "DateTimestampValidationError" }
+func (e QuotesRequestValidationError) ErrorName() string { return "QuotesRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DateTimestampValidationError) Error() string {
+func (e QuotesRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -297,14 +307,14 @@ func (e DateTimestampValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDateTimestamp.%s: %s%s",
+		"invalid %sQuotesRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DateTimestampValidationError{}
+var _ error = QuotesRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -312,2851 +322,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DateTimestampValidationError{}
-
-// Validate checks the field values on QuotesCompanyPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCompanyPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCompanyPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesCompanyPeriodRequestMultiError, or nil if none found.
-func (m *QuotesCompanyPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCompanyPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := QuotesCompanyPeriodRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesCompanyPeriodRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesCompanyPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCompanyPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesCompanyPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCompanyPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCompanyPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCompanyPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCompanyPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCompanyPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCompanyPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCompanyPeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCompanyPeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesCompanyPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCompanyPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCompanyPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCompanyPeriodRequestValidationError is the validation error returned
-// by QuotesCompanyPeriodRequest.Validate if the designated constraints aren't met.
-type QuotesCompanyPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCompanyPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCompanyPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCompanyPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCompanyPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCompanyPeriodRequestValidationError) ErrorName() string {
-	return "QuotesCompanyPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCompanyPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCompanyPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCompanyPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCompanyPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesCompanyTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCompanyTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCompanyTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesCompanyTimestampRequestMultiError, or nil if none found.
-func (m *QuotesCompanyTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCompanyTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := QuotesCompanyTimestampRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesCompanyTimestampRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesCompanyTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCompanyTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesCompanyTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCompanyTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCompanyTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCompanyTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCompanyTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCompanyTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCompanyTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCompanyTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCompanyTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesCompanyTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCompanyTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCompanyTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCompanyTimestampRequestValidationError is the validation error
-// returned by QuotesCompanyTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesCompanyTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCompanyTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCompanyTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCompanyTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCompanyTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCompanyTimestampRequestValidationError) ErrorName() string {
-	return "QuotesCompanyTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCompanyTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCompanyTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCompanyTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCompanyTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesCurrencyPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCurrencyPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCurrencyPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesCurrencyPeriodRequestMultiError, or nil if none found.
-func (m *QuotesCurrencyPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCurrencyPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := QuotesCurrencyPeriodRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesCurrencyPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCurrencyPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesCurrencyPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCurrencyPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCurrencyPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCurrencyPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCurrencyPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCurrencyPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCurrencyPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCurrencyPeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCurrencyPeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesCurrencyPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCurrencyPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCurrencyPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCurrencyPeriodRequestValidationError is the validation error returned
-// by QuotesCurrencyPeriodRequest.Validate if the designated constraints
-// aren't met.
-type QuotesCurrencyPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCurrencyPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCurrencyPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCurrencyPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCurrencyPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCurrencyPeriodRequestValidationError) ErrorName() string {
-	return "QuotesCurrencyPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCurrencyPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCurrencyPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCurrencyPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCurrencyPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesCurrencyTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCurrencyTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCurrencyTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesCurrencyTimestampRequestMultiError, or nil if none found.
-func (m *QuotesCurrencyTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCurrencyTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := QuotesCurrencyTimestampRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesCurrencyTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCurrencyTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesCurrencyTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCurrencyTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCurrencyTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCurrencyTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCurrencyTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCurrencyTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCurrencyTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCurrencyTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCurrencyTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesCurrencyTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCurrencyTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCurrencyTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCurrencyTimestampRequestValidationError is the validation error
-// returned by QuotesCurrencyTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesCurrencyTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCurrencyTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCurrencyTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCurrencyTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCurrencyTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCurrencyTimestampRequestValidationError) ErrorName() string {
-	return "QuotesCurrencyTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCurrencyTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCurrencyTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCurrencyTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCurrencyTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesIndustryPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesIndustryPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesIndustryPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesIndustryPeriodRequestMultiError, or nil if none found.
-func (m *QuotesIndustryPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesIndustryPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesIndustryPeriodRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetIndustry(); val < 5010101010 || val > 6310301010 {
-		err := QuotesIndustryPeriodRequestValidationError{
-			field:  "Industry",
-			reason: "value must be inside range [5010101010, 6310301010]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesIndustryPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesIndustryPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesIndustryPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesIndustryPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesIndustryPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesIndustryPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesIndustryPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesIndustryPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesIndustryPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesIndustryPeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesIndustryPeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesIndustryPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesIndustryPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesIndustryPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesIndustryPeriodRequestValidationError is the validation error returned
-// by QuotesIndustryPeriodRequest.Validate if the designated constraints
-// aren't met.
-type QuotesIndustryPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesIndustryPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesIndustryPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesIndustryPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesIndustryPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesIndustryPeriodRequestValidationError) ErrorName() string {
-	return "QuotesIndustryPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesIndustryPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesIndustryPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesIndustryPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesIndustryPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesIndustryTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesIndustryTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesIndustryTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesIndustryTimestampRequestMultiError, or nil if none found.
-func (m *QuotesIndustryTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesIndustryTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesIndustryTimestampRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetIndustry(); val < 5010101010 || val > 6310301010 {
-		err := QuotesIndustryTimestampRequestValidationError{
-			field:  "Industry",
-			reason: "value must be inside range [5010101010, 6310301010]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesIndustryTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesIndustryTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesIndustryTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesIndustryTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesIndustryTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesIndustryTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesIndustryTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesIndustryTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesIndustryTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesIndustryTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesIndustryTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesIndustryTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesIndustryTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesIndustryTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesIndustryTimestampRequestValidationError is the validation error
-// returned by QuotesIndustryTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesIndustryTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesIndustryTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesIndustryTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesIndustryTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesIndustryTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesIndustryTimestampRequestValidationError) ErrorName() string {
-	return "QuotesIndustryTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesIndustryTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesIndustryTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesIndustryTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesIndustryTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesExchangePeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesExchangePeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesExchangePeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesExchangePeriodRequestMultiError, or nil if none found.
-func (m *QuotesExchangePeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesExchangePeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesExchangePeriodRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
-		err := QuotesExchangePeriodRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	_QuotesExchangePeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesExchangePeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesExchangePeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesExchangePeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesExchangePeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesExchangePeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesExchangePeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesExchangePeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesExchangePeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesExchangePeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesExchangePeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesExchangePeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesExchangePeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesExchangePeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesExchangePeriodRequestValidationError is the validation error returned
-// by QuotesExchangePeriodRequest.Validate if the designated constraints
-// aren't met.
-type QuotesExchangePeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesExchangePeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesExchangePeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesExchangePeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesExchangePeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesExchangePeriodRequestValidationError) ErrorName() string {
-	return "QuotesExchangePeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesExchangePeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesExchangePeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesExchangePeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesExchangePeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesExchangeTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesExchangeTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesExchangeTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesExchangeTimestampRequestMultiError, or nil if none found.
-func (m *QuotesExchangeTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesExchangeTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := QuotesExchangeTimestampRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
-		err := QuotesExchangeTimestampRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	_QuotesExchangeTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesExchangeTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesExchangeTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesExchangeTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesExchangeTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesExchangeTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesExchangeTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesExchangeTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesExchangeTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesExchangeTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesExchangeTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesExchangeTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesExchangeTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesExchangeTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesExchangeTimestampRequestValidationError is the validation error
-// returned by QuotesExchangeTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesExchangeTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesExchangeTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesExchangeTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesExchangeTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesExchangeTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesExchangeTimestampRequestValidationError) ErrorName() string {
-	return "QuotesExchangeTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesExchangeTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesExchangeTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesExchangeTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesExchangeTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesCountryPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCountryPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCountryPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesCountryPeriodRequestMultiError, or nil if none found.
-func (m *QuotesCountryPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCountryPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
-		err := QuotesCountryPeriodRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	_QuotesCountryPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCountryPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesCountryPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCountryPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCountryPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCountryPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCountryPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCountryPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCountryPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCountryPeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCountryPeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesCountryPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCountryPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCountryPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCountryPeriodRequestValidationError is the validation error returned
-// by QuotesCountryPeriodRequest.Validate if the designated constraints aren't met.
-type QuotesCountryPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCountryPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCountryPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCountryPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCountryPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCountryPeriodRequestValidationError) ErrorName() string {
-	return "QuotesCountryPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCountryPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCountryPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCountryPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCountryPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesCountryTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesCountryTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesCountryTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesCountryTimestampRequestMultiError, or nil if none found.
-func (m *QuotesCountryTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesCountryTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if utf8.RuneCountInString(m.GetCountry()) != 2 {
-		err := QuotesCountryTimestampRequestValidationError{
-			field:  "Country",
-			reason: "value length must be 2 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	_QuotesCountryTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesCountryTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesCountryTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesCountryTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesCountryTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesCountryTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesCountryTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesCountryTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesCountryTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesCountryTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesCountryTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesCountryTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesCountryTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesCountryTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesCountryTimestampRequestValidationError is the validation error
-// returned by QuotesCountryTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesCountryTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesCountryTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesCountryTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesCountryTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesCountryTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesCountryTimestampRequestValidationError) ErrorName() string {
-	return "QuotesCountryTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesCountryTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesCountryTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesCountryTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesCountryTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesIndexPeriodRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesIndexPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesIndexPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesIndexPeriodRequestMultiError, or nil if none found.
-func (m *QuotesIndexPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesIndexPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetIndex()); l < 3 || l > 32 {
-		err := QuotesIndexPeriodRequestValidationError{
-			field:  "Index",
-			reason: "value length must be between 3 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesIndexPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesIndexPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesIndexPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesIndexPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesIndexPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesIndexPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesIndexPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesIndexPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesIndexPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesIndexPeriodRequestMultiError is an error wrapping multiple validation
-// errors returned by QuotesIndexPeriodRequest.ValidateAll() if the designated
-// constraints aren't met.
-type QuotesIndexPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesIndexPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesIndexPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesIndexPeriodRequestValidationError is the validation error returned by
-// QuotesIndexPeriodRequest.Validate if the designated constraints aren't met.
-type QuotesIndexPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesIndexPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesIndexPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesIndexPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesIndexPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesIndexPeriodRequestValidationError) ErrorName() string {
-	return "QuotesIndexPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesIndexPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesIndexPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesIndexPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesIndexPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesIndexTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesIndexTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesIndexTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesIndexTimestampRequestMultiError, or nil if none found.
-func (m *QuotesIndexTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesIndexTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetIndex()); l < 3 || l > 32 {
-		err := QuotesIndexTimestampRequestValidationError{
-			field:  "Index",
-			reason: "value length must be between 3 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesIndexTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesIndexTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesIndexTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesIndexTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesIndexTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesIndexTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesIndexTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesIndexTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesIndexTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesIndexTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesIndexTimestampRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesIndexTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesIndexTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesIndexTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesIndexTimestampRequestValidationError is the validation error returned
-// by QuotesIndexTimestampRequest.Validate if the designated constraints
-// aren't met.
-type QuotesIndexTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesIndexTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesIndexTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesIndexTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesIndexTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesIndexTimestampRequestValidationError) ErrorName() string {
-	return "QuotesIndexTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesIndexTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesIndexTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesIndexTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesIndexTimestampRequestValidationError{}
-
-// Validate checks the field values on QuotesAccountPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesAccountPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesAccountPeriodRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesAccountPeriodRequestMultiError, or nil if none found.
-func (m *QuotesAccountPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesAccountPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 16 {
-		err := QuotesAccountPeriodRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 16 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesAccountPeriodRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesAccountPeriodRequest_Indicators_Unique[item]; exists {
-			err := QuotesAccountPeriodRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesAccountPeriodRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesAccountPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesAccountPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesAccountPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesAccountPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesAccountPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesAccountPeriodRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesAccountPeriodRequest.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesAccountPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesAccountPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesAccountPeriodRequestMultiError) AllErrors() []error { return m }
-
-// QuotesAccountPeriodRequestValidationError is the validation error returned
-// by QuotesAccountPeriodRequest.Validate if the designated constraints aren't met.
-type QuotesAccountPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesAccountPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesAccountPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesAccountPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesAccountPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesAccountPeriodRequestValidationError) ErrorName() string {
-	return "QuotesAccountPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesAccountPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesAccountPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesAccountPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesAccountPeriodRequestValidationError{}
-
-// Validate checks the field values on QuotesAccountTimestampRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesAccountTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesAccountTimestampRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// QuotesAccountTimestampRequestMultiError, or nil if none found.
-func (m *QuotesAccountTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesAccountTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 16 {
-		err := QuotesAccountTimestampRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 16 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_QuotesAccountTimestampRequest_Indicators_Unique := make(map[Indicator]struct{}, len(m.GetIndicators()))
-
-	for idx, item := range m.GetIndicators() {
-		_, _ = idx, item
-
-		if _, exists := _QuotesAccountTimestampRequest_Indicators_Unique[item]; exists {
-			err := QuotesAccountTimestampRequestValidationError{
-				field:  fmt.Sprintf("Indicators[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_QuotesAccountTimestampRequest_Indicators_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Indicators[idx]
-	}
-
-	if m.GetDate() == nil {
-		err := QuotesAccountTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesAccountTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesAccountTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesAccountTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return QuotesAccountTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesAccountTimestampRequestMultiError is an error wrapping multiple
-// validation errors returned by QuotesAccountTimestampRequest.ValidateAll()
-// if the designated constraints aren't met.
-type QuotesAccountTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesAccountTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesAccountTimestampRequestMultiError) AllErrors() []error { return m }
-
-// QuotesAccountTimestampRequestValidationError is the validation error
-// returned by QuotesAccountTimestampRequest.Validate if the designated
-// constraints aren't met.
-type QuotesAccountTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesAccountTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesAccountTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesAccountTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesAccountTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesAccountTimestampRequestValidationError) ErrorName() string {
-	return "QuotesAccountTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesAccountTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesAccountTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesAccountTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesAccountTimestampRequestValidationError{}
-
-// Validate checks the field values on SplitPeriodRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SplitPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitPeriodRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitPeriodRequestMultiError, or nil if none found.
-func (m *SplitPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := SplitPeriodRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := SplitPeriodRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetDate() == nil {
-		err := SplitPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SplitPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitPeriodRequestMultiError is an error wrapping multiple validation errors
-// returned by SplitPeriodRequest.ValidateAll() if the designated constraints
-// aren't met.
-type SplitPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitPeriodRequestMultiError) AllErrors() []error { return m }
-
-// SplitPeriodRequestValidationError is the validation error returned by
-// SplitPeriodRequest.Validate if the designated constraints aren't met.
-type SplitPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitPeriodRequestValidationError) ErrorName() string {
-	return "SplitPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SplitPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitPeriodRequestValidationError{}
-
-// Validate checks the field values on SplitTimestampRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SplitTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitTimestampRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitTimestampRequestMultiError, or nil if none found.
-func (m *SplitTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := SplitTimestampRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := SplitTimestampRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetDate() == nil {
-		err := SplitTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SplitTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitTimestampRequestMultiError is an error wrapping multiple validation
-// errors returned by SplitTimestampRequest.ValidateAll() if the designated
-// constraints aren't met.
-type SplitTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitTimestampRequestMultiError) AllErrors() []error { return m }
-
-// SplitTimestampRequestValidationError is the validation error returned by
-// SplitTimestampRequest.Validate if the designated constraints aren't met.
-type SplitTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitTimestampRequestValidationError) ErrorName() string {
-	return "SplitTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SplitTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitTimestampRequestValidationError{}
+} = QuotesRequestValidationError{}
 
 // Validate checks the field values on QuotesReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -3179,35 +345,6 @@ func (m *QuotesReply) validate(all bool) error {
 	}
 
 	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetIndicators()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesReplyValidationError{
-					field:  "Indicators",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesReplyValidationError{
-					field:  "Indicators",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetIndicators()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesReplyValidationError{
-				field:  "Indicators",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	for idx, item := range m.GetDate() {
 		_, _ = idx, item
@@ -3320,310 +457,64 @@ var _ interface {
 	ErrorName() string
 } = QuotesReplyValidationError{}
 
-// Validate checks the field values on QuotesReply_Indicators with the rules
+// Validate checks the field values on QuotesRequest_Sort with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesReply_Indicators) Validate() error {
+func (m *QuotesRequest_Sort) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on QuotesReply_Indicators with the rules
+// ValidateAll checks the field values on QuotesRequest_Sort with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// QuotesReply_IndicatorsMultiError, or nil if none found.
-func (m *QuotesReply_Indicators) ValidateAll() error {
+// QuotesRequest_SortMultiError, or nil if none found.
+func (m *QuotesRequest_Sort) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *QuotesReply_Indicators) validate(all bool) error {
+func (m *QuotesRequest_Sort) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if all {
-		switch v := interface{}(m.GetMacd()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuotesReply_IndicatorsValidationError{
-					field:  "Macd",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, QuotesReply_IndicatorsValidationError{
-					field:  "Macd",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := QuotesRequest_SortValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
 		}
-	} else if v, ok := interface{}(m.GetMacd()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuotesReply_IndicatorsValidationError{
-				field:  "Macd",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+		if !all {
+			return err
 		}
+		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetBband() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, QuotesReply_IndicatorsValidationError{
-						field:  fmt.Sprintf("Bband[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, QuotesReply_IndicatorsValidationError{
-						field:  fmt.Sprintf("Bband[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return QuotesReply_IndicatorsValidationError{
-					field:  fmt.Sprintf("Bband[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
+	if _, ok := QuotesRequest_Sort_Orientation_name[int32(m.GetOrientation())]; !ok {
+		err := QuotesRequest_SortValidationError{
+			field:  "Orientation",
+			reason: "value must be one of the defined enum values",
 		}
-
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
-		return QuotesReply_IndicatorsMultiError(errors)
+		return QuotesRequest_SortMultiError(errors)
 	}
 
 	return nil
 }
 
-// QuotesReply_IndicatorsMultiError is an error wrapping multiple validation
-// errors returned by QuotesReply_Indicators.ValidateAll() if the designated
-// constraints aren't met.
-type QuotesReply_IndicatorsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesReply_IndicatorsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesReply_IndicatorsMultiError) AllErrors() []error { return m }
-
-// QuotesReply_IndicatorsValidationError is the validation error returned by
-// QuotesReply_Indicators.Validate if the designated constraints aren't met.
-type QuotesReply_IndicatorsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesReply_IndicatorsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesReply_IndicatorsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesReply_IndicatorsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesReply_IndicatorsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesReply_IndicatorsValidationError) ErrorName() string {
-	return "QuotesReply_IndicatorsValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesReply_IndicatorsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesReply_Indicators.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesReply_IndicatorsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesReply_IndicatorsValidationError{}
-
-// Validate checks the field values on QuotesReply_Indicators_Macd with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesReply_Indicators_Macd) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesReply_Indicators_Macd with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesReply_Indicators_MacdMultiError, or nil if none found.
-func (m *QuotesReply_Indicators_Macd) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesReply_Indicators_Macd) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return QuotesReply_Indicators_MacdMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesReply_Indicators_MacdMultiError is an error wrapping multiple
-// validation errors returned by QuotesReply_Indicators_Macd.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesReply_Indicators_MacdMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m QuotesReply_Indicators_MacdMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m QuotesReply_Indicators_MacdMultiError) AllErrors() []error { return m }
-
-// QuotesReply_Indicators_MacdValidationError is the validation error returned
-// by QuotesReply_Indicators_Macd.Validate if the designated constraints
+// QuotesRequest_SortMultiError is an error wrapping multiple validation errors
+// returned by QuotesRequest_Sort.ValidateAll() if the designated constraints
 // aren't met.
-type QuotesReply_Indicators_MacdValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuotesReply_Indicators_MacdValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuotesReply_Indicators_MacdValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuotesReply_Indicators_MacdValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuotesReply_Indicators_MacdValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuotesReply_Indicators_MacdValidationError) ErrorName() string {
-	return "QuotesReply_Indicators_MacdValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e QuotesReply_Indicators_MacdValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuotesReply_Indicators_Macd.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuotesReply_Indicators_MacdValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuotesReply_Indicators_MacdValidationError{}
-
-// Validate checks the field values on QuotesReply_Indicators_Bband with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *QuotesReply_Indicators_Bband) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on QuotesReply_Indicators_Bband with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// QuotesReply_Indicators_BbandMultiError, or nil if none found.
-func (m *QuotesReply_Indicators_Bband) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *QuotesReply_Indicators_Bband) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return QuotesReply_Indicators_BbandMultiError(errors)
-	}
-
-	return nil
-}
-
-// QuotesReply_Indicators_BbandMultiError is an error wrapping multiple
-// validation errors returned by QuotesReply_Indicators_Bband.ValidateAll() if
-// the designated constraints aren't met.
-type QuotesReply_Indicators_BbandMultiError []error
+type QuotesRequest_SortMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m QuotesReply_Indicators_BbandMultiError) Error() string {
+func (m QuotesRequest_SortMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -3632,12 +523,11 @@ func (m QuotesReply_Indicators_BbandMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m QuotesReply_Indicators_BbandMultiError) AllErrors() []error { return m }
+func (m QuotesRequest_SortMultiError) AllErrors() []error { return m }
 
-// QuotesReply_Indicators_BbandValidationError is the validation error returned
-// by QuotesReply_Indicators_Bband.Validate if the designated constraints
-// aren't met.
-type QuotesReply_Indicators_BbandValidationError struct {
+// QuotesRequest_SortValidationError is the validation error returned by
+// QuotesRequest_Sort.Validate if the designated constraints aren't met.
+type QuotesRequest_SortValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -3645,24 +535,24 @@ type QuotesReply_Indicators_BbandValidationError struct {
 }
 
 // Field function returns field value.
-func (e QuotesReply_Indicators_BbandValidationError) Field() string { return e.field }
+func (e QuotesRequest_SortValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e QuotesReply_Indicators_BbandValidationError) Reason() string { return e.reason }
+func (e QuotesRequest_SortValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e QuotesReply_Indicators_BbandValidationError) Cause() error { return e.cause }
+func (e QuotesRequest_SortValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e QuotesReply_Indicators_BbandValidationError) Key() bool { return e.key }
+func (e QuotesRequest_SortValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e QuotesReply_Indicators_BbandValidationError) ErrorName() string {
-	return "QuotesReply_Indicators_BbandValidationError"
+func (e QuotesRequest_SortValidationError) ErrorName() string {
+	return "QuotesRequest_SortValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e QuotesReply_Indicators_BbandValidationError) Error() string {
+func (e QuotesRequest_SortValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -3674,14 +564,14 @@ func (e QuotesReply_Indicators_BbandValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sQuotesReply_Indicators_Bband.%s: %s%s",
+		"invalid %sQuotesRequest_Sort.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = QuotesReply_Indicators_BbandValidationError{}
+var _ error = QuotesRequest_SortValidationError{}
 
 var _ interface {
 	Field() string
@@ -3689,4 +579,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = QuotesReply_Indicators_BbandValidationError{}
+} = QuotesRequest_SortValidationError{}

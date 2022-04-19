@@ -19,20 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuotesClient interface {
-	Company(ctx context.Context, in *QuotesCompanyPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	CompanyTimestamp(ctx context.Context, in *QuotesCompanyTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Currency(ctx context.Context, in *QuotesCurrencyPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	CurrencyTimestamp(ctx context.Context, in *QuotesCurrencyTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Industry(ctx context.Context, in *QuotesIndustryPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	IndustryTimestamp(ctx context.Context, in *QuotesIndustryTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Exchange(ctx context.Context, in *QuotesExchangePeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	ExchangeTimestamp(ctx context.Context, in *QuotesExchangeTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Country(ctx context.Context, in *QuotesCountryPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	CountryTimestamp(ctx context.Context, in *QuotesCountryTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Index(ctx context.Context, in *QuotesIndexPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	IndexTimestamp(ctx context.Context, in *QuotesIndexTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	Account(ctx context.Context, in *QuotesAccountPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error)
-	AccountTimestamp(ctx context.Context, in *QuotesAccountTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error)
+	Search(ctx context.Context, in *QuotesRequest, opts ...grpc.CallOption) (*QuotesReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -44,126 +31,9 @@ func NewQuotesClient(cc grpc.ClientConnInterface) QuotesClient {
 	return &quotesClient{cc}
 }
 
-func (c *quotesClient) Company(ctx context.Context, in *QuotesCompanyPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
+func (c *quotesClient) Search(ctx context.Context, in *QuotesRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
 	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Company", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) CompanyTimestamp(ctx context.Context, in *QuotesCompanyTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/CompanyTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Currency(ctx context.Context, in *QuotesCurrencyPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Currency", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) CurrencyTimestamp(ctx context.Context, in *QuotesCurrencyTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/CurrencyTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Industry(ctx context.Context, in *QuotesIndustryPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Industry", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) IndustryTimestamp(ctx context.Context, in *QuotesIndustryTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/IndustryTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Exchange(ctx context.Context, in *QuotesExchangePeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Exchange", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) ExchangeTimestamp(ctx context.Context, in *QuotesExchangeTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/ExchangeTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Country(ctx context.Context, in *QuotesCountryPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Country", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) CountryTimestamp(ctx context.Context, in *QuotesCountryTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/CountryTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Index(ctx context.Context, in *QuotesIndexPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Index", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) IndexTimestamp(ctx context.Context, in *QuotesIndexTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/IndexTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) Account(ctx context.Context, in *QuotesAccountPeriodRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Account", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *quotesClient) AccountTimestamp(ctx context.Context, in *QuotesAccountTimestampRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
-	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/AccountTimestamp", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -183,20 +53,7 @@ func (c *quotesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...gr
 // All implementations must embed UnimplementedQuotesServer
 // for forward compatibility
 type QuotesServer interface {
-	Company(context.Context, *QuotesCompanyPeriodRequest) (*QuotesReply, error)
-	CompanyTimestamp(context.Context, *QuotesCompanyTimestampRequest) (*QuotesReply, error)
-	Currency(context.Context, *QuotesCurrencyPeriodRequest) (*QuotesReply, error)
-	CurrencyTimestamp(context.Context, *QuotesCurrencyTimestampRequest) (*QuotesReply, error)
-	Industry(context.Context, *QuotesIndustryPeriodRequest) (*QuotesReply, error)
-	IndustryTimestamp(context.Context, *QuotesIndustryTimestampRequest) (*QuotesReply, error)
-	Exchange(context.Context, *QuotesExchangePeriodRequest) (*QuotesReply, error)
-	ExchangeTimestamp(context.Context, *QuotesExchangeTimestampRequest) (*QuotesReply, error)
-	Country(context.Context, *QuotesCountryPeriodRequest) (*QuotesReply, error)
-	CountryTimestamp(context.Context, *QuotesCountryTimestampRequest) (*QuotesReply, error)
-	Index(context.Context, *QuotesIndexPeriodRequest) (*QuotesReply, error)
-	IndexTimestamp(context.Context, *QuotesIndexTimestampRequest) (*QuotesReply, error)
-	Account(context.Context, *QuotesAccountPeriodRequest) (*QuotesReply, error)
-	AccountTimestamp(context.Context, *QuotesAccountTimestampRequest) (*QuotesReply, error)
+	Search(context.Context, *QuotesRequest) (*QuotesReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedQuotesServer()
 }
@@ -205,47 +62,8 @@ type QuotesServer interface {
 type UnimplementedQuotesServer struct {
 }
 
-func (UnimplementedQuotesServer) Company(context.Context, *QuotesCompanyPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Company not implemented")
-}
-func (UnimplementedQuotesServer) CompanyTimestamp(context.Context, *QuotesCompanyTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CompanyTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Currency(context.Context, *QuotesCurrencyPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Currency not implemented")
-}
-func (UnimplementedQuotesServer) CurrencyTimestamp(context.Context, *QuotesCurrencyTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CurrencyTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Industry(context.Context, *QuotesIndustryPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Industry not implemented")
-}
-func (UnimplementedQuotesServer) IndustryTimestamp(context.Context, *QuotesIndustryTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IndustryTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Exchange(context.Context, *QuotesExchangePeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Exchange not implemented")
-}
-func (UnimplementedQuotesServer) ExchangeTimestamp(context.Context, *QuotesExchangeTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Country(context.Context, *QuotesCountryPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Country not implemented")
-}
-func (UnimplementedQuotesServer) CountryTimestamp(context.Context, *QuotesCountryTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CountryTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Index(context.Context, *QuotesIndexPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Index not implemented")
-}
-func (UnimplementedQuotesServer) IndexTimestamp(context.Context, *QuotesIndexTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IndexTimestamp not implemented")
-}
-func (UnimplementedQuotesServer) Account(context.Context, *QuotesAccountPeriodRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Account not implemented")
-}
-func (UnimplementedQuotesServer) AccountTimestamp(context.Context, *QuotesAccountTimestampRequest) (*QuotesReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AccountTimestamp not implemented")
+func (UnimplementedQuotesServer) Search(context.Context, *QuotesRequest) (*QuotesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedQuotesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -263,254 +81,20 @@ func RegisterQuotesServer(s grpc.ServiceRegistrar, srv QuotesServer) {
 	s.RegisterService(&Quotes_ServiceDesc, srv)
 }
 
-func _Quotes_Company_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCompanyPeriodRequest)
+func _Quotes_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuotesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QuotesServer).Company(ctx, in)
+		return srv.(QuotesServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Company",
+		FullMethod: "/quotes.v1.Quotes/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Company(ctx, req.(*QuotesCompanyPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_CompanyTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCompanyTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).CompanyTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/CompanyTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).CompanyTimestamp(ctx, req.(*QuotesCompanyTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Currency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCurrencyPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Currency(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Currency",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Currency(ctx, req.(*QuotesCurrencyPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_CurrencyTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCurrencyTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).CurrencyTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/CurrencyTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).CurrencyTimestamp(ctx, req.(*QuotesCurrencyTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Industry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesIndustryPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Industry(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Industry",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Industry(ctx, req.(*QuotesIndustryPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_IndustryTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesIndustryTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).IndustryTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/IndustryTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).IndustryTimestamp(ctx, req.(*QuotesIndustryTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Exchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesExchangePeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Exchange(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Exchange",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Exchange(ctx, req.(*QuotesExchangePeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_ExchangeTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesExchangeTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).ExchangeTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/ExchangeTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).ExchangeTimestamp(ctx, req.(*QuotesExchangeTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Country_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCountryPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Country(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Country",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Country(ctx, req.(*QuotesCountryPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_CountryTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesCountryTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).CountryTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/CountryTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).CountryTimestamp(ctx, req.(*QuotesCountryTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Index_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesIndexPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Index(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Index",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Index(ctx, req.(*QuotesIndexPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_IndexTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesIndexTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).IndexTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/IndexTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).IndexTimestamp(ctx, req.(*QuotesIndexTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_Account_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesAccountPeriodRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).Account(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/Account",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Account(ctx, req.(*QuotesAccountPeriodRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Quotes_AccountTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesAccountTimestampRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuotesServer).AccountTimestamp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/quotes.v1.Quotes/AccountTimestamp",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).AccountTimestamp(ctx, req.(*QuotesAccountTimestampRequest))
+		return srv.(QuotesServer).Search(ctx, req.(*QuotesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -541,60 +125,8 @@ var Quotes_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QuotesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Company",
-			Handler:    _Quotes_Company_Handler,
-		},
-		{
-			MethodName: "CompanyTimestamp",
-			Handler:    _Quotes_CompanyTimestamp_Handler,
-		},
-		{
-			MethodName: "Currency",
-			Handler:    _Quotes_Currency_Handler,
-		},
-		{
-			MethodName: "CurrencyTimestamp",
-			Handler:    _Quotes_CurrencyTimestamp_Handler,
-		},
-		{
-			MethodName: "Industry",
-			Handler:    _Quotes_Industry_Handler,
-		},
-		{
-			MethodName: "IndustryTimestamp",
-			Handler:    _Quotes_IndustryTimestamp_Handler,
-		},
-		{
-			MethodName: "Exchange",
-			Handler:    _Quotes_Exchange_Handler,
-		},
-		{
-			MethodName: "ExchangeTimestamp",
-			Handler:    _Quotes_ExchangeTimestamp_Handler,
-		},
-		{
-			MethodName: "Country",
-			Handler:    _Quotes_Country_Handler,
-		},
-		{
-			MethodName: "CountryTimestamp",
-			Handler:    _Quotes_CountryTimestamp_Handler,
-		},
-		{
-			MethodName: "Index",
-			Handler:    _Quotes_Index_Handler,
-		},
-		{
-			MethodName: "IndexTimestamp",
-			Handler:    _Quotes_IndexTimestamp_Handler,
-		},
-		{
-			MethodName: "Account",
-			Handler:    _Quotes_Account_Handler,
-		},
-		{
-			MethodName: "AccountTimestamp",
-			Handler:    _Quotes_AccountTimestamp_Handler,
+			MethodName: "Search",
+			Handler:    _Quotes_Search_Handler,
 		},
 		{
 			MethodName: "Health",

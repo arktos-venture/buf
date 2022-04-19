@@ -38,9 +38,9 @@
         ]
       }
     },
-    "/v1/quotes/account": {
+    "/v1/quotes": {
       "post": {
-        "operationId": "Quotes_Account",
+        "operationId": "Quotes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -61,465 +61,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesAccountPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/account/ts": {
-      "post": {
-        "operationId": "Quotes_AccountTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesAccountTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/company": {
-      "post": {
-        "operationId": "Quotes_Company",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCompanyPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/company/ts": {
-      "post": {
-        "operationId": "Quotes_CompanyTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCompanyTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/country": {
-      "post": {
-        "operationId": "Quotes_Country",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCountryPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/country/ts": {
-      "post": {
-        "operationId": "Quotes_CountryTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCountryTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/currency": {
-      "post": {
-        "operationId": "Quotes_Currency",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCurrencyPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/currency/ts": {
-      "post": {
-        "operationId": "Quotes_CurrencyTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesCurrencyTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/exchange": {
-      "post": {
-        "operationId": "Quotes_Exchange",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesExchangePeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/exchange/ts": {
-      "post": {
-        "operationId": "Quotes_ExchangeTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesExchangeTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/index": {
-      "post": {
-        "operationId": "Quotes_Index",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesIndexPeriodRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/index/ts": {
-      "post": {
-        "operationId": "Quotes_IndexTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1QuotesIndexTimestampRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/{exchange}/industry": {
-      "post": {
-        "operationId": "Quotes_Industry",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "industry": {
-                  "type": "string",
-                  "format": "int64"
-                },
-                "indicators": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/quotesv1Indicator"
-                  }
-                },
-                "date": {
-                  "$ref": "#/definitions/quotesv1DatePeriod"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Quotes"
-        ]
-      }
-    },
-    "/v1/quotes/{exchange}/industry/ts": {
-      "post": {
-        "operationId": "Quotes_IndustryTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "industry": {
-                  "type": "string",
-                  "format": "int64"
-                },
-                "indicators": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/quotesv1Indicator"
-                  }
-                },
-                "date": {
-                  "$ref": "#/definitions/quotesv1DateTimestamp"
-                }
-              }
+              "$ref": "#/definitions/v1QuotesRequest"
             }
           }
         ],
@@ -530,170 +72,6 @@
     }
   },
   "definitions": {
-    "IndicatorsBband": {
-      "type": "object",
-      "properties": {
-        "upper": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "middle": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "lower": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        }
-      }
-    },
-    "IndicatorsMacd": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "signal": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        }
-      }
-    },
-    "QuotesReplyIndicators": {
-      "type": "object",
-      "properties": {
-        "macd": {
-          "$ref": "#/definitions/IndicatorsMacd"
-        },
-        "rsi": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "obv": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "adx": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "beta": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "atr": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "bband": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IndicatorsBband"
-          }
-        },
-        "ema": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "linearreg": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "willr": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "stddev": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "sma10": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "sma20": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "sma50": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "sma100": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "sma200": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -724,275 +102,53 @@
         }
       }
     },
-    "quotesv1DatePeriod": {
+    "quotesv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Country",
+        "Currency",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "quotesv1Filter": {
       "type": "object",
       "properties": {
-        "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
+        "operator": {
+          "$ref": "#/definitions/quotesv1Operator"
         },
-        "period": {
+        "argument": {
+          "$ref": "#/definitions/quotesv1Argument"
+        },
+        "value": {
           "type": "string"
         }
       }
-    },
-    "quotesv1DateTimestamp": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "quotesv1Indicator": {
-      "type": "string",
-      "enum": [
-        "Macd",
-        "Rsi",
-        "Obv",
-        "Adx",
-        "Beta",
-        "Atr",
-        "Bband",
-        "Ema",
-        "LinearReg",
-        "WillR",
-        "StdDev",
-        "Sma10",
-        "Sma20",
-        "Sma50",
-        "Sma100",
-        "Sma200"
-      ],
-      "default": "Macd"
     },
     "quotesv1Interval": {
       "type": "string",
       "enum": [
         "d",
         "w",
-        "m"
+        "m",
+        "y"
       ],
       "default": "d"
     },
-    "v1QuotesAccountPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesAccountTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
-    },
-    "v1QuotesCompanyPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesCompanyTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
-    },
-    "v1QuotesCountryPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "country": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesCountryTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "country": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
-    },
-    "v1QuotesCurrencyPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesCurrencyTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
-    },
-    "v1QuotesExchangePeriodRequest": {
-      "type": "object",
-      "properties": {
-        "exchange": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesExchangeTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "exchange": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
-    },
-    "v1QuotesIndexPeriodRequest": {
-      "type": "object",
-      "properties": {
-        "index": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DatePeriod"
-        }
-      }
-    },
-    "v1QuotesIndexTimestampRequest": {
-      "type": "object",
-      "properties": {
-        "index": {
-          "type": "string"
-        },
-        "indicators": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1Indicator"
-          }
-        },
-        "date": {
-          "$ref": "#/definitions/quotesv1DateTimestamp"
-        }
-      }
+    "quotesv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
     },
     "v1QuotesReply": {
       "type": "object",
@@ -1032,9 +188,6 @@
             "format": "float"
           }
         },
-        "indicators": {
-          "$ref": "#/definitions/QuotesReplyIndicators"
-        },
         "date": {
           "type": "array",
           "items": {
@@ -1043,6 +196,36 @@
           }
         }
       }
+    },
+    "v1QuotesRequest": {
+      "type": "object",
+      "properties": {
+        "tsdb": {
+          "$ref": "#/definitions/v1TSDB"
+        },
+        "interval": {
+          "$ref": "#/definitions/quotesv1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1Filter"
+          }
+        }
+      }
+    },
+    "v1TSDB": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Currencies",
+        "Industries",
+        "Exchanges",
+        "Countries",
+        "Indexes",
+        "Accounts"
+      ],
+      "default": "Companies"
     }
   }
 }
