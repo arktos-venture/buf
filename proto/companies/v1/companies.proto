@@ -92,13 +92,16 @@ message CompanyReply {
 	string exchange = 6;
 	string routing = 7;
 	string isin = 8;
-	int64 employees = 9; 
-	Activity activity = 10;
-	Shares shares = 11;
-	string currencyReport = 12;
-	int64 fiscalYearEnd = 13;
-	CompanyContact contact = 14;
-	CompanyAddress address = 15;
+	int64 employees = 9;
+	bool adr = 10;
+	Activity activity = 11;
+	Shares shares = 12;
+	string currencyReport = 13;
+	int64 fiscalYearEnd = 14;
+	CompanyContact contact = 15;
+	CompanyAddress address = 16;
+	google.protobuf.Timestamp created_at = 17;
+	google.protobuf.Timestamp updated_at = 18; 
 }
 
 message CompanyStatsReply {
@@ -134,7 +137,8 @@ message CompanyStatsReply {
 	Pricing pricing = 2;
 	Dividends dividends = 3;
 	Volume volume = 4;
-	google.protobuf.Timestamp date = 5; 
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6; 
 }
 
 message CompanySimilarsReply {
