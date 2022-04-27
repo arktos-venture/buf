@@ -73,5 +73,5 @@ message DividendsReply {
 	repeated google.protobuf.Timestamp declarationDate = 2;
 	repeated google.protobuf.Timestamp recordDate = 3;
 	repeated google.protobuf.Timestamp paymentDate = 4;
-	repeated google.protobuf.Timestamp date = 5;
+	repeated google.protobuf.Timestamp created_at = 5;
 }

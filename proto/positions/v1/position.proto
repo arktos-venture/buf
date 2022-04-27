@@ -73,7 +73,7 @@ message PositionCompanyReply {
   float size = 3;
   Money money = 4;
   Performance performance = 5;
-  google.protobuf.Timestamp date = 6;
+  google.protobuf.Timestamp created_at = 6;
 }
 
 message PositionCompanyReplies {
@@ -84,7 +84,7 @@ message PositionCompanyReplies {
 message PositionCurrencyReply {
   string currency = 1;
   float size = 2;
-  google.protobuf.Timestamp date = 3;
+  google.protobuf.Timestamp created_at = 3;
 }
 
 message PositionCurrencyReplies {

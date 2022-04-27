@@ -108,5 +108,5 @@ message QuotesReply {
 	repeated float low = 3;
 	repeated float high = 4;
 	repeated float volume = 5;
-	repeated google.protobuf.Timestamp date = 7;
+	repeated google.protobuf.Timestamp created_at = 7;
 }
