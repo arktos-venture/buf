@@ -68,11 +68,9 @@ service Strategies {
 		};
 	}
 }
-
-enum StrategyType {
-	AKTrend = 0;
-	MACD = 1;
-}
+// 
+// Request
+// 
 
 enum Interval {
 	d = 0;
@@ -80,20 +78,17 @@ enum Interval {
 	m = 2;
 }
 
-// 
-// Request
-// 
-
 message Parameters {
-	Interval interval = 4 [(validate.rules).enum = {defined_only: true}];
-	string period = 5 [(validate.rules).string = {in: ["1m", "2m", "3m", "6m", "1y", "2y", "3y", "5y", "10y", "20y", "30y"]}];
-	StrategyType strategy = 6 [(validate.rules).enum = {defined_only: true}]; 
+	string strategy = 1;
+	Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
+	google.protobuf.Timestamp date = 3;
+	map<string, int32> params = 4 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
 }
 
 message StrategyCompanyRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	Parameters parameters = 4;
+	Parameters parameters = 3;
 }
 
 message StrategyCurrencyRequest {
@@ -139,9 +134,7 @@ message StrategyReply {
 		SELL = 2;
 	}
 
-	repeated float close = 1;
-	repeated Action action = 2;
-	repeated float delta = 3;
-	repeated google.protobuf.Timestamp date = 4;
-	int32 total = 5;
+	Action action = 1;
+	google.protobuf.Timestamp date = 2;
+	google.protobuf.Timestamp last_quote_date = 3;
 }

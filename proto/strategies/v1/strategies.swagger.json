@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -61,7 +61,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyAccountRequest"
+              "$ref": "#/definitions/v1StrategyAccountRequest"
             }
           }
         ],
@@ -83,7 +83,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -93,7 +93,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyCompanyRequest"
+              "$ref": "#/definitions/v1StrategyCompanyRequest"
             }
           }
         ],
@@ -115,7 +115,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -125,7 +125,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyCountryRequest"
+              "$ref": "#/definitions/v1StrategyCountryRequest"
             }
           }
         ],
@@ -147,7 +147,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -157,7 +157,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyCurrencyRequest"
+              "$ref": "#/definitions/v1StrategyCurrencyRequest"
             }
           }
         ],
@@ -179,7 +179,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -189,7 +189,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyExchangeRequest"
+              "$ref": "#/definitions/v1StrategyExchangeRequest"
             }
           }
         ],
@@ -211,7 +211,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -221,7 +221,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyIndexRequest"
+              "$ref": "#/definitions/v1StrategyIndexRequest"
             }
           }
         ],
@@ -243,7 +243,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -279,7 +279,19 @@
     }
   },
   "definitions": {
-    "googlerpcStatus": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -297,18 +309,6 @@
         }
       }
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
     "strategiesv1Interval": {
       "type": "string",
       "enum": [
@@ -318,7 +318,54 @@
       ],
       "default": "d"
     },
-    "strategiesv1StrategyAccountRequest": {
+    "strategiesv1StrategyReply": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/strategiesv1StrategyReplyAction"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_quote_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "strategiesv1StrategyReplyAction": {
+      "type": "string",
+      "enum": [
+        "HOLD",
+        "BUY",
+        "SELL"
+      ],
+      "default": "HOLD"
+    },
+    "v1Parameters": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string"
+        },
+        "interval": {
+          "$ref": "#/definitions/strategiesv1Interval"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    },
+    "v1StrategyAccountRequest": {
       "type": "object",
       "properties": {
         "account": {
@@ -329,7 +376,7 @@
         }
       }
     },
-    "strategiesv1StrategyCompanyRequest": {
+    "v1StrategyCompanyRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -343,7 +390,7 @@
         }
       }
     },
-    "strategiesv1StrategyCountryRequest": {
+    "v1StrategyCountryRequest": {
       "type": "object",
       "properties": {
         "country": {
@@ -354,7 +401,7 @@
         }
       }
     },
-    "strategiesv1StrategyCurrencyRequest": {
+    "v1StrategyCurrencyRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -365,7 +412,7 @@
         }
       }
     },
-    "strategiesv1StrategyExchangeRequest": {
+    "v1StrategyExchangeRequest": {
       "type": "object",
       "properties": {
         "exchange": {
@@ -379,7 +426,7 @@
         }
       }
     },
-    "strategiesv1StrategyIndexRequest": {
+    "v1StrategyIndexRequest": {
       "type": "object",
       "properties": {
         "index": {
@@ -389,73 +436,6 @@
           "$ref": "#/definitions/v1Parameters"
         }
       }
-    },
-    "strategiesv1StrategyReply": {
-      "type": "object",
-      "properties": {
-        "close": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "action": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1StrategyReplyAction"
-          }
-        },
-        "delta": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "date": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "strategiesv1StrategyType": {
-      "type": "string",
-      "enum": [
-        "AKTrend",
-        "MACD"
-      ],
-      "default": "AKTrend"
-    },
-    "v1Parameters": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/strategiesv1Interval"
-        },
-        "period": {
-          "type": "string"
-        },
-        "strategy": {
-          "$ref": "#/definitions/strategiesv1StrategyType"
-        }
-      }
-    },
-    "v1StrategyReplyAction": {
-      "type": "string",
-      "enum": [
-        "HOLD",
-        "BUY",
-        "SELL"
-      ],
-      "default": "HOLD"
     }
   }
 }

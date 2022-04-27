@@ -136,7 +136,7 @@ message CountryIndicatorReply {
 	message Result {
 		repeated float value = 1;
 		repeated float forecast = 2;
-		repeated google.protobuf.Timestamp date = 3;
+		repeated google.protobuf.Timestamp created_at = 3;
 	}
 
 	Indicator indicator = 1;

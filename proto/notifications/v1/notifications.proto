@@ -89,7 +89,7 @@ message NotificationReply {
 	Level level = 2; 
 	string title = 3;
 	string description = 4;
-	google.protobuf.Timestamp date = 5;
+	google.protobuf.Timestamp created_at = 5;
 }
 
 message NotificationReplies {

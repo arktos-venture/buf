@@ -4,6 +4,7 @@ package index.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "grpc-api/api/index/v1;v1";
@@ -111,6 +112,8 @@ message IndexReply {
   string currency = 4;
   bool public = 5;
   repeated Company companies = 6;
+	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp updated_at = 8;
 }
 
 message IndexReplies {

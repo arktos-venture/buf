@@ -138,7 +138,7 @@ message OrderReply {
   Size size = 8;
   Price price = 9;
   string status = 10;
-  google.protobuf.Timestamp date = 11;
+  google.protobuf.Timestamp created_at = 11;
 }
 
 message OrderReplies {

@@ -70,6 +70,9 @@ enum Argument {
 	VolumeAvg10d = 20;
 	VolumeAvg90d = 21;
 	Isin = 22;
+	Adr = 23;
+	Id = 24;
+	Country = 25;
 }
 
 message Filter {
@@ -142,12 +145,14 @@ message ScreenerReply {
 	string name = 4;
 	string isin = 5;
 	string exchange = 6;
-	Activity activity = 7;
-	Shares shares = 8;
-	Pricing pricing = 9;
-	Dividends dividends = 10;
-	Volume volume = 11;
-	google.protobuf.Timestamp date = 12; 
+	bool adr = 7;
+	Activity activity = 8;
+	Shares shares = 9;
+	Pricing pricing = 10;
+	Dividends dividends = 11;
+	Volume volume = 12;
+	google.protobuf.Timestamp created_at = 13;
+	google.protobuf.Timestamp updated_at = 14; 
 }
 
 message ScreenerReplies {

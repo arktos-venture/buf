@@ -85,7 +85,7 @@ message SplitBulkRequest {
 message SplitsReply {
   float from = 1;
   float to = 2;
-  google.protobuf.Timestamp date = 3;
+  google.protobuf.Timestamp created_at = 3;
 }
 
 message SplitReplies {
