@@ -31,17 +31,17 @@ type StrategiesHTTPServer interface {
 
 func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/strategy/company", _Strategies_Company1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/currency", _Strategies_Currency1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/{exchange}/industry", _Strategies_Industry1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/exchange", _Strategies_Exchange1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/country", _Strategies_Country1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/index", _Strategies_Index1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/account", _Strategies_Account1_HTTP_Handler(srv))
+	r.POST("/v1/strategy/company", _Strategies_Company0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/currency", _Strategies_Currency0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/{exchange}/industry", _Strategies_Industry0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/exchange", _Strategies_Exchange0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/country", _Strategies_Country0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/index", _Strategies_Index0_HTTP_Handler(srv))
+	r.POST("/v1/strategy/account", _Strategies_Account0_HTTP_Handler(srv))
 	r.GET("/healthz", _Strategies_Health5_HTTP_Handler(srv))
 }
 
-func _Strategies_Company1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Company0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCompanyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -60,7 +60,7 @@ func _Strategies_Company1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.C
 	}
 }
 
-func _Strategies_Currency1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Currency0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCurrencyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -79,7 +79,7 @@ func _Strategies_Currency1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.
 	}
 }
 
-func _Strategies_Industry1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Industry0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndustryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -101,7 +101,7 @@ func _Strategies_Industry1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.
 	}
 }
 
-func _Strategies_Exchange1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Exchange0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyExchangeRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -120,7 +120,7 @@ func _Strategies_Exchange1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.
 	}
 }
 
-func _Strategies_Country1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Country0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyCountryRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -139,7 +139,7 @@ func _Strategies_Country1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.C
 	}
 }
 
-func _Strategies_Index1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Index0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyIndexRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -158,7 +158,7 @@ func _Strategies_Index1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Con
 	}
 }
 
-func _Strategies_Account1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Account0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyAccountRequest
 		if err := ctx.Bind(&in); err != nil {

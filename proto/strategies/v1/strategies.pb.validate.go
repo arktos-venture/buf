@@ -57,6 +57,8 @@ func (m *Parameters) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Strategy
+
 	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
 		err := ParametersValidationError{
 			field:  "Interval",
@@ -68,21 +70,39 @@ func (m *Parameters) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _Parameters_Period_InLookup[m.GetPeriod()]; !ok {
-		err := ParametersValidationError{
-			field:  "Period",
-			reason: "value must be in list [1m 2m 3m 6m 1y 2y 3y 5y 10y 20y 30y]",
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ParametersValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ParametersValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ParametersValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
-	if _, ok := StrategyType_name[int32(m.GetStrategy())]; !ok {
+	if l := len(m.GetParams()); l < 2 || l > 10 {
 		err := ParametersValidationError{
-			field:  "Strategy",
-			reason: "value must be one of the defined enum values",
+			field:  "Params",
+			reason: "value must contain between 2 and 10 pairs, inclusive",
 		}
 		if !all {
 			return err
@@ -166,20 +186,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ParametersValidationError{}
-
-var _Parameters_Period_InLookup = map[string]struct{}{
-	"1m":  {},
-	"2m":  {},
-	"3m":  {},
-	"6m":  {},
-	"1y":  {},
-	"2y":  {},
-	"3y":  {},
-	"5y":  {},
-	"10y": {},
-	"20y": {},
-	"30y": {},
-}
 
 // Validate checks the field values on StrategyCompanyRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1232,41 +1238,65 @@ func (m *StrategyReply) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetDate() {
-		_, _ = idx, item
+	// no validation rules for Action
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyReplyValidationError{
-						field:  fmt.Sprintf("Date[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyReplyValidationError{
-						field:  fmt.Sprintf("Date[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StrategyReplyValidationError{
-					field:  fmt.Sprintf("Date[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "Date",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyReplyValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
-	// no validation rules for Total
+	if all {
+		switch v := interface{}(m.GetLastQuoteDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "LastQuoteDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "LastQuoteDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLastQuoteDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyReplyValidationError{
+				field:  "LastQuoteDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return StrategyReplyMultiError(errors)
