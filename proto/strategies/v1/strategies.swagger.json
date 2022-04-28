@@ -38,9 +38,9 @@
         ]
       }
     },
-    "/v1/strategy/account": {
+    "/v1/strategy/execute": {
       "post": {
-        "operationId": "Strategies_Account",
+        "operationId": "Strategies_Execute",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -61,214 +61,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StrategyAccountRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/company": {
-      "post": {
-        "operationId": "Strategies_Company",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyCompanyRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/country": {
-      "post": {
-        "operationId": "Strategies_Country",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyCountryRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/currency": {
-      "post": {
-        "operationId": "Strategies_Currency",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyCurrencyRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/exchange": {
-      "post": {
-        "operationId": "Strategies_Exchange",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyExchangeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/index": {
-      "post": {
-        "operationId": "Strategies_Index",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyIndexRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
-    "/v1/strategy/{exchange}/industry": {
-      "post": {
-        "operationId": "Strategies_Industry",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "industry": {
-                  "type": "string",
-                  "format": "int64"
-                },
-                "parameters": {
-                  "$ref": "#/definitions/v1Parameters"
-                }
-              }
+              "$ref": "#/definitions/strategiesv1StrategyRequest"
             }
           }
         ],
@@ -309,14 +102,53 @@
         }
       }
     },
+    "strategiesv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Country",
+        "Currency",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "strategiesv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/strategiesv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/strategiesv1Argument"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
     "strategiesv1Interval": {
       "type": "string",
       "enum": [
         "d",
         "w",
-        "m"
+        "m",
+        "y"
       ],
       "default": "d"
+    },
+    "strategiesv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
     },
     "strategiesv1StrategyReply": {
       "type": "object",
@@ -327,6 +159,10 @@
         "date": {
           "type": "string",
           "format": "date-time"
+        },
+        "last_quote": {
+          "type": "number",
+          "format": "float"
         },
         "last_quote_date": {
           "type": "string",
@@ -343,18 +179,44 @@
       ],
       "default": "HOLD"
     },
-    "v1Parameters": {
+    "strategiesv1StrategyRequest": {
       "type": "object",
       "properties": {
-        "strategy": {
-          "type": "string"
+        "tsdb": {
+          "$ref": "#/definitions/strategiesv1TSDB"
         },
         "interval": {
           "$ref": "#/definitions/strategiesv1Interval"
         },
-        "date": {
-          "type": "string",
-          "format": "date-time"
+        "strategy": {
+          "$ref": "#/definitions/v1Strategy"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/strategiesv1Filter"
+          }
+        }
+      }
+    },
+    "strategiesv1TSDB": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Currencies",
+        "Industries",
+        "Exchanges",
+        "Countries",
+        "Indexes",
+        "Accounts"
+      ],
+      "default": "Companies"
+    },
+    "v1Strategy": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
         },
         "params": {
           "type": "object",
@@ -362,78 +224,10 @@
             "type": "integer",
             "format": "int32"
           }
-        }
-      }
-    },
-    "v1StrategyAccountRequest": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
         },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
-        }
-      }
-    },
-    "v1StrategyCompanyRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
-        }
-      }
-    },
-    "v1StrategyCountryRequest": {
-      "type": "object",
-      "properties": {
-        "country": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
-        }
-      }
-    },
-    "v1StrategyCurrencyRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
-        }
-      }
-    },
-    "v1StrategyExchangeRequest": {
-      "type": "object",
-      "properties": {
-        "exchange": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
-        }
-      }
-    },
-    "v1StrategyIndexRequest": {
-      "type": "object",
-      "properties": {
-        "index": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+        "inject": {
+          "type": "number",
+          "format": "float"
         }
       }
     }

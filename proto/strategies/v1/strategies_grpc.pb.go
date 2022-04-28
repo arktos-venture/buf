@@ -19,13 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StrategiesClient interface {
-	Company(ctx context.Context, in *StrategyCompanyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Currency(ctx context.Context, in *StrategyCurrencyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Industry(ctx context.Context, in *StrategyIndustryRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Exchange(ctx context.Context, in *StrategyExchangeRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Country(ctx context.Context, in *StrategyCountryRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Index(ctx context.Context, in *StrategyIndexRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Account(ctx context.Context, in *StrategyAccountRequest, opts ...grpc.CallOption) (*StrategyReply, error)
+	Execute(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -37,63 +31,9 @@ func NewStrategiesClient(cc grpc.ClientConnInterface) StrategiesClient {
 	return &strategiesClient{cc}
 }
 
-func (c *strategiesClient) Company(ctx context.Context, in *StrategyCompanyRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
+func (c *strategiesClient) Execute(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
 	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Company", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Currency(ctx context.Context, in *StrategyCurrencyRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Currency", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Industry(ctx context.Context, in *StrategyIndustryRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Industry", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Exchange(ctx context.Context, in *StrategyExchangeRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Exchange", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Country(ctx context.Context, in *StrategyCountryRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Country", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Index(ctx context.Context, in *StrategyIndexRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Index", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Account(ctx context.Context, in *StrategyAccountRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
-	out := new(StrategyReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Account", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Execute", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,13 +53,7 @@ func (c *strategiesClient) Health(ctx context.Context, in *emptypb.Empty, opts .
 // All implementations must embed UnimplementedStrategiesServer
 // for forward compatibility
 type StrategiesServer interface {
-	Company(context.Context, *StrategyCompanyRequest) (*StrategyReply, error)
-	Currency(context.Context, *StrategyCurrencyRequest) (*StrategyReply, error)
-	Industry(context.Context, *StrategyIndustryRequest) (*StrategyReply, error)
-	Exchange(context.Context, *StrategyExchangeRequest) (*StrategyReply, error)
-	Country(context.Context, *StrategyCountryRequest) (*StrategyReply, error)
-	Index(context.Context, *StrategyIndexRequest) (*StrategyReply, error)
-	Account(context.Context, *StrategyAccountRequest) (*StrategyReply, error)
+	Execute(context.Context, *StrategyRequest) (*StrategyReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedStrategiesServer()
 }
@@ -128,26 +62,8 @@ type StrategiesServer interface {
 type UnimplementedStrategiesServer struct {
 }
 
-func (UnimplementedStrategiesServer) Company(context.Context, *StrategyCompanyRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Company not implemented")
-}
-func (UnimplementedStrategiesServer) Currency(context.Context, *StrategyCurrencyRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Currency not implemented")
-}
-func (UnimplementedStrategiesServer) Industry(context.Context, *StrategyIndustryRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Industry not implemented")
-}
-func (UnimplementedStrategiesServer) Exchange(context.Context, *StrategyExchangeRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Exchange not implemented")
-}
-func (UnimplementedStrategiesServer) Country(context.Context, *StrategyCountryRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Country not implemented")
-}
-func (UnimplementedStrategiesServer) Index(context.Context, *StrategyIndexRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Index not implemented")
-}
-func (UnimplementedStrategiesServer) Account(context.Context, *StrategyAccountRequest) (*StrategyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Account not implemented")
+func (UnimplementedStrategiesServer) Execute(context.Context, *StrategyRequest) (*StrategyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Execute not implemented")
 }
 func (UnimplementedStrategiesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -165,128 +81,20 @@ func RegisterStrategiesServer(s grpc.ServiceRegistrar, srv StrategiesServer) {
 	s.RegisterService(&Strategies_ServiceDesc, srv)
 }
 
-func _Strategies_Company_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyCompanyRequest)
+func _Strategies_Execute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StrategyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StrategiesServer).Company(ctx, in)
+		return srv.(StrategiesServer).Execute(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Company",
+		FullMethod: "/strategies.v1.Strategies/Execute",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Company(ctx, req.(*StrategyCompanyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Currency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyCurrencyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Currency(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Currency",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Currency(ctx, req.(*StrategyCurrencyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Industry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyIndustryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Industry(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Industry",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Industry(ctx, req.(*StrategyIndustryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Exchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyExchangeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Exchange(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Exchange",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Exchange(ctx, req.(*StrategyExchangeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Country_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyCountryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Country(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Country",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Country(ctx, req.(*StrategyCountryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Index_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyIndexRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Index(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Index",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Index(ctx, req.(*StrategyIndexRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Account_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyAccountRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Account(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Account",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Account(ctx, req.(*StrategyAccountRequest))
+		return srv.(StrategiesServer).Execute(ctx, req.(*StrategyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -317,32 +125,8 @@ var Strategies_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StrategiesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Company",
-			Handler:    _Strategies_Company_Handler,
-		},
-		{
-			MethodName: "Currency",
-			Handler:    _Strategies_Currency_Handler,
-		},
-		{
-			MethodName: "Industry",
-			Handler:    _Strategies_Industry_Handler,
-		},
-		{
-			MethodName: "Exchange",
-			Handler:    _Strategies_Exchange_Handler,
-		},
-		{
-			MethodName: "Country",
-			Handler:    _Strategies_Country_Handler,
-		},
-		{
-			MethodName: "Index",
-			Handler:    _Strategies_Index_Handler,
-		},
-		{
-			MethodName: "Account",
-			Handler:    _Strategies_Account_Handler,
+			MethodName: "Execute",
+			Handler:    _Strategies_Execute_Handler,
 		},
 		{
 			MethodName: "Health",

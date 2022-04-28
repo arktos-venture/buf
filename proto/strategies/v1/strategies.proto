@@ -13,51 +13,9 @@ option java_package = "dev.kratos.api.strategies.v1";
 option java_outer_classname = "StrategiesProtoV1";
 
 service Strategies {
-	rpc Company (StrategyCompanyRequest) returns (StrategyReply)  {
+	rpc Execute (StrategyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  	post: "/v1/strategy/company"
-		  	body: "*"
-		};
-	}
-	
-	rpc Currency (StrategyCurrencyRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/currency"
-		  	body: "*"
-		};
-	}
-	
-	rpc Industry (StrategyIndustryRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/{exchange}/industry"
-		  	body: "*"
-		};
-	}
-	
-	rpc Exchange (StrategyExchangeRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/exchange"
-		  	body: "*"
-		};
-	}
-	
-	rpc Country (StrategyCountryRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/country"
-		  	body: "*"
-		};
-	}
-	
-	rpc Index (StrategyIndexRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-			post: "/v1/strategy/index"
-		  	body: "*"
-		};
-	}
-	
-	rpc Account (StrategyAccountRequest) returns (StrategyReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/account"
+		  	post: "/v1/strategy/execute"
 		  	body: "*"
 		};
 	}
@@ -76,51 +34,54 @@ enum Interval {
 	d = 0;
 	w = 1;
 	m = 2;
+	y = 3;
 }
 
-message Parameters {
-	string strategy = 1;
+enum TSDB {
+	Companies = 0;
+	Currencies = 1;
+	Industries = 2;
+	Exchanges = 3;
+	Countries = 4;
+	Indexes = 5;
+	Accounts = 6;
+}
+  
+enum Operator {
+	Equal = 0;
+	Greater = 1;
+	GreaterEqual = 2;
+	Less = 3;
+	LessEqual = 4;
+}
+  
+enum Argument {
+	Ticker = 0;
+	Exchange = 1;
+	Industry = 2;
+	Index = 3;
+	Country = 4;
+	Currency = 5;
+	Time = 6;
+}
+  
+message Filter {
+	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
+	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
+	string value = 3;
+}
+
+message Strategy {
+	string name = 1;
+	map<string, int32> params = 2 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
+	float inject = 3;
+}
+  
+message StrategyRequest {
+	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
-	google.protobuf.Timestamp date = 3;
-	map<string, int32> params = 4 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
-}
-
-message StrategyCompanyRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	Parameters parameters = 3;
-}
-
-message StrategyCurrencyRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	Parameters parameters = 2;
-}
-
-message StrategyIndustryRequest {
-	int64 industry = 1 [(validate.rules).int64 = {gte: 5010101010, lte: 6310301010}];
-	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	Parameters parameters = 3;
-}
-
-message StrategyExchangeRequest {
-	string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string country = 2 [(validate.rules).string.len = 2];
-	Parameters parameters = 3;
-}
-
-message StrategyCountryRequest {
-	string country = 1 [(validate.rules).string.len = 2];
-	Parameters parameters = 2;
-}
-
-message StrategyIndexRequest {
-	string index = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
-	Parameters parameters = 2;
-}
-
-message StrategyAccountRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
-	Parameters parameters = 2;
+	Strategy strategy = 3;
+	repeated Filter filters = 4 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 // 
@@ -136,5 +97,6 @@ message StrategyReply {
 
 	Action action = 1;
 	google.protobuf.Timestamp date = 2;
-	google.protobuf.Timestamp last_quote_date = 3;
+	float last_quote = 3;
+	google.protobuf.Timestamp last_quote_date = 4;
 }
