@@ -132,6 +132,19 @@
       ],
       "default": "Equal"
     },
+    "quotesv1TSDB": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Currencies",
+        "Industries",
+        "Exchanges",
+        "Countries",
+        "Indexes",
+        "Accounts"
+      ],
+      "default": "Companies"
+    },
     "rpcStatus": {
       "type": "object",
       "properties": {
@@ -201,7 +214,7 @@
       "type": "object",
       "properties": {
         "tsdb": {
-          "$ref": "#/definitions/v1TSDB"
+          "$ref": "#/definitions/quotesv1TSDB"
         },
         "interval": {
           "$ref": "#/definitions/quotesv1Interval"
@@ -213,19 +226,6 @@
           }
         }
       }
-    },
-    "v1TSDB": {
-      "type": "string",
-      "enum": [
-        "Companies",
-        "Currencies",
-        "Industries",
-        "Exchanges",
-        "Countries",
-        "Indexes",
-        "Accounts"
-      ],
-      "default": "Companies"
     }
   }
 }

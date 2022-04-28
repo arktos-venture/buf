@@ -61,7 +61,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StrategyRequest"
+              "$ref": "#/definitions/strategy_resultsv1StrategyRequest"
             }
           }
         ],
@@ -136,7 +136,7 @@
       ],
       "default": "HOLD"
     },
-    "v1StrategyRequest": {
+    "strategy_resultsv1StrategyRequest": {
       "type": "object",
       "properties": {
         "quotes": {
