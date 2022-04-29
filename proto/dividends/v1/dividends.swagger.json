@@ -69,6 +69,42 @@
           "Dividends"
         ]
       }
+    },
+    "/v1/dividends/{exchange}/{ticker}": {
+      "get": {
+        "operationId": "Dividends_Last",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DividendsLastReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Dividends"
+        ]
+      }
     }
   },
   "definitions": {
@@ -142,6 +178,31 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1DividendsLastReply": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "number",
+          "format": "float"
+        },
+        "declarationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "paymentDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

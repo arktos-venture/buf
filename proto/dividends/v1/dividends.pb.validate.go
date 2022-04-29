@@ -313,6 +313,332 @@ var _ interface {
 	ErrorName() string
 } = DividendsRequestValidationError{}
 
+// Validate checks the field values on DividendsLastRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DividendsLastRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DividendsLastRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DividendsLastRequestMultiError, or nil if none found.
+func (m *DividendsLastRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DividendsLastRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Exchange
+
+	// no validation rules for Ticker
+
+	if len(errors) > 0 {
+		return DividendsLastRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DividendsLastRequestMultiError is an error wrapping multiple validation
+// errors returned by DividendsLastRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DividendsLastRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DividendsLastRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DividendsLastRequestMultiError) AllErrors() []error { return m }
+
+// DividendsLastRequestValidationError is the validation error returned by
+// DividendsLastRequest.Validate if the designated constraints aren't met.
+type DividendsLastRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DividendsLastRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DividendsLastRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DividendsLastRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DividendsLastRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DividendsLastRequestValidationError) ErrorName() string {
+	return "DividendsLastRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DividendsLastRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDividendsLastRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DividendsLastRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DividendsLastRequestValidationError{}
+
+// Validate checks the field values on DividendsLastReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DividendsLastReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DividendsLastReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DividendsLastReplyMultiError, or nil if none found.
+func (m *DividendsLastReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DividendsLastReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Values
+
+	if all {
+		switch v := interface{}(m.GetDeclarationDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "DeclarationDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "DeclarationDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDeclarationDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DividendsLastReplyValidationError{
+				field:  "DeclarationDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetRecordDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "RecordDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "RecordDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRecordDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DividendsLastReplyValidationError{
+				field:  "RecordDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetPaymentDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "PaymentDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "PaymentDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPaymentDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DividendsLastReplyValidationError{
+				field:  "PaymentDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DividendsLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DividendsLastReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return DividendsLastReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// DividendsLastReplyMultiError is an error wrapping multiple validation errors
+// returned by DividendsLastReply.ValidateAll() if the designated constraints
+// aren't met.
+type DividendsLastReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DividendsLastReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DividendsLastReplyMultiError) AllErrors() []error { return m }
+
+// DividendsLastReplyValidationError is the validation error returned by
+// DividendsLastReply.Validate if the designated constraints aren't met.
+type DividendsLastReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DividendsLastReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DividendsLastReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DividendsLastReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DividendsLastReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DividendsLastReplyValidationError) ErrorName() string {
+	return "DividendsLastReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DividendsLastReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDividendsLastReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DividendsLastReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DividendsLastReplyValidationError{}
+
 // Validate checks the field values on DividendsReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

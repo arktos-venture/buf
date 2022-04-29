@@ -13,6 +13,12 @@ option java_package = "dev.kratos.api.dividend.v1";
 option java_outer_classname = "DividendProtoV1";
 
 service Dividends {
+	rpc Last (DividendsLastRequest) returns (DividendsLastReply)  {
+        option (google.api.http) = {
+            get: "/v1/dividends/{exchange}/{ticker}"
+        };
+    }
+
   	rpc Search (DividendsRequest) returns (DividendsReply)  {
         option (google.api.http) = {
             post: "/v1/dividends"
@@ -58,15 +64,28 @@ message Filter {
 	string value = 3;
 }
   
-message DividendsRequest {  
+message DividendsRequest {
 	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
 	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+}
+
+message DividendsLastRequest {
+	string exchange = 1;
+	string ticker = 2;
 }
 
 
 // 
 // Reply
 // 
+
+message DividendsLastReply {
+	float values = 1;
+	google.protobuf.Timestamp declarationDate = 2;
+	google.protobuf.Timestamp recordDate = 3;
+	google.protobuf.Timestamp paymentDate = 4;
+	google.protobuf.Timestamp created_at = 5;
+}
 
 message DividendsReply {
 	repeated float values = 1;
