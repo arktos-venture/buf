@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DividendsClient interface {
+	Last(ctx context.Context, in *DividendsLastRequest, opts ...grpc.CallOption) (*DividendsLastReply, error)
 	Search(ctx context.Context, in *DividendsRequest, opts ...grpc.CallOption) (*DividendsReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -29,6 +30,15 @@ type dividendsClient struct {
 
 func NewDividendsClient(cc grpc.ClientConnInterface) DividendsClient {
 	return &dividendsClient{cc}
+}
+
+func (c *dividendsClient) Last(ctx context.Context, in *DividendsLastRequest, opts ...grpc.CallOption) (*DividendsLastReply, error) {
+	out := new(DividendsLastReply)
+	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Last", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *dividendsClient) Search(ctx context.Context, in *DividendsRequest, opts ...grpc.CallOption) (*DividendsReply, error) {
@@ -53,6 +63,7 @@ func (c *dividendsClient) Health(ctx context.Context, in *emptypb.Empty, opts ..
 // All implementations must embed UnimplementedDividendsServer
 // for forward compatibility
 type DividendsServer interface {
+	Last(context.Context, *DividendsLastRequest) (*DividendsLastReply, error)
 	Search(context.Context, *DividendsRequest) (*DividendsReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedDividendsServer()
@@ -62,6 +73,9 @@ type DividendsServer interface {
 type UnimplementedDividendsServer struct {
 }
 
+func (UnimplementedDividendsServer) Last(context.Context, *DividendsLastRequest) (*DividendsLastReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
+}
 func (UnimplementedDividendsServer) Search(context.Context, *DividendsRequest) (*DividendsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
@@ -79,6 +93,24 @@ type UnsafeDividendsServer interface {
 
 func RegisterDividendsServer(s grpc.ServiceRegistrar, srv DividendsServer) {
 	s.RegisterService(&Dividends_ServiceDesc, srv)
+}
+
+func _Dividends_Last_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DividendsLastRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DividendsServer).Last(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dividends.v1.Dividends/Last",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DividendsServer).Last(ctx, req.(*DividendsLastRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Dividends_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -124,6 +156,10 @@ var Dividends_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "dividends.v1.Dividends",
 	HandlerType: (*DividendsServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Last",
+			Handler:    _Dividends_Last_Handler,
+		},
 		{
 			MethodName: "Search",
 			Handler:    _Dividends_Search_Handler,
