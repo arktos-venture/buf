@@ -13,6 +13,12 @@ option java_package = "dev.kratos.api.quotes.v1";
 option java_outer_classname = "QuotesProtoV1";
 
 service Quotes {
+  rpc Last (QuotesLastRequest) returns (QuotesLastReply)  {
+    option (google.api.http) = {
+      get: "/v1/quotes/{exchange}/{ticker}"
+    };
+  }
+
   rpc Search (QuotesRequest) returns (QuotesReply)  {
     option (google.api.http) = {
       post: "/v1/quotes"
@@ -97,6 +103,11 @@ message QuotesRequest {
 	repeated Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
+message QuotesLastRequest {
+	string exchange = 1;
+	string ticker = 2;
+}
+
 
 // 
 // Reply
@@ -109,4 +120,13 @@ message QuotesReply {
 	repeated float high = 4;
 	repeated float volume = 5;
 	repeated google.protobuf.Timestamp created_at = 7;
+}
+
+message QuotesLastReply {
+	float open = 1;
+	float close = 2;
+	float low = 3;
+	float high = 4;
+	float volume = 5;
+	google.protobuf.Timestamp created_at = 7;
 }

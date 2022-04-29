@@ -324,6 +324,112 @@ var _ interface {
 	ErrorName() string
 } = QuotesRequestValidationError{}
 
+// Validate checks the field values on QuotesLastRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *QuotesLastRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QuotesLastRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QuotesLastRequestMultiError, or nil if none found.
+func (m *QuotesLastRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QuotesLastRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Exchange
+
+	// no validation rules for Ticker
+
+	if len(errors) > 0 {
+		return QuotesLastRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// QuotesLastRequestMultiError is an error wrapping multiple validation errors
+// returned by QuotesLastRequest.ValidateAll() if the designated constraints
+// aren't met.
+type QuotesLastRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QuotesLastRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QuotesLastRequestMultiError) AllErrors() []error { return m }
+
+// QuotesLastRequestValidationError is the validation error returned by
+// QuotesLastRequest.Validate if the designated constraints aren't met.
+type QuotesLastRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QuotesLastRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QuotesLastRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QuotesLastRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QuotesLastRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QuotesLastRequestValidationError) ErrorName() string {
+	return "QuotesLastRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QuotesLastRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQuotesLastRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QuotesLastRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QuotesLastRequestValidationError{}
+
 // Validate checks the field values on QuotesReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -456,3 +562,142 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = QuotesReplyValidationError{}
+
+// Validate checks the field values on QuotesLastReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *QuotesLastReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QuotesLastReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QuotesLastReplyMultiError, or nil if none found.
+func (m *QuotesLastReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QuotesLastReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Open
+
+	// no validation rules for Close
+
+	// no validation rules for Low
+
+	// no validation rules for High
+
+	// no validation rules for Volume
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QuotesLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QuotesLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QuotesLastReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return QuotesLastReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// QuotesLastReplyMultiError is an error wrapping multiple validation errors
+// returned by QuotesLastReply.ValidateAll() if the designated constraints
+// aren't met.
+type QuotesLastReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QuotesLastReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QuotesLastReplyMultiError) AllErrors() []error { return m }
+
+// QuotesLastReplyValidationError is the validation error returned by
+// QuotesLastReply.Validate if the designated constraints aren't met.
+type QuotesLastReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QuotesLastReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QuotesLastReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QuotesLastReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QuotesLastReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QuotesLastReplyValidationError) ErrorName() string { return "QuotesLastReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e QuotesLastReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQuotesLastReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QuotesLastReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QuotesLastReplyValidationError{}
