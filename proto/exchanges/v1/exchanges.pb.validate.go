@@ -614,6 +614,8 @@ func (m *ExchangeReply) validate(all bool) error {
 
 	// no validation rules for Description
 
+	// no validation rules for Indice
+
 	// no validation rules for Routing
 
 	// no validation rules for Country
