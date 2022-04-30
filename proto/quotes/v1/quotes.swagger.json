@@ -99,6 +99,22 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "tsdb",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Companies",
+              "Currencies",
+              "Industries",
+              "Exchanges",
+              "Countries",
+              "Indexes",
+              "Accounts"
+            ],
+            "default": "Companies"
           }
         ],
         "tags": [
