@@ -104,8 +104,9 @@ message QuotesRequest {
 }
 
 message QuotesLastRequest {
-	string exchange = 1;
-	string ticker = 2;
+  TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+	string exchange = 2;
+	string ticker = 3;
 }
 
 

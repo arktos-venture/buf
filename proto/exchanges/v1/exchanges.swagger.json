@@ -273,6 +273,9 @@
         "description": {
           "type": "string"
         },
+        "indice": {
+          "type": "string"
+        },
         "routing": {
           "type": "string"
         },

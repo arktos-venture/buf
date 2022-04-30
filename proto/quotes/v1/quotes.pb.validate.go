@@ -346,6 +346,17 @@ func (m *QuotesLastRequest) validate(all bool) error {
 
 	var errors []error
 
+	if _, ok := TSDB_name[int32(m.GetTsdb())]; !ok {
+		err := QuotesLastRequestValidationError{
+			field:  "Tsdb",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	// no validation rules for Exchange
 
 	// no validation rules for Ticker
