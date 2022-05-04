@@ -136,7 +136,6 @@ message ScreenerReply {
 	message Dividends {
 		float yield = 1;
 		float annual = 2;
-		float yieldAvg5y = 3;
 	}
 
 	int64 id = 1;

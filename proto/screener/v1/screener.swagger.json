@@ -287,10 +287,6 @@
         "annual": {
           "type": "number",
           "format": "float"
-        },
-        "yieldAvg5y": {
-          "type": "number",
-          "format": "float"
         }
       }
     },
