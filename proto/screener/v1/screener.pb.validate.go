@@ -1409,8 +1409,6 @@ func (m *ScreenerReply_Dividends) validate(all bool) error {
 
 	// no validation rules for Annual
 
-	// no validation rules for YieldAvg5Y
-
 	if len(errors) > 0 {
 		return ScreenerReply_DividendsMultiError(errors)
 	}
