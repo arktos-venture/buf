@@ -49,12 +49,12 @@ message ExchangeRequest {
 		bool holidays = 2;
 	}
 
-	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM"]}];
+	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
 	Request request = 2;
 }
 
 message ExchangeIsOpenRequest {
-	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM"]}];
+	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
 }
 
 message ExchangeListRequest {
