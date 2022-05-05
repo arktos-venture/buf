@@ -1191,11 +1191,15 @@ func (m *IndexReply_Company) validate(all bool) error {
 
 	// no validation rules for Ticker
 
-	// no validation rules for Isin
+	// no validation rules for TickerAlternative
 
 	// no validation rules for Name
 
+	// no validation rules for Isin
+
 	// no validation rules for Exchange
+
+	// no validation rules for Adr
 
 	if all {
 		switch v := interface{}(m.GetActivity()).(type) {
@@ -1226,9 +1230,121 @@ func (m *IndexReply_Company) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for Price
+	if all {
+		switch v := interface{}(m.GetShares()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReply_CompanyValidationError{
+				field:  "Shares",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for Change
+	if all {
+		switch v := interface{}(m.GetPricing()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Pricing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Pricing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPricing()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReply_CompanyValidationError{
+				field:  "Pricing",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetDividends()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReply_CompanyValidationError{
+				field:  "Dividends",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReply_CompanyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReply_CompanyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return IndexReply_CompanyMultiError(errors)
@@ -1422,3 +1538,442 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndexReply_Company_ActivityValidationError{}
+
+// Validate checks the field values on IndexReply_Company_Shares with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndexReply_Company_Shares) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexReply_Company_Shares with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexReply_Company_SharesMultiError, or nil if none found.
+func (m *IndexReply_Company_Shares) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexReply_Company_Shares) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Outstanding
+
+	// no validation rules for Float
+
+	if len(errors) > 0 {
+		return IndexReply_Company_SharesMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndexReply_Company_SharesMultiError is an error wrapping multiple validation
+// errors returned by IndexReply_Company_Shares.ValidateAll() if the
+// designated constraints aren't met.
+type IndexReply_Company_SharesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexReply_Company_SharesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexReply_Company_SharesMultiError) AllErrors() []error { return m }
+
+// IndexReply_Company_SharesValidationError is the validation error returned by
+// IndexReply_Company_Shares.Validate if the designated constraints aren't met.
+type IndexReply_Company_SharesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndexReply_Company_SharesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndexReply_Company_SharesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndexReply_Company_SharesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndexReply_Company_SharesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndexReply_Company_SharesValidationError) ErrorName() string {
+	return "IndexReply_Company_SharesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndexReply_Company_SharesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndexReply_Company_Shares.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndexReply_Company_SharesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndexReply_Company_SharesValidationError{}
+
+// Validate checks the field values on IndexReply_Company_Pricing with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndexReply_Company_Pricing) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexReply_Company_Pricing with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexReply_Company_PricingMultiError, or nil if none found.
+func (m *IndexReply_Company_Pricing) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexReply_Company_Pricing) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Last
+
+	// no validation rules for MinYear
+
+	// no validation rules for MaxYear
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for Marketcap
+
+	// no validation rules for Beta5Y
+
+	if len(errors) > 0 {
+		return IndexReply_Company_PricingMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndexReply_Company_PricingMultiError is an error wrapping multiple
+// validation errors returned by IndexReply_Company_Pricing.ValidateAll() if
+// the designated constraints aren't met.
+type IndexReply_Company_PricingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexReply_Company_PricingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexReply_Company_PricingMultiError) AllErrors() []error { return m }
+
+// IndexReply_Company_PricingValidationError is the validation error returned
+// by IndexReply_Company_Pricing.Validate if the designated constraints aren't met.
+type IndexReply_Company_PricingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndexReply_Company_PricingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndexReply_Company_PricingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndexReply_Company_PricingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndexReply_Company_PricingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndexReply_Company_PricingValidationError) ErrorName() string {
+	return "IndexReply_Company_PricingValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndexReply_Company_PricingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndexReply_Company_Pricing.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndexReply_Company_PricingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndexReply_Company_PricingValidationError{}
+
+// Validate checks the field values on IndexReply_Company_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndexReply_Company_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexReply_Company_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexReply_Company_VolumeMultiError, or nil if none found.
+func (m *IndexReply_Company_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexReply_Company_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Last
+
+	// no validation rules for Avg10D
+
+	// no validation rules for Avg90D
+
+	// no validation rules for Share10DRatio
+
+	// no validation rules for Share90DRatio
+
+	if len(errors) > 0 {
+		return IndexReply_Company_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndexReply_Company_VolumeMultiError is an error wrapping multiple validation
+// errors returned by IndexReply_Company_Volume.ValidateAll() if the
+// designated constraints aren't met.
+type IndexReply_Company_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexReply_Company_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexReply_Company_VolumeMultiError) AllErrors() []error { return m }
+
+// IndexReply_Company_VolumeValidationError is the validation error returned by
+// IndexReply_Company_Volume.Validate if the designated constraints aren't met.
+type IndexReply_Company_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndexReply_Company_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndexReply_Company_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndexReply_Company_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndexReply_Company_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndexReply_Company_VolumeValidationError) ErrorName() string {
+	return "IndexReply_Company_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndexReply_Company_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndexReply_Company_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndexReply_Company_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndexReply_Company_VolumeValidationError{}
+
+// Validate checks the field values on IndexReply_Company_Dividends with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndexReply_Company_Dividends) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexReply_Company_Dividends with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexReply_Company_DividendsMultiError, or nil if none found.
+func (m *IndexReply_Company_Dividends) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexReply_Company_Dividends) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Yield
+
+	// no validation rules for Annual
+
+	if len(errors) > 0 {
+		return IndexReply_Company_DividendsMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndexReply_Company_DividendsMultiError is an error wrapping multiple
+// validation errors returned by IndexReply_Company_Dividends.ValidateAll() if
+// the designated constraints aren't met.
+type IndexReply_Company_DividendsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexReply_Company_DividendsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexReply_Company_DividendsMultiError) AllErrors() []error { return m }
+
+// IndexReply_Company_DividendsValidationError is the validation error returned
+// by IndexReply_Company_Dividends.Validate if the designated constraints
+// aren't met.
+type IndexReply_Company_DividendsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndexReply_Company_DividendsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndexReply_Company_DividendsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndexReply_Company_DividendsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndexReply_Company_DividendsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndexReply_Company_DividendsValidationError) ErrorName() string {
+	return "IndexReply_Company_DividendsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndexReply_Company_DividendsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndexReply_Company_Dividends.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndexReply_Company_DividendsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndexReply_Company_DividendsValidationError{}
