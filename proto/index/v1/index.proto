@@ -96,14 +96,45 @@ message IndexReply {
       int64 activity = 5;
     }
 
+    message Shares {
+      int64 outstanding = 1;
+      int64 float = 2;
+    }
+  
+    message Pricing {
+      float last = 1;
+      float minYear = 2;
+      float maxYear = 3;
+      float returnYear = 4;
+      int64 marketcap = 5;
+      float beta5y = 6;
+    }
+  
+    message Volume {
+      float last = 1;
+      float avg10d = 2;
+      float avg90d = 3;
+      float share10dRatio = 4;
+      float share90dRatio = 5;
+    }
+  
+    message Dividends {
+      float yield = 1;
+      float annual = 2;
+    }
+
     int64 id = 1;
     string ticker = 2;
-    string isin = 3;
+    string ticker_alternative = 3;
     string name = 4;
-    string exchange = 5;
-    Activity activity = 6;
-    float price = 7;
-    float change = 8;
+    string isin = 5;
+    string exchange = 6;
+    bool adr = 7;
+    Activity activity = 8;
+    Shares shares = 9;
+    Pricing pricing = 10;
+    Dividends dividends = 11;
+    Volume volume = 12;
   }
 
   string ref = 1;

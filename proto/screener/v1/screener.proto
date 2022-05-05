@@ -78,7 +78,7 @@ enum Argument {
 message Filter {
 	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
 	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
-	repeated string values = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 100];
+	repeated string values = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 1000];
 }
 
 message ScreenerRequest {
