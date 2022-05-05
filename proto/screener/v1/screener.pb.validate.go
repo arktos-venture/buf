@@ -78,10 +78,10 @@ func (m *Filter) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := len(m.GetValues()); l < 1 || l > 100 {
+	if l := len(m.GetValues()); l < 1 || l > 1000 {
 		err := FilterValidationError{
 			field:  "Values",
-			reason: "value must contain between 1 and 100 items, inclusive",
+			reason: "value must contain between 1 and 1000 items, inclusive",
 		}
 		if !all {
 			return err
