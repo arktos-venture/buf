@@ -622,22 +622,22 @@ var _ interface {
 	ErrorName() string
 } = IndicesShortReplyValidationError{}
 
-// Validate checks the field values on IndicesReplies with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *IndicesReplies) Validate() error {
+// Validate checks the field values on IndicesShortReplies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndicesShortReplies) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on IndicesReplies with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in IndicesRepliesMultiError,
-// or nil if none found.
-func (m *IndicesReplies) ValidateAll() error {
+// ValidateAll checks the field values on IndicesShortReplies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndicesShortRepliesMultiError, or nil if none found.
+func (m *IndicesShortReplies) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *IndicesReplies) validate(all bool) error {
+func (m *IndicesShortReplies) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -651,7 +651,7 @@ func (m *IndicesReplies) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, IndicesRepliesValidationError{
+					errors = append(errors, IndicesShortRepliesValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -659,7 +659,7 @@ func (m *IndicesReplies) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, IndicesRepliesValidationError{
+					errors = append(errors, IndicesShortRepliesValidationError{
 						field:  fmt.Sprintf("Results[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -668,7 +668,7 @@ func (m *IndicesReplies) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return IndicesRepliesValidationError{
+				return IndicesShortRepliesValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -681,19 +681,19 @@ func (m *IndicesReplies) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return IndicesRepliesMultiError(errors)
+		return IndicesShortRepliesMultiError(errors)
 	}
 
 	return nil
 }
 
-// IndicesRepliesMultiError is an error wrapping multiple validation errors
-// returned by IndicesReplies.ValidateAll() if the designated constraints
-// aren't met.
-type IndicesRepliesMultiError []error
+// IndicesShortRepliesMultiError is an error wrapping multiple validation
+// errors returned by IndicesShortReplies.ValidateAll() if the designated
+// constraints aren't met.
+type IndicesShortRepliesMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m IndicesRepliesMultiError) Error() string {
+func (m IndicesShortRepliesMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -702,11 +702,11 @@ func (m IndicesRepliesMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m IndicesRepliesMultiError) AllErrors() []error { return m }
+func (m IndicesShortRepliesMultiError) AllErrors() []error { return m }
 
-// IndicesRepliesValidationError is the validation error returned by
-// IndicesReplies.Validate if the designated constraints aren't met.
-type IndicesRepliesValidationError struct {
+// IndicesShortRepliesValidationError is the validation error returned by
+// IndicesShortReplies.Validate if the designated constraints aren't met.
+type IndicesShortRepliesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -714,22 +714,24 @@ type IndicesRepliesValidationError struct {
 }
 
 // Field function returns field value.
-func (e IndicesRepliesValidationError) Field() string { return e.field }
+func (e IndicesShortRepliesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IndicesRepliesValidationError) Reason() string { return e.reason }
+func (e IndicesShortRepliesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IndicesRepliesValidationError) Cause() error { return e.cause }
+func (e IndicesShortRepliesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IndicesRepliesValidationError) Key() bool { return e.key }
+func (e IndicesShortRepliesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IndicesRepliesValidationError) ErrorName() string { return "IndicesRepliesValidationError" }
+func (e IndicesShortRepliesValidationError) ErrorName() string {
+	return "IndicesShortRepliesValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e IndicesRepliesValidationError) Error() string {
+func (e IndicesShortRepliesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -741,14 +743,14 @@ func (e IndicesRepliesValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIndicesReplies.%s: %s%s",
+		"invalid %sIndicesShortReplies.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IndicesRepliesValidationError{}
+var _ error = IndicesShortRepliesValidationError{}
 
 var _ interface {
 	Field() string
@@ -756,7 +758,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IndicesRepliesValidationError{}
+} = IndicesShortRepliesValidationError{}
 
 // Validate checks the field values on IndicesReply_Company with the rules
 // defined in the proto definition for this message. If any rules are

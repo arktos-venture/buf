@@ -19,7 +19,7 @@ service Indices {
     };
   }
 
-  rpc List (IndicesExchangeRequest) returns (IndicesShortReply)  {
+  rpc List (IndicesExchangeRequest) returns (IndicesShortReplies)  {
     option (google.api.http) = {
       get: "/v1/indice/{exchange}"
     };
@@ -117,7 +117,7 @@ message IndicesShortReply {
 	google.protobuf.Timestamp updated_at = 5;
 }
 
-message IndicesReplies {
+message IndicesShortReplies {
   repeated IndicesShortReply results = 1;
   int32 total = 2;
 }
