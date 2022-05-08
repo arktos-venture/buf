@@ -18,70 +18,70 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-type PositionHTTPServer interface {
-	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
-	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
+type IndicesHTTPServer interface {
+	Get(context.Context, *IndicesRequest) (*IndicesReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReply, error)
 }
 
-func RegisterPositionHTTPServer(s *http.Server, srv PositionHTTPServer) {
+func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/positions/{account}/companies", _Position_Companies0_HTTP_Handler(srv))
-	r.GET("/v1/positions/{account}/currencies", _Position_Currencies0_HTTP_Handler(srv))
-	r.GET("/healthz", _Position_Health10_HTTP_Handler(srv))
+	r.GET("/v1/indice/{indice}", _Indices_Get1_HTTP_Handler(srv))
+	r.GET("/v1/indice/{exchange}", _Indices_List0_HTTP_Handler(srv))
+	r.GET("/healthz", _Indices_Health2_HTTP_Handler(srv))
 }
 
-func _Position_Companies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Indices_Get1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PositionRequest
+		var in IndicesRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/positions.v1.Position/Companies")
+		http.SetOperation(ctx, "/indices.v1.Indices/Get")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Companies(ctx, req.(*PositionRequest))
+			return srv.Get(ctx, req.(*IndicesRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*PositionCompanyReplies)
+		reply := out.(*IndicesReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Position_Currencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Indices_List0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PositionRequest
+		var in IndicesExchangeRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/positions.v1.Position/Currencies")
+		http.SetOperation(ctx, "/indices.v1.Indices/List")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Currencies(ctx, req.(*PositionRequest))
+			return srv.List(ctx, req.(*IndicesExchangeRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*PositionCurrencyReplies)
+		reply := out.(*IndicesShortReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Position_Health10_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Indices_Health2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/positions.v1.Position/Health")
+		http.SetOperation(ctx, "/indices.v1.Indices/Health")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Health(ctx, req.(*emptypb.Empty))
 		})
@@ -94,25 +94,25 @@ func _Position_Health10_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Conte
 	}
 }
 
-type PositionHTTPClient interface {
-	Companies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCompanyReplies, err error)
-	Currencies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCurrencyReplies, err error)
+type IndicesHTTPClient interface {
+	Get(ctx context.Context, req *IndicesRequest, opts ...http.CallOption) (rsp *IndicesReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	List(ctx context.Context, req *IndicesExchangeRequest, opts ...http.CallOption) (rsp *IndicesShortReply, err error)
 }
 
-type PositionHTTPClientImpl struct {
+type IndicesHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewPositionHTTPClient(client *http.Client) PositionHTTPClient {
-	return &PositionHTTPClientImpl{client}
+func NewIndicesHTTPClient(client *http.Client) IndicesHTTPClient {
+	return &IndicesHTTPClientImpl{client}
 }
 
-func (c *PositionHTTPClientImpl) Companies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCompanyReplies, error) {
-	var out PositionCompanyReplies
-	pattern := "/v1/positions/{account}/companies"
+func (c *IndicesHTTPClientImpl) Get(ctx context.Context, in *IndicesRequest, opts ...http.CallOption) (*IndicesReply, error) {
+	var out IndicesReply
+	pattern := "/v1/indice/{indice}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/Companies"))
+	opts = append(opts, http.Operation("/indices.v1.Indices/Get"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -121,24 +121,24 @@ func (c *PositionHTTPClientImpl) Companies(ctx context.Context, in *PositionRequ
 	return &out, err
 }
 
-func (c *PositionHTTPClientImpl) Currencies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCurrencyReplies, error) {
-	var out PositionCurrencyReplies
-	pattern := "/v1/positions/{account}/currencies"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/Currencies"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *PositionHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+func (c *IndicesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/Health"))
+	opts = append(opts, http.Operation("/indices.v1.Indices/Health"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *IndicesHTTPClientImpl) List(ctx context.Context, in *IndicesExchangeRequest, opts ...http.CallOption) (*IndicesShortReply, error) {
+	var out IndicesShortReply
+	pattern := "/v1/indice/{exchange}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/indices.v1.Indices/List"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

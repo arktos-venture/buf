@@ -28,9 +28,9 @@ type ExchangesHTTPServer interface {
 func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/exchange/{exchange}/isopen", _Exchanges_IsOpen0_HTTP_Handler(srv))
-	r.GET("/v1/exchange/{exchange}", _Exchanges_Get1_HTTP_Handler(srv))
-	r.GET("/v1/exchanges", _Exchanges_List0_HTTP_Handler(srv))
-	r.GET("/healthz", _Exchanges_Health4_HTTP_Handler(srv))
+	r.GET("/v1/exchange/{exchange}", _Exchanges_Get2_HTTP_Handler(srv))
+	r.GET("/v1/exchanges", _Exchanges_List1_HTTP_Handler(srv))
+	r.GET("/healthz", _Exchanges_Health5_HTTP_Handler(srv))
 }
 
 func _Exchanges_IsOpen0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
@@ -55,7 +55,7 @@ func _Exchanges_IsOpen0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Exchanges_Get1_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Get2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -77,7 +77,7 @@ func _Exchanges_Get1_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Exchanges_List0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_List1_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -96,7 +96,7 @@ func _Exchanges_List0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Exchanges_Health4_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Health5_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

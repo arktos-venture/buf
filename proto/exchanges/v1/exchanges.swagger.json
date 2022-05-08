@@ -167,6 +167,20 @@
         }
       }
     },
+    "ExchangeReplyIndice": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "ExchangeRequestRequest": {
       "type": "object",
       "properties": {
@@ -273,8 +287,11 @@
         "description": {
           "type": "string"
         },
-        "indice": {
-          "type": "string"
+        "indices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExchangeReplyIndice"
+          }
         },
         "routing": {
           "type": "string"

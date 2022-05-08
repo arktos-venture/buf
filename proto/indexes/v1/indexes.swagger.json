@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/index/v1/index.proto",
+    "title": "proto/indexes/v1/indexes.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Index"
+      "name": "Indexes"
     }
   ],
   "consumes": [
@@ -18,7 +18,7 @@
   "paths": {
     "/healthz": {
       "get": {
-        "operationId": "Index_Health",
+        "operationId": "Indexes_Health",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,18 +34,18 @@
           }
         },
         "tags": [
-          "Index"
+          "Indexes"
         ]
       }
     },
-    "/v1/index": {
+    "/v1/indexes": {
       "get": {
-        "operationId": "Index_Search",
+        "operationId": "Indexes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexSearchReplies"
+              "$ref": "#/definitions/v1IndexesSearchReplies"
             }
           },
           "default": {
@@ -84,16 +84,16 @@
           }
         ],
         "tags": [
-          "Index"
+          "Indexes"
         ]
       },
       "post": {
-        "operationId": "Index_Create",
+        "operationId": "Indexes_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReply"
+              "$ref": "#/definitions/v1IndexesReply"
             }
           },
           "default": {
@@ -109,21 +109,21 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexCreateRequest"
+              "$ref": "#/definitions/v1IndexesCreateRequest"
             }
           }
         ],
         "tags": [
-          "Index"
+          "Indexes"
         ]
       },
       "put": {
-        "operationId": "Index_Update",
+        "operationId": "Indexes_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReply"
+              "$ref": "#/definitions/v1IndexesReply"
             }
           },
           "default": {
@@ -139,23 +139,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexCreateRequest"
+              "$ref": "#/definitions/v1IndexesCreateRequest"
             }
           }
         ],
         "tags": [
-          "Index"
+          "Indexes"
         ]
       }
     },
-    "/v1/index/{ref}": {
+    "/v1/indexes/{ref}": {
       "get": {
-        "operationId": "Index_Get",
+        "operationId": "Indexes_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReply"
+              "$ref": "#/definitions/v1IndexesReply"
             }
           },
           "default": {
@@ -174,16 +174,16 @@
           }
         ],
         "tags": [
-          "Index"
+          "Indexes"
         ]
       },
       "delete": {
-        "operationId": "Index_Delete",
+        "operationId": "Indexes_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReply"
+              "$ref": "#/definitions/v1IndexesReply"
             }
           },
           "default": {
@@ -202,117 +202,12 @@
           }
         ],
         "tags": [
-          "Index"
+          "Indexes"
         ]
       }
     }
   },
   "definitions": {
-    "IndexReplyCompanyActivity": {
-      "type": "object",
-      "properties": {
-        "economicSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "businessSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industryGroup": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industry": {
-          "type": "string",
-          "format": "int64"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "IndexReplyCompanyDividends": {
-      "type": "object",
-      "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
-        },
-        "annual": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "IndexReplyCompanyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "IndexReplyCompanyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "IndexReplyCompanyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg10d": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg90d": {
-          "type": "number",
-          "format": "float"
-        },
-        "share10dRatio": {
-          "type": "number",
-          "format": "float"
-        },
-        "share90dRatio": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -343,7 +238,7 @@
         }
       }
     },
-    "v1IndexCreateRequest": {
+    "v1IndexesCreateRequest": {
       "type": "object",
       "properties": {
         "ref": {
@@ -366,7 +261,7 @@
         }
       }
     },
-    "v1IndexReply": {
+    "v1IndexesReply": {
       "type": "object",
       "properties": {
         "ref": {
@@ -387,7 +282,7 @@
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndexReplyCompany"
+            "$ref": "#/definitions/v1IndexesReplyCompany"
           }
         },
         "created_at": {
@@ -400,7 +295,7 @@
         }
       }
     },
-    "v1IndexReplyCompany": {
+    "v1IndexesReplyCompany": {
       "type": "object",
       "properties": {
         "id": {
@@ -426,29 +321,134 @@
           "type": "boolean"
         },
         "activity": {
-          "$ref": "#/definitions/IndexReplyCompanyActivity"
+          "$ref": "#/definitions/v1IndexesReplyCompanyActivity"
         },
         "shares": {
-          "$ref": "#/definitions/IndexReplyCompanyShares"
+          "$ref": "#/definitions/v1IndexesReplyCompanyShares"
         },
         "pricing": {
-          "$ref": "#/definitions/IndexReplyCompanyPricing"
+          "$ref": "#/definitions/v1IndexesReplyCompanyPricing"
         },
         "dividends": {
-          "$ref": "#/definitions/IndexReplyCompanyDividends"
+          "$ref": "#/definitions/v1IndexesReplyCompanyDividends"
         },
         "volume": {
-          "$ref": "#/definitions/IndexReplyCompanyVolume"
+          "$ref": "#/definitions/v1IndexesReplyCompanyVolume"
         }
       }
     },
-    "v1IndexSearchReplies": {
+    "v1IndexesReplyCompanyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1IndexesReplyCompanyDividends": {
+      "type": "object",
+      "properties": {
+        "yield": {
+          "type": "number",
+          "format": "float"
+        },
+        "annual": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1IndexesReplyCompanyPricing": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "minYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "marketcap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1IndexesReplyCompanyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1IndexesReplyCompanyVolume": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg10d": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg90d": {
+          "type": "number",
+          "format": "float"
+        },
+        "share10dRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "share90dRatio": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1IndexesSearchReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndexSearchReply"
+            "$ref": "#/definitions/v1IndexesSearchReply"
           }
         },
         "total": {
@@ -457,7 +457,7 @@
         }
       }
     },
-    "v1IndexSearchReply": {
+    "v1IndexesSearchReply": {
       "type": "object",
       "properties": {
         "ref": {
@@ -471,7 +471,7 @@
         }
       }
     },
-    "v1IndexSearchRequestPage": {
+    "v1IndexesSearchRequestPage": {
       "type": "object",
       "properties": {
         "number": {

@@ -1,47 +1,47 @@
 syntax = "proto3";
 
-package index.v1;
+package indexes.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/index/v1;v1";
+option go_package = "grpc-api/api/indexes/v1;v1";
 option java_multiple_files = true;
-option java_package = "dev.kratos.api.index.v1";
-option java_outer_classname = "IndexProtoV1";
+option java_package = "dev.kratos.api.indexes.v1";
+option java_outer_classname = "IndexesProtoV1";
 
-service Index {
-  rpc Get (IndexRequest) returns (IndexReply)  {
+service Indexes {
+  rpc Get (IndexesRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      get: "/v1/index/{ref}"
+      get: "/v1/indexes/{ref}"
     };
   }
 
-  rpc Search (IndexSearchRequest) returns (IndexSearchReplies)  {
+  rpc Search (IndexesSearchRequest) returns (IndexesSearchReplies)  {
     option (google.api.http) = {
-      get: "/v1/index"
+      get: "/v1/indexes"
     };
   }
 
-  rpc Create (IndexCreateRequest) returns (IndexReply)  {
+  rpc Create (IndexesCreateRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      post: "/v1/index"
+      post: "/v1/indexes"
       body: "*"
     };
   }
 
-  rpc Update (IndexCreateRequest) returns (IndexReply)  {
+  rpc Update (IndexesCreateRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      put: "/v1/index"
+      put: "/v1/indexes"
       body: "*"
     };
   }
 
-  rpc Delete (IndexRequest) returns (IndexReply)  {
+  rpc Delete (IndexesRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      delete: "/v1/index/{ref}"
+      delete: "/v1/indexes/{ref}"
     };
   }
 
@@ -57,11 +57,11 @@ service Index {
 // Request
 // 
 
-message IndexRequest {
+message IndexesRequest {
   string ref = 1 [(validate.rules).string = {min_len: 2, max_len: 32}];
 }
 
-message IndexSearchRequest {
+message IndexesSearchRequest {
   message Page {
     int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
     int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
@@ -72,7 +72,7 @@ message IndexSearchRequest {
   Page page = 3 [(validate.rules).message.required = true];
 }
 
-message IndexCreateRequest {
+message IndexesCreateRequest {
   string ref = 1 [(validate.rules).string = {min_len: 1, max_len: 32}];
   string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
   string description = 3 [(validate.rules).string = {min_len: 8, max_len: 128}];
@@ -86,7 +86,7 @@ message IndexCreateRequest {
 // Reply
 // 
 
-message IndexReply {
+message IndexesReply {
   message Company {
     message Activity {
       int64 economicSector = 1; 
@@ -147,18 +147,18 @@ message IndexReply {
 	google.protobuf.Timestamp updated_at = 8;
 }
 
-message IndexReplies {
-  repeated IndexReply results = 1;
+message IndexesReplies {
+  repeated IndexesReply results = 1;
   int32 total = 2;
 }
 
-message IndexSearchReply {
+message IndexesSearchReply {
   string ref = 1;
   string name = 2;
   string description = 3;
 }
 
-message IndexSearchReplies {
-  repeated IndexSearchReply results = 1;
+message IndexesSearchReplies {
+  repeated IndexesSearchReply results = 1;
   int32 total = 2;
 }

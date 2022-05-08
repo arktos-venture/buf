@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package indices.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/indices/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.indices.v1";
+option java_outer_classname = "IndicesProtoV1";
+
+service Indices {
+  rpc Get (IndicesRequest) returns (IndicesReply)  {
+    option (google.api.http) = {
+      get: "/v1/indice/{indice}"
+    };
+  }
+
+  rpc List (IndicesExchangeRequest) returns (IndicesShortReply)  {
+    option (google.api.http) = {
+      get: "/v1/indice/{exchange}"
+    };
+  }
+
+  rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+
+// 
+// Request
+// 
+
+message IndicesRequest {
+  string indice = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+}
+
+message IndicesExchangeRequest {
+  string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+}
+
+
+// 
+// Reply
+// 
+
+message IndicesReply {
+  message Company {
+    message Activity {
+      int64 economicSector = 1; 
+      int64 businessSector = 2;
+      int64 industryGroup = 3;
+      int64 industry = 4;
+      int64 activity = 5;
+    }
+
+    message Shares {
+      int64 outstanding = 1;
+      int64 float = 2;
+    }
+  
+    message Pricing {
+      float last = 1;
+      float minYear = 2;
+      float maxYear = 3;
+      float returnYear = 4;
+      int64 marketcap = 5;
+      float beta5y = 6;
+    }
+  
+    message Volume {
+      float last = 1;
+      float avg10d = 2;
+      float avg90d = 3;
+      float share10dRatio = 4;
+      float share90dRatio = 5;
+    }
+  
+    message Dividends {
+      float yield = 1;
+      float annual = 2;
+    }
+
+    int64 id = 1;
+    string ticker = 2;
+    string ticker_alternative = 3;
+    string name = 4;
+    string isin = 5;
+    string exchange = 6;
+    bool adr = 7;
+    Activity activity = 8;
+    Shares shares = 9;
+    Pricing pricing = 10;
+    Dividends dividends = 11;
+    Volume volume = 12;
+  }
+
+  string ticker = 1;
+  string name = 2;
+  string description = 3;
+  repeated Company companies = 4;
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6;
+}
+
+message IndicesShortReply {
+  string ticker = 1;
+  string name = 2;
+  string description = 3;
+	google.protobuf.Timestamp created_at = 4;
+	google.protobuf.Timestamp updated_at = 5;
+}
+
+message IndicesReplies {
+  repeated IndicesShortReply results = 1;
+  int32 total = 2;
+}
