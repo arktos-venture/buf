@@ -616,7 +616,39 @@ func (m *ExchangeReply) validate(all bool) error {
 
 	// no validation rules for Description
 
-	// no validation rules for Indice
+	for idx, item := range m.GetIndices() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ExchangeReplyValidationError{
+						field:  fmt.Sprintf("Indices[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ExchangeReplyValidationError{
+						field:  fmt.Sprintf("Indices[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ExchangeReplyValidationError{
+					field:  fmt.Sprintf("Indices[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	// no validation rules for Routing
 
@@ -1643,6 +1675,114 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ExchangeReply_CompanyValidationError{}
+
+// Validate checks the field values on ExchangeReply_Indice with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeReply_Indice) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeReply_Indice with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeReply_IndiceMultiError, or nil if none found.
+func (m *ExchangeReply_Indice) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeReply_Indice) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	if len(errors) > 0 {
+		return ExchangeReply_IndiceMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeReply_IndiceMultiError is an error wrapping multiple validation
+// errors returned by ExchangeReply_Indice.ValidateAll() if the designated
+// constraints aren't met.
+type ExchangeReply_IndiceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeReply_IndiceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeReply_IndiceMultiError) AllErrors() []error { return m }
+
+// ExchangeReply_IndiceValidationError is the validation error returned by
+// ExchangeReply_Indice.Validate if the designated constraints aren't met.
+type ExchangeReply_IndiceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeReply_IndiceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeReply_IndiceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeReply_IndiceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeReply_IndiceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeReply_IndiceValidationError) ErrorName() string {
+	return "ExchangeReply_IndiceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeReply_IndiceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeReply_Indice.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeReply_IndiceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeReply_IndiceValidationError{}
 
 // Validate checks the field values on ExchangeReplies_Company with the rules
 // defined in the proto definition for this message. If any rules are

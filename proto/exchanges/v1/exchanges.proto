@@ -86,12 +86,18 @@ message ExchangeReply {
 		string isin = 4;
 		int64 activity = 5;
 	}
+
+	message Indice {
+		string ticker = 1;
+		string name = 2;
+		string description = 3;
+	}
   
 	int64 id = 1;
 	string ticker = 2;
 	string name = 3;
 	string description = 4;
-	string indice = 5;
+	repeated Indice indices = 5;
 	string routing = 6;
 	string country = 7;
 	string currency = 8;
