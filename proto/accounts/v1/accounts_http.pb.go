@@ -28,7 +28,7 @@ type AccountsHTTPServer interface {
 func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/account/{account}", _Accounts_Get3_HTTP_Handler(srv))
-	r.GET("/v1/accounts", _Accounts_List2_HTTP_Handler(srv))
+	r.GET("/v1/accounts", _Accounts_List3_HTTP_Handler(srv))
 	r.POST("/v1/account", _Accounts_Create0_HTTP_Handler(srv))
 	r.GET("/healthz", _Accounts_Health9_HTTP_Handler(srv))
 }
@@ -55,7 +55,7 @@ func _Accounts_Get3_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Accounts_List2_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_List3_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountListRequest
 		if err := ctx.BindQuery(&in); err != nil {

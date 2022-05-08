@@ -32,7 +32,7 @@ func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r.POST("/v1/{account}/order", _Orders_Create1_HTTP_Handler(srv))
 	r.PUT("/v1/{account}/order/{orderId}", _Orders_Update0_HTTP_Handler(srv))
 	r.DELETE("/v1/{account}/order/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Orders_Health10_HTTP_Handler(srv))
+	r.GET("/healthz", _Orders_Health11_HTTP_Handler(srv))
 }
 
 func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
@@ -123,7 +123,7 @@ func _Orders_Delete0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Health10_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Health11_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

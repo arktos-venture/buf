@@ -27,13 +27,13 @@ type SplitsHTTPServer interface {
 
 func RegisterSplitsHTTPServer(s *http.Server, srv SplitsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/company/{exchange}/{ticker}/splits", _Splits_List3_HTTP_Handler(srv))
+	r.POST("/v1/company/{exchange}/{ticker}/splits", _Splits_List4_HTTP_Handler(srv))
 	r.POST("/v1/company/{exchange}/{ticker}/splits/ts", _Splits_ListByTimestamp0_HTTP_Handler(srv))
 	r.POST("/v1/exchange/{exchange}/splits/bulk", _Splits_Bulk0_HTTP_Handler(srv))
-	r.GET("/healthz", _Splits_Health15_HTTP_Handler(srv))
+	r.GET("/healthz", _Splits_Health16_HTTP_Handler(srv))
 }
 
-func _Splits_List3_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
+func _Splits_List4_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SplitPeriodRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -99,7 +99,7 @@ func _Splits_Bulk0_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Splits_Health15_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
+func _Splits_Health16_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
