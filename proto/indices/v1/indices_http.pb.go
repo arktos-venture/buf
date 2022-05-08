@@ -21,7 +21,7 @@ const _ = http.SupportPackageIsVersion1
 type IndicesHTTPServer interface {
 	Get(context.Context, *IndicesRequest) (*IndicesReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReply, error)
+	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReplies, error)
 }
 
 func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
@@ -70,7 +70,7 @@ func _Indices_List0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) e
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndicesShortReply)
+		reply := out.(*IndicesShortReplies)
 		return ctx.Result(200, reply)
 	}
 }
@@ -97,7 +97,7 @@ func _Indices_Health2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 type IndicesHTTPClient interface {
 	Get(ctx context.Context, req *IndicesRequest, opts ...http.CallOption) (rsp *IndicesReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	List(ctx context.Context, req *IndicesExchangeRequest, opts ...http.CallOption) (rsp *IndicesShortReply, err error)
+	List(ctx context.Context, req *IndicesExchangeRequest, opts ...http.CallOption) (rsp *IndicesShortReplies, err error)
 }
 
 type IndicesHTTPClientImpl struct {
@@ -134,8 +134,8 @@ func (c *IndicesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, o
 	return &out, err
 }
 
-func (c *IndicesHTTPClientImpl) List(ctx context.Context, in *IndicesExchangeRequest, opts ...http.CallOption) (*IndicesShortReply, error) {
-	var out IndicesShortReply
+func (c *IndicesHTTPClientImpl) List(ctx context.Context, in *IndicesExchangeRequest, opts ...http.CallOption) (*IndicesShortReplies, error) {
+	var out IndicesShortReplies
 	pattern := "/v1/indice/{exchange}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indices.v1.Indices/List"))

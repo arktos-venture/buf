@@ -45,7 +45,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndicesShortReply"
+              "$ref": "#/definitions/v1IndicesShortReplies"
             }
           },
           "default": {
@@ -302,6 +302,21 @@
         "share90dRatio": {
           "type": "number",
           "format": "float"
+        }
+      }
+    },
+    "v1IndicesShortReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IndicesShortReply"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

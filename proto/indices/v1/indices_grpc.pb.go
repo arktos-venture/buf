@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndicesClient interface {
 	Get(ctx context.Context, in *IndicesRequest, opts ...grpc.CallOption) (*IndicesReply, error)
-	List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReply, error)
+	List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -41,8 +41,8 @@ func (c *indicesClient) Get(ctx context.Context, in *IndicesRequest, opts ...grp
 	return out, nil
 }
 
-func (c *indicesClient) List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReply, error) {
-	out := new(IndicesShortReply)
+func (c *indicesClient) List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReplies, error) {
+	out := new(IndicesShortReplies)
 	err := c.cc.Invoke(ctx, "/indices.v1.Indices/List", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *indicesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...g
 // for forward compatibility
 type IndicesServer interface {
 	Get(context.Context, *IndicesRequest) (*IndicesReply, error)
-	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReply, error)
+	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedIndicesServer()
 }
@@ -76,7 +76,7 @@ type UnimplementedIndicesServer struct {
 func (UnimplementedIndicesServer) Get(context.Context, *IndicesRequest) (*IndicesReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedIndicesServer) List(context.Context, *IndicesExchangeRequest) (*IndicesShortReply, error) {
+func (UnimplementedIndicesServer) List(context.Context, *IndicesExchangeRequest) (*IndicesShortReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedIndicesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
