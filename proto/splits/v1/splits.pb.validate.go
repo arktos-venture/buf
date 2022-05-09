@@ -35,31 +35,30 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on DatePeriod with the rules defined in the
+// Validate checks the field values on Filter with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *DatePeriod) Validate() error {
+func (m *Filter) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DatePeriod with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DatePeriodMultiError, or
-// nil if none found.
-func (m *DatePeriod) ValidateAll() error {
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DatePeriod) validate(all bool) error {
+func (m *Filter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
-		err := DatePeriodValidationError{
-			field:  "Interval",
+	if _, ok := Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterValidationError{
+			field:  "Operator",
 			reason: "value must be one of the defined enum values",
 		}
 		if !all {
@@ -68,10 +67,10 @@ func (m *DatePeriod) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _DatePeriod_Period_InLookup[m.GetPeriod()]; !ok {
-		err := DatePeriodValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y 2y 3y 5y 10y 20y 30y]",
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -79,19 +78,21 @@ func (m *DatePeriod) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Value
+
 	if len(errors) > 0 {
-		return DatePeriodMultiError(errors)
+		return FilterMultiError(errors)
 	}
 
 	return nil
 }
 
-// DatePeriodMultiError is an error wrapping multiple validation errors
-// returned by DatePeriod.ValidateAll() if the designated constraints aren't met.
-type DatePeriodMultiError []error
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DatePeriodMultiError) Error() string {
+func (m FilterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -100,11 +101,11 @@ func (m DatePeriodMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DatePeriodMultiError) AllErrors() []error { return m }
+func (m FilterMultiError) AllErrors() []error { return m }
 
-// DatePeriodValidationError is the validation error returned by
-// DatePeriod.Validate if the designated constraints aren't met.
-type DatePeriodValidationError struct {
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -112,22 +113,22 @@ type DatePeriodValidationError struct {
 }
 
 // Field function returns field value.
-func (e DatePeriodValidationError) Field() string { return e.field }
+func (e FilterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DatePeriodValidationError) Reason() string { return e.reason }
+func (e FilterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DatePeriodValidationError) Cause() error { return e.cause }
+func (e FilterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DatePeriodValidationError) Key() bool { return e.key }
+func (e FilterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DatePeriodValidationError) ErrorName() string { return "DatePeriodValidationError" }
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DatePeriodValidationError) Error() string {
+func (e FilterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -139,14 +140,14 @@ func (e DatePeriodValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDatePeriod.%s: %s%s",
+		"invalid %sFilter.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DatePeriodValidationError{}
+var _ error = FilterValidationError{}
 
 var _ interface {
 	Field() string
@@ -154,42 +155,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DatePeriodValidationError{}
+} = FilterValidationError{}
 
-var _DatePeriod_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-	"2y":   {},
-	"3y":   {},
-	"5y":   {},
-	"10y":  {},
-	"20y":  {},
-	"30y":  {},
-}
-
-// Validate checks the field values on DateTimestamp with the rules defined in
+// Validate checks the field values on SplitsRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *DateTimestamp) Validate() error {
+func (m *SplitsRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DateTimestamp with the rules defined
+// ValidateAll checks the field values on SplitsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DateTimestampMultiError, or
+// result is a list of violation errors wrapped in SplitsRequestMultiError, or
 // nil if none found.
-func (m *DateTimestamp) ValidateAll() error {
+func (m *SplitsRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DateTimestamp) validate(all bool) error {
+func (m *SplitsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -197,7 +180,7 @@ func (m *DateTimestamp) validate(all bool) error {
 	var errors []error
 
 	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
-		err := DateTimestampValidationError{
+		err := SplitsRequestValidationError{
 			field:  "Interval",
 			reason: "value must be one of the defined enum values",
 		}
@@ -207,49 +190,65 @@ func (m *DateTimestamp) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DateTimestampValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := SplitsRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SplitsRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SplitsRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, DateTimestampValidationError{
-					field:  "Date",
+				return SplitsRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DateTimestampValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
-		return DateTimestampMultiError(errors)
+		return SplitsRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// DateTimestampMultiError is an error wrapping multiple validation errors
-// returned by DateTimestamp.ValidateAll() if the designated constraints
+// SplitsRequestMultiError is an error wrapping multiple validation errors
+// returned by SplitsRequest.ValidateAll() if the designated constraints
 // aren't met.
-type DateTimestampMultiError []error
+type SplitsRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DateTimestampMultiError) Error() string {
+func (m SplitsRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -258,11 +257,11 @@ func (m DateTimestampMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DateTimestampMultiError) AllErrors() []error { return m }
+func (m SplitsRequestMultiError) AllErrors() []error { return m }
 
-// DateTimestampValidationError is the validation error returned by
-// DateTimestamp.Validate if the designated constraints aren't met.
-type DateTimestampValidationError struct {
+// SplitsRequestValidationError is the validation error returned by
+// SplitsRequest.Validate if the designated constraints aren't met.
+type SplitsRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -270,22 +269,22 @@ type DateTimestampValidationError struct {
 }
 
 // Field function returns field value.
-func (e DateTimestampValidationError) Field() string { return e.field }
+func (e SplitsRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DateTimestampValidationError) Reason() string { return e.reason }
+func (e SplitsRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DateTimestampValidationError) Cause() error { return e.cause }
+func (e SplitsRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DateTimestampValidationError) Key() bool { return e.key }
+func (e SplitsRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DateTimestampValidationError) ErrorName() string { return "DateTimestampValidationError" }
+func (e SplitsRequestValidationError) ErrorName() string { return "SplitsRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DateTimestampValidationError) Error() string {
+func (e SplitsRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -297,14 +296,14 @@ func (e DateTimestampValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDateTimestamp.%s: %s%s",
+		"invalid %sSplitsRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DateTimestampValidationError{}
+var _ error = SplitsRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -312,423 +311,48 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DateTimestampValidationError{}
+} = SplitsRequestValidationError{}
 
-// Validate checks the field values on SplitPeriodRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SplitPeriodRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitPeriodRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitPeriodRequestMultiError, or nil if none found.
-func (m *SplitPeriodRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitPeriodRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := SplitPeriodRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := SplitPeriodRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetDate() == nil {
-		err := SplitPeriodRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitPeriodRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitPeriodRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SplitPeriodRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitPeriodRequestMultiError is an error wrapping multiple validation errors
-// returned by SplitPeriodRequest.ValidateAll() if the designated constraints
-// aren't met.
-type SplitPeriodRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitPeriodRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitPeriodRequestMultiError) AllErrors() []error { return m }
-
-// SplitPeriodRequestValidationError is the validation error returned by
-// SplitPeriodRequest.Validate if the designated constraints aren't met.
-type SplitPeriodRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitPeriodRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitPeriodRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitPeriodRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitPeriodRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitPeriodRequestValidationError) ErrorName() string {
-	return "SplitPeriodRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SplitPeriodRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitPeriodRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitPeriodRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitPeriodRequestValidationError{}
-
-// Validate checks the field values on SplitTimestampRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SplitTimestampRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitTimestampRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitTimestampRequestMultiError, or nil if none found.
-func (m *SplitTimestampRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitTimestampRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := SplitTimestampRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := SplitTimestampRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetDate() == nil {
-		err := SplitTimestampRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitTimestampRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitTimestampRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SplitTimestampRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitTimestampRequestMultiError is an error wrapping multiple validation
-// errors returned by SplitTimestampRequest.ValidateAll() if the designated
-// constraints aren't met.
-type SplitTimestampRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitTimestampRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitTimestampRequestMultiError) AllErrors() []error { return m }
-
-// SplitTimestampRequestValidationError is the validation error returned by
-// SplitTimestampRequest.Validate if the designated constraints aren't met.
-type SplitTimestampRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitTimestampRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitTimestampRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitTimestampRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitTimestampRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitTimestampRequestValidationError) ErrorName() string {
-	return "SplitTimestampRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SplitTimestampRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitTimestampRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitTimestampRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitTimestampRequestValidationError{}
-
-// Validate checks the field values on SplitBulkRequest with the rules defined
+// Validate checks the field values on SplitsLastRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *SplitBulkRequest) Validate() error {
+func (m *SplitsLastRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on SplitBulkRequest with the rules
+// ValidateAll checks the field values on SplitsLastRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// SplitBulkRequestMultiError, or nil if none found.
-func (m *SplitBulkRequest) ValidateAll() error {
+// SplitsLastRequestMultiError, or nil if none found.
+func (m *SplitsLastRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *SplitBulkRequest) validate(all bool) error {
+func (m *SplitsLastRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := SplitBulkRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Exchange
 
-	if m.GetDate() == nil {
-		err := SplitBulkRequestValidationError{
-			field:  "Date",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitBulkRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitBulkRequestValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitBulkRequestValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
-		return SplitBulkRequestMultiError(errors)
+		return SplitsLastRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// SplitBulkRequestMultiError is an error wrapping multiple validation errors
-// returned by SplitBulkRequest.ValidateAll() if the designated constraints
+// SplitsLastRequestMultiError is an error wrapping multiple validation errors
+// returned by SplitsLastRequest.ValidateAll() if the designated constraints
 // aren't met.
-type SplitBulkRequestMultiError []error
+type SplitsLastRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m SplitBulkRequestMultiError) Error() string {
+func (m SplitsLastRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -737,11 +361,11 @@ func (m SplitBulkRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m SplitBulkRequestMultiError) AllErrors() []error { return m }
+func (m SplitsLastRequestMultiError) AllErrors() []error { return m }
 
-// SplitBulkRequestValidationError is the validation error returned by
-// SplitBulkRequest.Validate if the designated constraints aren't met.
-type SplitBulkRequestValidationError struct {
+// SplitsLastRequestValidationError is the validation error returned by
+// SplitsLastRequest.Validate if the designated constraints aren't met.
+type SplitsLastRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -749,22 +373,24 @@ type SplitBulkRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e SplitBulkRequestValidationError) Field() string { return e.field }
+func (e SplitsLastRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SplitBulkRequestValidationError) Reason() string { return e.reason }
+func (e SplitsLastRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SplitBulkRequestValidationError) Cause() error { return e.cause }
+func (e SplitsLastRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SplitBulkRequestValidationError) Key() bool { return e.key }
+func (e SplitsLastRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SplitBulkRequestValidationError) ErrorName() string { return "SplitBulkRequestValidationError" }
+func (e SplitsLastRequestValidationError) ErrorName() string {
+	return "SplitsLastRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e SplitBulkRequestValidationError) Error() string {
+func (e SplitsLastRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -776,14 +402,14 @@ func (e SplitBulkRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSplitBulkRequest.%s: %s%s",
+		"invalid %sSplitsLastRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SplitBulkRequestValidationError{}
+var _ error = SplitsLastRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -791,7 +417,140 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SplitBulkRequestValidationError{}
+} = SplitsLastRequestValidationError{}
+
+// Validate checks the field values on SplitsLastReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *SplitsLastReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SplitsLastReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SplitsLastReplyMultiError, or nil if none found.
+func (m *SplitsLastReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SplitsLastReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for From
+
+	// no validation rules for To
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SplitsLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SplitsLastReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SplitsLastReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return SplitsLastReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SplitsLastReplyMultiError is an error wrapping multiple validation errors
+// returned by SplitsLastReply.ValidateAll() if the designated constraints
+// aren't met.
+type SplitsLastReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SplitsLastReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SplitsLastReplyMultiError) AllErrors() []error { return m }
+
+// SplitsLastReplyValidationError is the validation error returned by
+// SplitsLastReply.Validate if the designated constraints aren't met.
+type SplitsLastReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SplitsLastReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SplitsLastReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SplitsLastReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SplitsLastReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SplitsLastReplyValidationError) ErrorName() string { return "SplitsLastReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SplitsLastReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSplitsLastReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SplitsLastReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SplitsLastReplyValidationError{}
 
 // Validate checks the field values on SplitsReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -815,37 +574,38 @@ func (m *SplitsReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for From
+	for idx, item := range m.GetCreatedAt() {
+		_, _ = idx, item
 
-	// no validation rules for To
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitsReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SplitsReplyValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SplitsReplyValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitsReplyValidationError{
-					field:  "CreatedAt",
+				return SplitsReplyValidationError{
+					field:  fmt.Sprintf("CreatedAt[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitsReplyValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -924,409 +684,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SplitsReplyValidationError{}
-
-// Validate checks the field values on SplitReplies with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *SplitReplies) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitReplies with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SplitRepliesMultiError, or
-// nil if none found.
-func (m *SplitReplies) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitReplies) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	for idx, item := range m.GetResults() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SplitRepliesValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, SplitRepliesValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SplitRepliesValidationError{
-					field:  fmt.Sprintf("Results[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	// no validation rules for Total
-
-	if len(errors) > 0 {
-		return SplitRepliesMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitRepliesMultiError is an error wrapping multiple validation errors
-// returned by SplitReplies.ValidateAll() if the designated constraints aren't met.
-type SplitRepliesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitRepliesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitRepliesMultiError) AllErrors() []error { return m }
-
-// SplitRepliesValidationError is the validation error returned by
-// SplitReplies.Validate if the designated constraints aren't met.
-type SplitRepliesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitRepliesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitRepliesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitRepliesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitRepliesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitRepliesValidationError) ErrorName() string { return "SplitRepliesValidationError" }
-
-// Error satisfies the builtin error interface
-func (e SplitRepliesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitReplies.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitRepliesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitRepliesValidationError{}
-
-// Validate checks the field values on SplitBulkReplies with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *SplitBulkReplies) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitBulkReplies with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitBulkRepliesMultiError, or nil if none found.
-func (m *SplitBulkReplies) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitBulkReplies) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	for idx, item := range m.GetCompanies() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SplitBulkRepliesValidationError{
-						field:  fmt.Sprintf("Companies[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, SplitBulkRepliesValidationError{
-						field:  fmt.Sprintf("Companies[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SplitBulkRepliesValidationError{
-					field:  fmt.Sprintf("Companies[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	// no validation rules for Total
-
-	if len(errors) > 0 {
-		return SplitBulkRepliesMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitBulkRepliesMultiError is an error wrapping multiple validation errors
-// returned by SplitBulkReplies.ValidateAll() if the designated constraints
-// aren't met.
-type SplitBulkRepliesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitBulkRepliesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitBulkRepliesMultiError) AllErrors() []error { return m }
-
-// SplitBulkRepliesValidationError is the validation error returned by
-// SplitBulkReplies.Validate if the designated constraints aren't met.
-type SplitBulkRepliesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitBulkRepliesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitBulkRepliesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitBulkRepliesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitBulkRepliesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitBulkRepliesValidationError) ErrorName() string { return "SplitBulkRepliesValidationError" }
-
-// Error satisfies the builtin error interface
-func (e SplitBulkRepliesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitBulkReplies.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitBulkRepliesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitBulkRepliesValidationError{}
-
-// Validate checks the field values on SplitBulkReplies_Company with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SplitBulkReplies_Company) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SplitBulkReplies_Company with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SplitBulkReplies_CompanyMultiError, or nil if none found.
-func (m *SplitBulkReplies_Company) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SplitBulkReplies_Company) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Ticker
-
-	// no validation rules for Exchange
-
-	if all {
-		switch v := interface{}(m.GetResults()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SplitBulkReplies_CompanyValidationError{
-					field:  "Results",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SplitBulkReplies_CompanyValidationError{
-					field:  "Results",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetResults()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SplitBulkReplies_CompanyValidationError{
-				field:  "Results",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SplitBulkReplies_CompanyMultiError(errors)
-	}
-
-	return nil
-}
-
-// SplitBulkReplies_CompanyMultiError is an error wrapping multiple validation
-// errors returned by SplitBulkReplies_Company.ValidateAll() if the designated
-// constraints aren't met.
-type SplitBulkReplies_CompanyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SplitBulkReplies_CompanyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SplitBulkReplies_CompanyMultiError) AllErrors() []error { return m }
-
-// SplitBulkReplies_CompanyValidationError is the validation error returned by
-// SplitBulkReplies_Company.Validate if the designated constraints aren't met.
-type SplitBulkReplies_CompanyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SplitBulkReplies_CompanyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SplitBulkReplies_CompanyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SplitBulkReplies_CompanyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SplitBulkReplies_CompanyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SplitBulkReplies_CompanyValidationError) ErrorName() string {
-	return "SplitBulkReplies_CompanyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SplitBulkReplies_CompanyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSplitBulkReplies_Company.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SplitBulkReplies_CompanyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SplitBulkReplies_CompanyValidationError{}
