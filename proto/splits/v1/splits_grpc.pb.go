@@ -19,9 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SplitsClient interface {
-	List(ctx context.Context, in *SplitPeriodRequest, opts ...grpc.CallOption) (*SplitReplies, error)
-	ListByTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...grpc.CallOption) (*SplitReplies, error)
-	Bulk(ctx context.Context, in *SplitBulkRequest, opts ...grpc.CallOption) (*SplitBulkReplies, error)
+	Last(ctx context.Context, in *SplitsLastRequest, opts ...grpc.CallOption) (*SplitsLastReply, error)
+	Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -33,27 +32,18 @@ func NewSplitsClient(cc grpc.ClientConnInterface) SplitsClient {
 	return &splitsClient{cc}
 }
 
-func (c *splitsClient) List(ctx context.Context, in *SplitPeriodRequest, opts ...grpc.CallOption) (*SplitReplies, error) {
-	out := new(SplitReplies)
-	err := c.cc.Invoke(ctx, "/splits.v1.Splits/List", in, out, opts...)
+func (c *splitsClient) Last(ctx context.Context, in *SplitsLastRequest, opts ...grpc.CallOption) (*SplitsLastReply, error) {
+	out := new(SplitsLastReply)
+	err := c.cc.Invoke(ctx, "/splits.v1.Splits/Last", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *splitsClient) ListByTimestamp(ctx context.Context, in *SplitTimestampRequest, opts ...grpc.CallOption) (*SplitReplies, error) {
-	out := new(SplitReplies)
-	err := c.cc.Invoke(ctx, "/splits.v1.Splits/ListByTimestamp", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *splitsClient) Bulk(ctx context.Context, in *SplitBulkRequest, opts ...grpc.CallOption) (*SplitBulkReplies, error) {
-	out := new(SplitBulkReplies)
-	err := c.cc.Invoke(ctx, "/splits.v1.Splits/Bulk", in, out, opts...)
+func (c *splitsClient) Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReply, error) {
+	out := new(SplitsReply)
+	err := c.cc.Invoke(ctx, "/splits.v1.Splits/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +63,8 @@ func (c *splitsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...gr
 // All implementations must embed UnimplementedSplitsServer
 // for forward compatibility
 type SplitsServer interface {
-	List(context.Context, *SplitPeriodRequest) (*SplitReplies, error)
-	ListByTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error)
-	Bulk(context.Context, *SplitBulkRequest) (*SplitBulkReplies, error)
+	Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error)
+	Search(context.Context, *SplitsRequest) (*SplitsReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSplitsServer()
 }
@@ -84,14 +73,11 @@ type SplitsServer interface {
 type UnimplementedSplitsServer struct {
 }
 
-func (UnimplementedSplitsServer) List(context.Context, *SplitPeriodRequest) (*SplitReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedSplitsServer) Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedSplitsServer) ListByTimestamp(context.Context, *SplitTimestampRequest) (*SplitReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListByTimestamp not implemented")
-}
-func (UnimplementedSplitsServer) Bulk(context.Context, *SplitBulkRequest) (*SplitBulkReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Bulk not implemented")
+func (UnimplementedSplitsServer) Search(context.Context, *SplitsRequest) (*SplitsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedSplitsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -109,56 +95,38 @@ func RegisterSplitsServer(s grpc.ServiceRegistrar, srv SplitsServer) {
 	s.RegisterService(&Splits_ServiceDesc, srv)
 }
 
-func _Splits_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SplitPeriodRequest)
+func _Splits_Last_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SplitsLastRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SplitsServer).List(ctx, in)
+		return srv.(SplitsServer).Last(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/splits.v1.Splits/List",
+		FullMethod: "/splits.v1.Splits/Last",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SplitsServer).List(ctx, req.(*SplitPeriodRequest))
+		return srv.(SplitsServer).Last(ctx, req.(*SplitsLastRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Splits_ListByTimestamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SplitTimestampRequest)
+func _Splits_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SplitsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SplitsServer).ListByTimestamp(ctx, in)
+		return srv.(SplitsServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/splits.v1.Splits/ListByTimestamp",
+		FullMethod: "/splits.v1.Splits/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SplitsServer).ListByTimestamp(ctx, req.(*SplitTimestampRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Splits_Bulk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SplitBulkRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SplitsServer).Bulk(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/splits.v1.Splits/Bulk",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SplitsServer).Bulk(ctx, req.(*SplitBulkRequest))
+		return srv.(SplitsServer).Search(ctx, req.(*SplitsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -189,16 +157,12 @@ var Splits_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SplitsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "List",
-			Handler:    _Splits_List_Handler,
+			MethodName: "Last",
+			Handler:    _Splits_Last_Handler,
 		},
 		{
-			MethodName: "ListByTimestamp",
-			Handler:    _Splits_ListByTimestamp_Handler,
-		},
-		{
-			MethodName: "Bulk",
-			Handler:    _Splits_Bulk_Handler,
+			MethodName: "Search",
+			Handler:    _Splits_Search_Handler,
 		},
 		{
 			MethodName: "Health",

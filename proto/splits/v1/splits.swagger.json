@@ -38,14 +38,46 @@
         ]
       }
     },
-    "/v1/company/{exchange}/{ticker}/splits": {
+    "/v1/splits": {
       "post": {
-        "operationId": "Splits_List",
+        "operationId": "Splits_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SplitReplies"
+              "$ref": "#/definitions/v1SplitsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SplitsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Splits"
+        ]
+      }
+    },
+    "/v1/splits/{exchange}/{ticker}": {
+      "get": {
+        "operationId": "Splits_Last",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SplitsLastReply"
             }
           },
           "default": {
@@ -67,111 +99,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "date": {
-                  "$ref": "#/definitions/v1DatePeriod"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Splits"
-        ]
-      }
-    },
-    "/v1/company/{exchange}/{ticker}/splits/ts": {
-      "post": {
-        "operationId": "Splits_ListByTimestamp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SplitReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "date": {
-                  "$ref": "#/definitions/v1DateTimestamp"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Splits"
-        ]
-      }
-    },
-    "/v1/exchange/{exchange}/splits/bulk": {
-      "post": {
-        "operationId": "Splits_Bulk",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SplitBulkReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "date": {
-                  "$ref": "#/definitions/v1DateTimestamp"
-                }
-              }
-            }
           }
         ],
         "tags": [
@@ -211,6 +138,29 @@
         }
       }
     },
+    "splitsv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "splitsv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/splitsv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/splitsv1Argument"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
     "splitsv1Interval": {
       "type": "string",
       "enum": [
@@ -220,74 +170,18 @@
       ],
       "default": "d"
     },
-    "v1DatePeriod": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/splitsv1Interval"
-        },
-        "period": {
-          "type": "string"
-        }
-      }
+    "splitsv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
     },
-    "v1DateTimestamp": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/splitsv1Interval"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1SplitBulkReplies": {
-      "type": "object",
-      "properties": {
-        "companies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1SplitBulkRepliesCompany"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1SplitBulkRepliesCompany": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "results": {
-          "$ref": "#/definitions/v1SplitsReply"
-        }
-      }
-    },
-    "v1SplitReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1SplitsReply"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1SplitsReply": {
+    "v1SplitsLastReply": {
       "type": "object",
       "properties": {
         "from": {
@@ -301,6 +195,46 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1SplitsReply": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1SplitsRequest": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/splitsv1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/splitsv1Filter"
+          }
         }
       }
     }
