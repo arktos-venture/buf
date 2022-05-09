@@ -289,6 +289,35 @@ func (m *IndicesReply) validate(all bool) error {
 
 	// no validation rules for Description
 
+	if all {
+		switch v := interface{}(m.GetQuote()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndicesReplyValidationError{
+					field:  "Quote",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndicesReplyValidationError{
+					field:  "Quote",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuote()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndicesReplyValidationError{
+				field:  "Quote",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	for idx, item := range m.GetCompanies() {
 		_, _ = idx, item
 
@@ -1024,6 +1053,147 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndicesReply_CompanyValidationError{}
+
+// Validate checks the field values on IndicesReply_Quote with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndicesReply_Quote) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndicesReply_Quote with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndicesReply_QuoteMultiError, or nil if none found.
+func (m *IndicesReply_Quote) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndicesReply_Quote) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Open
+
+	// no validation rules for Close
+
+	// no validation rules for Low
+
+	// no validation rules for High
+
+	// no validation rules for Volume
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndicesReply_QuoteValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndicesReply_QuoteValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndicesReply_QuoteValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return IndicesReply_QuoteMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndicesReply_QuoteMultiError is an error wrapping multiple validation errors
+// returned by IndicesReply_Quote.ValidateAll() if the designated constraints
+// aren't met.
+type IndicesReply_QuoteMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndicesReply_QuoteMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndicesReply_QuoteMultiError) AllErrors() []error { return m }
+
+// IndicesReply_QuoteValidationError is the validation error returned by
+// IndicesReply_Quote.Validate if the designated constraints aren't met.
+type IndicesReply_QuoteValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndicesReply_QuoteValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndicesReply_QuoteValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndicesReply_QuoteValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndicesReply_QuoteValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndicesReply_QuoteValidationError) ErrorName() string {
+	return "IndicesReply_QuoteValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndicesReply_QuoteValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndicesReply_Quote.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndicesReply_QuoteValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndicesReply_QuoteValidationError{}
 
 // Validate checks the field values on IndicesReply_Company_Activity with the
 // rules defined in the proto definition for this message. If any rules are

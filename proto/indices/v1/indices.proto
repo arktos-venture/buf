@@ -101,13 +101,23 @@ message IndicesReply {
     Volume volume = 12;
   }
 
+  message Quote {
+    float open = 1;
+    float close = 2;
+    float low = 3;
+    float high = 4;
+    float volume = 5;
+    google.protobuf.Timestamp created_at = 7;
+  }
+
   int64 id = 1;
   string ticker = 2;
   string name = 3;
   string description = 4;
-  repeated Company companies = 5;
-	google.protobuf.Timestamp created_at = 6;
-	google.protobuf.Timestamp updated_at = 7;
+  Quote quote = 5;
+  repeated Company companies = 6;
+	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp updated_at = 8;
 }
 
 message IndicesShortReply {
