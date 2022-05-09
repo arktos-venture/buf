@@ -108,9 +108,7 @@
             "enum": [
               "Companies",
               "Currencies",
-              "Industries",
-              "Exchanges",
-              "Countries",
+              "Indices",
               "Indexes",
               "Accounts"
             ],
@@ -141,10 +139,6 @@
       "enum": [
         "Ticker",
         "Exchange",
-        "Industry",
-        "Index",
-        "Country",
-        "Currency",
         "Time"
       ],
       "default": "Ticker"
@@ -189,9 +183,7 @@
       "enum": [
         "Companies",
         "Currencies",
-        "Industries",
-        "Exchanges",
-        "Countries",
+        "Indices",
         "Indexes",
         "Accounts"
       ],
