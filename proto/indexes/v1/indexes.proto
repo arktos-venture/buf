@@ -74,11 +74,8 @@ message IndexesSearchRequest {
 
 message IndexesCreateRequest {
   string ref = 1 [(validate.rules).string = {min_len: 1, max_len: 32}];
-  string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  string description = 3 [(validate.rules).string = {min_len: 8, max_len: 128}];
-  string currency = 4 [(validate.rules).string.len = 3];
-  string request = 5 [(validate.rules).string = {min_len: 8, max_len: 8196}];
-  bool public = 6;
+  string request = 2 [(validate.rules).string = {min_len: 8, max_len: 8196}];
+  bool public = 3;
 }
 
 
@@ -138,13 +135,10 @@ message IndexesReply {
   }
 
   string ref = 1;
-  string name = 2;
-  string description = 3;
-  string currency = 4;
-  bool public = 5;
-  repeated Company companies = 6;
-	google.protobuf.Timestamp created_at = 7;
-	google.protobuf.Timestamp updated_at = 8;
+  bool public = 2;
+  repeated Company companies = 3;
+	google.protobuf.Timestamp created_at = 4;
+	google.protobuf.Timestamp updated_at = 5;
 }
 
 message IndexesReplies {
@@ -154,8 +148,6 @@ message IndexesReplies {
 
 message IndexesSearchReply {
   string ref = 1;
-  string name = 2;
-  string description = 3;
 }
 
 message IndexesSearchReplies {

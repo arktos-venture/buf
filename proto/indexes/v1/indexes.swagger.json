@@ -244,15 +244,6 @@
         "ref": {
           "type": "string"
         },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
         "request": {
           "type": "string"
         },
@@ -265,15 +256,6 @@
       "type": "object",
       "properties": {
         "ref": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "currency": {
           "type": "string"
         },
         "public": {
@@ -461,12 +443,6 @@
       "type": "object",
       "properties": {
         "ref": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
           "type": "string"
         }
       }

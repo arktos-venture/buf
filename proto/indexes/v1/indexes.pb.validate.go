@@ -335,40 +335,6 @@ func (m *IndexesCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 32 {
-		err := IndexesCreateRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetDescription()); l < 8 || l > 128 {
-		err := IndexesCreateRequestValidationError{
-			field:  "Description",
-			reason: "value length must be between 8 and 128 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := IndexesCreateRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	if l := utf8.RuneCountInString(m.GetRequest()); l < 8 || l > 8196 {
 		err := IndexesCreateRequestValidationError{
 			field:  "Request",
@@ -485,12 +451,6 @@ func (m *IndexesReply) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for Ref
-
-	// no validation rules for Name
-
-	// no validation rules for Description
-
-	// no validation rules for Currency
 
 	// no validation rules for Public
 
@@ -822,10 +782,6 @@ func (m *IndexesSearchReply) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for Ref
-
-	// no validation rules for Name
-
-	// no validation rules for Description
 
 	if len(errors) > 0 {
 		return IndexesSearchReplyMultiError(errors)

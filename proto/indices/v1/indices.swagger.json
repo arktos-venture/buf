@@ -38,36 +38,6 @@
         ]
       }
     },
-    "/v1/indice/{exchange}": {
-      "get": {
-        "operationId": "Indices_List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndicesShortReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Indices"
-        ]
-      }
-    },
     "/v1/indice/{indice}": {
       "get": {
         "operationId": "Indices_Get",
@@ -97,9 +67,68 @@
           "Indices"
         ]
       }
+    },
+    "/v1/indices/exchange/{exchange}": {
+      "get": {
+        "operationId": "Indices_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicesShortReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
     }
   },
   "definitions": {
+    "IndicesReplyQuote": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -133,6 +162,10 @@
     "v1IndicesReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
           "type": "string"
         },
@@ -141,6 +174,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "quote": {
+          "$ref": "#/definitions/IndicesReplyQuote"
         },
         "companies": {
           "type": "array",
@@ -323,6 +359,10 @@
     "v1IndicesShortReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "ticker": {
           "type": "string"
         },
