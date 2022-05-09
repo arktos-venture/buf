@@ -21,7 +21,7 @@ service Indices {
 
   rpc List (IndicesExchangeRequest) returns (IndicesShortReplies)  {
     option (google.api.http) = {
-      get: "/v1/indice/{exchange}"
+      get: "/v1/indices/exchange/{exchange}"
     };
   }
 
@@ -101,20 +101,22 @@ message IndicesReply {
     Volume volume = 12;
   }
 
-  string ticker = 1;
-  string name = 2;
-  string description = 3;
-  repeated Company companies = 4;
-	google.protobuf.Timestamp created_at = 5;
-	google.protobuf.Timestamp updated_at = 6;
+  int64 id = 1;
+  string ticker = 2;
+  string name = 3;
+  string description = 4;
+  repeated Company companies = 5;
+	google.protobuf.Timestamp created_at = 6;
+	google.protobuf.Timestamp updated_at = 7;
 }
 
 message IndicesShortReply {
-  string ticker = 1;
-  string name = 2;
-  string description = 3;
-	google.protobuf.Timestamp created_at = 4;
-	google.protobuf.Timestamp updated_at = 5;
+  int64 id = 1;
+  string ticker = 2;
+  string name = 3;
+  string description = 4;
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6;
 }
 
 message IndicesShortReplies {

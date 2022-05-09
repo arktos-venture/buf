@@ -281,6 +281,8 @@ func (m *IndicesReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	// no validation rules for Ticker
 
 	// no validation rules for Name
@@ -477,6 +479,8 @@ func (m *IndicesShortReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
 
 	// no validation rules for Ticker
 
