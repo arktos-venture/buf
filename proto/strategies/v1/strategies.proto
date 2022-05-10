@@ -40,12 +40,10 @@ enum Interval {
 enum TSDB {
 	Companies = 0;
 	Currencies = 1;
-	Industries = 2;
-	Exchanges = 3;
-	Countries = 4;
-	Indexes = 5;
-	Accounts = 6;
-}
+	Indices = 2;
+	Indexes = 3;
+	Accounts = 4;
+  }
   
 enum Operator {
 	Equal = 0;
@@ -58,11 +56,7 @@ enum Operator {
 enum Argument {
 	Ticker = 0;
 	Exchange = 1;
-	Industry = 2;
-	Index = 3;
-	Country = 4;
-	Currency = 5;
-	Time = 6;
+  	Time = 2;
 }
   
 message Filter {

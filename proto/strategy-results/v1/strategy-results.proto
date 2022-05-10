@@ -33,9 +33,10 @@ service Strategy {
 // 
 
 message StrategyRequest {
-	repeated float quotes = 1;
-	repeated google.protobuf.Timestamp dates = 2;
-	map<string, int32> params = 3;
+	bool reversed = 1;
+	repeated float quotes = 2;
+	repeated google.protobuf.Timestamp dates = 3;
+	map<string, int32> params = 4;
 }
 
 
