@@ -26,7 +26,7 @@ type StrategiesHTTPServer interface {
 func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/strategy/execute", _Strategies_Execute1_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategies_Health6_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategies_Health7_HTTP_Handler(srv))
 }
 
 func _Strategies_Execute1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
@@ -48,7 +48,7 @@ func _Strategies_Execute1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.C
 	}
 }
 
-func _Strategies_Health6_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Health7_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

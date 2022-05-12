@@ -29,15 +29,15 @@ type IndexesHTTPServer interface {
 
 func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indexes/{ref}", _Indexes_Get6_HTTP_Handler(srv))
+	r.GET("/v1/indexes/{ref}", _Indexes_Get7_HTTP_Handler(srv))
 	r.GET("/v1/indexes", _Indexes_Search9_HTTP_Handler(srv))
 	r.POST("/v1/indexes", _Indexes_Create3_HTTP_Handler(srv))
 	r.PUT("/v1/indexes", _Indexes_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/indexes/{ref}", _Indexes_Delete1_HTTP_Handler(srv))
-	r.GET("/healthz", _Indexes_Health17_HTTP_Handler(srv))
+	r.GET("/healthz", _Indexes_Health18_HTTP_Handler(srv))
 }
 
-func _Indexes_Get6_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Get7_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexesRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -138,7 +138,7 @@ func _Indexes_Delete1_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Health17_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Health18_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

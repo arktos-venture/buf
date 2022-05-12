@@ -139,6 +139,9 @@
     "strategy_resultsv1StrategyRequest": {
       "type": "object",
       "properties": {
+        "reversed": {
+          "type": "boolean"
+        },
         "quotes": {
           "type": "array",
           "items": {

@@ -57,6 +57,8 @@ func (m *StrategyRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Reversed
+
 	for idx, item := range m.GetDates() {
 		_, _ = idx, item
 
