@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package currencies.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/currencies/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.currencies.v1";
+option java_outer_classname = "CurrenciesProtoV1";
+
+service Currencies {
+	rpc Get (CurrencyRequest) returns (CurrencyReply)  {
+		option (google.api.http) = {
+			get: "/v1/currency/{ticker}"
+		};
+	}
+
+	rpc List (CurrencyListRequest) returns (CurrencyReplies)  {
+		option (google.api.http) = {
+			get: "/v1/currencies/{ticker}"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    	option (google.api.http) = {
+      		get: "/healthz"
+    	};
+  	}
+}
+
+
+// 
+// Request
+// 
+
+message CurrencyRequest {
+	string ticker = 1 [(validate.rules).string.len = 6];
+}
+
+message CurrencyListRequest {
+	string ticker = 1 [(validate.rules).string.len = 3];
+}
+
+
+// 
+// Reply
+// 
+
+message CurrencyReply {
+	message Currencies {
+		string from = 1;
+		string to = 2; 
+	}
+	
+	message Exchanges {
+		repeated string from = 1;
+		repeated string to = 2; 
+	}
+
+	message Quote {
+		float open = 1;
+		float close = 2;
+		float low = 3;
+		float high = 4;
+		float volume = 5;
+		google.protobuf.Timestamp created_at = 7;
+	}
+
+	int64 id = 1;
+	string ticker = 2;
+	Currencies currencies = 3;
+	Exchanges exchanges = 4;
+	Quote quote = 5;
+}
+
+message CurrencyReplies {
+	repeated CurrencyReply results = 1;
+	int32 total = 2;
+}

@@ -100,35 +100,6 @@
     }
   },
   "definitions": {
-    "IndicesReplyQuote": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "number",
-          "format": "float"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -176,7 +147,7 @@
           "type": "string"
         },
         "quote": {
-          "$ref": "#/definitions/IndicesReplyQuote"
+          "$ref": "#/definitions/v1IndicesReplyQuote"
         },
         "companies": {
           "type": "array",
@@ -338,6 +309,35 @@
         "share90dRatio": {
           "type": "number",
           "format": "float"
+        }
+      }
+    },
+    "v1IndicesReplyQuote": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
