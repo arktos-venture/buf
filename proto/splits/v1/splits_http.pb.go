@@ -28,7 +28,7 @@ func RegisterSplitsHTTPServer(s *http.Server, srv SplitsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/splits/{exchange}/{ticker}", _Splits_Last2_HTTP_Handler(srv))
 	r.POST("/v1/splits", _Splits_Search8_HTTP_Handler(srv))
-	r.GET("/healthz", _Splits_Health17_HTTP_Handler(srv))
+	r.GET("/healthz", _Splits_Health18_HTTP_Handler(srv))
 }
 
 func _Splits_Last2_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
@@ -72,7 +72,7 @@ func _Splits_Search8_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Splits_Health17_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
+func _Splits_Health18_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

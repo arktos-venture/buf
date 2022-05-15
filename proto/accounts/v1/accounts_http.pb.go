@@ -30,7 +30,7 @@ func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r.GET("/v1/account/{account}", _Accounts_Get4_HTTP_Handler(srv))
 	r.GET("/v1/accounts", _Accounts_List4_HTTP_Handler(srv))
 	r.POST("/v1/account", _Accounts_Create0_HTTP_Handler(srv))
-	r.GET("/healthz", _Accounts_Health10_HTTP_Handler(srv))
+	r.GET("/healthz", _Accounts_Health11_HTTP_Handler(srv))
 }
 
 func _Accounts_Get4_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
@@ -93,7 +93,7 @@ func _Accounts_Create0_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Health10_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Health11_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
