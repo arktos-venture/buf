@@ -1,0 +1,710 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/indicators/v1/indicators.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Indicators"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Indicators_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/adx": {
+      "post": {
+        "summary": "ADX - Average Directional Movement Index",
+        "operationId": "Indicators_ADX",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/atr": {
+      "post": {
+        "summary": "ATR - Average True Range",
+        "operationId": "Indicators_ATR",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/avgprice": {
+      "post": {
+        "summary": "AVGPRICE - Average Price",
+        "operationId": "Indicators_AVGPRICE",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/bbands": {
+      "post": {
+        "summary": "BBANDS - Bollinger Bands",
+        "operationId": "Indicators_BBANDS",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/cci": {
+      "post": {
+        "summary": "CCI - Commodity Channel Index",
+        "operationId": "Indicators_CCI",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/dmi": {
+      "post": {
+        "summary": "DX - Directional Movement Index",
+        "operationId": "Indicators_DMI",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/ema": {
+      "post": {
+        "summary": "EMA - Exponential Moving Average",
+        "operationId": "Indicators_EMA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/macd": {
+      "post": {
+        "summary": "MACD - Moving Average Convergence/Divergence",
+        "operationId": "Indicators_MACD",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/rsi": {
+      "post": {
+        "summary": "RSI - Relative Strength Index",
+        "operationId": "Indicators_RSI",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/sar": {
+      "post": {
+        "summary": "SAR - Parabolic SAR",
+        "operationId": "Indicators_SAR",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/slope": {
+      "post": {
+        "summary": "LINEARREG_SLOPE - Linear Regression Slope",
+        "operationId": "Indicators_LINEARREG_SLOPE",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/sma": {
+      "post": {
+        "summary": "SMA - Simple Moving Average",
+        "operationId": "Indicators_SMA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/stddev": {
+      "post": {
+        "summary": "STDDEV - Standard Deviation",
+        "operationId": "Indicators_STDDEV",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/volatility": {
+      "post": {
+        "summary": "VAR - Variance",
+        "operationId": "Indicators_VAR",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/willr": {
+      "post": {
+        "summary": "WILLR - Williams' %R",
+        "operationId": "Indicators_WILLR",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    },
+    "/v1/quotes/indicator/wma": {
+      "post": {
+        "operationId": "Indicators_WMA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndicatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indicators"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1IndicatorReply": {
+      "type": "object",
+      "properties": {
+        "indicator": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1IndicatorRequest": {
+      "type": "object",
+      "properties": {
+        "quotes": {
+          "$ref": "#/definitions/v1Quotes"
+        },
+        "parameters": {
+          "$ref": "#/definitions/v1Parameters"
+        }
+      }
+    },
+    "v1Parameters": {
+      "type": "object",
+      "properties": {
+        "timePeriod": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nbDev": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nbDevUp": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nbDevDown": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maType": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1Quotes": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "high": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "low": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "volume": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

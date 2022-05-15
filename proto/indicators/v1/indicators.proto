@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+package indicators.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "grpc-api/api/indicators/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.indicators.v1";
+option java_outer_classname = "IndicatorsProtoV1";
+
+service Indicators {
+  // AVGPRICE - Average Price
+  rpc AVGPRICE (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/avgprice"
+      body: "*"
+    };
+  }
+
+  // SMA - Simple Moving Average
+  rpc SMA (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/sma"
+      body: "*"
+    };
+  }
+
+  // EMA - Exponential Moving Average
+  rpc EMA (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/ema"
+      body: "*"
+    };
+  }
+
+  rpc WMA (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/wma"
+      body: "*"
+    };
+  }
+  
+  // VAR - Variance
+  rpc VAR (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/volatility"
+      body: "*"
+    };
+  }
+  
+  // RSI - Relative Strength Index
+  rpc RSI (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/rsi"
+      body: "*"
+    };
+  }
+  
+  // STDDEV - Standard Deviation
+  rpc STDDEV (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/stddev"
+      body: "*"
+    };
+  }
+  
+  // LINEARREG_SLOPE - Linear Regression Slope
+  rpc LINEARREG_SLOPE (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/slope"
+      body: "*"
+    };
+  }
+  
+  // DX - Directional Movement Index
+  rpc DMI (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/dmi"
+      body: "*"
+    };
+  }
+  
+  // ADX - Average Directional Movement Index
+  rpc ADX (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/adx"
+      body: "*"
+    };
+  }
+  
+  // MACD - Moving Average Convergence/Divergence
+  rpc MACD (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/macd"
+      body: "*"
+    };
+  }
+  
+  // ATR - Average True Range
+  rpc ATR (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/atr"
+      body: "*"
+    };
+  }
+
+  // CCI - Commodity Channel Index
+  rpc CCI (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/cci"
+      body: "*"
+    };
+  }
+  
+  // BBANDS - Bollinger Bands
+  rpc BBANDS (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/bbands"
+      body: "*"
+    };
+  }
+
+  // WILLR - Williams' %R
+  rpc WILLR (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/willr"
+      body: "*"
+    };
+  }
+
+  // SAR - Parabolic SAR
+  rpc SAR (IndicatorRequest) returns (IndicatorReply)  {
+    option (google.api.http) = {
+      post: "/v1/quotes/indicator/sar"
+      body: "*"
+    };
+  }
+  
+  rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+			get: "/healthz"
+		};
+	}
+}
+
+
+// 
+// Request
+// 
+
+message Quotes {
+  repeated float open = 1 [(validate.rules).repeated.min_items = 1];
+  repeated float high = 2 [(validate.rules).repeated.min_items = 1];
+  repeated float close = 3 [(validate.rules).repeated.min_items = 1];
+  repeated float low = 4 [(validate.rules).repeated.min_items = 1];
+  repeated int64 volume = 5 [(validate.rules).repeated.min_items = 1];
+  repeated google.protobuf.Timestamp created_at = 6 [(validate.rules).repeated.min_items = 1];
+}
+
+message Parameters {
+  int32 timePeriod = 1 [(validate.rules).int32 = {gte: 2, lte: 1000}];
+  int32 nbDev = 2 [(validate.rules).int32.ignore_empty = true];
+  int32 nbDevUp = 3 [(validate.rules).int32.ignore_empty = true];
+  int32 nbDevDown = 4 [(validate.rules).int32.ignore_empty = true];
+  int32 maType = 5 [(validate.rules).int32.ignore_empty = true];
+}
+
+message IndicatorRequest {
+  Quotes quotes = 1 [(validate.rules).message.required = true];
+  Parameters parameters = 2 [(validate.rules).message.required = true];
+}
+
+
+// 
+// Reply
+// 
+
+message IndicatorReply {
+  repeated float indicator = 1;
+  repeated float close = 2;
+	repeated google.protobuf.Timestamp created_at = 3;
+}
