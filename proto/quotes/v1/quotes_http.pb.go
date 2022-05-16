@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package quotes_v1
 
 import (
 	context "context"
@@ -27,8 +27,8 @@ type QuotesHTTPServer interface {
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/quotes/{exchange}/{ticker}", _Quotes_Last0_HTTP_Handler(srv))
-	r.POST("/v1/quotes", _Quotes_Search1_HTTP_Handler(srv))
-	r.GET("/healthz", _Quotes_Health5_HTTP_Handler(srv))
+	r.POST("/v1/quotes", _Quotes_Search2_HTTP_Handler(srv))
+	r.GET("/healthz", _Quotes_Health4_HTTP_Handler(srv))
 }
 
 func _Quotes_Last0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
@@ -53,7 +53,7 @@ func _Quotes_Last0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Quotes_Search1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Search2_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuotesRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -72,7 +72,7 @@ func _Quotes_Search1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Quotes_Health5_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Health4_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
