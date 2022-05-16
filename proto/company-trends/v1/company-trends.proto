@@ -6,7 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/company/trends/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/company-trends/v1;company_trends_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.company.trends.v1";
 option java_outer_classname = "CompanyTrendsProtoV1";
