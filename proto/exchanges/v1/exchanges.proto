@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/exchanges/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;exchanges_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.exchanges.v1";
 option java_outer_classname = "ExchangesProtoV1";
@@ -15,13 +15,13 @@ option java_outer_classname = "ExchangesProtoV1";
 service Exchanges {
 	rpc IsOpen (ExchangeIsOpenRequest) returns (ExchangeIsOpenReply) {
 		option (google.api.http) = {
-            get: "/v1/exchange/{exchange}/isopen"
+            get: "/v1/exchange/{ticker}/isopen"
         };
 	}
 
   	rpc Get (ExchangeRequest) returns (ExchangeReply)  {
         option (google.api.http) = {
-            get: "/v1/exchange/{exchange}"
+            get: "/v1/exchange/{ticker}"
         };
     }
 
@@ -49,12 +49,12 @@ message ExchangeRequest {
 		bool holidays = 2;
 	}
 
-	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
-	Request request = 2;
+	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
+	Request request = 2  [(validate.rules).message.required = true];
 }
 
 message ExchangeIsOpenRequest {
-	string exchange = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
+	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
 }
 
 message ExchangeListRequest {
