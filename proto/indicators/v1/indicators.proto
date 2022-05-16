@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/indicators/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;indicators_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indicators.v1";
 option java_outer_classname = "IndicatorsProtoV1";
@@ -53,7 +53,7 @@ service Indicators {
   }
   
   // RSI - Relative Strength Index
-  rpc RSI (IndicatorRequest) returns (IndicatorReply)  {
+  rpc RSI (IndicatorRequest) returns (IndicatorRsiReply)  {
     option (google.api.http) = {
       post: "/v1/quotes/indicator/rsi"
       body: "*"
@@ -93,7 +93,7 @@ service Indicators {
   }
   
   // MACD - Moving Average Convergence/Divergence
-  rpc MACD (IndicatorRequest) returns (IndicatorReply)  {
+  rpc MACD (IndicatorRequest) returns (IndicatorMacdReply)  {
     option (google.api.http) = {
       post: "/v1/quotes/indicator/macd"
       body: "*"
@@ -117,7 +117,7 @@ service Indicators {
   }
   
   // BBANDS - Bollinger Bands
-  rpc BBANDS (IndicatorRequest) returns (IndicatorReply)  {
+  rpc BBANDS (IndicatorRequest) returns (IndicatorBBandsReply)  {
     option (google.api.http) = {
       post: "/v1/quotes/indicator/bbands"
       body: "*"
@@ -161,17 +161,9 @@ message Quotes {
   repeated google.protobuf.Timestamp created_at = 6 [(validate.rules).repeated.min_items = 1];
 }
 
-message Parameters {
-  int32 timePeriod = 1 [(validate.rules).int32 = {gte: 2, lte: 1000}];
-  int32 nbDev = 2 [(validate.rules).int32.ignore_empty = true];
-  int32 nbDevUp = 3 [(validate.rules).int32.ignore_empty = true];
-  int32 nbDevDown = 4 [(validate.rules).int32.ignore_empty = true];
-  int32 maType = 5 [(validate.rules).int32.ignore_empty = true];
-}
-
 message IndicatorRequest {
   Quotes quotes = 1 [(validate.rules).message.required = true];
-  Parameters parameters = 2 [(validate.rules).message.required = true];
+  map<string, float> parameters = 2 [(validate.rules).map.min_pairs = 1];
 }
 
 
@@ -181,6 +173,41 @@ message IndicatorRequest {
 
 message IndicatorReply {
   repeated float indicator = 1;
+  repeated float close = 2;
+	repeated google.protobuf.Timestamp created_at = 3;
+}
+
+message IndicatorBBandsReply {
+  message Indicator {
+    repeated float upper = 1;
+    repeated float middle = 2;
+    repeated float down = 3;
+  }
+
+  Indicator indicators = 1;
+  repeated float close = 2;
+	repeated google.protobuf.Timestamp created_at = 3;
+}
+
+message IndicatorRsiReply {
+  message Indicator {
+    repeated float fast = 1;
+    repeated float slow = 2;
+  }
+
+  Indicator indicators = 1;
+  repeated float close = 2;
+	repeated google.protobuf.Timestamp created_at = 3;
+}
+
+message IndicatorMacdReply {
+  message Indicator {
+    repeated float fast = 1;
+    repeated float slow = 2;
+    repeated float signal = 3;
+  }
+
+  Indicator indicators = 1;
   repeated float close = 2;
 	repeated google.protobuf.Timestamp created_at = 3;
 }

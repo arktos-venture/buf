@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package indicators_v1
 
 import (
 	context "context"
@@ -22,14 +22,14 @@ type IndicatorsHTTPServer interface {
 	ADX(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	ATR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	AVGPRICE(context.Context, *IndicatorRequest) (*IndicatorReply, error)
-	BBANDS(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	BBANDS(context.Context, *IndicatorRequest) (*IndicatorBBandsReply, error)
 	CCI(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	DMI(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	EMA(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	LINEARREG_SLOPE(context.Context, *IndicatorRequest) (*IndicatorReply, error)
-	MACD(context.Context, *IndicatorRequest) (*IndicatorReply, error)
-	RSI(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	MACD(context.Context, *IndicatorRequest) (*IndicatorMacdReply, error)
+	RSI(context.Context, *IndicatorRequest) (*IndicatorRsiReply, error)
 	SAR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	SMA(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	STDDEV(context.Context, *IndicatorRequest) (*IndicatorReply, error)
@@ -56,7 +56,7 @@ func RegisterIndicatorsHTTPServer(s *http.Server, srv IndicatorsHTTPServer) {
 	r.POST("/v1/quotes/indicator/bbands", _Indicators_BBANDS0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/indicator/willr", _Indicators_WILLR0_HTTP_Handler(srv))
 	r.POST("/v1/quotes/indicator/sar", _Indicators_SAR0_HTTP_Handler(srv))
-	r.GET("/healthz", _Indicators_Health8_HTTP_Handler(srv))
+	r.GET("/healthz", _Indicators_Health9_HTTP_Handler(srv))
 }
 
 func _Indicators_AVGPRICE0_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Context) error {
@@ -168,7 +168,7 @@ func _Indicators_RSI0_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Conte
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndicatorReply)
+		reply := out.(*IndicatorRsiReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -263,7 +263,7 @@ func _Indicators_MACD0_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Cont
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndicatorReply)
+		reply := out.(*IndicatorMacdReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -320,7 +320,7 @@ func _Indicators_BBANDS0_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Co
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndicatorReply)
+		reply := out.(*IndicatorBBandsReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -363,7 +363,7 @@ func _Indicators_SAR0_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Indicators_Health8_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Context) error {
+func _Indicators_Health9_HTTP_Handler(srv IndicatorsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -386,14 +386,14 @@ type IndicatorsHTTPClient interface {
 	ADX(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	ATR(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	AVGPRICE(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
-	BBANDS(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
+	BBANDS(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorBBandsReply, err error)
 	CCI(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	DMI(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	EMA(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	LINEARREG_SLOPE(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
-	MACD(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
-	RSI(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
+	MACD(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorMacdReply, err error)
+	RSI(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorRsiReply, err error)
 	SAR(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	SMA(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
 	STDDEV(ctx context.Context, req *IndicatorRequest, opts ...http.CallOption) (rsp *IndicatorReply, err error)
@@ -449,8 +449,8 @@ func (c *IndicatorsHTTPClientImpl) AVGPRICE(ctx context.Context, in *IndicatorRe
 	return &out, err
 }
 
-func (c *IndicatorsHTTPClientImpl) BBANDS(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorReply, error) {
-	var out IndicatorReply
+func (c *IndicatorsHTTPClientImpl) BBANDS(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorBBandsReply, error) {
+	var out IndicatorBBandsReply
 	pattern := "/v1/quotes/indicator/bbands"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indicators.v1.Indicators/BBANDS"))
@@ -527,8 +527,8 @@ func (c *IndicatorsHTTPClientImpl) LINEARREG_SLOPE(ctx context.Context, in *Indi
 	return &out, err
 }
 
-func (c *IndicatorsHTTPClientImpl) MACD(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorReply, error) {
-	var out IndicatorReply
+func (c *IndicatorsHTTPClientImpl) MACD(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorMacdReply, error) {
+	var out IndicatorMacdReply
 	pattern := "/v1/quotes/indicator/macd"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indicators.v1.Indicators/MACD"))
@@ -540,8 +540,8 @@ func (c *IndicatorsHTTPClientImpl) MACD(ctx context.Context, in *IndicatorReques
 	return &out, err
 }
 
-func (c *IndicatorsHTTPClientImpl) RSI(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorReply, error) {
-	var out IndicatorReply
+func (c *IndicatorsHTTPClientImpl) RSI(ctx context.Context, in *IndicatorRequest, opts ...http.CallOption) (*IndicatorRsiReply, error) {
+	var out IndicatorRsiReply
 	pattern := "/v1/quotes/indicator/rsi"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indicators.v1.Indicators/RSI"))

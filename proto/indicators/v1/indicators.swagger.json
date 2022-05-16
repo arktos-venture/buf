@@ -145,7 +145,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndicatorReply"
+              "$ref": "#/definitions/v1IndicatorBBandsReply"
             }
           },
           "default": {
@@ -277,7 +277,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndicatorReply"
+              "$ref": "#/definitions/v1IndicatorMacdReply"
             }
           },
           "default": {
@@ -310,7 +310,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndicatorReply"
+              "$ref": "#/definitions/v1IndicatorRsiReply"
             }
           },
           "default": {
@@ -597,6 +597,102 @@
         }
       }
     },
+    "v1IndicatorBBandsReply": {
+      "type": "object",
+      "properties": {
+        "indicators": {
+          "$ref": "#/definitions/v1IndicatorBBandsReplyIndicator"
+        },
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1IndicatorBBandsReplyIndicator": {
+      "type": "object",
+      "properties": {
+        "upper": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "middle": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "down": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "v1IndicatorMacdReply": {
+      "type": "object",
+      "properties": {
+        "indicators": {
+          "$ref": "#/definitions/v1IndicatorMacdReplyIndicator"
+        },
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1IndicatorMacdReplyIndicator": {
+      "type": "object",
+      "properties": {
+        "fast": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "slow": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "signal": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
     "v1IndicatorReply": {
       "type": "object",
       "properties": {
@@ -630,32 +726,52 @@
           "$ref": "#/definitions/v1Quotes"
         },
         "parameters": {
-          "$ref": "#/definitions/v1Parameters"
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
+          }
         }
       }
     },
-    "v1Parameters": {
+    "v1IndicatorRsiReply": {
       "type": "object",
       "properties": {
-        "timePeriod": {
-          "type": "integer",
-          "format": "int32"
+        "indicators": {
+          "$ref": "#/definitions/v1IndicatorRsiReplyIndicator"
         },
-        "nbDev": {
-          "type": "integer",
-          "format": "int32"
+        "close": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
         },
-        "nbDevUp": {
-          "type": "integer",
-          "format": "int32"
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1IndicatorRsiReplyIndicator": {
+      "type": "object",
+      "properties": {
+        "fast": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
         },
-        "nbDevDown": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maType": {
-          "type": "integer",
-          "format": "int32"
+        "slow": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
         }
       }
     },
