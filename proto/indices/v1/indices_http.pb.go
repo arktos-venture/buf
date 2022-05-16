@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package indices_v1
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/indice/{indice}", _Indices_Get1_HTTP_Handler(srv))
 	r.GET("/v1/indices/exchange/{exchange}", _Indices_List0_HTTP_Handler(srv))
-	r.GET("/healthz", _Indices_Health2_HTTP_Handler(srv))
+	r.GET("/healthz", _Indices_Health5_HTTP_Handler(srv))
 }
 
 func _Indices_Get1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
@@ -75,7 +75,7 @@ func _Indices_List0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Indices_Health2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Health5_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

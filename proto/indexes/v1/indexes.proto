@@ -6,8 +6,9 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "proto/screener/v1/screener.proto";
 
-option go_package = "grpc-api/api/indexes/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/indexes/v1;indexes_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indexes.v1";
 option java_outer_classname = "IndexesProtoV1";
@@ -84,59 +85,9 @@ message IndexesCreateRequest {
 // 
 
 message IndexesReply {
-  message Company {
-    message Activity {
-      int64 economicSector = 1; 
-      int64 businessSector = 2;
-      int64 industryGroup = 3;
-      int64 industry = 4;
-      int64 activity = 5;
-    }
-
-    message Shares {
-      int64 outstanding = 1;
-      int64 float = 2;
-    }
-  
-    message Pricing {
-      float last = 1;
-      float minYear = 2;
-      float maxYear = 3;
-      float returnYear = 4;
-      int64 marketcap = 5;
-      float beta5y = 6;
-    }
-  
-    message Volume {
-      float last = 1;
-      float avg10d = 2;
-      float avg90d = 3;
-      float share10dRatio = 4;
-      float share90dRatio = 5;
-    }
-  
-    message Dividends {
-      float yield = 1;
-      float annual = 2;
-    }
-
-    int64 id = 1;
-    string ticker = 2;
-    string ticker_alternative = 3;
-    string name = 4;
-    string isin = 5;
-    string exchange = 6;
-    bool adr = 7;
-    Activity activity = 8;
-    Shares shares = 9;
-    Pricing pricing = 10;
-    Dividends dividends = 11;
-    Volume volume = 12;
-  }
-
   string ref = 1;
   bool public = 2;
-  repeated Company companies = 3;
+  repeated screener.v1.ScreenerReply companies = 3;
 	google.protobuf.Timestamp created_at = 4;
 	google.protobuf.Timestamp updated_at = 5;
 }
