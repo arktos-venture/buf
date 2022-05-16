@@ -7,10 +7,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/orders/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/orders/v1;orders_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.orders.v1";
-option java_outer_classname = "OrdersProtoV1";
+option java_outer_classname = "APIOrdersProtoV1";
 
 service Orders {
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
@@ -69,7 +69,7 @@ enum Duration {
 enum Action {
   BUY = 0;
   SELL = 1;
-  ALL = 2;
+  HOLD = 2;
 }
 
 message OrderRequest {
@@ -78,9 +78,9 @@ message OrderRequest {
 
 message OrderSearchRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  Action action = 2 [(validate.rules).enum = {defined_only: true}];
+  repeated Action action = 2 [(validate.rules).repeated.min_items = 1];
   Duration duration = 3 [(validate.rules).enum = {defined_only: true}];
-  OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
+  repeated OrderType orderType = 4 [(validate.rules).repeated.min_items = 1];
   string period = 5 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y"]}];
 }
 

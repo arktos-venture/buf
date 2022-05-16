@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package notification.v1;
+package news.v1;
 import "errors/errors.proto";
 
-option go_package = "grpc-api/api/notification/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/news/v1;news_v1";
 option java_multiple_files = true;
-option java_package = "notification.v1.errors";
-option objc_class_prefix = "APINotificationErrors";
+option java_package = "news.v1.errors";
+option objc_class_prefix = "APINewsErrors";
 
 enum ErrorReason {
   option (errors.default_code) = 500;

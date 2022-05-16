@@ -7,10 +7,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/notifications/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/notifications/v1;notifications_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.notifications.v1";
-option java_outer_classname = "NotificationsProtoV1";
+option java_outer_classname = "APINotificationsProtoV1";
 
 service Notifications {
 	rpc Create (NotificationCreateRequest) returns (NotificationReply)  {

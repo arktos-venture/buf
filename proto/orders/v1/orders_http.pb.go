@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package orders_v1
 
 import (
 	context "context"
@@ -28,14 +28,14 @@ type OrdersHTTPServer interface {
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/{account}/orders", _Orders_Search4_HTTP_Handler(srv))
-	r.POST("/v1/{account}/order", _Orders_Create1_HTTP_Handler(srv))
+	r.GET("/v1/{account}/orders", _Orders_Search0_HTTP_Handler(srv))
+	r.POST("/v1/{account}/order", _Orders_Create0_HTTP_Handler(srv))
 	r.PUT("/v1/{account}/order/{orderId}", _Orders_Update0_HTTP_Handler(srv))
 	r.DELETE("/v1/{account}/order/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Orders_Health13_HTTP_Handler(srv))
+	r.GET("/healthz", _Orders_Health1_HTTP_Handler(srv))
 }
 
-func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Search0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -57,7 +57,7 @@ func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Create1_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Create0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -123,7 +123,7 @@ func _Orders_Delete0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Health13_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Health1_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
