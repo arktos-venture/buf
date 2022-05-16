@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package strategy_results_v1
 
 import (
 	context "context"
@@ -26,7 +26,7 @@ type StrategyHTTPServer interface {
 func RegisterStrategyHTTPServer(s *http.Server, srv StrategyHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/strategy/execute", _Strategy_Execute0_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategy_Health1_HTTP_Handler(srv))
+	r.GET("/healthz", _Strategy_Health2_HTTP_Handler(srv))
 }
 
 func _Strategy_Execute0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
@@ -48,7 +48,7 @@ func _Strategy_Execute0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Health1_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
+func _Strategy_Health2_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
