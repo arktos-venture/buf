@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/orders/v1;orders_v1";
 option java_multiple_files = true;
@@ -15,7 +16,8 @@ option java_outer_classname = "APIOrdersProtoV1";
 service Orders {
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      get: "/v1/{account}/orders"
+      post: "/v1/{account}/orders"
+      body: "*"
     };
   }
 
@@ -63,7 +65,6 @@ enum OrderType {
 enum Duration {
   DAY = 0;
   GTC = 1;
-  DALL = 2;
 }
 
 enum Action {
@@ -72,16 +73,48 @@ enum Action {
   HOLD = 2;
 }
 
+enum Status {
+  SUBMITTED = 0;
+  PRESUBMITED = 1;
+  CLOSE = 2;
+  OPEN = 3;
+}
+
+enum Argument {
+	Ticker = 0;
+	Exchange = 1;
+	Currency = 2;
+	Price = 3;
+	Size = 4;
+	Isin = 5;
+	Id = 6;
+  oAction = 7;
+  oDuration = 8;
+  oType = 9;
+  oStatus = 10;
+  Time = 11;
+}
+
+message Filter {
+	screener.v1.Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
+	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
+	repeated string values = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 1000];
+}
+
 message OrderRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
 }
 
 message OrderSearchRequest {
+	message Sort {
+		Argument argument = 1 [(validate.rules).enum = {defined_only: true}];
+		screener.v1.ScreenerRequest.Sort.Orientation orientation = 2 [(validate.rules).enum = {defined_only: true}];
+	}
+
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-  repeated Action action = 2 [(validate.rules).repeated.min_items = 1];
-  Duration duration = 3 [(validate.rules).enum = {defined_only: true}];
-  repeated OrderType orderType = 4 [(validate.rules).repeated.min_items = 1];
-  string period = 5 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m", "2m", "3m", "6m", "1y"]}];
+	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+	Sort sort = 3 [(validate.rules).message.required = true];
+  int32 limit = 4 [(validate.rules).int32 = {gt: 0, lte: 10000}];
 }
 
 message OrderCreateRequest {  
@@ -137,7 +170,7 @@ message OrderReply {
   Duration duration = 7;
   Size size = 8;
   Price price = 9;
-  string status = 10;
+  Status status = 10;
   google.protobuf.Timestamp created_at = 11;
 }
 

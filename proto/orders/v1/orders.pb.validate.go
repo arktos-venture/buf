@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,7 +35,140 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.Operator(0)
 )
+
+// Validate checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Filter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Filter) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := screener_v1.Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterValidationError{
+			field:  "Operator",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := len(m.GetValues()); l < 1 || l > 1000 {
+		err := FilterValidationError{
+			field:  "Values",
+			reason: "value must contain between 1 and 1000 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return FilterMultiError(errors)
+	}
+
+	return nil
+}
+
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FilterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FilterMultiError) AllErrors() []error { return m }
+
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFilter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FilterValidationError{}
 
 // Validate checks the field values on OrderRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -178,10 +313,10 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetAction()) < 1 {
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
 		err := OrderSearchRequestValidationError{
-			field:  "Action",
-			reason: "value must contain at least 1 item(s)",
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
 		}
 		if !all {
 			return err
@@ -189,10 +324,44 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := Duration_name[int32(m.GetDuration())]; !ok {
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OrderSearchRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OrderSearchRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return OrderSearchRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.GetSort() == nil {
 		err := OrderSearchRequestValidationError{
-			field:  "Duration",
-			reason: "value must be one of the defined enum values",
+			field:  "Sort",
+			reason: "value is required",
 		}
 		if !all {
 			return err
@@ -200,21 +369,39 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetOrderType()) < 1 {
-		err := OrderSearchRequestValidationError{
-			field:  "OrderType",
-			reason: "value must contain at least 1 item(s)",
+	if all {
+		switch v := interface{}(m.GetSort()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderSearchRequestValidationError{
+					field:  "Sort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderSearchRequestValidationError{
+					field:  "Sort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderSearchRequestValidationError{
+				field:  "Sort",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
-	if _, ok := _OrderSearchRequest_Period_InLookup[m.GetPeriod()]; !ok {
+	if val := m.GetLimit(); val <= 0 || val > 10000 {
 		err := OrderSearchRequestValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y]",
+			field:  "Limit",
+			reason: "value must be inside range (0, 10000]",
 		}
 		if !all {
 			return err
@@ -301,18 +488,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OrderSearchRequestValidationError{}
-
-var _OrderSearchRequest_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-}
 
 // Validate checks the field values on OrderCreateRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1256,6 +1431,130 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OrderDeleteValidationError{}
+
+// Validate checks the field values on OrderSearchRequest_Sort with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *OrderSearchRequest_Sort) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderSearchRequest_Sort with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OrderSearchRequest_SortMultiError, or nil if none found.
+func (m *OrderSearchRequest_Sort) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderSearchRequest_Sort) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := OrderSearchRequest_SortValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := screener_v1.ScreenerRequest_Sort_Orientation_name[int32(m.GetOrientation())]; !ok {
+		err := OrderSearchRequest_SortValidationError{
+			field:  "Orientation",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return OrderSearchRequest_SortMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderSearchRequest_SortMultiError is an error wrapping multiple validation
+// errors returned by OrderSearchRequest_Sort.ValidateAll() if the designated
+// constraints aren't met.
+type OrderSearchRequest_SortMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderSearchRequest_SortMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderSearchRequest_SortMultiError) AllErrors() []error { return m }
+
+// OrderSearchRequest_SortValidationError is the validation error returned by
+// OrderSearchRequest_Sort.Validate if the designated constraints aren't met.
+type OrderSearchRequest_SortValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderSearchRequest_SortValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderSearchRequest_SortValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderSearchRequest_SortValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderSearchRequest_SortValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderSearchRequest_SortValidationError) ErrorName() string {
+	return "OrderSearchRequest_SortValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e OrderSearchRequest_SortValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderSearchRequest_Sort.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderSearchRequest_SortValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderSearchRequest_SortValidationError{}
 
 // Validate checks the field values on OrderReply_Size with the rules defined
 // in the proto definition for this message. If any rules are violated, the

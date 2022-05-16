@@ -30,7 +30,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -53,7 +53,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -179,17 +179,6 @@
         }
       }
     },
-    "ScreenerRequestSort": {
-      "type": "object",
-      "properties": {
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "orientation": {
-          "$ref": "#/definitions/SortOrientation"
-        }
-      }
-    },
     "SortOrientation": {
       "type": "string",
       "enum": [
@@ -198,19 +187,7 @@
       ],
       "default": "ASC"
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -225,6 +202,18 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },
@@ -367,11 +356,22 @@
           }
         },
         "sort": {
-          "$ref": "#/definitions/ScreenerRequestSort"
+          "$ref": "#/definitions/v1ScreenerRequestSort"
         },
         "limit": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "v1ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/screenerv1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
         }
       }
     }

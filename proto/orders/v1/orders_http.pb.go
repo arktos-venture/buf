@@ -28,17 +28,17 @@ type OrdersHTTPServer interface {
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/{account}/orders", _Orders_Search0_HTTP_Handler(srv))
+	r.POST("/v1/{account}/orders", _Orders_Search1_HTTP_Handler(srv))
 	r.POST("/v1/{account}/order", _Orders_Create0_HTTP_Handler(srv))
 	r.PUT("/v1/{account}/order/{orderId}", _Orders_Update0_HTTP_Handler(srv))
 	r.DELETE("/v1/{account}/order/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
-	r.GET("/healthz", _Orders_Health1_HTTP_Handler(srv))
+	r.GET("/healthz", _Orders_Health2_HTTP_Handler(srv))
 }
 
-func _Orders_Search0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Search1_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderSearchRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
@@ -123,7 +123,7 @@ func _Orders_Delete0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Health1_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Health2_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -200,10 +200,10 @@ func (c *OrdersHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, op
 func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*OrderReplies, error) {
 	var out OrderReplies
 	pattern := "/v1/{account}/orders"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
