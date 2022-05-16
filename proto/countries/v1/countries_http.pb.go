@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package countries_v1
 
 import (
 	context "context"
