@@ -29,7 +29,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -51,7 +51,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -117,7 +117,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -152,7 +152,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -204,7 +204,7 @@
       }
     },
     "/v1/{account}/orders": {
-      "get": {
+      "post": {
         "operationId": "Orders_Search",
         "responses": {
           "200": {
@@ -216,7 +216,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -228,55 +228,27 @@
             "type": "string"
           },
           {
-            "name": "action",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "BUY",
-                "SELL",
-                "HOLD"
-              ]
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "duration",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "DAY",
-              "GTC",
-              "DALL"
-            ],
-            "default": "DAY"
-          },
-          {
-            "name": "orderType",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "LMT",
-                "MKT",
-                "STP",
-                "IBALGO",
-                "MIDPRICE",
-                "OALL"
-              ]
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "filters": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ordersv1Filter"
+                  }
+                },
+                "sort": {
+                  "$ref": "#/definitions/v1OrderSearchRequestSort"
+                },
+                "limit": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -316,37 +288,15 @@
         }
       }
     },
-    "ordersv1Action": {
+    "SortOrientation": {
       "type": "string",
       "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
+        "ASC",
+        "DESC"
       ],
-      "default": "BUY"
+      "default": "ASC"
     },
-    "ordersv1Duration": {
-      "type": "string",
-      "enum": [
-        "DAY",
-        "GTC",
-        "DALL"
-      ],
-      "default": "DAY"
-    },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "rpcStatus": {
+    "googlerpcStatus": {
       "type": "object",
       "properties": {
         "code": {
@@ -363,6 +313,95 @@
           }
         }
       }
+    },
+    "ordersv1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "ordersv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Currency",
+        "Price",
+        "Size",
+        "Isin",
+        "Id",
+        "oAction",
+        "oDuration",
+        "oType",
+        "oStatus",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "ordersv1Duration": {
+      "type": "string",
+      "enum": [
+        "DAY",
+        "GTC"
+      ],
+      "default": "DAY"
+    },
+    "ordersv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/screenerv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/ordersv1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ordersv1Status": {
+      "type": "string",
+      "enum": [
+        "SUBMITTED",
+        "PRESUBMITED",
+        "CLOSE",
+        "OPEN"
+      ],
+      "default": "SUBMITTED"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "screenerv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
     },
     "v1OrderDelete": {
       "type": "object",
@@ -418,11 +457,22 @@
           "$ref": "#/definitions/OrderReplyPrice"
         },
         "status": {
-          "type": "string"
+          "$ref": "#/definitions/ordersv1Status"
         },
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1OrderSearchRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/ordersv1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
         }
       }
     },
