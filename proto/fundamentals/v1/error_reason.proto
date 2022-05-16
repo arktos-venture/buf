@@ -3,7 +3,7 @@ syntax = "proto3";
 package company.fundamental.v1.get;
 import "errors/errors.proto";
 
-option go_package = "grpc-api/api/company/fundamental/v1/get;v1";
+option go_package = "github.com/arktos-venture/buf/proto/company/fundamental/v1/get;v1";
 option java_multiple_files = true;
 option java_package = "company.fundamental.v1.errors";
 option objc_class_prefix = "APICompanyFundamentalErrors";

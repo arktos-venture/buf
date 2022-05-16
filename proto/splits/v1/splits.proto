@@ -7,10 +7,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/splits/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/splits/v1;splits_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.splits.v1";
-option java_outer_classname = "splitsProtoV1";
+option java_outer_classname = "APISplitsProtoV1";
 
 service Splits {
   rpc Last (SplitsLastRequest) returns (SplitsLastReply)  {
