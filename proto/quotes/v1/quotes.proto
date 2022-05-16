@@ -7,10 +7,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/quotes/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/quotes/v1;quotes_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.quotes.v1";
-option java_outer_classname = "QuotesProtoV1";
+option java_outer_classname = "APIQuotesProtoV1";
 
 service Quotes {
   rpc Last (QuotesLastRequest) returns (QuotesLastReply)  {
@@ -50,25 +50,6 @@ enum Interval {
   w = 1;
   m = 2;
   y = 3;
-}
-
-enum Indicator {
-  Macd = 0;
-  Rsi = 1;
-  Obv = 2;
-  Adx = 3;
-  Beta = 4;
-  Atr = 5;
-  Bband = 6;
-  Ema = 7;
-  LinearReg = 8;
-  WillR = 9;
-  StdDev = 10;
-  Sma10 = 11;
-  Sma20 = 12;
-  Sma50 = 13;
-  Sma100 = 14;
-  Sma200 = 15;
 }
 
 enum Operator {

@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package companies_v1
 
 import (
 	context "context"
@@ -30,7 +30,7 @@ func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get6_HTTP_Handler(srv))
 	r.GET("/v1/company/{exchange}/{ticker}/stats", _Companies_Stats0_HTTP_Handler(srv))
 	r.GET("/v1/company/{exchange}/{ticker}/similars", _Companies_Similars0_HTTP_Handler(srv))
-	r.GET("/healthz", _Companies_Health16_HTTP_Handler(srv))
+	r.GET("/healthz", _Companies_Health17_HTTP_Handler(srv))
 }
 
 func _Companies_Get6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
@@ -99,7 +99,7 @@ func _Companies_Similars0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Companies_Health16_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Health17_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

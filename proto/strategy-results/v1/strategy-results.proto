@@ -5,12 +5,13 @@ package strategy_results.v1;
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-// import "validate/validate.proto";
+import "validate/validate.proto";
+import "proto/orders/v1/orders.proto";
 
-option go_package = "grpc-api/api/strategy_results/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/strategy-results/v1;strategy_results_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.strategy_results.v1";
-option java_outer_classname = "StrategyResultsProtoV1";
+option java_outer_classname = "APIStrategyResultsProtoV1";
 
 service Strategy {
 	rpc Execute (StrategyRequest) returns (StrategyReply)  {
@@ -34,8 +35,8 @@ service Strategy {
 
 message StrategyRequest {
 	bool reversed = 1;
-	repeated float quotes = 2;
-	repeated google.protobuf.Timestamp dates = 3;
+	repeated float quotes = 2 [(validate.rules).repeated.min_items = 1];
+	repeated google.protobuf.Timestamp dates = 3 [(validate.rules).repeated.min_items = 1];
 	map<string, int32> params = 4;
 }
 
@@ -45,13 +46,7 @@ message StrategyRequest {
 // 
 
 message StrategyReply {
-	enum Action {
-		HOLD = 0;
-		BUY = 1;
-		SELL = 2;
-	}
-
 	repeated float close = 1;
-	repeated Action action = 2;
+	repeated orders.v1.Action actions = 2;
 	repeated google.protobuf.Timestamp date = 3;
 }

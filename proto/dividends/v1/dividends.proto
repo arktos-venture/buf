@@ -6,8 +6,9 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "proto/quotes/v1/quotes.proto";
 
-option go_package = "grpc-api/api/dividend/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/dividends/v1;dividends_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.dividend.v1";
 option java_outer_classname = "DividendProtoV1";
@@ -44,29 +45,15 @@ enum Interval {
 	y = 2;
 }
   
-enum Operator {
-	Equal = 0;
-	Greater = 1;
-	GreaterEqual = 2;
-	Less = 3;
-	LessEqual = 4;
-}
-  
-enum Argument {
-	Ticker = 0;
-	Exchange = 1;
-	Time = 2;
-}
-  
 message Filter {
-	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
-	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
+	quotes.v1.Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
+	quotes.v1.Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
 	string value = 3;
 }
   
 message DividendsRequest {
 	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+	repeated quotes.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message DividendsLastRequest {

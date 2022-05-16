@@ -231,13 +231,16 @@
             "name": "action",
             "in": "query",
             "required": false,
-            "type": "string",
-            "enum": [
-              "BUY",
-              "SELL",
-              "ALL"
-            ],
-            "default": "BUY"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "BUY",
+                "SELL",
+                "HOLD"
+              ]
+            },
+            "collectionFormat": "multi"
           },
           {
             "name": "duration",
@@ -255,16 +258,19 @@
             "name": "orderType",
             "in": "query",
             "required": false,
-            "type": "string",
-            "enum": [
-              "LMT",
-              "MKT",
-              "STP",
-              "IBALGO",
-              "MIDPRICE",
-              "OALL"
-            ],
-            "default": "LMT"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "LMT",
+                "MKT",
+                "STP",
+                "IBALGO",
+                "MIDPRICE",
+                "OALL"
+              ]
+            },
+            "collectionFormat": "multi"
           },
           {
             "name": "period",
@@ -315,7 +321,7 @@
       "enum": [
         "BUY",
         "SELL",
-        "ALL"
+        "HOLD"
       ],
       "default": "BUY"
     },

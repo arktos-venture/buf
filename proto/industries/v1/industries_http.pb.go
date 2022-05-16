@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package industries_v1
 
 import (
 	context "context"
@@ -27,8 +27,8 @@ type IndustriesHTTPServer interface {
 func RegisterIndustriesHTTPServer(s *http.Server, srv IndustriesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/industries", _Industries_List3_HTTP_Handler(srv))
-	r.POST("/v1/industries", _Industries_Search2_HTTP_Handler(srv))
-	r.GET("/healthz", _Industries_Health8_HTTP_Handler(srv))
+	r.POST("/v1/industries", _Industries_Search3_HTTP_Handler(srv))
+	r.GET("/healthz", _Industries_Health10_HTTP_Handler(srv))
 }
 
 func _Industries_List3_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
@@ -50,7 +50,7 @@ func _Industries_List3_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Industries_Search2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+func _Industries_Search3_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndustrySearchRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -69,7 +69,7 @@ func _Industries_Search2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Industries_Health8_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+func _Industries_Health10_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package company_trends_v1
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterCompanyTrendsHTTPServer(s *http.Server, srv CompanyTrendsHTTPServer
 	r := s.Route("/")
 	r.POST("/v1/company/trendId", _CompanyTrends_Get8_HTTP_Handler(srv))
 	r.POST("/v1/company/trends", _CompanyTrends_Search10_HTTP_Handler(srv))
-	r.GET("/healthz", _CompanyTrends_Health19_HTTP_Handler(srv))
+	r.GET("/healthz", _CompanyTrends_Health20_HTTP_Handler(srv))
 }
 
 func _CompanyTrends_Get8_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx http.Context) error {
@@ -69,7 +69,7 @@ func _CompanyTrends_Search10_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx 
 	}
 }
 
-func _CompanyTrends_Health19_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx http.Context) error {
+func _CompanyTrends_Health20_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

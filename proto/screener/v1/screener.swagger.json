@@ -74,6 +74,111 @@
     }
   },
   "definitions": {
+    "ScreenerReplyActivity": {
+      "type": "object",
+      "properties": {
+        "economicSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "businessSector": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industryGroup": {
+          "type": "string",
+          "format": "int64"
+        },
+        "industry": {
+          "type": "string",
+          "format": "int64"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "ScreenerReplyDividends": {
+      "type": "object",
+      "properties": {
+        "yield": {
+          "type": "number",
+          "format": "float"
+        },
+        "annual": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ScreenerReplyPricing": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "minYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "maxYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnYear": {
+          "type": "number",
+          "format": "float"
+        },
+        "marketcap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ScreenerReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "ScreenerReplyVolume": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg10d": {
+          "type": "number",
+          "format": "float"
+        },
+        "avg90d": {
+          "type": "number",
+          "format": "float"
+        },
+        "share10dRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "share90dRatio": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "ScreenerRequestSort": {
       "type": "object",
       "properties": {
@@ -228,19 +333,19 @@
           "type": "boolean"
         },
         "activity": {
-          "$ref": "#/definitions/v1ScreenerReplyActivity"
+          "$ref": "#/definitions/ScreenerReplyActivity"
         },
         "shares": {
-          "$ref": "#/definitions/v1ScreenerReplyShares"
+          "$ref": "#/definitions/ScreenerReplyShares"
         },
         "pricing": {
-          "$ref": "#/definitions/v1ScreenerReplyPricing"
+          "$ref": "#/definitions/ScreenerReplyPricing"
         },
         "dividends": {
-          "$ref": "#/definitions/v1ScreenerReplyDividends"
+          "$ref": "#/definitions/ScreenerReplyDividends"
         },
         "volume": {
-          "$ref": "#/definitions/v1ScreenerReplyVolume"
+          "$ref": "#/definitions/ScreenerReplyVolume"
         },
         "created_at": {
           "type": "string",
@@ -249,111 +354,6 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1ScreenerReplyActivity": {
-      "type": "object",
-      "properties": {
-        "economicSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "businessSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industryGroup": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industry": {
-          "type": "string",
-          "format": "int64"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ScreenerReplyDividends": {
-      "type": "object",
-      "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
-        },
-        "annual": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "v1ScreenerReplyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "v1ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg10d": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg90d": {
-          "type": "number",
-          "format": "float"
-        },
-        "share10dRatio": {
-          "type": "number",
-          "format": "float"
-        },
-        "share90dRatio": {
-          "type": "number",
-          "format": "float"
         }
       }
     },

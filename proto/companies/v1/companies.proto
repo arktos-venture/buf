@@ -6,8 +6,9 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "proto/screener/v1/screener.proto";
 
-option go_package = "grpc-api/api/companies/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.companies.v1";
 option java_outer_classname = "CompanyProtoV1";
@@ -71,19 +72,6 @@ message CompanyContact {
 // 
 
 message CompanyReply {
-	message Activity {
-		int64 economicSector = 1; 
-		int64 businessSector = 2;
-		int64 industryGroup = 3;
-		int64 industry = 4;
-		int64 activity = 5;
-	}
-
-	message Shares {
-		int64 outstanding = 1;
-		int64 float = 2;
-	}
-
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
@@ -94,8 +82,8 @@ message CompanyReply {
 	string isin = 8;
 	int64 employees = 9;
 	bool adr = 10;
-	Activity activity = 11;
-	Shares shares = 12;
+	screener.v1.ScreenerReply.Activity activity = 11;
+	screener.v1.ScreenerReply.Shares shares = 12;
 	string currencyReport = 13;
 	int64 fiscalYearEnd = 14;
 	CompanyContact contact = 15;
@@ -105,38 +93,10 @@ message CompanyReply {
 }
 
 message CompanyStatsReply {
-	message Shares {
-		int64 outstanding = 1;
-		int64 float = 2;
-	}
-
-	message Pricing {
-		float last = 1;
-		float minYear = 2;
-		float maxYear = 3;
-		float returnYear = 4;
-		int64 marketcap = 5;
-		float beta5y = 6;
-	}
-
-	message Volume {
-		float last = 1;
-		float avg10d = 2;
-		float avg90d = 3;
-		float share10dRatio = 4;
-		float share90dRatio = 5;
-	}
-
-	message Dividends {
-		float yield = 1;
-		float annual = 2;
-		float yieldAvg5y = 3;
-	}
-
-	Shares shares = 1;
-	Pricing pricing = 2;
-	Dividends dividends = 3;
-	Volume volume = 4;
+	screener.v1.ScreenerReply.Shares shares = 1;
+	screener.v1.ScreenerReply.Pricing pricing = 2;
+	screener.v1.ScreenerReply.Dividends dividends = 3;
+	screener.v1.ScreenerReply.Volume volume = 4;
 	google.protobuf.Timestamp created_at = 5;
 	google.protobuf.Timestamp updated_at = 6; 
 }

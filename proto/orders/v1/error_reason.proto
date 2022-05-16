@@ -3,10 +3,10 @@ syntax = "proto3";
 package orders.v1;
 import "errors/errors.proto";
 
-option go_package = "grpc-api/api/orders/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/orders/v1;orders_v1";
 option java_multiple_files = true;
 option java_package = "orders.v1.errors";
-option objc_class_prefix = "APIOrderErrors";
+option objc_class_prefix = "APIOrdersErrors";
 
 enum ErrorReason {
   option (errors.default_code) = 500;

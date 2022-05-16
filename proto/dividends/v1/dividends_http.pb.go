@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package dividends_v1
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/dividends/{exchange}/{ticker}", _Dividends_Last1_HTTP_Handler(srv))
 	r.POST("/v1/dividends", _Dividends_Search6_HTTP_Handler(srv))
-	r.GET("/healthz", _Dividends_Health14_HTTP_Handler(srv))
+	r.GET("/healthz", _Dividends_Health15_HTTP_Handler(srv))
 }
 
 func _Dividends_Last1_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
@@ -72,7 +72,7 @@ func _Dividends_Search6_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Dividends_Health14_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Health15_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

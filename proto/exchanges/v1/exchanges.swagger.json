@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/exchange/{exchange}": {
+    "/v1/exchange/{ticker}": {
       "get": {
         "operationId": "Exchanges_Get",
         "responses": {
@@ -57,7 +57,7 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "ticker",
             "in": "path",
             "required": true,
             "type": "string"
@@ -80,7 +80,7 @@
         ]
       }
     },
-    "/v1/exchange/{exchange}/isopen": {
+    "/v1/exchange/{ticker}/isopen": {
       "get": {
         "operationId": "Exchanges_IsOpen",
         "responses": {
@@ -99,7 +99,7 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "ticker",
             "in": "path",
             "required": true,
             "type": "string"

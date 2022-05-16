@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package news_v1
 
 import (
 	context "context"
@@ -25,11 +25,11 @@ type NewsHTTPServer interface {
 
 func RegisterNewsHTTPServer(s *http.Server, srv NewsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/news", _News_Search3_HTTP_Handler(srv))
-	r.GET("/healthz", _News_Health9_HTTP_Handler(srv))
+	r.POST("/v1/news", _News_Search4_HTTP_Handler(srv))
+	r.GET("/healthz", _News_Health11_HTTP_Handler(srv))
 }
 
-func _News_Search3_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _News_Search4_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NewsRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -48,7 +48,7 @@ func _News_Search3_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error
 	}
 }
 
-func _News_Health9_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _News_Health11_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

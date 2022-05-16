@@ -6,11 +6,13 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "proto/screener/v1/screener.proto";
+import "proto/quotes/v1/quotes.proto";
 
-option go_package = "grpc-api/api/indices/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/indices/v1;indices_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indices.v1";
-option java_outer_classname = "IndicesProtoV1";
+option java_outer_classname = "APIIndicesProtoV1";
 
 service Indices {
   rpc Get (IndicesRequest) returns (IndicesReply)  {
@@ -51,71 +53,12 @@ message IndicesExchangeRequest {
 // 
 
 message IndicesReply {
-  message Company {
-    message Activity {
-      int64 economicSector = 1; 
-      int64 businessSector = 2;
-      int64 industryGroup = 3;
-      int64 industry = 4;
-      int64 activity = 5;
-    }
-
-    message Shares {
-      int64 outstanding = 1;
-      int64 float = 2;
-    }
-  
-    message Pricing {
-      float last = 1;
-      float minYear = 2;
-      float maxYear = 3;
-      float returnYear = 4;
-      int64 marketcap = 5;
-      float beta5y = 6;
-    }
-  
-    message Volume {
-      float last = 1;
-      float avg10d = 2;
-      float avg90d = 3;
-      float share10dRatio = 4;
-      float share90dRatio = 5;
-    }
-  
-    message Dividends {
-      float yield = 1;
-      float annual = 2;
-    }
-
-    int64 id = 1;
-    string ticker = 2;
-    string ticker_alternative = 3;
-    string name = 4;
-    string isin = 5;
-    string exchange = 6;
-    bool adr = 7;
-    Activity activity = 8;
-    Shares shares = 9;
-    Pricing pricing = 10;
-    Dividends dividends = 11;
-    Volume volume = 12;
-  }
-
-  message Quote {
-    float open = 1;
-    float close = 2;
-    float low = 3;
-    float high = 4;
-    float volume = 5;
-    google.protobuf.Timestamp created_at = 7;
-  }
-
   int64 id = 1;
   string ticker = 2;
   string name = 3;
   string description = 4;
-  Quote quote = 5;
-  repeated Company companies = 6;
+  quotes.v1.QuotesLastReply quote = 5;
+  repeated screener.v1.ScreenerReply companies = 6;
 	google.protobuf.Timestamp created_at = 7;
 	google.protobuf.Timestamp updated_at = 8;
 }

@@ -84,6 +84,50 @@
         }
       }
     },
+    "quotesv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "quotesv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/quotesv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/quotesv1Argument"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "quotesv1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "y"
+      ],
+      "default": "d"
+    },
+    "quotesv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
+    },
     "rpcStatus": {
       "type": "object",
       "properties": {
@@ -102,55 +146,11 @@
         }
       }
     },
-    "strategiesv1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Time"
-      ],
-      "default": "Ticker"
-    },
-    "strategiesv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/strategiesv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/strategiesv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "strategiesv1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "y"
-      ],
-      "default": "d"
-    },
-    "strategiesv1Operator": {
-      "type": "string",
-      "enum": [
-        "Equal",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual"
-      ],
-      "default": "Equal"
-    },
     "strategiesv1StrategyReply": {
       "type": "object",
       "properties": {
         "action": {
-          "$ref": "#/definitions/strategiesv1StrategyReplyAction"
+          "$ref": "#/definitions/v1StrategyReplyAction"
         },
         "date": {
           "type": "string",
@@ -166,23 +166,14 @@
         }
       }
     },
-    "strategiesv1StrategyReplyAction": {
-      "type": "string",
-      "enum": [
-        "HOLD",
-        "BUY",
-        "SELL"
-      ],
-      "default": "HOLD"
-    },
     "strategiesv1StrategyRequest": {
       "type": "object",
       "properties": {
         "tsdb": {
-          "$ref": "#/definitions/strategiesv1TSDB"
+          "$ref": "#/definitions/v1TSDB"
         },
         "interval": {
-          "$ref": "#/definitions/strategiesv1Interval"
+          "$ref": "#/definitions/quotesv1Interval"
         },
         "strategy": {
           "$ref": "#/definitions/v1Strategy"
@@ -190,21 +181,10 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/strategiesv1Filter"
+            "$ref": "#/definitions/quotesv1Filter"
           }
         }
       }
-    },
-    "strategiesv1TSDB": {
-      "type": "string",
-      "enum": [
-        "Companies",
-        "Currencies",
-        "Indices",
-        "Indexes",
-        "Accounts"
-      ],
-      "default": "Companies"
     },
     "v1Strategy": {
       "type": "object",
@@ -224,6 +204,26 @@
           "format": "float"
         }
       }
+    },
+    "v1StrategyReplyAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1TSDB": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Currencies",
+        "Indices",
+        "Indexes",
+        "Accounts"
+      ],
+      "default": "Companies"
     }
   }
 }

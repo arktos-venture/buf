@@ -3,7 +3,7 @@ syntax = "proto3";
 package strategy_results.v1;
 import "errors/errors.proto";
 
-option go_package = "grpc-api/api/strategy_results/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/strategy-results/v1;strategy_results_v1";
 option java_multiple_files = true;
 option java_package = "strategy_results.v1.errors";
 option objc_class_prefix = "APIStrategyResultsErrors";

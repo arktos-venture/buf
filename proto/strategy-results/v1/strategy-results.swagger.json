@@ -72,6 +72,15 @@
     }
   },
   "definitions": {
+    "ordersv1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -112,10 +121,10 @@
             "format": "float"
           }
         },
-        "action": {
+        "actions": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/strategy_resultsv1StrategyReplyAction"
+            "$ref": "#/definitions/ordersv1Action"
           }
         },
         "date": {
@@ -126,15 +135,6 @@
           }
         }
       }
-    },
-    "strategy_resultsv1StrategyReplyAction": {
-      "type": "string",
-      "enum": [
-        "HOLD",
-        "BUY",
-        "SELL"
-      ],
-      "default": "HOLD"
     },
     "strategy_resultsv1StrategyRequest": {
       "type": "object",

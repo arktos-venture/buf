@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package indices.v1.search;
+package indices.v1;
 import "errors/errors.proto";
 
-option go_package = "grpc-api/api/indices/v1/search;v1";
+option go_package = "github.com/arktos-venture/buf/proto/indices/v1;indices_v1";
 option java_multiple_files = true;
 option java_package = "indices.v1.errors";
-option objc_class_prefix = "APIIndexesSearchErrors";
+option objc_class_prefix = "APIIndicesErrors";
 
 enum ErrorReason {
   option (errors.default_code) = 500;

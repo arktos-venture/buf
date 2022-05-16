@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package positions_v1
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterPositionHTTPServer(s *http.Server, srv PositionHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/positions/{account}/companies", _Position_Companies0_HTTP_Handler(srv))
 	r.GET("/v1/positions/{account}/currencies", _Position_Currencies0_HTTP_Handler(srv))
-	r.GET("/healthz", _Position_Health11_HTTP_Handler(srv))
+	r.GET("/healthz", _Position_Health13_HTTP_Handler(srv))
 }
 
 func _Position_Companies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
@@ -75,7 +75,7 @@ func _Position_Currencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Position_Health11_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
+func _Position_Health13_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {

@@ -1,7 +1,7 @@
 syntax = "proto3";
-package kratos.company.api.get;
+package kratos.config.api;
 
-option go_package = "grpc-api/config;config";
+option go_package = "github.com/arktos-venture/buf/config;config";
 
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";

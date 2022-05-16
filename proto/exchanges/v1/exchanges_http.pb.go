@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package exchanges_v1
 
 import (
 	context "context"
@@ -27,10 +27,10 @@ type ExchangesHTTPServer interface {
 
 func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/exchange/{exchange}/isopen", _Exchanges_IsOpen0_HTTP_Handler(srv))
-	r.GET("/v1/exchange/{exchange}", _Exchanges_Get3_HTTP_Handler(srv))
+	r.GET("/v1/exchange/{ticker}/isopen", _Exchanges_IsOpen0_HTTP_Handler(srv))
+	r.GET("/v1/exchange/{ticker}", _Exchanges_Get3_HTTP_Handler(srv))
 	r.GET("/v1/exchanges", _Exchanges_List2_HTTP_Handler(srv))
-	r.GET("/healthz", _Exchanges_Health6_HTTP_Handler(srv))
+	r.GET("/healthz", _Exchanges_Health7_HTTP_Handler(srv))
 }
 
 func _Exchanges_IsOpen0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
@@ -96,7 +96,7 @@ func _Exchanges_List2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Exchanges_Health6_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Health7_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -132,7 +132,7 @@ func NewExchangesHTTPClient(client *http.Client) ExchangesHTTPClient {
 
 func (c *ExchangesHTTPClientImpl) Get(ctx context.Context, in *ExchangeRequest, opts ...http.CallOption) (*ExchangeReply, error) {
 	var out ExchangeReply
-	pattern := "/v1/exchange/{exchange}"
+	pattern := "/v1/exchange/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Get"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -158,7 +158,7 @@ func (c *ExchangesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty,
 
 func (c *ExchangesHTTPClientImpl) IsOpen(ctx context.Context, in *ExchangeIsOpenRequest, opts ...http.CallOption) (*ExchangeIsOpenReply, error) {
 	var out ExchangeIsOpenReply
-	pattern := "/v1/exchange/{exchange}/isopen"
+	pattern := "/v1/exchange/{ticker}/isopen"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/IsOpen"))
 	opts = append(opts, http.PathTemplate(pattern))
