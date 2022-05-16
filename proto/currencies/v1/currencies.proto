@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-option go_package = "grpc-api/api/currencies/v1;v1";
+option go_package = "github.com/arktos-venture/buf/proto/currencies/v1;currencies_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.currencies.v1";
 option java_outer_classname = "CurrenciesProtoV1";

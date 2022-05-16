@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package v1
+package currencies_v1
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterCurrenciesHTTPServer(s *http.Server, srv CurrenciesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/currency/{ticker}", _Currencies_Get2_HTTP_Handler(srv))
 	r.GET("/v1/currencies/{ticker}", _Currencies_List1_HTTP_Handler(srv))
-	r.GET("/healthz", _Currencies_Health3_HTTP_Handler(srv))
+	r.GET("/healthz", _Currencies_Health6_HTTP_Handler(srv))
 }
 
 func _Currencies_Get2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
@@ -75,7 +75,7 @@ func _Currencies_List1_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Currencies_Health3_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
+func _Currencies_Health6_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
