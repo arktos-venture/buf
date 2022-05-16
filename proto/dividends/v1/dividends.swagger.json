@@ -108,29 +108,6 @@
     }
   },
   "definitions": {
-    "dividendsv1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Time"
-      ],
-      "default": "Ticker"
-    },
-    "dividendsv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/dividendsv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/dividendsv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
     "dividendsv1Interval": {
       "type": "string",
       "enum": [
@@ -139,17 +116,6 @@
         "y"
       ],
       "default": "m"
-    },
-    "dividendsv1Operator": {
-      "type": "string",
-      "enum": [
-        "Equal",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual"
-      ],
-      "default": "Equal"
     },
     "protobufAny": {
       "type": "object",
@@ -162,6 +128,40 @@
           "format": "byte"
         }
       }
+    },
+    "quotesv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "quotesv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/quotesv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/quotesv1Argument"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "quotesv1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual"
+      ],
+      "default": "Equal"
     },
     "rpcStatus": {
       "type": "object",
@@ -255,7 +255,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/dividendsv1Filter"
+            "$ref": "#/definitions/quotesv1Filter"
           }
         }
       }
