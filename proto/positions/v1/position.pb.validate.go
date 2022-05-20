@@ -68,17 +68,6 @@ func (m *PositionRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := _PositionRequest_Period_InLookup[m.GetPeriod()]; !ok {
-		err := PositionRequestValidationError{
-			field:  "Period",
-			reason: "value must be in list [last 3d 1w 2w 1m 2m 3m 6m 1y 2y 3y 5y]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(errors) > 0 {
 		return PositionRequestMultiError(errors)
 	}
@@ -157,21 +146,6 @@ var _ interface {
 	ErrorName() string
 } = PositionRequestValidationError{}
 
-var _PositionRequest_Period_InLookup = map[string]struct{}{
-	"last": {},
-	"3d":   {},
-	"1w":   {},
-	"2w":   {},
-	"1m":   {},
-	"2m":   {},
-	"3m":   {},
-	"6m":   {},
-	"1y":   {},
-	"2y":   {},
-	"3y":   {},
-	"5y":   {},
-}
-
 // Validate checks the field values on PositionCompanyReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -201,11 +175,11 @@ func (m *PositionCompanyReply) validate(all bool) error {
 	// no validation rules for Size
 
 	if all {
-		switch v := interface{}(m.GetMoney()).(type) {
+		switch v := interface{}(m.GetCost()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, PositionCompanyReplyValidationError{
-					field:  "Money",
+					field:  "Cost",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -213,16 +187,16 @@ func (m *PositionCompanyReply) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, PositionCompanyReplyValidationError{
-					field:  "Money",
+					field:  "Cost",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetMoney()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetCost()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PositionCompanyReplyValidationError{
-				field:  "Money",
+				field:  "Cost",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -281,6 +255,35 @@ func (m *PositionCompanyReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return PositionCompanyReplyValidationError{
 				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PositionCompanyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PositionCompanyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PositionCompanyReplyValidationError{
+				field:  "UpdatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -560,6 +563,35 @@ func (m *PositionCurrencyReply) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PositionCurrencyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PositionCurrencyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PositionCurrencyReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return PositionCurrencyReplyMultiError(errors)
 	}
@@ -778,166 +810,6 @@ var _ interface {
 	ErrorName() string
 } = PositionCurrencyRepliesValidationError{}
 
-// Validate checks the field values on PositionCompanyReply_Money with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *PositionCompanyReply_Money) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on PositionCompanyReply_Money with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// PositionCompanyReply_MoneyMultiError, or nil if none found.
-func (m *PositionCompanyReply_Money) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *PositionCompanyReply_Money) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetUnit()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, PositionCompanyReply_MoneyValidationError{
-					field:  "Unit",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, PositionCompanyReply_MoneyValidationError{
-					field:  "Unit",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetUnit()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return PositionCompanyReply_MoneyValidationError{
-				field:  "Unit",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetTotal()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, PositionCompanyReply_MoneyValidationError{
-					field:  "Total",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, PositionCompanyReply_MoneyValidationError{
-					field:  "Total",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetTotal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return PositionCompanyReply_MoneyValidationError{
-				field:  "Total",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return PositionCompanyReply_MoneyMultiError(errors)
-	}
-
-	return nil
-}
-
-// PositionCompanyReply_MoneyMultiError is an error wrapping multiple
-// validation errors returned by PositionCompanyReply_Money.ValidateAll() if
-// the designated constraints aren't met.
-type PositionCompanyReply_MoneyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PositionCompanyReply_MoneyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PositionCompanyReply_MoneyMultiError) AllErrors() []error { return m }
-
-// PositionCompanyReply_MoneyValidationError is the validation error returned
-// by PositionCompanyReply_Money.Validate if the designated constraints aren't met.
-type PositionCompanyReply_MoneyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PositionCompanyReply_MoneyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PositionCompanyReply_MoneyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PositionCompanyReply_MoneyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PositionCompanyReply_MoneyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PositionCompanyReply_MoneyValidationError) ErrorName() string {
-	return "PositionCompanyReply_MoneyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e PositionCompanyReply_MoneyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPositionCompanyReply_Money.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PositionCompanyReply_MoneyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PositionCompanyReply_MoneyValidationError{}
-
 // Validate checks the field values on PositionCompanyReply_Performance with
 // the rules defined in the proto definition for this message. If any rules
 // are violated, the first error encountered is returned, or nil if there are
@@ -1047,46 +919,46 @@ var _ interface {
 	ErrorName() string
 } = PositionCompanyReply_PerformanceValidationError{}
 
-// Validate checks the field values on PositionCompanyReply_Money_Unit with the
-// rules defined in the proto definition for this message. If any rules are
+// Validate checks the field values on PositionCompanyReply_Cost with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *PositionCompanyReply_Money_Unit) Validate() error {
+func (m *PositionCompanyReply_Cost) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PositionCompanyReply_Money_Unit with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// PositionCompanyReply_Money_UnitMultiError, or nil if none found.
-func (m *PositionCompanyReply_Money_Unit) ValidateAll() error {
+// ValidateAll checks the field values on PositionCompanyReply_Cost with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PositionCompanyReply_CostMultiError, or nil if none found.
+func (m *PositionCompanyReply_Cost) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PositionCompanyReply_Money_Unit) validate(all bool) error {
+func (m *PositionCompanyReply_Cost) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Cost
+	// no validation rules for Unit
 
-	// no validation rules for Market
+	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return PositionCompanyReply_Money_UnitMultiError(errors)
+		return PositionCompanyReply_CostMultiError(errors)
 	}
 
 	return nil
 }
 
-// PositionCompanyReply_Money_UnitMultiError is an error wrapping multiple
-// validation errors returned by PositionCompanyReply_Money_Unit.ValidateAll()
-// if the designated constraints aren't met.
-type PositionCompanyReply_Money_UnitMultiError []error
+// PositionCompanyReply_CostMultiError is an error wrapping multiple validation
+// errors returned by PositionCompanyReply_Cost.ValidateAll() if the
+// designated constraints aren't met.
+type PositionCompanyReply_CostMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PositionCompanyReply_Money_UnitMultiError) Error() string {
+func (m PositionCompanyReply_CostMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1095,12 +967,11 @@ func (m PositionCompanyReply_Money_UnitMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PositionCompanyReply_Money_UnitMultiError) AllErrors() []error { return m }
+func (m PositionCompanyReply_CostMultiError) AllErrors() []error { return m }
 
-// PositionCompanyReply_Money_UnitValidationError is the validation error
-// returned by PositionCompanyReply_Money_Unit.Validate if the designated
-// constraints aren't met.
-type PositionCompanyReply_Money_UnitValidationError struct {
+// PositionCompanyReply_CostValidationError is the validation error returned by
+// PositionCompanyReply_Cost.Validate if the designated constraints aren't met.
+type PositionCompanyReply_CostValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1108,24 +979,24 @@ type PositionCompanyReply_Money_UnitValidationError struct {
 }
 
 // Field function returns field value.
-func (e PositionCompanyReply_Money_UnitValidationError) Field() string { return e.field }
+func (e PositionCompanyReply_CostValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PositionCompanyReply_Money_UnitValidationError) Reason() string { return e.reason }
+func (e PositionCompanyReply_CostValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PositionCompanyReply_Money_UnitValidationError) Cause() error { return e.cause }
+func (e PositionCompanyReply_CostValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PositionCompanyReply_Money_UnitValidationError) Key() bool { return e.key }
+func (e PositionCompanyReply_CostValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PositionCompanyReply_Money_UnitValidationError) ErrorName() string {
-	return "PositionCompanyReply_Money_UnitValidationError"
+func (e PositionCompanyReply_CostValidationError) ErrorName() string {
+	return "PositionCompanyReply_CostValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e PositionCompanyReply_Money_UnitValidationError) Error() string {
+func (e PositionCompanyReply_CostValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1137,14 +1008,14 @@ func (e PositionCompanyReply_Money_UnitValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPositionCompanyReply_Money_Unit.%s: %s%s",
+		"invalid %sPositionCompanyReply_Cost.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PositionCompanyReply_Money_UnitValidationError{}
+var _ error = PositionCompanyReply_CostValidationError{}
 
 var _ interface {
 	Field() string
@@ -1152,113 +1023,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PositionCompanyReply_Money_UnitValidationError{}
-
-// Validate checks the field values on PositionCompanyReply_Money_Total with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the first error encountered is returned, or nil if there are
-// no violations.
-func (m *PositionCompanyReply_Money_Total) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on PositionCompanyReply_Money_Total with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// PositionCompanyReply_Money_TotalMultiError, or nil if none found.
-func (m *PositionCompanyReply_Money_Total) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *PositionCompanyReply_Money_Total) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Cost
-
-	// no validation rules for Market
-
-	if len(errors) > 0 {
-		return PositionCompanyReply_Money_TotalMultiError(errors)
-	}
-
-	return nil
-}
-
-// PositionCompanyReply_Money_TotalMultiError is an error wrapping multiple
-// validation errors returned by
-// PositionCompanyReply_Money_Total.ValidateAll() if the designated
-// constraints aren't met.
-type PositionCompanyReply_Money_TotalMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PositionCompanyReply_Money_TotalMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PositionCompanyReply_Money_TotalMultiError) AllErrors() []error { return m }
-
-// PositionCompanyReply_Money_TotalValidationError is the validation error
-// returned by PositionCompanyReply_Money_Total.Validate if the designated
-// constraints aren't met.
-type PositionCompanyReply_Money_TotalValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PositionCompanyReply_Money_TotalValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PositionCompanyReply_Money_TotalValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PositionCompanyReply_Money_TotalValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PositionCompanyReply_Money_TotalValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PositionCompanyReply_Money_TotalValidationError) ErrorName() string {
-	return "PositionCompanyReply_Money_TotalValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e PositionCompanyReply_Money_TotalValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPositionCompanyReply_Money_Total.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PositionCompanyReply_Money_TotalValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PositionCompanyReply_Money_TotalValidationError{}
+} = PositionCompanyReply_CostValidationError{}
