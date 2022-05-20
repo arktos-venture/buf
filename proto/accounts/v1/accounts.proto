@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "proto/orders/v1/orders.proto";
-import "proto/positions/v1/position.proto";
+import "proto/positions/v1/positions.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/accounts/v1;accounts_v1";
 option java_multiple_files = true;
@@ -73,8 +73,8 @@ message AccountCreateRequest {
 
 message AccountReply {
 	message Positions {
-		repeated positions.v1.PositionCompanyReply Companies = 1;
-		repeated positions.v1.PositionCurrencyReply Currencies = 2;
+		repeated positions.v1.PositionCompanyReply companies = 1;
+		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
 	int64 id = 1;

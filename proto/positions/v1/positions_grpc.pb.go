@@ -170,5 +170,5 @@ var Position_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/positions/v1/position.proto",
+	Metadata: "proto/positions/v1/positions.proto",
 }
