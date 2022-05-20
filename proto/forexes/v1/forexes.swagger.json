@@ -1,0 +1,212 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/forexes/v1/forexes.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Forexes"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "Forexes_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Forexes"
+        ]
+      }
+    },
+    "/v1/forexes/{currency}/pairs": {
+      "get": {
+        "operationId": "Forexes_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForexListReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      }
+    },
+    "/v1/forexes/{forex}": {
+      "get": {
+        "operationId": "Forexes_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForexReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "forex",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ForexReplyCurrency": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "v1ForexListReply": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "forexes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ForexReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "quote": {
+          "$ref": "#/definitions/v1QuotesLastReply"
+        },
+        "from": {
+          "$ref": "#/definitions/ForexReplyCurrency"
+        },
+        "to": {
+          "$ref": "#/definitions/ForexReplyCurrency"
+        }
+      }
+    },
+    "v1QuotesLastReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

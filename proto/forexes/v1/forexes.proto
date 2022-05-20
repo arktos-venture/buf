@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package forexes.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "proto/quotes/v1/quotes.proto";
+
+option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;forexes_v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.forexes.v1";
+option java_outer_classname = "APIForexesProtoV1";
+
+service Forexes {
+	rpc Get (ForexRequest) returns (ForexReply)  {
+		option (google.api.http) = {
+			get: "/v1/forexes/{forex}"
+		};
+	}
+
+	rpc List (ForexListRequest) returns (ForexListReply)  {
+		option (google.api.http) = {
+			get: "/v1/forexes/{currency}/pairs"
+		};
+	}
+
+	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+    	option (google.api.http) = {
+      		get: "/healthz"
+    	};
+  	}
+}
+
+
+// 
+// Request
+// 
+
+message ForexRequest {
+	string forex = 1 [(validate.rules).string.len = 6];
+}
+
+message ForexListRequest {
+	string currency = 1 [(validate.rules).string.len = 3];
+}
+
+
+// 
+// Reply
+// 
+
+message ForexReply {
+	message Currency {
+		string name = 1;
+		repeated string exchanges = 2;
+	}
+
+	int64 id = 1;
+	string ticker = 2;
+	quotes.v1.QuotesLastReply quote = 3;
+	Currency from = 4;
+	Currency to = 5;
+	
+}
+
+message ForexListReply {
+	string currency = 1;
+	repeated string forexes = 2;
+}
