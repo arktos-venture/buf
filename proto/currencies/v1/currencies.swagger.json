@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/currencies/{ticker}": {
+    "/v1/currencies": {
       "get": {
         "operationId": "Currencies_List",
         "responses": {
@@ -55,14 +55,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Currencies"
         ]
@@ -100,63 +92,6 @@
     }
   },
   "definitions": {
-    "CurrencyReplyCurrencies": {
-      "type": "object",
-      "properties": {
-        "from": {
-          "type": "string"
-        },
-        "to": {
-          "type": "string"
-        }
-      }
-    },
-    "CurrencyReplyExchanges": {
-      "type": "object",
-      "properties": {
-        "from": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "to": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "CurrencyReplyQuote": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "number",
-          "format": "float"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -193,12 +128,24 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CurrencyReply"
+            "$ref": "#/definitions/v1CurrencyRepliesResult"
           }
         },
         "total": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "v1CurrencyRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
         }
       }
     },
@@ -212,14 +159,11 @@
         "ticker": {
           "type": "string"
         },
-        "currencies": {
-          "$ref": "#/definitions/CurrencyReplyCurrencies"
-        },
         "exchanges": {
-          "$ref": "#/definitions/CurrencyReplyExchanges"
-        },
-        "quote": {
-          "$ref": "#/definitions/CurrencyReplyQuote"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

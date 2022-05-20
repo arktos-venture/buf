@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CurrenciesClient interface {
 	Get(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error)
-	List(ctx context.Context, in *CurrencyListRequest, opts ...grpc.CallOption) (*CurrencyReplies, error)
+	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CurrencyReplies, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -41,7 +41,7 @@ func (c *currenciesClient) Get(ctx context.Context, in *CurrencyRequest, opts ..
 	return out, nil
 }
 
-func (c *currenciesClient) List(ctx context.Context, in *CurrencyListRequest, opts ...grpc.CallOption) (*CurrencyReplies, error) {
+func (c *currenciesClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CurrencyReplies, error) {
 	out := new(CurrencyReplies)
 	err := c.cc.Invoke(ctx, "/currencies.v1.Currencies/List", in, out, opts...)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *currenciesClient) Health(ctx context.Context, in *emptypb.Empty, opts .
 // for forward compatibility
 type CurrenciesServer interface {
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
-	List(context.Context, *CurrencyListRequest) (*CurrencyReplies, error)
+	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCurrenciesServer()
 }
@@ -76,7 +76,7 @@ type UnimplementedCurrenciesServer struct {
 func (UnimplementedCurrenciesServer) Get(context.Context, *CurrencyRequest) (*CurrencyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCurrenciesServer) List(context.Context, *CurrencyListRequest) (*CurrencyReplies, error) {
+func (UnimplementedCurrenciesServer) List(context.Context, *emptypb.Empty) (*CurrencyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedCurrenciesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
@@ -114,7 +114,7 @@ func _Currencies_Get_Handler(srv interface{}, ctx context.Context, dec func(inte
 }
 
 func _Currencies_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CurrencyListRequest)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func _Currencies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/currencies.v1.Currencies/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CurrenciesServer).List(ctx, req.(*CurrencyListRequest))
+		return srv.(CurrenciesServer).List(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }

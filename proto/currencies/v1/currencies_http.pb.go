@@ -21,13 +21,13 @@ const _ = http.SupportPackageIsVersion1
 type CurrenciesHTTPServer interface {
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	List(context.Context, *CurrencyListRequest) (*CurrencyReplies, error)
+	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
 }
 
 func RegisterCurrenciesHTTPServer(s *http.Server, srv CurrenciesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/currency/{ticker}", _Currencies_Get2_HTTP_Handler(srv))
-	r.GET("/v1/currencies/{ticker}", _Currencies_List1_HTTP_Handler(srv))
+	r.GET("/v1/currencies", _Currencies_List1_HTTP_Handler(srv))
 	r.GET("/healthz", _Currencies_Health6_HTTP_Handler(srv))
 }
 
@@ -55,16 +55,13 @@ func _Currencies_Get2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Conte
 
 func _Currencies_List1_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CurrencyListRequest
+		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/currencies.v1.Currencies/List")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*CurrencyListRequest))
+			return srv.List(ctx, req.(*emptypb.Empty))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -97,7 +94,7 @@ func _Currencies_Health6_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Co
 type CurrenciesHTTPClient interface {
 	Get(ctx context.Context, req *CurrencyRequest, opts ...http.CallOption) (rsp *CurrencyReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	List(ctx context.Context, req *CurrencyListRequest, opts ...http.CallOption) (rsp *CurrencyReplies, err error)
+	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *CurrencyReplies, err error)
 }
 
 type CurrenciesHTTPClientImpl struct {
@@ -134,9 +131,9 @@ func (c *CurrenciesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty
 	return &out, err
 }
 
-func (c *CurrenciesHTTPClientImpl) List(ctx context.Context, in *CurrencyListRequest, opts ...http.CallOption) (*CurrencyReplies, error) {
+func (c *CurrenciesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*CurrencyReplies, error) {
 	var out CurrencyReplies
-	pattern := "/v1/currencies/{ticker}"
+	pattern := "/v1/currencies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/currencies.v1.Currencies/List"))
 	opts = append(opts, http.PathTemplate(pattern))
