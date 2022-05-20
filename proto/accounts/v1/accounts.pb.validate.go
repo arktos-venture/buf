@@ -585,6 +585,69 @@ func (m *AccountReply) validate(all bool) error {
 
 	// no validation rules for Currency
 
+	for idx, item := range m.GetOrders() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AccountReplyValidationError{
+						field:  fmt.Sprintf("Orders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AccountReplyValidationError{
+						field:  fmt.Sprintf("Orders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AccountReplyValidationError{
+					field:  fmt.Sprintf("Orders[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetPositions()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AccountReplyValidationError{
+					field:  "Positions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AccountReplyValidationError{
+					field:  "Positions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPositions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AccountReplyValidationError{
+				field:  "Positions",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for Active
 
 	if all {
@@ -857,3 +920,173 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AccountRepliesValidationError{}
+
+// Validate checks the field values on AccountReply_Positions with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AccountReply_Positions) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AccountReply_Positions with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AccountReply_PositionsMultiError, or nil if none found.
+func (m *AccountReply_Positions) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AccountReply_Positions) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetCompanies() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AccountReply_PositionsValidationError{
+						field:  fmt.Sprintf("Companies[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AccountReply_PositionsValidationError{
+						field:  fmt.Sprintf("Companies[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AccountReply_PositionsValidationError{
+					field:  fmt.Sprintf("Companies[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetCurrencies() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AccountReply_PositionsValidationError{
+						field:  fmt.Sprintf("Currencies[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AccountReply_PositionsValidationError{
+						field:  fmt.Sprintf("Currencies[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AccountReply_PositionsValidationError{
+					field:  fmt.Sprintf("Currencies[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return AccountReply_PositionsMultiError(errors)
+	}
+
+	return nil
+}
+
+// AccountReply_PositionsMultiError is an error wrapping multiple validation
+// errors returned by AccountReply_Positions.ValidateAll() if the designated
+// constraints aren't met.
+type AccountReply_PositionsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AccountReply_PositionsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AccountReply_PositionsMultiError) AllErrors() []error { return m }
+
+// AccountReply_PositionsValidationError is the validation error returned by
+// AccountReply_Positions.Validate if the designated constraints aren't met.
+type AccountReply_PositionsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AccountReply_PositionsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AccountReply_PositionsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AccountReply_PositionsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AccountReply_PositionsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AccountReply_PositionsValidationError) ErrorName() string {
+	return "AccountReply_PositionsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AccountReply_PositionsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAccountReply_Positions.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AccountReply_PositionsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AccountReply_PositionsValidationError{}
