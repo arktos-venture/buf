@@ -149,43 +149,17 @@
     "AccountReplyPositions": {
       "type": "object",
       "properties": {
-        "Companies": {
+        "companies": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1PositionCompanyReply"
           }
         },
-        "Currencies": {
+        "currencies": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1PositionCurrencyReply"
           }
-        }
-      }
-    },
-    "MoneyTotal": {
-      "type": "object",
-      "properties": {
-        "cost": {
-          "type": "number",
-          "format": "float"
-        },
-        "market": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "MoneyUnit": {
-      "type": "object",
-      "properties": {
-        "cost": {
-          "type": "number",
-          "format": "float"
-        },
-        "market": {
-          "type": "number",
-          "format": "float"
         }
       }
     },
@@ -219,14 +193,16 @@
         }
       }
     },
-    "PositionCompanyReplyMoney": {
+    "PositionCompanyReplyCost": {
       "type": "object",
       "properties": {
         "unit": {
-          "$ref": "#/definitions/MoneyUnit"
+          "type": "number",
+          "format": "float"
         },
         "total": {
-          "$ref": "#/definitions/MoneyTotal"
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -444,13 +420,17 @@
           "type": "number",
           "format": "float"
         },
-        "money": {
-          "$ref": "#/definitions/PositionCompanyReplyMoney"
+        "cost": {
+          "$ref": "#/definitions/PositionCompanyReplyCost"
         },
         "performance": {
           "$ref": "#/definitions/PositionCompanyReplyPerformance"
         },
         "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
           "type": "string",
           "format": "date-time"
         }
@@ -467,6 +447,10 @@
           "format": "float"
         },
         "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
           "type": "string",
           "format": "date-time"
         }

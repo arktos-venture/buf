@@ -73,8 +73,8 @@ message AccountCreateRequest {
 
 message AccountReply {
 	message Positions {
-		repeated positions.v1.PositionCompanyReply Companies = 1;
-		repeated positions.v1.PositionCurrencyReply Currencies = 2;
+		repeated positions.v1.PositionCompanyReply companies = 1;
+		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
 	int64 id = 1;
