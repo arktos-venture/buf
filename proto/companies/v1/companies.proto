@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "proto/screener/v1/screener.proto";
+import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
 option java_multiple_files = true;
@@ -84,12 +85,13 @@ message CompanyReply {
 	bool adr = 10;
 	screener.v1.ScreenerReply.Activity activity = 11;
 	screener.v1.ScreenerReply.Shares shares = 12;
-	string currencyReport = 13;
-	int64 fiscalYearEnd = 14;
-	CompanyContact contact = 15;
-	CompanyAddress address = 16;
-	google.protobuf.Timestamp created_at = 17;
-	google.protobuf.Timestamp updated_at = 18; 
+	quotes.v1.QuotesLastReply quote = 13;
+	string currencyReport = 14;
+	int64 fiscalYearEnd = 15;
+	CompanyContact contact = 16;
+	CompanyAddress address = 17;
+	google.protobuf.Timestamp created_at = 18;
+	google.protobuf.Timestamp updated_at = 19; 
 }
 
 message CompanyStatsReply {
