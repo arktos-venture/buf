@@ -57,10 +57,10 @@ func (m *CurrencyRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetTicker()) != 6 {
+	if utf8.RuneCountInString(m.GetTicker()) != 3 {
 		err := CurrencyRequestValidationError{
 			field:  "Ticker",
-			reason: "value length must be 6 runes",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
@@ -147,120 +147,6 @@ var _ interface {
 	ErrorName() string
 } = CurrencyRequestValidationError{}
 
-// Validate checks the field values on CurrencyListRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CurrencyListRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CurrencyListRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CurrencyListRequestMultiError, or nil if none found.
-func (m *CurrencyListRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CurrencyListRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if utf8.RuneCountInString(m.GetTicker()) != 3 {
-		err := CurrencyListRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	if len(errors) > 0 {
-		return CurrencyListRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CurrencyListRequestMultiError is an error wrapping multiple validation
-// errors returned by CurrencyListRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CurrencyListRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyListRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CurrencyListRequestMultiError) AllErrors() []error { return m }
-
-// CurrencyListRequestValidationError is the validation error returned by
-// CurrencyListRequest.Validate if the designated constraints aren't met.
-type CurrencyListRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CurrencyListRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CurrencyListRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CurrencyListRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CurrencyListRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CurrencyListRequestValidationError) ErrorName() string {
-	return "CurrencyListRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CurrencyListRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCurrencyListRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CurrencyListRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CurrencyListRequestValidationError{}
-
 // Validate checks the field values on CurrencyReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -286,93 +172,6 @@ func (m *CurrencyReply) validate(all bool) error {
 	// no validation rules for Id
 
 	// no validation rules for Ticker
-
-	if all {
-		switch v := interface{}(m.GetCurrencies()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Currencies",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Currencies",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCurrencies()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CurrencyReplyValidationError{
-				field:  "Currencies",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetExchanges()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Exchanges",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Exchanges",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetExchanges()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CurrencyReplyValidationError{
-				field:  "Exchanges",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetQuote()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Quote",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CurrencyReplyValidationError{
-					field:  "Quote",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetQuote()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CurrencyReplyValidationError{
-				field:  "Quote",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	if len(errors) > 0 {
 		return CurrencyReplyMultiError(errors)
@@ -588,46 +387,46 @@ var _ interface {
 	ErrorName() string
 } = CurrencyRepliesValidationError{}
 
-// Validate checks the field values on CurrencyReply_Currencies with the rules
+// Validate checks the field values on CurrencyReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CurrencyReply_Currencies) Validate() error {
+func (m *CurrencyReplies_Result) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CurrencyReply_Currencies with the
-// rules defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on CurrencyReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CurrencyReply_CurrenciesMultiError, or nil if none found.
-func (m *CurrencyReply_Currencies) ValidateAll() error {
+// CurrencyReplies_ResultMultiError, or nil if none found.
+func (m *CurrencyReplies_Result) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CurrencyReply_Currencies) validate(all bool) error {
+func (m *CurrencyReplies_Result) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for From
+	// no validation rules for Id
 
-	// no validation rules for To
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
-		return CurrencyReply_CurrenciesMultiError(errors)
+		return CurrencyReplies_ResultMultiError(errors)
 	}
 
 	return nil
 }
 
-// CurrencyReply_CurrenciesMultiError is an error wrapping multiple validation
-// errors returned by CurrencyReply_Currencies.ValidateAll() if the designated
+// CurrencyReplies_ResultMultiError is an error wrapping multiple validation
+// errors returned by CurrencyReplies_Result.ValidateAll() if the designated
 // constraints aren't met.
-type CurrencyReply_CurrenciesMultiError []error
+type CurrencyReplies_ResultMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyReply_CurrenciesMultiError) Error() string {
+func (m CurrencyReplies_ResultMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -636,11 +435,11 @@ func (m CurrencyReply_CurrenciesMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CurrencyReply_CurrenciesMultiError) AllErrors() []error { return m }
+func (m CurrencyReplies_ResultMultiError) AllErrors() []error { return m }
 
-// CurrencyReply_CurrenciesValidationError is the validation error returned by
-// CurrencyReply_Currencies.Validate if the designated constraints aren't met.
-type CurrencyReply_CurrenciesValidationError struct {
+// CurrencyReplies_ResultValidationError is the validation error returned by
+// CurrencyReplies_Result.Validate if the designated constraints aren't met.
+type CurrencyReplies_ResultValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -648,24 +447,24 @@ type CurrencyReply_CurrenciesValidationError struct {
 }
 
 // Field function returns field value.
-func (e CurrencyReply_CurrenciesValidationError) Field() string { return e.field }
+func (e CurrencyReplies_ResultValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CurrencyReply_CurrenciesValidationError) Reason() string { return e.reason }
+func (e CurrencyReplies_ResultValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CurrencyReply_CurrenciesValidationError) Cause() error { return e.cause }
+func (e CurrencyReplies_ResultValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CurrencyReply_CurrenciesValidationError) Key() bool { return e.key }
+func (e CurrencyReplies_ResultValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CurrencyReply_CurrenciesValidationError) ErrorName() string {
-	return "CurrencyReply_CurrenciesValidationError"
+func (e CurrencyReplies_ResultValidationError) ErrorName() string {
+	return "CurrencyReplies_ResultValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CurrencyReply_CurrenciesValidationError) Error() string {
+func (e CurrencyReplies_ResultValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -677,14 +476,14 @@ func (e CurrencyReply_CurrenciesValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCurrencyReply_Currencies.%s: %s%s",
+		"invalid %sCurrencyReplies_Result.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CurrencyReply_CurrenciesValidationError{}
+var _ error = CurrencyReplies_ResultValidationError{}
 
 var _ interface {
 	Field() string
@@ -692,247 +491,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CurrencyReply_CurrenciesValidationError{}
-
-// Validate checks the field values on CurrencyReply_Exchanges with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CurrencyReply_Exchanges) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CurrencyReply_Exchanges with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CurrencyReply_ExchangesMultiError, or nil if none found.
-func (m *CurrencyReply_Exchanges) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CurrencyReply_Exchanges) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return CurrencyReply_ExchangesMultiError(errors)
-	}
-
-	return nil
-}
-
-// CurrencyReply_ExchangesMultiError is an error wrapping multiple validation
-// errors returned by CurrencyReply_Exchanges.ValidateAll() if the designated
-// constraints aren't met.
-type CurrencyReply_ExchangesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyReply_ExchangesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CurrencyReply_ExchangesMultiError) AllErrors() []error { return m }
-
-// CurrencyReply_ExchangesValidationError is the validation error returned by
-// CurrencyReply_Exchanges.Validate if the designated constraints aren't met.
-type CurrencyReply_ExchangesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CurrencyReply_ExchangesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CurrencyReply_ExchangesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CurrencyReply_ExchangesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CurrencyReply_ExchangesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CurrencyReply_ExchangesValidationError) ErrorName() string {
-	return "CurrencyReply_ExchangesValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CurrencyReply_ExchangesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCurrencyReply_Exchanges.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CurrencyReply_ExchangesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CurrencyReply_ExchangesValidationError{}
-
-// Validate checks the field values on CurrencyReply_Quote with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CurrencyReply_Quote) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CurrencyReply_Quote with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CurrencyReply_QuoteMultiError, or nil if none found.
-func (m *CurrencyReply_Quote) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CurrencyReply_Quote) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Open
-
-	// no validation rules for Close
-
-	// no validation rules for Low
-
-	// no validation rules for High
-
-	// no validation rules for Volume
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CurrencyReply_QuoteValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CurrencyReply_QuoteValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CurrencyReply_QuoteValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return CurrencyReply_QuoteMultiError(errors)
-	}
-
-	return nil
-}
-
-// CurrencyReply_QuoteMultiError is an error wrapping multiple validation
-// errors returned by CurrencyReply_Quote.ValidateAll() if the designated
-// constraints aren't met.
-type CurrencyReply_QuoteMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyReply_QuoteMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CurrencyReply_QuoteMultiError) AllErrors() []error { return m }
-
-// CurrencyReply_QuoteValidationError is the validation error returned by
-// CurrencyReply_Quote.Validate if the designated constraints aren't met.
-type CurrencyReply_QuoteValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CurrencyReply_QuoteValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CurrencyReply_QuoteValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CurrencyReply_QuoteValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CurrencyReply_QuoteValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CurrencyReply_QuoteValidationError) ErrorName() string {
-	return "CurrencyReply_QuoteValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CurrencyReply_QuoteValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCurrencyReply_Quote.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CurrencyReply_QuoteValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CurrencyReply_QuoteValidationError{}
+} = CurrencyReplies_ResultValidationError{}
