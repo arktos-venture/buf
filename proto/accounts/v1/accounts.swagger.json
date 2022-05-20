@@ -146,6 +146,103 @@
     }
   },
   "definitions": {
+    "AccountReplyPositions": {
+      "type": "object",
+      "properties": {
+        "Companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1PositionCompanyReply"
+          }
+        },
+        "Currencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1PositionCurrencyReply"
+          }
+        }
+      }
+    },
+    "MoneyTotal": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "number",
+          "format": "float"
+        },
+        "market": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "MoneyUnit": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "number",
+          "format": "float"
+        },
+        "market": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "OrderReplyPrice": {
+      "type": "object",
+      "properties": {
+        "ask": {
+          "type": "number",
+          "format": "float"
+        },
+        "buy": {
+          "type": "number",
+          "format": "float"
+        },
+        "commission": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "OrderReplySize": {
+      "type": "object",
+      "properties": {
+        "ask": {
+          "type": "number",
+          "format": "float"
+        },
+        "buy": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "PositionCompanyReplyMoney": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "$ref": "#/definitions/MoneyUnit"
+        },
+        "total": {
+          "$ref": "#/definitions/MoneyTotal"
+        }
+      }
+    },
+    "PositionCompanyReplyPerformance": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "number",
+          "format": "float"
+        },
+        "money": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "accountsv1Page": {
       "type": "object",
       "properties": {
@@ -176,6 +273,33 @@
           }
         }
       }
+    },
+    "ordersv1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "ordersv1Duration": {
+      "type": "string",
+      "enum": [
+        "DAY",
+        "GTC"
+      ],
+      "default": "DAY"
+    },
+    "ordersv1Status": {
+      "type": "string",
+      "enum": [
+        "SUBMITTED",
+        "PRESUBMITED",
+        "CLOSE",
+        "OPEN"
+      ],
+      "default": "SUBMITTED"
     },
     "protobufAny": {
       "type": "object",
@@ -234,6 +358,15 @@
         "currency": {
           "type": "string"
         },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OrderReply"
+          }
+        },
+        "positions": {
+          "$ref": "#/definitions/AccountReplyPositions"
+        },
         "active": {
           "type": "boolean"
         },
@@ -242,6 +375,98 @@
           "format": "date-time"
         },
         "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1OrderReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/definitions/ordersv1Action"
+        },
+        "orderType": {
+          "$ref": "#/definitions/v1OrderType"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "duration": {
+          "$ref": "#/definitions/ordersv1Duration"
+        },
+        "size": {
+          "$ref": "#/definitions/OrderReplySize"
+        },
+        "price": {
+          "$ref": "#/definitions/OrderReplyPrice"
+        },
+        "status": {
+          "$ref": "#/definitions/ordersv1Status"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1OrderType": {
+      "type": "string",
+      "enum": [
+        "LMT",
+        "MKT",
+        "STP",
+        "IBALGO",
+        "MIDPRICE",
+        "OALL"
+      ],
+      "default": "LMT"
+    },
+    "v1PositionCompanyReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "money": {
+          "$ref": "#/definitions/PositionCompanyReplyMoney"
+        },
+        "performance": {
+          "$ref": "#/definitions/PositionCompanyReplyPerformance"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1PositionCurrencyReply": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
           "type": "string",
           "format": "date-time"
         }

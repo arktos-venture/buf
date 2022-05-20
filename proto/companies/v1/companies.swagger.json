@@ -359,6 +359,9 @@
         "shares": {
           "$ref": "#/definitions/ScreenerReplyShares"
         },
+        "quote": {
+          "$ref": "#/definitions/v1QuotesLastReply"
+        },
         "currencyReport": {
           "type": "string"
         },
@@ -445,6 +448,35 @@
           "format": "date-time"
         },
         "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1QuotesLastReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
           "type": "string",
           "format": "date-time"
         }
