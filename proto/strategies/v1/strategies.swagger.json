@@ -218,7 +218,7 @@
       "type": "string",
       "enum": [
         "Companies",
-        "Currencies",
+        "Forexes",
         "Indices",
         "Indexes",
         "Accounts"

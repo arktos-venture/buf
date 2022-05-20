@@ -39,7 +39,7 @@ service Quotes {
 
 enum TSDB {
   Companies = 0;
-  Currencies = 1;
+  Forexes = 1;
   Indices = 2;
   Indexes = 3;
   Accounts = 4;
