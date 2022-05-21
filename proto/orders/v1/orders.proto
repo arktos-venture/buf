@@ -16,28 +16,28 @@ option java_outer_classname = "APIOrdersProtoV1";
 service Orders {
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/{account}/orders"
+      post: "/v1/{accountId}/orders"
       body: "*"
     };
   }
 
   rpc Create (OrderCreateRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      post: "/v1/{account}/order"
+      post: "/v1/{accountId}/order"
       body: "*"
     };
   }
 
   rpc Update (OrderUpdateRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      put: "/v1/{account}/order/{orderId}"
+      put: "/v1/{accountId}/order/{orderId}"
       body: "*"
     };
   }
 
   rpc Delete (OrderDeleteRequest) returns (OrderDelete)  {
     option (google.api.http) = {
-      delete: "/v1/{account}/order/{orderId}"
+      delete: "/v1/{accountId}/order/{orderId}"
     };
   }
 
@@ -102,7 +102,7 @@ message Filter {
 }
 
 message OrderRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
 }
 
 message OrderSearchRequest {
@@ -111,14 +111,14 @@ message OrderSearchRequest {
 		screener.v1.ScreenerRequest.Sort.Orientation orientation = 2 [(validate.rules).enum = {defined_only: true}];
 	}
 
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string accountId = 1 [(validate.rules).string.uuid = true];
 	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 	Sort sort = 3 [(validate.rules).message.required = true];
   int32 limit = 4 [(validate.rules).int32 = {gt: 0, lte: 10000}];
 }
 
 message OrderCreateRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string accountId = 1 [(validate.rules).string.uuid = true];
   string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string currency = 4 [(validate.rules).string.len = 3];
@@ -130,7 +130,7 @@ message OrderCreateRequest {
 }
 
 message OrderUpdateRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string accountId = 1 [(validate.rules).string.uuid = true];
   int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
   Action action = 3 [(validate.rules).enum = {defined_only: true}];
   OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
@@ -140,7 +140,7 @@ message OrderUpdateRequest {
 }
 
 message OrderDeleteRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string accountId = 1 [(validate.rules).string.uuid = true];
   int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
 }
 

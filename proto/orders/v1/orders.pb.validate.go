@@ -39,6 +39,9 @@ var (
 	_ = screener_v1.Operator(0)
 )
 
+// define the regex for a UUID once up-front
+var _orders_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
 // Validate checks the field values on Filter with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -192,10 +195,10 @@ func (m *OrderRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 32 {
 		err := OrderRequestValidationError{
 			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+			reason: "value length must be between 3 and 32 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -302,10 +305,11 @@ func (m *OrderSearchRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
-		err := OrderSearchRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = OrderSearchRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
@@ -416,6 +420,14 @@ func (m *OrderSearchRequest) validate(all bool) error {
 	return nil
 }
 
+func (m *OrderSearchRequest) _validateUuid(uuid string) error {
+	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
+	}
+
+	return nil
+}
+
 // OrderSearchRequestMultiError is an error wrapping multiple validation errors
 // returned by OrderSearchRequest.ValidateAll() if the designated constraints
 // aren't met.
@@ -511,10 +523,11 @@ func (m *OrderCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
-		err := OrderCreateRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = OrderCreateRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
@@ -618,6 +631,14 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	return nil
 }
 
+func (m *OrderCreateRequest) _validateUuid(uuid string) error {
+	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
+	}
+
+	return nil
+}
+
 // OrderCreateRequestMultiError is an error wrapping multiple validation errors
 // returned by OrderCreateRequest.ValidateAll() if the designated constraints
 // aren't met.
@@ -713,10 +734,11 @@ func (m *OrderUpdateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
-		err := OrderUpdateRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = OrderUpdateRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
@@ -792,6 +814,14 @@ func (m *OrderUpdateRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return OrderUpdateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *OrderUpdateRequest) _validateUuid(uuid string) error {
+	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -892,10 +922,11 @@ func (m *OrderDeleteRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
-		err := OrderDeleteRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = OrderDeleteRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
@@ -916,6 +947,14 @@ func (m *OrderDeleteRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return OrderDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *OrderDeleteRequest) _validateUuid(uuid string) error {
+	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil

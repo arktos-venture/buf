@@ -26,8 +26,8 @@ type PositionHTTPServer interface {
 
 func RegisterPositionHTTPServer(s *http.Server, srv PositionHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/positions/{account}/companies", _Position_Companies0_HTTP_Handler(srv))
-	r.GET("/v1/positions/{account}/currencies", _Position_Currencies0_HTTP_Handler(srv))
+	r.GET("/v1/positions/{accountId}/companies", _Position_Companies0_HTTP_Handler(srv))
+	r.GET("/v1/positions/{accountId}/currencies", _Position_Currencies0_HTTP_Handler(srv))
 	r.GET("/healthz", _Position_Health13_HTTP_Handler(srv))
 }
 
@@ -110,7 +110,7 @@ func NewPositionHTTPClient(client *http.Client) PositionHTTPClient {
 
 func (c *PositionHTTPClientImpl) Companies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCompanyReplies, error) {
 	var out PositionCompanyReplies
-	pattern := "/v1/positions/{account}/companies"
+	pattern := "/v1/positions/{accountId}/companies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Position/Companies"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -123,7 +123,7 @@ func (c *PositionHTTPClientImpl) Companies(ctx context.Context, in *PositionRequ
 
 func (c *PositionHTTPClientImpl) Currencies(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionCurrencyReplies, error) {
 	var out PositionCurrencyReplies
-	pattern := "/v1/positions/{account}/currencies"
+	pattern := "/v1/positions/{accountId}/currencies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Position/Currencies"))
 	opts = append(opts, http.PathTemplate(pattern))

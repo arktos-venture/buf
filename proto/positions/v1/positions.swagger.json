@@ -38,7 +38,7 @@
         ]
       }
     },
-    "/v1/positions/{account}/companies": {
+    "/v1/positions/{accountId}/companies": {
       "get": {
         "operationId": "Position_Companies",
         "responses": {
@@ -57,7 +57,7 @@
         },
         "parameters": [
           {
-            "name": "account",
+            "name": "accountId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -68,7 +68,7 @@
         ]
       }
     },
-    "/v1/positions/{account}/currencies": {
+    "/v1/positions/{accountId}/currencies": {
       "get": {
         "operationId": "Position_Currencies",
         "responses": {
@@ -87,7 +87,7 @@
         },
         "parameters": [
           {
-            "name": "account",
+            "name": "accountId",
             "in": "path",
             "required": true,
             "type": "string"

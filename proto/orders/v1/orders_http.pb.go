@@ -28,10 +28,10 @@ type OrdersHTTPServer interface {
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/{account}/orders", _Orders_Search1_HTTP_Handler(srv))
-	r.POST("/v1/{account}/order", _Orders_Create0_HTTP_Handler(srv))
-	r.PUT("/v1/{account}/order/{orderId}", _Orders_Update0_HTTP_Handler(srv))
-	r.DELETE("/v1/{account}/order/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
+	r.POST("/v1/{accountId}/orders", _Orders_Search1_HTTP_Handler(srv))
+	r.POST("/v1/{accountId}/order", _Orders_Create0_HTTP_Handler(srv))
+	r.PUT("/v1/{accountId}/order/{orderId}", _Orders_Update0_HTTP_Handler(srv))
+	r.DELETE("/v1/{accountId}/order/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
 	r.GET("/healthz", _Orders_Health2_HTTP_Handler(srv))
 }
 
@@ -160,7 +160,7 @@ func NewOrdersHTTPClient(client *http.Client) OrdersHTTPClient {
 
 func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
-	pattern := "/v1/{account}/order"
+	pattern := "/v1/{accountId}/order"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -173,7 +173,7 @@ func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateReques
 
 func (c *OrdersHTTPClientImpl) Delete(ctx context.Context, in *OrderDeleteRequest, opts ...http.CallOption) (*OrderDelete, error) {
 	var out OrderDelete
-	pattern := "/v1/{account}/order/{orderId}"
+	pattern := "/v1/{accountId}/order/{orderId}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -199,7 +199,7 @@ func (c *OrdersHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, op
 
 func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*OrderReplies, error) {
 	var out OrderReplies
-	pattern := "/v1/{account}/orders"
+	pattern := "/v1/{accountId}/orders"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -212,7 +212,7 @@ func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchReques
 
 func (c *OrdersHTTPClientImpl) Update(ctx context.Context, in *OrderUpdateRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
-	pattern := "/v1/{account}/order/{orderId}"
+	pattern := "/v1/{accountId}/order/{orderId}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Update"))
 	opts = append(opts, http.PathTemplate(pattern))
