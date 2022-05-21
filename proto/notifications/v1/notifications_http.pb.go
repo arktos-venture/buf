@@ -26,8 +26,8 @@ type NotificationsHTTPServer interface {
 
 func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/{account}/notifications", _Notifications_Create2_HTTP_Handler(srv))
-	r.GET("/v1/{account}/notifications", _Notifications_Search7_HTTP_Handler(srv))
+	r.POST("/v1/notifications/{accountId}", _Notifications_Create2_HTTP_Handler(srv))
+	r.GET("/v1/notifications/{accountId}", _Notifications_Search7_HTTP_Handler(srv))
 	r.GET("/healthz", _Notifications_Health17_HTTP_Handler(srv))
 }
 
@@ -110,7 +110,7 @@ func NewNotificationsHTTPClient(client *http.Client) NotificationsHTTPClient {
 
 func (c *NotificationsHTTPClientImpl) Create(ctx context.Context, in *NotificationCreateRequest, opts ...http.CallOption) (*NotificationReply, error) {
 	var out NotificationReply
-	pattern := "/v1/{account}/notifications"
+	pattern := "/v1/notifications/{accountId}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/notifications.v1.Notifications/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -136,7 +136,7 @@ func (c *NotificationsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Em
 
 func (c *NotificationsHTTPClientImpl) Search(ctx context.Context, in *NotificationSearchRequest, opts ...http.CallOption) (*NotificationReplies, error) {
 	var out NotificationReplies
-	pattern := "/v1/{account}/notifications"
+	pattern := "/v1/notifications/{accountId}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/notifications.v1.Notifications/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
