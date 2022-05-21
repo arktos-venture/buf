@@ -4,7 +4,6 @@ package accounts.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "proto/orders/v1/orders.proto";
 import "proto/positions/v1/positions.proto";
@@ -52,18 +51,20 @@ message Page {
 }
 
 message AccountRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+	string userId = 1 [(validate.rules).string.uuid = true];
+	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
 }
 
 message AccountListRequest {
-	string user = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+	string userId = 1 [(validate.rules).string.uuid = true];
 	Page page = 2 [(validate.rules).message.required = true];
 }
 
 message AccountCreateRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
-	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 128}];
-	string currency = 3 [(validate.rules).string.len = 3];
+	string userId = 1 [(validate.rules).string.uuid = true];
+	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
+	string description = 3 [(validate.rules).string = {min_len: 4, max_len: 128}];
+	string currency = 4 [(validate.rules).string.len = 3];
 }
 
 
@@ -77,15 +78,13 @@ message AccountReply {
 		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
-	int64 id = 1;
-	string account = 2;
-	string user = 3;
+	string id = 1;
+	string userId = 2;
+	string account = 3;
 	string currency = 4;
 	repeated orders.v1.OrderReply orders = 5;
 	Positions positions = 6;
 	bool active = 7;
-	google.protobuf.Timestamp created_at = 8;
-	google.protobuf.Timestamp updated_at = 9;
 }
 
 message AccountReplies {
