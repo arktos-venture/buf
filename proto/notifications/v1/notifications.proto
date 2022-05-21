@@ -15,14 +15,14 @@ option java_outer_classname = "APINotificationsProtoV1";
 service Notifications {
 	rpc Create (NotificationCreateRequest) returns (NotificationReply)  {
 		option (google.api.http) = {
-		  	post: "/v1/{account}/notifications"
+		  	post: "/v1/notifications/{accountId}"
 			body: "*"
 		};
 	}
 
 	rpc Search (NotificationSearchRequest) returns (NotificationReplies)  {
 		option (google.api.http) = {
-		  	get: "/v1/{account}/notifications"
+		  	get: "/v1/notifications/{accountId}"
 		};
 	}
 
@@ -65,15 +65,15 @@ message Page {
 }
 
 message NotificationCreateRequest {
-	string account = 1;
+	string accountId = 1 [(validate.rules).string.uuid = true];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
-	Subject subject = 4;
-	string title = 6;
-	string description = 7;
+	Subject subject = 3 [(validate.rules).enum = {defined_only: true}];
+	string title = 4 [(validate.rules).string = {min_len: 10, max_len: 100}];
+	string description = 5 [(validate.rules).string = {min_len: 20, max_len: 250}];
 }
 
 message NotificationSearchRequest {
-	string account = 1;
+	string accountId = 1 [(validate.rules).string.uuid = true];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
 	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
 	Page page = 4 [(validate.rules).message.required = true];

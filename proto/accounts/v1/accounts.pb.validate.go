@@ -35,6 +35,9 @@ var (
 	_ = sort.Sort
 )
 
+// define the regex for a UUID once up-front
+var _accounts_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
 // Validate checks the field values on Page with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
 // encountered is returned, or nil if there are no violations.
@@ -177,10 +180,22 @@ func (m *AccountRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
+		err = AccountRequestValidationError{
+			field:  "UserId",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 100 {
 		err := AccountRequestValidationError{
 			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+			reason: "value length must be between 3 and 100 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -190,6 +205,14 @@ func (m *AccountRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return AccountRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *AccountRequest) _validateUuid(uuid string) error {
+	if matched := _accounts_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -288,10 +311,11 @@ func (m *AccountListRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetUser()); l < 3 || l > 32 {
-		err := AccountListRequestValidationError{
-			field:  "User",
-			reason: "value length must be between 3 and 32 runes, inclusive",
+	if err := m._validateUuid(m.GetUserId()); err != nil {
+		err = AccountListRequestValidationError{
+			field:  "UserId",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
@@ -341,6 +365,14 @@ func (m *AccountListRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return AccountListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *AccountListRequest) _validateUuid(uuid string) error {
+	if matched := _accounts_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -441,10 +473,22 @@ func (m *AccountCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 15 {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
+		err = AccountCreateRequestValidationError{
+			field:  "UserId",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 100 {
 		err := AccountCreateRequestValidationError{
 			field:  "Account",
-			reason: "value length must be between 3 and 15 runes, inclusive",
+			reason: "value length must be between 3 and 100 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -477,6 +521,14 @@ func (m *AccountCreateRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return AccountCreateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *AccountCreateRequest) _validateUuid(uuid string) error {
+	if matched := _accounts_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -579,9 +631,9 @@ func (m *AccountReply) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Account
+	// no validation rules for UserId
 
-	// no validation rules for User
+	// no validation rules for Account
 
 	// no validation rules for Currency
 
@@ -649,64 +701,6 @@ func (m *AccountReply) validate(all bool) error {
 	}
 
 	// no validation rules for Active
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, AccountReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, AccountReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return AccountReplyValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetUpdatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, AccountReplyValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, AccountReplyValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return AccountReplyValidationError{
-				field:  "UpdatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	if len(errors) > 0 {
 		return AccountReplyMultiError(errors)

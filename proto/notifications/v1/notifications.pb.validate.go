@@ -35,6 +35,9 @@ var (
 	_ = sort.Sort
 )
 
+// define the regex for a UUID once up-front
+var _notifications_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
 // Validate checks the field values on Page with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
 // encountered is returned, or nil if there are no violations.
@@ -177,7 +180,17 @@ func (m *NotificationCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Account
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = NotificationCreateRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if _, ok := Level_name[int32(m.GetLevel())]; !ok {
 		err := NotificationCreateRequestValidationError{
@@ -190,14 +203,49 @@ func (m *NotificationCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Subject
+	if _, ok := Subject_name[int32(m.GetSubject())]; !ok {
+		err := NotificationCreateRequestValidationError{
+			field:  "Subject",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Title
+	if l := utf8.RuneCountInString(m.GetTitle()); l < 10 || l > 100 {
+		err := NotificationCreateRequestValidationError{
+			field:  "Title",
+			reason: "value length must be between 10 and 100 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Description
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 20 || l > 250 {
+		err := NotificationCreateRequestValidationError{
+			field:  "Description",
+			reason: "value length must be between 20 and 250 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return NotificationCreateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *NotificationCreateRequest) _validateUuid(uuid string) error {
+	if matched := _notifications_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -298,7 +346,17 @@ func (m *NotificationSearchRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Account
+	if err := m._validateUuid(m.GetAccountId()); err != nil {
+		err = NotificationSearchRequestValidationError{
+			field:  "AccountId",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if _, ok := Level_name[int32(m.GetLevel())]; !ok {
 		err := NotificationSearchRequestValidationError{
@@ -364,6 +422,14 @@ func (m *NotificationSearchRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return NotificationSearchRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *NotificationSearchRequest) _validateUuid(uuid string) error {
+	if matched := _notifications_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil

@@ -15,13 +15,13 @@ option java_outer_classname = "APIPositionsProtoV1";
 service Position {
   rpc Companies (PositionRequest) returns (PositionCompanyReplies)  {
     option (google.api.http) = {
-      get: "/v1/positions/{account}/companies"
+      get: "/v1/positions/{accountId}/companies"
     };
   }
 
   rpc Currencies (PositionRequest) returns (PositionCurrencyReplies)  {
     option (google.api.http) = {
-      get: "/v1/positions/{account}/currencies"
+      get: "/v1/positions/{accountId}/currencies"
     };
   }
 
@@ -38,7 +38,7 @@ service Position {
 // 
 
 message PositionRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 15}];
+  string accountId = 1 [(validate.rules).string.uuid = true];
 }
 
 

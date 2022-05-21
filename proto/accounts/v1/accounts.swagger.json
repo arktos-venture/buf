@@ -93,6 +93,12 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -119,7 +125,7 @@
         },
         "parameters": [
           {
-            "name": "user",
+            "name": "userId",
             "in": "query",
             "required": false,
             "type": "string"
@@ -292,6 +298,9 @@
     "v1AccountCreateRequest": {
       "type": "object",
       "properties": {
+        "userId": {
+          "type": "string"
+        },
         "account": {
           "type": "string"
         },
@@ -322,13 +331,12 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "account": {
           "type": "string"
         },
-        "user": {
+        "userId": {
+          "type": "string"
+        },
+        "account": {
           "type": "string"
         },
         "currency": {
@@ -345,14 +353,6 @@
         },
         "active": {
           "type": "boolean"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
         }
       }
     },
