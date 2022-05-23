@@ -16,10 +16,15 @@ option java_outer_classname = "APIAccountsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
         title: "Accounts APIs";
-		description: "Accounts APIs trade companies"
-        version: "1.0";    
+		description: "Accounts APIs trade companies";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
   	};
-	schemes: HTTP;
+	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
