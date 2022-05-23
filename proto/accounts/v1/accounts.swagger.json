@@ -1,13 +1,17 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/accounts/v1/accounts.proto",
-    "version": "version not set"
+    "title": "Accounts API",
+    "description": "Accounts gestion to trade companies",
+    "version": "1.0"
   },
   "tags": [
     {
       "name": "Accounts"
     }
+  ],
+  "schemes": [
+    "http"
   ],
   "consumes": [
     "application/json"
@@ -93,12 +97,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "userId",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -124,12 +122,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
           {
             "name": "page.number",
             "in": "query",
@@ -166,6 +158,29 @@
           "items": {
             "$ref": "#/definitions/v1PositionCurrencyReply"
           }
+        }
+      }
+    },
+    "AccountReplyUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
         }
       }
     },
@@ -298,9 +313,6 @@
     "v1AccountCreateRequest": {
       "type": "object",
       "properties": {
-        "userId": {
-          "type": "string"
-        },
         "account": {
           "type": "string"
         },
@@ -333,14 +345,17 @@
         "id": {
           "type": "string"
         },
-        "userId": {
-          "type": "string"
-        },
         "account": {
           "type": "string"
         },
         "currency": {
           "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountReplyUser"
+          }
         },
         "orders": {
           "type": "array",
@@ -456,5 +471,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }
