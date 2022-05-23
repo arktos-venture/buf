@@ -15,8 +15,8 @@ option java_package = "dev.kratos.api.accounts.v1";
 option java_outer_classname = "APIAccountsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Accounts API";
-		description: "Accounts gestion to trade companies"
+        title: "Accounts APIs";
+		description: "Accounts APIs trade companies"
         version: "1.0";    
   	};
 	schemes: HTTP;
@@ -41,15 +41,9 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Accounts {
-	rpc Get (AccountRequest) returns (AccountReply)  {
+	rpc Positions (AccountRequest) returns (AccountPositionsReply)  {
 		option (google.api.http) = {
-			get: "/v1/account/{account}"
-		};
-	}
-
-	rpc List (AccountListRequest) returns (AccountReplies)  {
-		option (google.api.http) = {
-			get: "/v1/accounts"
+			get: "/v1/account/{accountId}/positions"
 		};
 	}
 
@@ -60,10 +54,21 @@ service Accounts {
 		};
 	}
 
+	rpc Update (AccountUpdateRequest) returns (AccountReply)  {
+		option (google.api.http) = {
+			put: "/v1/account/{accountId}"
+			body: "*"
+		};
+	}
+
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
     	option (google.api.http) = {
       		get: "/healthz"
     	};
+
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
+		};
   	}
 }
 
@@ -72,23 +77,21 @@ service Accounts {
 // Request
 // 
 
-message Page {
-	int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-}
-
 message AccountRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 100}];
-}
-
-message AccountListRequest {
-	Page page = 1 [(validate.rules).message.required = true];
+	string accountId = 1 [(validate.rules).string.uuid = true];
 }
 
 message AccountCreateRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 100}];
+	string name = 1 [(validate.rules).string = {min_len: 3, max_len: 100}];
 	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 128}];
 	string currency = 3 [(validate.rules).string.len = 3];
+}
+
+message AccountUpdateRequest {
+	string accountId = 1 [(validate.rules).string.uuid = true];
+	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
+	string description = 3 [(validate.rules).string = {min_len: 4, max_len: 128}];
+	string currency = 4 [(validate.rules).string.len = 3];
 }
 
 
@@ -96,31 +99,20 @@ message AccountCreateRequest {
 // Reply
 // 
 
-message AccountReply {
+message AccountPositionsReply {
 	message Positions {
 		repeated positions.v1.PositionCompanyReply companies = 1;
 		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
-	message User {
-		string id = 1;
-		string username = 2;
-		string email = 3;
-		string firstname = 4;
-		string lastname = 5;
-		bool active = 6;
-	}
-
 	string id = 1;
-	string account = 2;
-	string currency = 3;
-	repeated User users = 4;
-	repeated orders.v1.OrderReply orders = 5;
-	Positions positions = 6;
-	bool active = 7;
+	repeated orders.v1.OrderReply orders = 2;
+	Positions positions = 3;
 }
 
-message AccountReplies {
-	repeated AccountReply results = 1;
-	int32 total = 2;
+message AccountReply {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	string currency = 4;
 }

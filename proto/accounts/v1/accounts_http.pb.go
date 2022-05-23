@@ -20,20 +20,20 @@ const _ = http.SupportPackageIsVersion1
 
 type AccountsHTTPServer interface {
 	Create(context.Context, *AccountCreateRequest) (*AccountReply, error)
-	Get(context.Context, *AccountRequest) (*AccountReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	List(context.Context, *AccountListRequest) (*AccountReplies, error)
+	Positions(context.Context, *AccountRequest) (*AccountPositionsReply, error)
+	Update(context.Context, *AccountUpdateRequest) (*AccountReply, error)
 }
 
 func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/account/{account}", _Accounts_Get5_HTTP_Handler(srv))
-	r.GET("/v1/accounts", _Accounts_List5_HTTP_Handler(srv))
+	r.GET("/v1/account/{accountId}/positions", _Accounts_Positions0_HTTP_Handler(srv))
 	r.POST("/v1/account", _Accounts_Create1_HTTP_Handler(srv))
+	r.PUT("/v1/account/{accountId}", _Accounts_Update1_HTTP_Handler(srv))
 	r.GET("/healthz", _Accounts_Health14_HTTP_Handler(srv))
 }
 
-func _Accounts_Get5_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Positions0_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -42,34 +42,15 @@ func _Accounts_Get5_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) 
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/accounts.v1.Accounts/Get")
+		http.SetOperation(ctx, "/accounts.v1.Accounts/Positions")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*AccountRequest))
+			return srv.Positions(ctx, req.(*AccountRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*AccountReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Accounts_List5_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in AccountListRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/accounts.v1.Accounts/List")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*AccountListRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*AccountReplies)
+		reply := out.(*AccountPositionsReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -83,6 +64,28 @@ func _Accounts_Create1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 		http.SetOperation(ctx, "/accounts.v1.Accounts/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Create(ctx, req.(*AccountCreateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AccountReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Accounts_Update1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AccountUpdateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/accounts.v1.Accounts/Update")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Update(ctx, req.(*AccountUpdateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -114,9 +117,9 @@ func _Accounts_Health14_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Conte
 
 type AccountsHTTPClient interface {
 	Create(ctx context.Context, req *AccountCreateRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
-	Get(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	List(ctx context.Context, req *AccountListRequest, opts ...http.CallOption) (rsp *AccountReplies, err error)
+	Positions(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountPositionsReply, err error)
+	Update(ctx context.Context, req *AccountUpdateRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 }
 
 type AccountsHTTPClientImpl struct {
@@ -140,19 +143,6 @@ func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountCreateRe
 	return &out, err
 }
 
-func (c *AccountsHTTPClientImpl) Get(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountReply, error) {
-	var out AccountReply
-	pattern := "/v1/account/{account}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/accounts.v1.Accounts/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
 func (c *AccountsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/healthz"
@@ -166,13 +156,26 @@ func (c *AccountsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, 
 	return &out, err
 }
 
-func (c *AccountsHTTPClientImpl) List(ctx context.Context, in *AccountListRequest, opts ...http.CallOption) (*AccountReplies, error) {
-	var out AccountReplies
-	pattern := "/v1/accounts"
+func (c *AccountsHTTPClientImpl) Positions(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountPositionsReply, error) {
+	var out AccountPositionsReply
+	pattern := "/v1/account/{accountId}/positions"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/accounts.v1.Accounts/List"))
+	opts = append(opts, http.Operation("/accounts.v1.Accounts/Positions"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AccountsHTTPClientImpl) Update(ctx context.Context, in *AccountUpdateRequest, opts ...http.CallOption) (*AccountReply, error) {
+	var out AccountReply
+	pattern := "/v1/account/{accountId}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/accounts.v1.Accounts/Update"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

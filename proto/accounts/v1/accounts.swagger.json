@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Accounts API",
-    "description": "Accounts gestion to trade companies",
+    "title": "Accounts APIs",
+    "description": "Accounts APIs trade companies",
     "version": "1.0"
   },
   "tags": [
@@ -39,7 +39,8 @@
         },
         "tags": [
           "Accounts"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/account": {
@@ -74,9 +75,9 @@
         ]
       }
     },
-    "/v1/account/{account}": {
-      "get": {
-        "operationId": "Accounts_Get",
+    "/v1/account/{accountId}": {
+      "put": {
+        "operationId": "Accounts_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -93,10 +94,29 @@
         },
         "parameters": [
           {
-            "name": "account",
+            "name": "accountId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -104,14 +124,14 @@
         ]
       }
     },
-    "/v1/accounts": {
+    "/v1/account/{accountId}/positions": {
       "get": {
-        "operationId": "Accounts_List",
+        "operationId": "Accounts_Positions",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AccountReplies"
+              "$ref": "#/definitions/v1AccountPositionsReply"
             }
           },
           "default": {
@@ -123,18 +143,10 @@
         },
         "parameters": [
           {
-            "name": "page.number",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.limit",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -144,7 +156,7 @@
     }
   },
   "definitions": {
-    "AccountReplyPositions": {
+    "AccountPositionsReplyPositions": {
       "type": "object",
       "properties": {
         "companies": {
@@ -158,29 +170,6 @@
           "items": {
             "$ref": "#/definitions/v1PositionCurrencyReply"
           }
-        }
-      }
-    },
-    "AccountReplyUser": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "firstname": {
-          "type": "string"
-        },
-        "lastname": {
-          "type": "string"
-        },
-        "active": {
-          "type": "boolean"
         }
       }
     },
@@ -237,19 +226,6 @@
         "money": {
           "type": "number",
           "format": "float"
-        }
-      }
-    },
-    "accountsv1Page": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     },
@@ -313,7 +289,7 @@
     "v1AccountCreateRequest": {
       "type": "object",
       "properties": {
-        "account": {
+        "name": {
           "type": "string"
         },
         "description": {
@@ -324,18 +300,20 @@
         }
       }
     },
-    "v1AccountReplies": {
+    "v1AccountPositionsReply": {
       "type": "object",
       "properties": {
-        "results": {
+        "id": {
+          "type": "string"
+        },
+        "orders": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1AccountReply"
+            "$ref": "#/definitions/v1OrderReply"
           }
         },
-        "total": {
-          "type": "integer",
-          "format": "int32"
+        "positions": {
+          "$ref": "#/definitions/AccountPositionsReplyPositions"
         }
       }
     },
@@ -345,29 +323,14 @@
         "id": {
           "type": "string"
         },
-        "account": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "currency": {
           "type": "string"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AccountReplyUser"
-          }
-        },
-        "orders": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1OrderReply"
-          }
-        },
-        "positions": {
-          "$ref": "#/definitions/AccountReplyPositions"
-        },
-        "active": {
-          "type": "boolean"
         }
       }
     },
