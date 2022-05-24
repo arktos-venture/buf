@@ -963,10 +963,6 @@ func (m *Server_GRPC) validate(all bool) error {
 
 	// no validation rules for Hostname
 
-	// no validation rules for Username
-
-	// no validation rules for Password
-
 	if all {
 		switch v := interface{}(m.GetTimeout()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1202,6 +1198,10 @@ func (m *Server_Keycloak) validate(all bool) error {
 	// no validation rules for Hostname
 
 	// no validation rules for Realm
+
+	// no validation rules for Username
+
+	// no validation rules for Password
 
 	if all {
 		switch v := interface{}(m.GetTimeout()).(type) {
