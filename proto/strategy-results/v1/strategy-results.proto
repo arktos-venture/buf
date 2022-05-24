@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/orders/v1/orders.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/strategy-results/v1;strategy_results_v1";

@@ -682,6 +682,35 @@ func (m *Data) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetKeycloak()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DataValidationError{
+					field:  "Keycloak",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DataValidationError{
+					field:  "Keycloak",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetKeycloak()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DataValidationError{
+				field:  "Keycloak",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	{
 		sorted_keys := make([]string, len(m.GetServices()))
 		i := 0
@@ -1199,10 +1228,6 @@ func (m *Server_Keycloak) validate(all bool) error {
 
 	// no validation rules for Realm
 
-	// no validation rules for Username
-
-	// no validation rules for Password
-
 	if all {
 		switch v := interface{}(m.GetTimeout()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1592,6 +1617,143 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Data_RedisValidationError{}
+
+// Validate checks the field values on Data_Keycloak with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Data_Keycloak) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Data_Keycloak with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in Data_KeycloakMultiError, or
+// nil if none found.
+func (m *Data_Keycloak) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Data_Keycloak) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Hostname
+
+	// no validation rules for Realm
+
+	// no validation rules for Username
+
+	// no validation rules for Password
+
+	if all {
+		switch v := interface{}(m.GetTimeout()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Data_KeycloakValidationError{
+					field:  "Timeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Data_KeycloakValidationError{
+					field:  "Timeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTimeout()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Data_KeycloakValidationError{
+				field:  "Timeout",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Data_KeycloakMultiError(errors)
+	}
+
+	return nil
+}
+
+// Data_KeycloakMultiError is an error wrapping multiple validation errors
+// returned by Data_Keycloak.ValidateAll() if the designated constraints
+// aren't met.
+type Data_KeycloakMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Data_KeycloakMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Data_KeycloakMultiError) AllErrors() []error { return m }
+
+// Data_KeycloakValidationError is the validation error returned by
+// Data_Keycloak.Validate if the designated constraints aren't met.
+type Data_KeycloakValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Data_KeycloakValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Data_KeycloakValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Data_KeycloakValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Data_KeycloakValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Data_KeycloakValidationError) ErrorName() string { return "Data_KeycloakValidationError" }
+
+// Error satisfies the builtin error interface
+func (e Data_KeycloakValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sData_Keycloak.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Data_KeycloakValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Data_KeycloakValidationError{}
 
 // Validate checks the field values on Data_Service with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
