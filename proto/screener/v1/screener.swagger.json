@@ -1,13 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/screener/v1/screener.proto",
-    "version": "version not set"
+    "title": "Screener APIs",
+    "description": "Screener APIs",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
   "tags": [
     {
       "name": "Screener"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -36,7 +46,8 @@
         },
         "tags": [
           "Screener"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/screener": {
@@ -375,5 +386,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

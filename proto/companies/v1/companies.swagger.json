@@ -1,13 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/companies/v1/companies.proto",
-    "version": "version not set"
+    "title": "Companies APIs",
+    "description": "Companies APIs available for trades",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
   "tags": [
     {
       "name": "Companies"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -36,7 +46,8 @@
         },
         "tags": [
           "Companies"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/company/{exchange}/{ticker}": {
@@ -482,5 +493,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

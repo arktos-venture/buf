@@ -27,13 +27,13 @@ type CompaniesHTTPServer interface {
 
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get7_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get6_HTTP_Handler(srv))
 	r.GET("/v1/company/{exchange}/{ticker}/stats", _Companies_Stats0_HTTP_Handler(srv))
 	r.GET("/v1/company/{exchange}/{ticker}/similars", _Companies_Similars0_HTTP_Handler(srv))
 	r.GET("/healthz", _Companies_Health18_HTTP_Handler(srv))
 }
 
-func _Companies_Get7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Get6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyRequest
 		if err := ctx.BindQuery(&in); err != nil {

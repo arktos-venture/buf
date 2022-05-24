@@ -5,24 +5,50 @@ package accounts.v1;
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/orders/v1/orders.proto";
 import "proto/positions/v1/positions.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/accounts/v1;accounts_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.accounts.v1";
-option java_outer_classname = "AccountsProtoV1";
+option java_outer_classname = "APIAccountsProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "Accounts APIs";
+		description: "Accounts APIs trade companies";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
 
 service Accounts {
-	rpc Get (AccountRequest) returns (AccountReply)  {
+	rpc Positions (AccountRequest) returns (AccountPositionsReply)  {
 		option (google.api.http) = {
-			get: "/v1/account/{account}"
-		};
-	}
-
-	rpc List (AccountListRequest) returns (AccountReplies)  {
-		option (google.api.http) = {
-			get: "/v1/accounts"
+			get: "/v1/account/{accountId}/positions"
 		};
 	}
 
@@ -33,10 +59,21 @@ service Accounts {
 		};
 	}
 
+	rpc Update (AccountUpdateRequest) returns (AccountReply)  {
+		option (google.api.http) = {
+			put: "/v1/account/{accountId}"
+			body: "*"
+		};
+	}
+
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
     	option (google.api.http) = {
       		get: "/healthz"
     	};
+
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
+		};
   	}
 }
 
@@ -45,24 +82,19 @@ service Accounts {
 // Request
 // 
 
-message Page {
-	int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-}
-
 message AccountRequest {
-	string userId = 1 [(validate.rules).string.uuid = true];
-	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
-}
-
-message AccountListRequest {
-	string userId = 1 [(validate.rules).string.uuid = true];
-	Page page = 2 [(validate.rules).message.required = true];
+	string accountId = 1 [(validate.rules).string.uuid = true];
 }
 
 message AccountCreateRequest {
-	string userId = 1 [(validate.rules).string.uuid = true];
-	string account = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
+	string name = 1 [(validate.rules).string = {min_len: 3, max_len: 100}];
+	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 128}];
+	string currency = 3 [(validate.rules).string.len = 3];
+}
+
+message AccountUpdateRequest {
+	string accountId = 1 [(validate.rules).string.uuid = true];
+	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
 	string description = 3 [(validate.rules).string = {min_len: 4, max_len: 128}];
 	string currency = 4 [(validate.rules).string.len = 3];
 }
@@ -72,22 +104,20 @@ message AccountCreateRequest {
 // Reply
 // 
 
-message AccountReply {
+message AccountPositionsReply {
 	message Positions {
 		repeated positions.v1.PositionCompanyReply companies = 1;
 		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
 	string id = 1;
-	string userId = 2;
-	string account = 3;
-	string currency = 4;
-	repeated orders.v1.OrderReply orders = 5;
-	Positions positions = 6;
-	bool active = 7;
+	repeated orders.v1.OrderReply orders = 2;
+	Positions positions = 3;
 }
 
-message AccountReplies {
-	repeated AccountReply results = 1;
-	int32 total = 2;
+message AccountReply {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	string currency = 4;
 }

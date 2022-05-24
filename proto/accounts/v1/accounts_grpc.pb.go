@@ -19,9 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountsClient interface {
-	Get(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountReply, error)
-	List(ctx context.Context, in *AccountListRequest, opts ...grpc.CallOption) (*AccountReplies, error)
+	Positions(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountPositionsReply, error)
 	Create(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	Update(ctx context.Context, in *AccountUpdateRequest, opts ...grpc.CallOption) (*AccountReply, error)
 	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -33,18 +33,9 @@ func NewAccountsClient(cc grpc.ClientConnInterface) AccountsClient {
 	return &accountsClient{cc}
 }
 
-func (c *accountsClient) Get(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountReply, error) {
-	out := new(AccountReply)
-	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Get", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountsClient) List(ctx context.Context, in *AccountListRequest, opts ...grpc.CallOption) (*AccountReplies, error) {
-	out := new(AccountReplies)
-	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/List", in, out, opts...)
+func (c *accountsClient) Positions(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountPositionsReply, error) {
+	out := new(AccountPositionsReply)
+	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Positions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +45,15 @@ func (c *accountsClient) List(ctx context.Context, in *AccountListRequest, opts 
 func (c *accountsClient) Create(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountReply, error) {
 	out := new(AccountReply)
 	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountsClient) Update(ctx context.Context, in *AccountUpdateRequest, opts ...grpc.CallOption) (*AccountReply, error) {
+	out := new(AccountReply)
+	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +73,9 @@ func (c *accountsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...
 // All implementations must embed UnimplementedAccountsServer
 // for forward compatibility
 type AccountsServer interface {
-	Get(context.Context, *AccountRequest) (*AccountReply, error)
-	List(context.Context, *AccountListRequest) (*AccountReplies, error)
+	Positions(context.Context, *AccountRequest) (*AccountPositionsReply, error)
 	Create(context.Context, *AccountCreateRequest) (*AccountReply, error)
+	Update(context.Context, *AccountUpdateRequest) (*AccountReply, error)
 	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAccountsServer()
 }
@@ -84,14 +84,14 @@ type AccountsServer interface {
 type UnimplementedAccountsServer struct {
 }
 
-func (UnimplementedAccountsServer) Get(context.Context, *AccountRequest) (*AccountReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
-}
-func (UnimplementedAccountsServer) List(context.Context, *AccountListRequest) (*AccountReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedAccountsServer) Positions(context.Context, *AccountRequest) (*AccountPositionsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Positions not implemented")
 }
 func (UnimplementedAccountsServer) Create(context.Context, *AccountCreateRequest) (*AccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedAccountsServer) Update(context.Context, *AccountUpdateRequest) (*AccountReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedAccountsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
@@ -109,38 +109,20 @@ func RegisterAccountsServer(s grpc.ServiceRegistrar, srv AccountsServer) {
 	s.RegisterService(&Accounts_ServiceDesc, srv)
 }
 
-func _Accounts_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Accounts_Positions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountsServer).Get(ctx, in)
+		return srv.(AccountsServer).Positions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/accounts.v1.Accounts/Get",
+		FullMethod: "/accounts.v1.Accounts/Positions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountsServer).Get(ctx, req.(*AccountRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Accounts_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccountListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AccountsServer).List(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/accounts.v1.Accounts/List",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountsServer).List(ctx, req.(*AccountListRequest))
+		return srv.(AccountsServer).Positions(ctx, req.(*AccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,6 +141,24 @@ func _Accounts_Create_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AccountsServer).Create(ctx, req.(*AccountCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Accounts_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountsServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.v1.Accounts/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountsServer).Update(ctx, req.(*AccountUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -189,16 +189,16 @@ var Accounts_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AccountsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Get",
-			Handler:    _Accounts_Get_Handler,
-		},
-		{
-			MethodName: "List",
-			Handler:    _Accounts_List_Handler,
+			MethodName: "Positions",
+			Handler:    _Accounts_Positions_Handler,
 		},
 		{
 			MethodName: "Create",
 			Handler:    _Accounts_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Accounts_Update_Handler,
 		},
 		{
 			MethodName: "Health",

@@ -1,13 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/quotes/v1/quotes.proto",
-    "version": "version not set"
+    "title": "Quotes APIs",
+    "description": "Quotes APIs",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
   "tags": [
     {
       "name": "Quotes"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -35,7 +45,8 @@
         },
         "tags": [
           "Quotes"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/quotes": {
@@ -300,5 +311,18 @@
       ],
       "default": "Companies"
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

@@ -28,7 +28,7 @@ message Server {
   message GRPC {
     string network = 1;
     string hostname = 2;
-    google.protobuf.Duration timeout = 3;
+    google.protobuf.Duration timeout = 5;
   }
 
   message Jaeger {
@@ -42,9 +42,18 @@ message Server {
     string environment = 2;
   }
 
+  message Keycloak {
+    string hostname = 1;
+    string realm = 2;
+    string username = 3;
+    string password = 4;
+    google.protobuf.Duration timeout = 5;
+  }
+
   HTTP http = 1;
   GRPC grpc = 2;
   Jaeger jaeger = 3;
+  Keycloak keycloak = 4;
 }
 
 message Data {
@@ -90,14 +99,6 @@ message Data {
     Timeout timeout = 6;
   }
 
-  message Keycloak {
-    string hostname = 1;
-    string realm = 2;
-    string clientID = 3;
-    string clientSecret = 4;
-    google.protobuf.Duration timeout = 5;
-  }  
-
   message Service {
     string hostname = 1;
     int32 port = 2;
@@ -106,7 +107,6 @@ message Data {
 
   Postgres postgres = 1;
   Redis redis = 2;
-  Keycloak keycloak = 3;
-  map<string, Service> services = 4;
+  map<string, Service> services = 3;
 }
 

@@ -1,0 +1,43 @@
+project_name: arktos-venture
+before:
+  hooks:
+    - go mod tidy
+gomod:
+  proxy: false
+  env:
+    - GOPRIVATE=github.com/arktos-venture
+      
+archives:
+  - name_template: "buf_{{ .Os }}_{{ .Arch }}{{ .Arm }}"
+    format: binary
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - '^chore'
+    - Merge pull request
+    - Merge remote-tracking branch
+    - Merge branch
+    - go mod tidy
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 10
+    - title: Other work
+      order: 999
+
+release:
+  footer: |
+    **Full Changelog**: https://github.com/arktos-venture/buf/compare/{{ .PreviousTag }}...{{ .Tag }}
