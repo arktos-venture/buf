@@ -6,6 +6,9 @@ gomod:
   proxy: false
   env:
     - GOPRIVATE=github.com/arktos-venture
+
+builds:
+  - skip: true
       
 archives:
   - name_template: "buf_{{ .Os }}_{{ .Arch }}{{ .Arm }}"
