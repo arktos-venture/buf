@@ -1,13 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/industries/v1/industries.proto",
-    "version": "version not set"
+    "title": "Industries APIs",
+    "description": "Industries APIs",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
   "tags": [
     {
       "name": "Industries"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -35,7 +45,8 @@
         },
         "tags": [
           "Industries"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/industries": {
@@ -185,5 +196,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

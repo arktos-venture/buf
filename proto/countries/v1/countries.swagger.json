@@ -1,13 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/countries/v1/countries.proto",
-    "version": "version not set"
+    "title": "Countries APIs",
+    "description": "Countries APIs",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
   "tags": [
     {
       "name": "Countries"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -35,7 +45,8 @@
         },
         "tags": [
           "Countries"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/countries": {
@@ -436,5 +447,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

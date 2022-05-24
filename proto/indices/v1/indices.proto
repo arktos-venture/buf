@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
 
@@ -13,23 +14,58 @@ option go_package = "github.com/arktos-venture/buf/proto/indices/v1;indices_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indices.v1";
 option java_outer_classname = "APIIndicesProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "Indices APIs";
+		description: "Indices APIs";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
 
 service Indices {
-  rpc Get (IndicesRequest) returns (IndicesReply)  {
-    option (google.api.http) = {
-      get: "/v1/indice/{indice}"
-    };
-  }
+	rpc Get (IndicesRequest) returns (IndicesReply)  {
+		option (google.api.http) = {
+			get: "/v1/indice/{indice}"
+		};
+	}
 
-  rpc List (IndicesExchangeRequest) returns (IndicesShortReplies)  {
-    option (google.api.http) = {
-      get: "/v1/indices/exchange/{exchange}"
-    };
-  }
+	rpc List (IndicesExchangeRequest) returns (IndicesShortReplies)  {
+		option (google.api.http) = {
+			get: "/v1/indices/exchange/{exchange}"
+		};
+	}
 
-  rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
+  	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
+		};
+
+   		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
 		};
 	}
 }
@@ -40,11 +76,11 @@ service Indices {
 // 
 
 message IndicesRequest {
-  string indice = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+  	string indice = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
 }
 
 message IndicesExchangeRequest {
-  string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+  	string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
 }
 
 
@@ -53,26 +89,26 @@ message IndicesExchangeRequest {
 // 
 
 message IndicesReply {
-  int64 id = 1;
-  string ticker = 2;
-  string name = 3;
-  string description = 4;
-  quotes.v1.QuotesLastReply quote = 5;
-  repeated screener.v1.ScreenerReply companies = 6;
+	int64 id = 1;
+	string ticker = 2;
+	string name = 3;
+	string description = 4;
+	quotes.v1.QuotesLastReply quote = 5;
+	repeated screener.v1.ScreenerReply companies = 6;
 	google.protobuf.Timestamp created_at = 7;
 	google.protobuf.Timestamp updated_at = 8;
 }
 
 message IndicesShortReply {
-  int64 id = 1;
-  string ticker = 2;
-  string name = 3;
-  string description = 4;
+	int64 id = 1;
+	string ticker = 2;
+	string name = 3;
+	string description = 4;
 	google.protobuf.Timestamp created_at = 5;
 	google.protobuf.Timestamp updated_at = 6;
 }
 
 message IndicesShortReplies {
-  repeated IndicesShortReply results = 1;
-  int32 total = 2;
+	repeated IndicesShortReply results = 1;
+	int32 total = 2;
 }

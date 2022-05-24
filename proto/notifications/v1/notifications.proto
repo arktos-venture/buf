@@ -6,11 +6,43 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/notifications/v1;notifications_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.notifications.v1";
 option java_outer_classname = "APINotificationsProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "Notifications APIs";
+		description: "Notifications APIs";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
 
 service Notifications {
 	rpc Create (NotificationCreateRequest) returns (NotificationReply)  {
@@ -30,6 +62,10 @@ service Notifications {
     	option (google.api.http) = {
       		get: "/healthz"
     	};
+
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
+		};
   	}
 }
 

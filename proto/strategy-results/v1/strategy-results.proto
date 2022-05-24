@@ -12,6 +12,37 @@ option go_package = "github.com/arktos-venture/buf/proto/strategy-results/v1;str
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.strategy_results.v1";
 option java_outer_classname = "APIStrategyResultsProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "StrategyResults APIs";
+		description: "StrategyResults APIs";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
 
 service Strategy {
 	rpc Execute (StrategyRequest) returns (StrategyReply)  {
@@ -24,6 +55,10 @@ service Strategy {
 	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
+		};
+
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
 		};
 	}
 }

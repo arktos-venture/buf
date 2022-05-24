@@ -6,11 +6,43 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;indicators_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indicators.v1";
-option java_outer_classname = "IndicatorsProtoV1";
+option java_outer_classname = "APIIndicatorsProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "Indicators APIs";
+		description: "Indicators APIs";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
 
 service Indicators {
   // AVGPRICE - Average Price
@@ -143,6 +175,10 @@ service Indicators {
   rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
 		option (google.api.http) = {
 			get: "/healthz"
+		};
+    
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			security: { } // Disable security key
 		};
 	}
 }
