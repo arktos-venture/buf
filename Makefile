@@ -53,43 +53,10 @@ api: swagger errors
 		   --validate_out=paths=source_relative,lang=go:. \
 	       $(API_PROTO_FILES)
 
-.PHONY: build-all
-# Build all images
-build-all:
-	@goreleaser release --snapshot --skip-publish --rm-dist -f app/.goreleaser.yaml
-
-.PHONY: build/%	
-# Build dev
-build/%:
-	@goreleaser release --snapshot --skip-publish --rm-dist -f app/$*/.goreleaser.yaml
-
 .PHONY: release	
 # Build release
 release:
 	@goreleaser release --snapshot --rm-dist
-
-.PHONY: run
-# Run all microservices
-run:
-	@docker-compose up -d --remove-orphans
-
-.PHONY: kind
-# Run all microservices on kind
-kind:
-	@kind create cluster --name grpc-apis --config kind.yaml
-
-.PHONY: generate
-# Generate files
-generate:
-	go generate ./...
-
-.PHONY: all
-# Generate all
-all:
-	make api;
-	make errors;
-	make config;
-	make generate;
 
 # Show help
 help:
