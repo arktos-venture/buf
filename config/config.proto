@@ -45,9 +45,7 @@ message Server {
   message Keycloak {
     string hostname = 1;
     string realm = 2;
-    string username = 3;
-    string password = 4;
-    google.protobuf.Duration timeout = 5;
+    google.protobuf.Duration timeout = 3;
   }
 
   HTTP http = 1;
@@ -99,6 +97,14 @@ message Data {
     Timeout timeout = 6;
   }
 
+  message Keycloak {
+    string hostname = 1;
+    string realm = 2;
+    string username = 3;
+    string password = 4;
+    google.protobuf.Duration timeout = 5;
+  }
+
   message Service {
     string hostname = 1;
     int32 port = 2;
@@ -107,6 +113,7 @@ message Data {
 
   Postgres postgres = 1;
   Redis redis = 2;
-  map<string, Service> services = 3;
+  Keycloak keycloak = 3;
+  map<string, Service> services = 4;
 }
 
