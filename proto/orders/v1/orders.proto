@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package orders.v1;
 
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -71,16 +70,6 @@ service Orders {
     option (google.api.http) = {
       delete: "/v1/{accountId}/order/{orderId}"
     };
-  }
-
-	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
-    option (google.api.http) = {
-      get: "/healthz"
-    };
-
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-			security: { } // Disable security key
-		};
   }
 }
 

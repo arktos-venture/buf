@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +21,6 @@ type ExchangesClient interface {
 	IsOpen(ctx context.Context, in *ExchangeIsOpenRequest, opts ...grpc.CallOption) (*ExchangeIsOpenReply, error)
 	Get(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
 	List(ctx context.Context, in *ExchangeListRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type exchangesClient struct {
@@ -60,15 +58,6 @@ func (c *exchangesClient) List(ctx context.Context, in *ExchangeListRequest, opt
 	return out, nil
 }
 
-func (c *exchangesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ExchangesServer is the server API for Exchanges service.
 // All implementations must embed UnimplementedExchangesServer
 // for forward compatibility
@@ -76,7 +65,6 @@ type ExchangesServer interface {
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedExchangesServer()
 }
 
@@ -92,9 +80,6 @@ func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*Exc
 }
 func (UnimplementedExchangesServer) List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedExchangesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedExchangesServer) mustEmbedUnimplementedExchangesServer() {}
 
@@ -163,24 +148,6 @@ func _Exchanges_List_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Exchanges_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExchangesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/exchanges.v1.Exchanges/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExchangesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Exchanges_ServiceDesc is the grpc.ServiceDesc for Exchanges service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -199,10 +166,6 @@ var Exchanges_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Exchanges_List_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Exchanges_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

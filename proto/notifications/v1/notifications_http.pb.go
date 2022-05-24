@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = http.SupportPackageIsVersion1
 
 type NotificationsHTTPServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 }
 
@@ -28,7 +26,6 @@ func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer
 	r := s.Route("/")
 	r.POST("/v1/notifications/{accountId}", _Notifications_Create2_HTTP_Handler(srv))
 	r.GET("/v1/notifications/{accountId}", _Notifications_Search7_HTTP_Handler(srv))
-	r.GET("/healthz", _Notifications_Health17_HTTP_Handler(srv))
 }
 
 func _Notifications_Create2_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
@@ -75,28 +72,8 @@ func _Notifications_Search7_HTTP_Handler(srv NotificationsHTTPServer) func(ctx h
 	}
 }
 
-func _Notifications_Health17_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/notifications.v1.Notifications/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type NotificationsHTTPClient interface {
 	Create(ctx context.Context, req *NotificationCreateRequest, opts ...http.CallOption) (rsp *NotificationReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Search(ctx context.Context, req *NotificationSearchRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
 }
 
@@ -115,19 +92,6 @@ func (c *NotificationsHTTPClientImpl) Create(ctx context.Context, in *Notificati
 	opts = append(opts, http.Operation("/notifications.v1.Notifications/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *NotificationsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/notifications.v1.Notifications/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

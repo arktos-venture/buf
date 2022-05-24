@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +21,6 @@ type CountriesClient interface {
 	Get(ctx context.Context, in *CountryRequest, opts ...grpc.CallOption) (*CountryReply, error)
 	Search(ctx context.Context, in *CountrySearchRequest, opts ...grpc.CallOption) (*CountryReplies, error)
 	Indicator(ctx context.Context, in *CountryIndicatorRequest, opts ...grpc.CallOption) (*CountryIndicatorReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type countriesClient struct {
@@ -60,15 +58,6 @@ func (c *countriesClient) Indicator(ctx context.Context, in *CountryIndicatorReq
 	return out, nil
 }
 
-func (c *countriesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/countries.v1.Countries/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // CountriesServer is the server API for Countries service.
 // All implementations must embed UnimplementedCountriesServer
 // for forward compatibility
@@ -76,7 +65,6 @@ type CountriesServer interface {
 	Get(context.Context, *CountryRequest) (*CountryReply, error)
 	Search(context.Context, *CountrySearchRequest) (*CountryReplies, error)
 	Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCountriesServer()
 }
 
@@ -92,9 +80,6 @@ func (UnimplementedCountriesServer) Search(context.Context, *CountrySearchReques
 }
 func (UnimplementedCountriesServer) Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Indicator not implemented")
-}
-func (UnimplementedCountriesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedCountriesServer) mustEmbedUnimplementedCountriesServer() {}
 
@@ -163,24 +148,6 @@ func _Countries_Indicator_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Countries_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CountriesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/countries.v1.Countries/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CountriesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Countries_ServiceDesc is the grpc.ServiceDesc for Countries service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -199,10 +166,6 @@ var Countries_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Indicator",
 			Handler:    _Countries_Indicator_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Countries_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

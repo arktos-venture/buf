@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 type CurrenciesClient interface {
 	Get(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error)
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CurrencyReplies, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type currenciesClient struct {
@@ -50,22 +49,12 @@ func (c *currenciesClient) List(ctx context.Context, in *emptypb.Empty, opts ...
 	return out, nil
 }
 
-func (c *currenciesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/currencies.v1.Currencies/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // CurrenciesServer is the server API for Currencies service.
 // All implementations must embed UnimplementedCurrenciesServer
 // for forward compatibility
 type CurrenciesServer interface {
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
 	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCurrenciesServer()
 }
 
@@ -78,9 +67,6 @@ func (UnimplementedCurrenciesServer) Get(context.Context, *CurrencyRequest) (*Cu
 }
 func (UnimplementedCurrenciesServer) List(context.Context, *emptypb.Empty) (*CurrencyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedCurrenciesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedCurrenciesServer) mustEmbedUnimplementedCurrenciesServer() {}
 
@@ -131,24 +117,6 @@ func _Currencies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Currencies_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CurrenciesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/currencies.v1.Currencies/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CurrenciesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Currencies_ServiceDesc is the grpc.ServiceDesc for Currencies service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -163,10 +131,6 @@ var Currencies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Currencies_List_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Currencies_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,7 +18,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type SplitsHTTPServer interface {
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error)
 	Search(context.Context, *SplitsRequest) (*SplitsReply, error)
 }
@@ -28,7 +26,6 @@ func RegisterSplitsHTTPServer(s *http.Server, srv SplitsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/splits/{exchange}/{ticker}", _Splits_Last2_HTTP_Handler(srv))
 	r.POST("/v1/splits", _Splits_Search8_HTTP_Handler(srv))
-	r.GET("/healthz", _Splits_Health19_HTTP_Handler(srv))
 }
 
 func _Splits_Last2_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
@@ -72,27 +69,7 @@ func _Splits_Search8_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Splits_Health19_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/splits.v1.Splits/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type SplitsHTTPClient interface {
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Last(ctx context.Context, req *SplitsLastRequest, opts ...http.CallOption) (rsp *SplitsLastReply, err error)
 	Search(ctx context.Context, req *SplitsRequest, opts ...http.CallOption) (rsp *SplitsReply, err error)
 }
@@ -103,19 +80,6 @@ type SplitsHTTPClientImpl struct {
 
 func NewSplitsHTTPClient(client *http.Client) SplitsHTTPClient {
 	return &SplitsHTTPClientImpl{client}
-}
-
-func (c *SplitsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/splits.v1.Splits/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *SplitsHTTPClientImpl) Last(ctx context.Context, in *SplitsLastRequest, opts ...http.CallOption) (*SplitsLastReply, error) {

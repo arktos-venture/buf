@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 type SplitsClient interface {
 	Last(ctx context.Context, in *SplitsLastRequest, opts ...grpc.CallOption) (*SplitsLastReply, error)
 	Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type splitsClient struct {
@@ -50,22 +48,12 @@ func (c *splitsClient) Search(ctx context.Context, in *SplitsRequest, opts ...gr
 	return out, nil
 }
 
-func (c *splitsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/splits.v1.Splits/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // SplitsServer is the server API for Splits service.
 // All implementations must embed UnimplementedSplitsServer
 // for forward compatibility
 type SplitsServer interface {
 	Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error)
 	Search(context.Context, *SplitsRequest) (*SplitsReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSplitsServer()
 }
 
@@ -78,9 +66,6 @@ func (UnimplementedSplitsServer) Last(context.Context, *SplitsLastRequest) (*Spl
 }
 func (UnimplementedSplitsServer) Search(context.Context, *SplitsRequest) (*SplitsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedSplitsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedSplitsServer) mustEmbedUnimplementedSplitsServer() {}
 
@@ -131,24 +116,6 @@ func _Splits_Search_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Splits_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SplitsServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/splits.v1.Splits/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SplitsServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Splits_ServiceDesc is the grpc.ServiceDesc for Splits service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -163,10 +130,6 @@ var Splits_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Splits_Search_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Splits_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

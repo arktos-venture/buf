@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,14 +20,12 @@ const _ = http.SupportPackageIsVersion1
 type PositionHTTPServer interface {
 	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
 	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 }
 
 func RegisterPositionHTTPServer(s *http.Server, srv PositionHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/positions/{accountId}/companies", _Position_Companies0_HTTP_Handler(srv))
 	r.GET("/v1/positions/{accountId}/currencies", _Position_Currencies0_HTTP_Handler(srv))
-	r.GET("/healthz", _Position_Health13_HTTP_Handler(srv))
 }
 
 func _Position_Companies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
@@ -75,29 +72,9 @@ func _Position_Currencies0_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Position_Health13_HTTP_Handler(srv PositionHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/positions.v1.Position/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type PositionHTTPClient interface {
 	Companies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCompanyReplies, err error)
 	Currencies(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionCurrencyReplies, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
 
 type PositionHTTPClientImpl struct {
@@ -126,19 +103,6 @@ func (c *PositionHTTPClientImpl) Currencies(ctx context.Context, in *PositionReq
 	pattern := "/v1/positions/{accountId}/currencies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Position/Currencies"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *PositionHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/positions.v1.Position/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

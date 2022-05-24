@@ -26,30 +26,6 @@
     "application/json"
   ],
   "paths": {
-    "/healthz": {
-      "get": {
-        "summary": "Private API",
-        "operationId": "Screener_Health",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Screener"
-        ],
-        "security": []
-      }
-    },
     "/v1/screener": {
       "post": {
         "summary": "Public API",

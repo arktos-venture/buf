@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 type IndustriesClient interface {
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndustryReply, error)
 	Search(ctx context.Context, in *IndustrySearchRequest, opts ...grpc.CallOption) (*IndustrySearchReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type industriesClient struct {
@@ -50,22 +49,12 @@ func (c *industriesClient) Search(ctx context.Context, in *IndustrySearchRequest
 	return out, nil
 }
 
-func (c *industriesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/industries.v1.Industries/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // IndustriesServer is the server API for Industries service.
 // All implementations must embed UnimplementedIndustriesServer
 // for forward compatibility
 type IndustriesServer interface {
 	List(context.Context, *emptypb.Empty) (*IndustryReply, error)
 	Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedIndustriesServer()
 }
 
@@ -78,9 +67,6 @@ func (UnimplementedIndustriesServer) List(context.Context, *emptypb.Empty) (*Ind
 }
 func (UnimplementedIndustriesServer) Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedIndustriesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedIndustriesServer) mustEmbedUnimplementedIndustriesServer() {}
 
@@ -131,24 +117,6 @@ func _Industries_Search_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Industries_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndustriesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/industries.v1.Industries/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndustriesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Industries_ServiceDesc is the grpc.ServiceDesc for Industries service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -163,10 +131,6 @@ var Industries_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Industries_Search_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Industries_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

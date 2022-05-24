@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -25,8 +24,6 @@ type CompaniesClient interface {
 	Stats(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyStatsReply, error)
 	// Public API
 	Similars(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanySimilarsReply, error)
-	// Private API
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type companiesClient struct {
@@ -64,15 +61,6 @@ func (c *companiesClient) Similars(ctx context.Context, in *CompanyRequest, opts
 	return out, nil
 }
 
-func (c *companiesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // CompaniesServer is the server API for Companies service.
 // All implementations must embed UnimplementedCompaniesServer
 // for forward compatibility
@@ -83,8 +71,6 @@ type CompaniesServer interface {
 	Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error)
 	// Public API
 	Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error)
-	// Private API
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCompaniesServer()
 }
 
@@ -100,9 +86,6 @@ func (UnimplementedCompaniesServer) Stats(context.Context, *CompanyRequest) (*Co
 }
 func (UnimplementedCompaniesServer) Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Similars not implemented")
-}
-func (UnimplementedCompaniesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedCompaniesServer) mustEmbedUnimplementedCompaniesServer() {}
 
@@ -171,24 +154,6 @@ func _Companies_Similars_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Companies_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CompaniesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/companies.v1.Companies/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompaniesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Companies_ServiceDesc is the grpc.ServiceDesc for Companies service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -207,10 +172,6 @@ var Companies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Similars",
 			Handler:    _Companies_Similars_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Companies_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

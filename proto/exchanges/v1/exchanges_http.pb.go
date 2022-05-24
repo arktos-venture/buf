@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = http.SupportPackageIsVersion1
 
 type ExchangesHTTPServer interface {
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
 	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
 }
@@ -30,7 +28,6 @@ func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r.GET("/v1/exchange/{ticker}/isopen", _Exchanges_IsOpen0_HTTP_Handler(srv))
 	r.GET("/v1/exchange/{ticker}", _Exchanges_Get3_HTTP_Handler(srv))
 	r.GET("/v1/exchanges", _Exchanges_List2_HTTP_Handler(srv))
-	r.GET("/healthz", _Exchanges_Health7_HTTP_Handler(srv))
 }
 
 func _Exchanges_IsOpen0_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
@@ -96,28 +93,8 @@ func _Exchanges_List2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Exchanges_Health7_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/exchanges.v1.Exchanges/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type ExchangesHTTPClient interface {
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	IsOpen(ctx context.Context, req *ExchangeIsOpenRequest, opts ...http.CallOption) (rsp *ExchangeIsOpenReply, err error)
 	List(ctx context.Context, req *ExchangeListRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
 }
@@ -135,19 +112,6 @@ func (c *ExchangesHTTPClientImpl) Get(ctx context.Context, in *ExchangeRequest, 
 	pattern := "/v1/exchange/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *ExchangesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -19,7 +19,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type IndustriesHTTPServer interface {
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	List(context.Context, *emptypb.Empty) (*IndustryReply, error)
 	Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error)
 }
@@ -28,7 +27,6 @@ func RegisterIndustriesHTTPServer(s *http.Server, srv IndustriesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/industries", _Industries_List3_HTTP_Handler(srv))
 	r.POST("/v1/industries", _Industries_Search3_HTTP_Handler(srv))
-	r.GET("/healthz", _Industries_Health10_HTTP_Handler(srv))
 }
 
 func _Industries_List3_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
@@ -69,27 +67,7 @@ func _Industries_Search3_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Industries_Health10_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/industries.v1.Industries/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type IndustriesHTTPClient interface {
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *IndustryReply, err error)
 	Search(ctx context.Context, req *IndustrySearchRequest, opts ...http.CallOption) (rsp *IndustrySearchReply, err error)
 }
@@ -100,19 +78,6 @@ type IndustriesHTTPClientImpl struct {
 
 func NewIndustriesHTTPClient(client *http.Client) IndustriesHTTPClient {
 	return &IndustriesHTTPClientImpl{client}
-}
-
-func (c *IndustriesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/industries.v1.Industries/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *IndustriesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*IndustryReply, error) {

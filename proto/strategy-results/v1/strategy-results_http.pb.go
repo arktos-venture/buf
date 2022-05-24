@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,13 +19,11 @@ const _ = http.SupportPackageIsVersion1
 
 type StrategyHTTPServer interface {
 	Execute(context.Context, *StrategyRequest) (*StrategyReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 }
 
 func RegisterStrategyHTTPServer(s *http.Server, srv StrategyHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/strategy/execute", _Strategy_Execute0_HTTP_Handler(srv))
-	r.GET("/healthz", _Strategy_Health3_HTTP_Handler(srv))
 }
 
 func _Strategy_Execute0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
@@ -48,28 +45,8 @@ func _Strategy_Execute0_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategy_Health3_HTTP_Handler(srv StrategyHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/strategy_results.v1.Strategy/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type StrategyHTTPClient interface {
 	Execute(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
 
 type StrategyHTTPClientImpl struct {
@@ -87,19 +64,6 @@ func (c *StrategyHTTPClientImpl) Execute(ctx context.Context, in *StrategyReques
 	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Execute"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *StrategyHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/strategy_results.v1.Strategy/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
