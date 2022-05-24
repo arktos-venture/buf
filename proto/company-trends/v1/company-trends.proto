@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package company.trends.v1;
 
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -55,16 +54,6 @@ service CompanyTrends {
 		option (google.api.http) = {
 		  	post: "/v1/company/trends"
 			body: "*"
-		};
-	}
-
-	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
-		option (google.api.http) = {
-			get: "/healthz"
-		};
-
-		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-			security: { } // Disable security key
 		};
 	}
 }

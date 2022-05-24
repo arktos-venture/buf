@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -50,7 +49,6 @@ type IndicatorsClient interface {
 	WILLR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
 	// SAR - Parabolic SAR
 	SAR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type indicatorsClient struct {
@@ -205,15 +203,6 @@ func (c *indicatorsClient) SAR(ctx context.Context, in *IndicatorRequest, opts .
 	return out, nil
 }
 
-func (c *indicatorsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/indicators.v1.Indicators/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // IndicatorsServer is the server API for Indicators service.
 // All implementations must embed UnimplementedIndicatorsServer
 // for forward compatibility
@@ -249,7 +238,6 @@ type IndicatorsServer interface {
 	WILLR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	// SAR - Parabolic SAR
 	SAR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedIndicatorsServer()
 }
 
@@ -304,9 +292,6 @@ func (UnimplementedIndicatorsServer) WILLR(context.Context, *IndicatorRequest) (
 }
 func (UnimplementedIndicatorsServer) SAR(context.Context, *IndicatorRequest) (*IndicatorReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SAR not implemented")
-}
-func (UnimplementedIndicatorsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedIndicatorsServer) mustEmbedUnimplementedIndicatorsServer() {}
 
@@ -609,24 +594,6 @@ func _Indicators_SAR_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Indicators_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndicatorsServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indicators.v1.Indicators/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicatorsServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Indicators_ServiceDesc is the grpc.ServiceDesc for Indicators service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -697,10 +664,6 @@ var Indicators_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SAR",
 			Handler:    _Indicators_SAR_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Indicators_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

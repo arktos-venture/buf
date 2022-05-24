@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -24,7 +23,6 @@ type IndexesClient interface {
 	Create(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error)
 	Update(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error)
 	Delete(ctx context.Context, in *IndexesRequest, opts ...grpc.CallOption) (*IndexesReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type indexesClient struct {
@@ -80,15 +78,6 @@ func (c *indexesClient) Delete(ctx context.Context, in *IndexesRequest, opts ...
 	return out, nil
 }
 
-func (c *indexesClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // IndexesServer is the server API for Indexes service.
 // All implementations must embed UnimplementedIndexesServer
 // for forward compatibility
@@ -98,7 +87,6 @@ type IndexesServer interface {
 	Create(context.Context, *IndexesCreateRequest) (*IndexesReply, error)
 	Update(context.Context, *IndexesCreateRequest) (*IndexesReply, error)
 	Delete(context.Context, *IndexesRequest) (*IndexesReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedIndexesServer()
 }
 
@@ -120,9 +108,6 @@ func (UnimplementedIndexesServer) Update(context.Context, *IndexesCreateRequest)
 }
 func (UnimplementedIndexesServer) Delete(context.Context, *IndexesRequest) (*IndexesReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedIndexesServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedIndexesServer) mustEmbedUnimplementedIndexesServer() {}
 
@@ -227,24 +212,6 @@ func _Indexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Indexes_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndexesServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indexes.v1.Indexes/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Indexes_ServiceDesc is the grpc.ServiceDesc for Indexes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -271,10 +238,6 @@ var Indexes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _Indexes_Delete_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Indexes_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

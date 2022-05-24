@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,7 +22,6 @@ type OrdersClient interface {
 	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error)
 	Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error)
 	Delete(ctx context.Context, in *OrderDeleteRequest, opts ...grpc.CallOption) (*OrderDelete, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type ordersClient struct {
@@ -70,15 +68,6 @@ func (c *ordersClient) Delete(ctx context.Context, in *OrderDeleteRequest, opts 
 	return out, nil
 }
 
-func (c *ordersClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/orders.v1.Orders/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // OrdersServer is the server API for Orders service.
 // All implementations must embed UnimplementedOrdersServer
 // for forward compatibility
@@ -87,7 +76,6 @@ type OrdersServer interface {
 	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
 	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
 	Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedOrdersServer()
 }
 
@@ -106,9 +94,6 @@ func (UnimplementedOrdersServer) Update(context.Context, *OrderUpdateRequest) (*
 }
 func (UnimplementedOrdersServer) Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedOrdersServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedOrdersServer) mustEmbedUnimplementedOrdersServer() {}
 
@@ -195,24 +180,6 @@ func _Orders_Delete_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Orders_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrdersServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/orders.v1.Orders/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrdersServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Orders_ServiceDesc is the grpc.ServiceDesc for Orders service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -235,10 +202,6 @@ var Orders_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _Orders_Delete_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Orders_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

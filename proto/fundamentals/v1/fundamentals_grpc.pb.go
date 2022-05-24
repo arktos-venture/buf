@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FundamentalsClient interface {
 	Get(ctx context.Context, in *FundamentalRequest, opts ...grpc.CallOption) (*FundamentalReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type fundamentalsClient struct {
@@ -40,21 +38,11 @@ func (c *fundamentalsClient) Get(ctx context.Context, in *FundamentalRequest, op
 	return out, nil
 }
 
-func (c *fundamentalsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fundamentals.v1.Fundamentals/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // FundamentalsServer is the server API for Fundamentals service.
 // All implementations must embed UnimplementedFundamentalsServer
 // for forward compatibility
 type FundamentalsServer interface {
 	Get(context.Context, *FundamentalRequest) (*FundamentalReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedFundamentalsServer()
 }
 
@@ -64,9 +52,6 @@ type UnimplementedFundamentalsServer struct {
 
 func (UnimplementedFundamentalsServer) Get(context.Context, *FundamentalRequest) (*FundamentalReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
-}
-func (UnimplementedFundamentalsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedFundamentalsServer) mustEmbedUnimplementedFundamentalsServer() {}
 
@@ -99,24 +84,6 @@ func _Fundamentals_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Fundamentals_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FundamentalsServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/fundamentals.v1.Fundamentals/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FundamentalsServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Fundamentals_ServiceDesc is the grpc.ServiceDesc for Fundamentals service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -127,10 +94,6 @@ var Fundamentals_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Fundamentals_Get_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Fundamentals_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

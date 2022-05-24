@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package notifications.v1;
 
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -57,16 +56,6 @@ service Notifications {
 		  	get: "/v1/notifications/{accountId}"
 		};
 	}
-
-  	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
-    	option (google.api.http) = {
-      		get: "/healthz"
-    	};
-
-		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-			security: { } // Disable security key
-		};
-  	}
 }
 
 

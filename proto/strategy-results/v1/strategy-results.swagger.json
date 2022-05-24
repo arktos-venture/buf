@@ -26,29 +26,6 @@
     "application/json"
   ],
   "paths": {
-    "/healthz": {
-      "get": {
-        "operationId": "Strategy_Health",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Strategy"
-        ],
-        "security": []
-      }
-    },
     "/v1/strategy/execute": {
       "post": {
         "operationId": "Strategy_Execute",

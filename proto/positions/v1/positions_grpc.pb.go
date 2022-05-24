@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 type PositionClient interface {
 	Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error)
 	Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type positionClient struct {
@@ -50,22 +48,12 @@ func (c *positionClient) Currencies(ctx context.Context, in *PositionRequest, op
 	return out, nil
 }
 
-func (c *positionClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/positions.v1.Position/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PositionServer is the server API for Position service.
 // All implementations must embed UnimplementedPositionServer
 // for forward compatibility
 type PositionServer interface {
 	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
 	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPositionServer()
 }
 
@@ -78,9 +66,6 @@ func (UnimplementedPositionServer) Companies(context.Context, *PositionRequest) 
 }
 func (UnimplementedPositionServer) Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Currencies not implemented")
-}
-func (UnimplementedPositionServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedPositionServer) mustEmbedUnimplementedPositionServer() {}
 
@@ -131,24 +116,6 @@ func _Position_Currencies_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Position_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PositionServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/positions.v1.Position/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Position_ServiceDesc is the grpc.ServiceDesc for Position service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -163,10 +130,6 @@ var Position_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Currencies",
 			Handler:    _Position_Currencies_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Position_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

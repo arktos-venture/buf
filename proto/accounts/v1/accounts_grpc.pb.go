@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +21,6 @@ type AccountsClient interface {
 	Positions(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountPositionsReply, error)
 	Create(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountReply, error)
 	Update(ctx context.Context, in *AccountUpdateRequest, opts ...grpc.CallOption) (*AccountReply, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type accountsClient struct {
@@ -60,15 +58,6 @@ func (c *accountsClient) Update(ctx context.Context, in *AccountUpdateRequest, o
 	return out, nil
 }
 
-func (c *accountsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AccountsServer is the server API for Accounts service.
 // All implementations must embed UnimplementedAccountsServer
 // for forward compatibility
@@ -76,7 +65,6 @@ type AccountsServer interface {
 	Positions(context.Context, *AccountRequest) (*AccountPositionsReply, error)
 	Create(context.Context, *AccountCreateRequest) (*AccountReply, error)
 	Update(context.Context, *AccountUpdateRequest) (*AccountReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAccountsServer()
 }
 
@@ -92,9 +80,6 @@ func (UnimplementedAccountsServer) Create(context.Context, *AccountCreateRequest
 }
 func (UnimplementedAccountsServer) Update(context.Context, *AccountUpdateRequest) (*AccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
-func (UnimplementedAccountsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedAccountsServer) mustEmbedUnimplementedAccountsServer() {}
 
@@ -163,24 +148,6 @@ func _Accounts_Update_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Accounts_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AccountsServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/accounts.v1.Accounts/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountsServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Accounts_ServiceDesc is the grpc.ServiceDesc for Accounts service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -199,10 +166,6 @@ var Accounts_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Update",
 			Handler:    _Accounts_Update_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Accounts_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

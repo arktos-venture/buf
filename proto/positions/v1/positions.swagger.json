@@ -26,29 +26,6 @@
     "application/json"
   ],
   "paths": {
-    "/healthz": {
-      "get": {
-        "operationId": "Position_Health",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Position"
-        ],
-        "security": []
-      }
-    },
     "/v1/positions/{accountId}/companies": {
       "get": {
         "operationId": "Position_Companies",

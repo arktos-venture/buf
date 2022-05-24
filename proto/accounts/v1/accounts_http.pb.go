@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = http.SupportPackageIsVersion1
 
 type AccountsHTTPServer interface {
 	Create(context.Context, *AccountCreateRequest) (*AccountReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Positions(context.Context, *AccountRequest) (*AccountPositionsReply, error)
 	Update(context.Context, *AccountUpdateRequest) (*AccountReply, error)
 }
@@ -30,7 +28,6 @@ func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r.GET("/v1/account/{accountId}/positions", _Accounts_Positions0_HTTP_Handler(srv))
 	r.POST("/v1/account", _Accounts_Create1_HTTP_Handler(srv))
 	r.PUT("/v1/account/{accountId}", _Accounts_Update1_HTTP_Handler(srv))
-	r.GET("/healthz", _Accounts_Health14_HTTP_Handler(srv))
 }
 
 func _Accounts_Positions0_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
@@ -96,28 +93,8 @@ func _Accounts_Update1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Health14_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/accounts.v1.Accounts/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type AccountsHTTPClient interface {
 	Create(ctx context.Context, req *AccountCreateRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Positions(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountPositionsReply, err error)
 	Update(ctx context.Context, req *AccountUpdateRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 }
@@ -137,19 +114,6 @@ func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountCreateRe
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *AccountsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/accounts.v1.Accounts/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

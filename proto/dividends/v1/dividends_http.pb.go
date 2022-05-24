@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,7 +18,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type DividendsHTTPServer interface {
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Last(context.Context, *DividendsLastRequest) (*DividendsLastReply, error)
 	Search(context.Context, *DividendsRequest) (*DividendsReply, error)
 }
@@ -28,7 +26,6 @@ func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/dividends/{exchange}/{ticker}", _Dividends_Last1_HTTP_Handler(srv))
 	r.POST("/v1/dividends", _Dividends_Search6_HTTP_Handler(srv))
-	r.GET("/healthz", _Dividends_Health16_HTTP_Handler(srv))
 }
 
 func _Dividends_Last1_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
@@ -72,27 +69,7 @@ func _Dividends_Search6_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Dividends_Health16_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/dividends.v1.Dividends/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type DividendsHTTPClient interface {
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Last(ctx context.Context, req *DividendsLastRequest, opts ...http.CallOption) (rsp *DividendsLastReply, err error)
 	Search(ctx context.Context, req *DividendsRequest, opts ...http.CallOption) (rsp *DividendsReply, err error)
 }
@@ -103,19 +80,6 @@ type DividendsHTTPClientImpl struct {
 
 func NewDividendsHTTPClient(client *http.Client) DividendsHTTPClient {
 	return &DividendsHTTPClientImpl{client}
-}
-
-func (c *DividendsHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/dividends.v1.Dividends/Health"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *DividendsHTTPClientImpl) Last(ctx context.Context, in *DividendsLastRequest, opts ...http.CallOption) (*DividendsLastReply, error) {

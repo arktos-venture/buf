@@ -20,7 +20,6 @@ const _ = http.SupportPackageIsVersion1
 
 type CurrenciesHTTPServer interface {
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
 }
 
@@ -28,7 +27,6 @@ func RegisterCurrenciesHTTPServer(s *http.Server, srv CurrenciesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/currency/{ticker}", _Currencies_Get2_HTTP_Handler(srv))
 	r.GET("/v1/currencies", _Currencies_List1_HTTP_Handler(srv))
-	r.GET("/healthz", _Currencies_Health6_HTTP_Handler(srv))
 }
 
 func _Currencies_Get2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
@@ -72,28 +70,8 @@ func _Currencies_List1_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Currencies_Health6_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/currencies.v1.Currencies/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type CurrenciesHTTPClient interface {
 	Get(ctx context.Context, req *CurrencyRequest, opts ...http.CallOption) (rsp *CurrencyReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *CurrencyReplies, err error)
 }
 
@@ -110,19 +88,6 @@ func (c *CurrenciesHTTPClientImpl) Get(ctx context.Context, in *CurrencyRequest,
 	pattern := "/v1/currency/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/currencies.v1.Currencies/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *CurrenciesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/currencies.v1.Currencies/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

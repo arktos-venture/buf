@@ -26,29 +26,6 @@
     "application/json"
   ],
   "paths": {
-    "/healthz": {
-      "get": {
-        "operationId": "Indexes_Health",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Indexes"
-        ],
-        "security": []
-      }
-    },
     "/v1/indexes": {
       "get": {
         "operationId": "Indexes_Search",

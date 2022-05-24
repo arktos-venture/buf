@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 type NotificationsClient interface {
 	Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error)
 	Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type notificationsClient struct {
@@ -50,22 +48,12 @@ func (c *notificationsClient) Search(ctx context.Context, in *NotificationSearch
 	return out, nil
 }
 
-func (c *notificationsClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // NotificationsServer is the server API for Notifications service.
 // All implementations must embed UnimplementedNotificationsServer
 // for forward compatibility
 type NotificationsServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedNotificationsServer()
 }
 
@@ -78,9 +66,6 @@ func (UnimplementedNotificationsServer) Create(context.Context, *NotificationCre
 }
 func (UnimplementedNotificationsServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedNotificationsServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedNotificationsServer) mustEmbedUnimplementedNotificationsServer() {}
 
@@ -131,24 +116,6 @@ func _Notifications_Search_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Notifications_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NotificationsServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/notifications.v1.Notifications/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationsServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Notifications_ServiceDesc is the grpc.ServiceDesc for Notifications service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -163,10 +130,6 @@ var Notifications_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Notifications_Search_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Notifications_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = http.SupportPackageIsVersion1
 
 type CountriesHTTPServer interface {
 	Get(context.Context, *CountryRequest) (*CountryReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error)
 	Search(context.Context, *CountrySearchRequest) (*CountryReplies, error)
 }
@@ -30,7 +28,6 @@ func RegisterCountriesHTTPServer(s *http.Server, srv CountriesHTTPServer) {
 	r.GET("/v1/country/{country}", _Countries_Get5_HTTP_Handler(srv))
 	r.POST("/v1/countries", _Countries_Search5_HTTP_Handler(srv))
 	r.GET("/v1/country/{country}/{indicator}", _Countries_Indicator0_HTTP_Handler(srv))
-	r.GET("/healthz", _Countries_Health15_HTTP_Handler(srv))
 }
 
 func _Countries_Get5_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
@@ -96,28 +93,8 @@ func _Countries_Indicator0_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.C
 	}
 }
 
-func _Countries_Health15_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/countries.v1.Countries/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type CountriesHTTPClient interface {
 	Get(ctx context.Context, req *CountryRequest, opts ...http.CallOption) (rsp *CountryReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	Indicator(ctx context.Context, req *CountryIndicatorRequest, opts ...http.CallOption) (rsp *CountryIndicatorReply, err error)
 	Search(ctx context.Context, req *CountrySearchRequest, opts ...http.CallOption) (rsp *CountryReplies, err error)
 }
@@ -135,19 +112,6 @@ func (c *CountriesHTTPClientImpl) Get(ctx context.Context, in *CountryRequest, o
 	pattern := "/v1/country/{country}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/countries.v1.Countries/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *CountriesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/countries.v1.Countries/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

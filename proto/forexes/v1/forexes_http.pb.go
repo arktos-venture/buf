@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +19,6 @@ const _ = http.SupportPackageIsVersion1
 
 type ForexesHTTPServer interface {
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	List(context.Context, *ForexListRequest) (*ForexListReply, error)
 }
 
@@ -28,7 +26,6 @@ func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/forexes/{forex}", _Forexes_Get4_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List4_HTTP_Handler(srv))
-	r.GET("/healthz", _Forexes_Health11_HTTP_Handler(srv))
 }
 
 func _Forexes_Get4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
@@ -75,28 +72,8 @@ func _Forexes_List4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Forexes_Health11_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/forexes.v1.Forexes/Health")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Health(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
 type ForexesHTTPClient interface {
 	Get(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
-	Health(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	List(ctx context.Context, req *ForexListRequest, opts ...http.CallOption) (rsp *ForexListReply, err error)
 }
 
@@ -113,19 +90,6 @@ func (c *ForexesHTTPClientImpl) Get(ctx context.Context, in *ForexRequest, opts 
 	pattern := "/v1/forexes/{forex}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/forexes.v1.Forexes/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *ForexesHTTPClientImpl) Health(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/healthz"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/forexes.v1.Forexes/Health"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

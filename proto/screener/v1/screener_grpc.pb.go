@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,8 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 type ScreenerClient interface {
 	// Public API
 	Search(ctx context.Context, in *ScreenerRequest, opts ...grpc.CallOption) (*ScreenerReplies, error)
-	// Private API
-	Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type screenerClient struct {
@@ -42,23 +39,12 @@ func (c *screenerClient) Search(ctx context.Context, in *ScreenerRequest, opts .
 	return out, nil
 }
 
-func (c *screenerClient) Health(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/screener.v1.Screener/Health", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ScreenerServer is the server API for Screener service.
 // All implementations must embed UnimplementedScreenerServer
 // for forward compatibility
 type ScreenerServer interface {
 	// Public API
 	Search(context.Context, *ScreenerRequest) (*ScreenerReplies, error)
-	// Private API
-	Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedScreenerServer()
 }
 
@@ -68,9 +54,6 @@ type UnimplementedScreenerServer struct {
 
 func (UnimplementedScreenerServer) Search(context.Context, *ScreenerRequest) (*ScreenerReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedScreenerServer) Health(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
 }
 func (UnimplementedScreenerServer) mustEmbedUnimplementedScreenerServer() {}
 
@@ -103,24 +86,6 @@ func _Screener_Search_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Screener_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ScreenerServer).Health(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/screener.v1.Screener/Health",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ScreenerServer).Health(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Screener_ServiceDesc is the grpc.ServiceDesc for Screener service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -131,10 +96,6 @@ var Screener_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Screener_Search_Handler,
-		},
-		{
-			MethodName: "Health",
-			Handler:    _Screener_Health_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

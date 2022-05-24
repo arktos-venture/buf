@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package companies.v1;
 
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -65,17 +64,6 @@ service Companies {
 	rpc Similars (CompanyRequest) returns (CompanySimilarsReply)  {
 		option (google.api.http) = {
 		  	get: "/v1/company/{exchange}/{ticker}/similars"
-		};
-	}
-
-	// Private API
-	rpc Health (google.protobuf.Empty) returns (google.protobuf.Empty)  {
-		option (google.api.http) = {
-			get: "/healthz"
-		};
-
-		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-			security: { } // Disable security key
 		};
 	}
 }
