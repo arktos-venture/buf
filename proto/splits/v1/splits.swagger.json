@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Dividends APIs",
-    "description": "Dividends APIs",
+    "title": "Splits APIs",
+    "description": "Splits APIs",
     "version": "1.0",
     "contact": {
       "name": "Arktos Venture project",

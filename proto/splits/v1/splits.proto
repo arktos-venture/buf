@@ -13,8 +13,8 @@ option java_package = "dev.kratos.api.splits.v1";
 option java_outer_classname = "APISplitsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-    title: "Dividends APIs";
-		description: "Dividends APIs";
+    title: "Splits APIs";
+		description: "Splits APIs";
     version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
