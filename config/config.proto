@@ -98,10 +98,20 @@ message Data {
   }
 
   message Keycloak {
+    message Credentials {
+      string username = 1;
+      string password = 2;
+    }
+
+    message Client {
+      string id = 1;
+      string secret = 2;
+    }
+
     string hostname = 1;
     string realm = 2;
-    string username = 3;
-    string password = 4;
+    Client client = 3;
+    Credentials credentials = 4;
     google.protobuf.Duration timeout = 5;
   }
 
