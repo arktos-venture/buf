@@ -47,28 +47,28 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Orders {
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/{accountId}/orders"
+      post: "/v1/orders/{account}/search"
       body: "*"
     };
   }
 
   rpc Create (OrderCreateRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      post: "/v1/{accountId}/order"
+      post: "/v1/order/{account}"
       body: "*"
     };
   }
 
   rpc Update (OrderUpdateRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      put: "/v1/{accountId}/order/{orderId}"
+      put: "/v1/order/{account}/{orderId}"
       body: "*"
     };
   }
 
   rpc Delete (OrderDeleteRequest) returns (OrderDelete)  {
     option (google.api.http) = {
-      delete: "/v1/{accountId}/order/{orderId}"
+      delete: "/v1/order/{account}/{orderId}"
     };
   }
 }
@@ -136,14 +136,14 @@ message OrderSearchRequest {
 		screener.v1.ScreenerRequest.Sort.Orientation orientation = 2 [(validate.rules).enum = {defined_only: true}];
 	}
 
-  string accountId = 1 [(validate.rules).string.uuid = true];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 	Sort sort = 3 [(validate.rules).message.required = true];
   int32 limit = 4 [(validate.rules).int32 = {gt: 0, lte: 10000}];
 }
 
 message OrderCreateRequest {  
-  string accountId = 1 [(validate.rules).string.uuid = true];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string currency = 4 [(validate.rules).string.len = 3];
@@ -155,7 +155,7 @@ message OrderCreateRequest {
 }
 
 message OrderUpdateRequest {  
-  string accountId = 1 [(validate.rules).string.uuid = true];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
   Action action = 3 [(validate.rules).enum = {defined_only: true}];
   OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
@@ -165,7 +165,7 @@ message OrderUpdateRequest {
 }
 
 message OrderDeleteRequest {  
-  string accountId = 1 [(validate.rules).string.uuid = true];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
 }
 

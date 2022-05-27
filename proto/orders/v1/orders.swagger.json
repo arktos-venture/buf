@@ -26,7 +26,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/{accountId}/order": {
+    "/v1/order/{account}": {
       "post": {
         "operationId": "Orders_Create",
         "responses": {
@@ -45,7 +45,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
@@ -92,7 +92,7 @@
         ]
       }
     },
-    "/v1/{accountId}/order/{orderId}": {
+    "/v1/order/{account}/{orderId}": {
       "delete": {
         "operationId": "Orders_Delete",
         "responses": {
@@ -111,7 +111,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
@@ -146,7 +146,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
@@ -191,7 +191,7 @@
         ]
       }
     },
-    "/v1/{accountId}/orders": {
+    "/v1/orders/{account}/search": {
       "post": {
         "operationId": "Orders_Search",
         "responses": {
@@ -210,7 +210,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
