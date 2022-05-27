@@ -116,7 +116,7 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CurrencyRepliesResult"
+            "type": "string"
           }
         },
         "total": {
@@ -125,25 +125,9 @@
         }
       }
     },
-    "v1CurrencyRepliesResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        }
-      }
-    },
     "v1CurrencyReply": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
         "ticker": {
           "type": "string"
         },
