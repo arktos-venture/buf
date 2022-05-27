@@ -56,7 +56,7 @@
         ]
       }
     },
-    "/v1/forexes/{forex}": {
+    "/v1/forexes/{ticker}": {
       "get": {
         "operationId": "Forexes_Get",
         "responses": {
@@ -75,7 +75,7 @@
         },
         "parameters": [
           {
-            "name": "forex",
+            "name": "ticker",
             "in": "path",
             "required": true,
             "type": "string"
@@ -149,10 +149,6 @@
     "v1ForexReply": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
         "ticker": {
           "type": "string"
         },

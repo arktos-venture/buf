@@ -27,14 +27,14 @@ type IndexesHTTPServer interface {
 
 func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indexes/{ref}", _Indexes_Get7_HTTP_Handler(srv))
+	r.GET("/v1/indexes/{ticker}", _Indexes_Get8_HTTP_Handler(srv))
 	r.GET("/v1/indexes", _Indexes_Search9_HTTP_Handler(srv))
-	r.POST("/v1/indexes", _Indexes_Create3_HTTP_Handler(srv))
-	r.PUT("/v1/indexes", _Indexes_Update2_HTTP_Handler(srv))
-	r.DELETE("/v1/indexes/{ref}", _Indexes_Delete1_HTTP_Handler(srv))
+	r.POST("/v1/indexes", _Indexes_Create4_HTTP_Handler(srv))
+	r.PUT("/v1/indexes", _Indexes_Update3_HTTP_Handler(srv))
+	r.DELETE("/v1/indexes/{ticker}", _Indexes_Delete2_HTTP_Handler(srv))
 }
 
-func _Indexes_Get7_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Get8_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexesRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -75,7 +75,7 @@ func _Indexes_Search9_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Create3_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Create4_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexesCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -94,7 +94,7 @@ func _Indexes_Create3_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Update2_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Update3_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexesCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -113,7 +113,7 @@ func _Indexes_Update2_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Delete1_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Delete2_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexesRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -166,7 +166,7 @@ func (c *IndexesHTTPClientImpl) Create(ctx context.Context, in *IndexesCreateReq
 
 func (c *IndexesHTTPClientImpl) Delete(ctx context.Context, in *IndexesRequest, opts ...http.CallOption) (*IndexesReply, error) {
 	var out IndexesReply
-	pattern := "/v1/indexes/{ref}"
+	pattern := "/v1/indexes/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indexes.v1.Indexes/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -179,7 +179,7 @@ func (c *IndexesHTTPClientImpl) Delete(ctx context.Context, in *IndexesRequest, 
 
 func (c *IndexesHTTPClientImpl) Get(ctx context.Context, in *IndexesRequest, opts ...http.CallOption) (*IndexesReply, error) {
 	var out IndexesReply
-	pattern := "/v1/indexes/{ref}"
+	pattern := "/v1/indexes/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indexes.v1.Indexes/Get"))
 	opts = append(opts, http.PathTemplate(pattern))

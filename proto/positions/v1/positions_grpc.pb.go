@@ -14,122 +14,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// PositionClient is the client API for Position service.
+// PositionsClient is the client API for Positions service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type PositionClient interface {
+type PositionsClient interface {
 	Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error)
 	Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error)
 }
 
-type positionClient struct {
+type positionsClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewPositionClient(cc grpc.ClientConnInterface) PositionClient {
-	return &positionClient{cc}
+func NewPositionsClient(cc grpc.ClientConnInterface) PositionsClient {
+	return &positionsClient{cc}
 }
 
-func (c *positionClient) Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error) {
+func (c *positionsClient) Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error) {
 	out := new(PositionCompanyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Position/Companies", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Companies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *positionClient) Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error) {
+func (c *positionsClient) Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error) {
 	out := new(PositionCurrencyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Position/Currencies", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Currencies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// PositionServer is the server API for Position service.
-// All implementations must embed UnimplementedPositionServer
+// PositionsServer is the server API for Positions service.
+// All implementations must embed UnimplementedPositionsServer
 // for forward compatibility
-type PositionServer interface {
+type PositionsServer interface {
 	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
 	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
-	mustEmbedUnimplementedPositionServer()
+	mustEmbedUnimplementedPositionsServer()
 }
 
-// UnimplementedPositionServer must be embedded to have forward compatible implementations.
-type UnimplementedPositionServer struct {
+// UnimplementedPositionsServer must be embedded to have forward compatible implementations.
+type UnimplementedPositionsServer struct {
 }
 
-func (UnimplementedPositionServer) Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error) {
+func (UnimplementedPositionsServer) Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Companies not implemented")
 }
-func (UnimplementedPositionServer) Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
+func (UnimplementedPositionsServer) Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Currencies not implemented")
 }
-func (UnimplementedPositionServer) mustEmbedUnimplementedPositionServer() {}
+func (UnimplementedPositionsServer) mustEmbedUnimplementedPositionsServer() {}
 
-// UnsafePositionServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to PositionServer will
+// UnsafePositionsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PositionsServer will
 // result in compilation errors.
-type UnsafePositionServer interface {
-	mustEmbedUnimplementedPositionServer()
+type UnsafePositionsServer interface {
+	mustEmbedUnimplementedPositionsServer()
 }
 
-func RegisterPositionServer(s grpc.ServiceRegistrar, srv PositionServer) {
-	s.RegisterService(&Position_ServiceDesc, srv)
+func RegisterPositionsServer(s grpc.ServiceRegistrar, srv PositionsServer) {
+	s.RegisterService(&Positions_ServiceDesc, srv)
 }
 
-func _Position_Companies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Positions_Companies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionServer).Companies(ctx, in)
+		return srv.(PositionsServer).Companies(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Position/Companies",
+		FullMethod: "/positions.v1.Positions/Companies",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServer).Companies(ctx, req.(*PositionRequest))
+		return srv.(PositionsServer).Companies(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Position_Currencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Positions_Currencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionServer).Currencies(ctx, in)
+		return srv.(PositionsServer).Currencies(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Position/Currencies",
+		FullMethod: "/positions.v1.Positions/Currencies",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServer).Currencies(ctx, req.(*PositionRequest))
+		return srv.(PositionsServer).Currencies(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Position_ServiceDesc is the grpc.ServiceDesc for Position service.
+// Positions_ServiceDesc is the grpc.ServiceDesc for Positions service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Position_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "positions.v1.Position",
-	HandlerType: (*PositionServer)(nil),
+var Positions_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "positions.v1.Positions",
+	HandlerType: (*PositionsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Companies",
-			Handler:    _Position_Companies_Handler,
+			Handler:    _Positions_Companies_Handler,
 		},
 		{
 			MethodName: "Currencies",
-			Handler:    _Position_Currencies_Handler,
+			Handler:    _Positions_Currencies_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

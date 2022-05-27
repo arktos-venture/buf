@@ -48,7 +48,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Indexes {
   rpc Get (IndexesRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      get: "/v1/indexes/{ref}"
+      get: "/v1/indexes/{ticker}"
     };
   }
 
@@ -74,7 +74,7 @@ service Indexes {
 
   rpc Delete (IndexesRequest) returns (IndexesReply)  {
     option (google.api.http) = {
-      delete: "/v1/indexes/{ref}"
+      delete: "/v1/indexes/{ticker}"
     };
   }
 }
@@ -85,7 +85,7 @@ service Indexes {
 // 
 
 message IndexesRequest {
-  string ref = 1 [(validate.rules).string = {min_len: 2, max_len: 32}];
+  string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 36}];
 }
 
 message IndexesSearchRequest {
@@ -95,12 +95,11 @@ message IndexesSearchRequest {
   }
   
   string currency = 1 [(validate.rules).string.len = 3];
-  bool public = 2;
-  Page page = 3 [(validate.rules).message.required = true];
+  Page page = 2 [(validate.rules).message.required = true];
 }
 
 message IndexesCreateRequest {
-  string ref = 1 [(validate.rules).string = {min_len: 1, max_len: 32}];
+  string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 36}];
   string request = 2 [(validate.rules).string = {min_len: 8, max_len: 8196}];
   bool public = 3;
 }
@@ -111,7 +110,7 @@ message IndexesCreateRequest {
 // 
 
 message IndexesReply {
-  string ref = 1;
+  string ticker = 1;
   bool public = 2;
   repeated screener.v1.ScreenerReply companies = 3;
 	google.protobuf.Timestamp created_at = 4;
@@ -124,7 +123,7 @@ message IndexesReplies {
 }
 
 message IndexesSearchReply {
-  string ref = 1;
+  string ticker = 1;
 }
 
 message IndexesSearchReplies {

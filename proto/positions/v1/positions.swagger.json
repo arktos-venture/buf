@@ -12,7 +12,7 @@
   },
   "tags": [
     {
-      "name": "Position"
+      "name": "Positions"
     }
   ],
   "schemes": [
@@ -26,9 +26,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/positions/{accountId}/companies": {
+    "/v1/positions/{account}/companies": {
       "get": {
-        "operationId": "Position_Companies",
+        "operationId": "Positions_Companies",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -45,20 +45,20 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
-          "Position"
+          "Positions"
         ]
       }
     },
-    "/v1/positions/{accountId}/currencies": {
+    "/v1/positions/{account}/currencies": {
       "get": {
-        "operationId": "Position_Currencies",
+        "operationId": "Positions_Currencies",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -75,14 +75,14 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
-          "Position"
+          "Positions"
         ]
       }
     }

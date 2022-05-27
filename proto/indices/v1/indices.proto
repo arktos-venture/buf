@@ -48,7 +48,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Indices {
 	rpc Get (IndicesRequest) returns (IndicesReply)  {
 		option (google.api.http) = {
-			get: "/v1/indice/{indice}"
+			get: "/v1/indice/{ticker}"
 		};
 	}
 
@@ -65,7 +65,7 @@ service Indices {
 // 
 
 message IndicesRequest {
-  	string indice = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+  	string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
 }
 
 message IndicesExchangeRequest {
@@ -78,8 +78,8 @@ message IndicesExchangeRequest {
 // 
 
 message IndicesReply {
-	int64 id = 1;
-	string ticker = 2;
+	string ticker = 1;
+	string exchange = 2;
 	string name = 3;
 	string description = 4;
 	quotes.v1.QuotesLastReply quote = 5;
@@ -89,12 +89,11 @@ message IndicesReply {
 }
 
 message IndicesShortReply {
-	int64 id = 1;
-	string ticker = 2;
-	string name = 3;
-	string description = 4;
-	google.protobuf.Timestamp created_at = 5;
-	google.protobuf.Timestamp updated_at = 6;
+	string ticker = 1;
+	string name = 2;
+	string description = 3;
+	google.protobuf.Timestamp created_at = 4;
+	google.protobuf.Timestamp updated_at = 5;
 }
 
 message IndicesShortReplies {

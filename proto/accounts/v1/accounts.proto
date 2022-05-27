@@ -47,20 +47,20 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Accounts {
 	rpc Positions (AccountRequest) returns (AccountPositionsReply)  {
 		option (google.api.http) = {
-			get: "/v1/account/{accountId}/positions"
+			get: "/v1/account/{account}/positions"
 		};
 	}
 
 	rpc Create (AccountCreateRequest) returns (AccountReply)  {
 		option (google.api.http) = {
-			post: "/v1/account"
+			post: "/v1/accounts"
 			body: "*"
 		};
 	}
 
 	rpc Update (AccountUpdateRequest) returns (AccountReply)  {
 		option (google.api.http) = {
-			put: "/v1/account/{accountId}"
+			put: "/v1/account/{account}"
 			body: "*"
 		};
 	}
@@ -72,7 +72,7 @@ service Accounts {
 // 
 
 message AccountRequest {
-	string accountId = 1 [(validate.rules).string.uuid = true];
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
 message AccountCreateRequest {
@@ -82,7 +82,7 @@ message AccountCreateRequest {
 }
 
 message AccountUpdateRequest {
-	string accountId = 1 [(validate.rules).string.uuid = true];
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
 	string description = 3 [(validate.rules).string = {min_len: 4, max_len: 128}];
 	string currency = 4 [(validate.rules).string.len = 3];
@@ -99,14 +99,13 @@ message AccountPositionsReply {
 		repeated positions.v1.PositionCurrencyReply currencies = 2;
 	}
 
-	string id = 1;
+	string account = 1;
 	repeated orders.v1.OrderReply orders = 2;
 	Positions positions = 3;
 }
 
 message AccountReply {
-	string id = 1;
-	string name = 2;
-	string description = 3;
-	string currency = 4;
+	string account = 1;
+	string description = 2;
+	string currency = 3;
 }

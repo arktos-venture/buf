@@ -24,7 +24,7 @@ type IndicesHTTPServer interface {
 
 func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indice/{indice}", _Indices_Get1_HTTP_Handler(srv))
+	r.GET("/v1/indice/{ticker}", _Indices_Get1_HTTP_Handler(srv))
 	r.GET("/v1/indices/exchange/{exchange}", _Indices_List0_HTTP_Handler(srv))
 }
 
@@ -87,7 +87,7 @@ func NewIndicesHTTPClient(client *http.Client) IndicesHTTPClient {
 
 func (c *IndicesHTTPClientImpl) Get(ctx context.Context, in *IndicesRequest, opts ...http.CallOption) (*IndicesReply, error) {
 	var out IndicesReply
-	pattern := "/v1/indice/{indice}"
+	pattern := "/v1/indice/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indices.v1.Indices/Get"))
 	opts = append(opts, http.PathTemplate(pattern))

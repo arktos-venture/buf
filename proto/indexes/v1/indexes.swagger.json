@@ -51,12 +51,6 @@
             "type": "string"
           },
           {
-            "name": "public",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
             "name": "page.number",
             "in": "query",
             "required": false,
@@ -136,7 +130,7 @@
         ]
       }
     },
-    "/v1/indexes/{ref}": {
+    "/v1/indexes/{ticker}": {
       "get": {
         "operationId": "Indexes_Get",
         "responses": {
@@ -155,7 +149,7 @@
         },
         "parameters": [
           {
-            "name": "ref",
+            "name": "ticker",
             "in": "path",
             "required": true,
             "type": "string"
@@ -183,7 +177,7 @@
         },
         "parameters": [
           {
-            "name": "ref",
+            "name": "ticker",
             "in": "path",
             "required": true,
             "type": "string"
@@ -334,7 +328,7 @@
     "v1IndexesCreateRequest": {
       "type": "object",
       "properties": {
-        "ref": {
+        "ticker": {
           "type": "string"
         },
         "request": {
@@ -348,7 +342,7 @@
     "v1IndexesReply": {
       "type": "object",
       "properties": {
-        "ref": {
+        "ticker": {
           "type": "string"
         },
         "public": {
@@ -388,7 +382,7 @@
     "v1IndexesSearchReply": {
       "type": "object",
       "properties": {
-        "ref": {
+        "ticker": {
           "type": "string"
         }
       }

@@ -39,56 +39,44 @@ var (
 	_ = quotes_v1.TSDB(0)
 )
 
-// Validate checks the field values on Strategy with the rules defined in the
+// Validate checks the field values on Request with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Strategy) Validate() error {
+func (m *Request) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Strategy with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in StrategyMultiError, or nil
-// if none found.
-func (m *Strategy) ValidateAll() error {
+// ValidateAll checks the field values on Request with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in RequestMultiError, or nil if none found.
+func (m *Request) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Strategy) validate(all bool) error {
+func (m *Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Name
+	// no validation rules for Parameters
 
-	if l := len(m.GetParams()); l < 2 || l > 10 {
-		err := StrategyValidationError{
-			field:  "Params",
-			reason: "value must contain between 2 and 10 pairs, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	// no validation rules for Inject
+	// no validation rules for Period
 
 	if len(errors) > 0 {
-		return StrategyMultiError(errors)
+		return RequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyMultiError is an error wrapping multiple validation errors returned
-// by Strategy.ValidateAll() if the designated constraints aren't met.
-type StrategyMultiError []error
+// RequestMultiError is an error wrapping multiple validation errors returned
+// by Request.ValidateAll() if the designated constraints aren't met.
+type RequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyMultiError) Error() string {
+func (m RequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -97,11 +85,11 @@ func (m StrategyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyMultiError) AllErrors() []error { return m }
+func (m RequestMultiError) AllErrors() []error { return m }
 
-// StrategyValidationError is the validation error returned by
-// Strategy.Validate if the designated constraints aren't met.
-type StrategyValidationError struct {
+// RequestValidationError is the validation error returned by Request.Validate
+// if the designated constraints aren't met.
+type RequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -109,22 +97,22 @@ type StrategyValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyValidationError) Field() string { return e.field }
+func (e RequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyValidationError) Reason() string { return e.reason }
+func (e RequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyValidationError) Cause() error { return e.cause }
+func (e RequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyValidationError) Key() bool { return e.key }
+func (e RequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyValidationError) ErrorName() string { return "StrategyValidationError" }
+func (e RequestValidationError) ErrorName() string { return "RequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e StrategyValidationError) Error() string {
+func (e RequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -136,14 +124,14 @@ func (e StrategyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategy.%s: %s%s",
+		"invalid %sRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyValidationError{}
+var _ error = RequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -151,7 +139,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyValidationError{}
+} = RequestValidationError{}
 
 // Validate checks the field values on StrategyRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -175,101 +163,7 @@ func (m *StrategyRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := quotes_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
-		err := StrategyRequestValidationError{
-			field:  "Tsdb",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if _, ok := quotes_v1.Interval_name[int32(m.GetInterval())]; !ok {
-		err := StrategyRequestValidationError{
-			field:  "Interval",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetStrategy()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategyRequestValidationError{
-					field:  "Strategy",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategyRequestValidationError{
-					field:  "Strategy",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetStrategy()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StrategyRequestValidationError{
-				field:  "Strategy",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if l := len(m.GetFilters()); l < 1 || l > 20 {
-		err := StrategyRequestValidationError{
-			field:  "Filters",
-			reason: "value must contain between 1 and 20 items, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	for idx, item := range m.GetFilters() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyRequestValidationError{
-						field:  fmt.Sprintf("Filters[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyRequestValidationError{
-						field:  fmt.Sprintf("Filters[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StrategyRequestValidationError{
-					field:  fmt.Sprintf("Filters[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
 		return StrategyRequestMultiError(errors)
@@ -349,6 +243,343 @@ var _ interface {
 	ErrorName() string
 } = StrategyRequestValidationError{}
 
+// Validate checks the field values on StrategyUpdateRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategyUpdateRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyUpdateRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategyUpdateRequestMultiError, or nil if none found.
+func (m *StrategyUpdateRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyUpdateRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	// no validation rules for Account
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	if all {
+		switch v := interface{}(m.GetParameters()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyUpdateRequestValidationError{
+					field:  "Parameters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyUpdateRequestValidationError{
+					field:  "Parameters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetParameters()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyUpdateRequestValidationError{
+				field:  "Parameters",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StrategyUpdateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyUpdateRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategyUpdateRequest.ValidateAll() if the designated
+// constraints aren't met.
+type StrategyUpdateRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyUpdateRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyUpdateRequestMultiError) AllErrors() []error { return m }
+
+// StrategyUpdateRequestValidationError is the validation error returned by
+// StrategyUpdateRequest.Validate if the designated constraints aren't met.
+type StrategyUpdateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyUpdateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyUpdateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyUpdateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyUpdateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyUpdateRequestValidationError) ErrorName() string {
+	return "StrategyUpdateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategyUpdateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyUpdateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyUpdateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyUpdateRequestValidationError{}
+
+// Validate checks the field values on StrategyExecuteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategyExecuteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyExecuteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategyExecuteRequestMultiError, or nil if none found.
+func (m *StrategyExecuteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyExecuteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := quotes_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
+		err := StrategyExecuteRequestValidationError{
+			field:  "Tsdb",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := quotes_v1.Interval_name[int32(m.GetInterval())]; !ok {
+		err := StrategyExecuteRequestValidationError{
+			field:  "Interval",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetStrategy()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyExecuteRequestValidationError{
+					field:  "Strategy",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyExecuteRequestValidationError{
+					field:  "Strategy",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStrategy()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyExecuteRequestValidationError{
+				field:  "Strategy",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := StrategyExecuteRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategyExecuteRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategyExecuteRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategyExecuteRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return StrategyExecuteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyExecuteRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategyExecuteRequest.ValidateAll() if the designated
+// constraints aren't met.
+type StrategyExecuteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyExecuteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyExecuteRequestMultiError) AllErrors() []error { return m }
+
+// StrategyExecuteRequestValidationError is the validation error returned by
+// StrategyExecuteRequest.Validate if the designated constraints aren't met.
+type StrategyExecuteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyExecuteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyExecuteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyExecuteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyExecuteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyExecuteRequestValidationError) ErrorName() string {
+	return "StrategyExecuteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategyExecuteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyExecuteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyExecuteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyExecuteRequestValidationError{}
+
 // Validate checks the field values on StrategyReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -371,14 +602,18 @@ func (m *StrategyReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Action
+	// no validation rules for Ticker
+
+	// no validation rules for Description
+
+	// no validation rules for Account
 
 	if all {
-		switch v := interface{}(m.GetDate()).(type) {
+		switch v := interface{}(m.GetRequest()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, StrategyReplyValidationError{
-					field:  "Date",
+					field:  "Request",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -386,30 +621,28 @@ func (m *StrategyReply) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, StrategyReplyValidationError{
-					field:  "Date",
+					field:  "Request",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StrategyReplyValidationError{
-				field:  "Date",
+				field:  "Request",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
 
-	// no validation rules for LastQuote
-
 	if all {
-		switch v := interface{}(m.GetLastQuoteDate()).(type) {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, StrategyReplyValidationError{
-					field:  "LastQuoteDate",
+					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -417,16 +650,45 @@ func (m *StrategyReply) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, StrategyReplyValidationError{
-					field:  "LastQuoteDate",
+					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetLastQuoteDate()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StrategyReplyValidationError{
-				field:  "LastQuoteDate",
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyReplyValidationError{
+				field:  "UpdatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -510,3 +772,421 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = StrategyReplyValidationError{}
+
+// Validate checks the field values on StrategyReplies with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *StrategyReplies) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyReplies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategyRepliesMultiError, or nil if none found.
+func (m *StrategyReplies) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyReplies) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetResults() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategyRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategyRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategyRepliesValidationError{
+					field:  fmt.Sprintf("Results[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return StrategyRepliesMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyRepliesMultiError is an error wrapping multiple validation errors
+// returned by StrategyReplies.ValidateAll() if the designated constraints
+// aren't met.
+type StrategyRepliesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyRepliesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyRepliesMultiError) AllErrors() []error { return m }
+
+// StrategyRepliesValidationError is the validation error returned by
+// StrategyReplies.Validate if the designated constraints aren't met.
+type StrategyRepliesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyRepliesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyRepliesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyRepliesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyRepliesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyRepliesValidationError) ErrorName() string { return "StrategyRepliesValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StrategyRepliesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyReplies.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyRepliesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyRepliesValidationError{}
+
+// Validate checks the field values on StrategyExecutedReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategyExecutedReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyExecutedReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategyExecutedReplyMultiError, or nil if none found.
+func (m *StrategyExecutedReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyExecutedReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Action
+
+	if all {
+		switch v := interface{}(m.GetDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyExecutedReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyExecutedReplyValidationError{
+					field:  "Date",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyExecutedReplyValidationError{
+				field:  "Date",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for LastQuote
+
+	if all {
+		switch v := interface{}(m.GetLastQuoteDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyExecutedReplyValidationError{
+					field:  "LastQuoteDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyExecutedReplyValidationError{
+					field:  "LastQuoteDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLastQuoteDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyExecutedReplyValidationError{
+				field:  "LastQuoteDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StrategyExecutedReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyExecutedReplyMultiError is an error wrapping multiple validation
+// errors returned by StrategyExecutedReply.ValidateAll() if the designated
+// constraints aren't met.
+type StrategyExecutedReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyExecutedReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyExecutedReplyMultiError) AllErrors() []error { return m }
+
+// StrategyExecutedReplyValidationError is the validation error returned by
+// StrategyExecutedReply.Validate if the designated constraints aren't met.
+type StrategyExecutedReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyExecutedReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyExecutedReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyExecutedReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyExecutedReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyExecutedReplyValidationError) ErrorName() string {
+	return "StrategyExecutedReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategyExecutedReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyExecutedReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyExecutedReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyExecutedReplyValidationError{}
+
+// Validate checks the field values on StrategyExecuteRequest_Strategy with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategyExecuteRequest_Strategy) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyExecuteRequest_Strategy with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// StrategyExecuteRequest_StrategyMultiError, or nil if none found.
+func (m *StrategyExecuteRequest_Strategy) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyExecuteRequest_Strategy) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	if l := len(m.GetParams()); l < 2 || l > 10 {
+		err := StrategyExecuteRequest_StrategyValidationError{
+			field:  "Params",
+			reason: "value must contain between 2 and 10 pairs, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Inject
+
+	if len(errors) > 0 {
+		return StrategyExecuteRequest_StrategyMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyExecuteRequest_StrategyMultiError is an error wrapping multiple
+// validation errors returned by StrategyExecuteRequest_Strategy.ValidateAll()
+// if the designated constraints aren't met.
+type StrategyExecuteRequest_StrategyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyExecuteRequest_StrategyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyExecuteRequest_StrategyMultiError) AllErrors() []error { return m }
+
+// StrategyExecuteRequest_StrategyValidationError is the validation error
+// returned by StrategyExecuteRequest_Strategy.Validate if the designated
+// constraints aren't met.
+type StrategyExecuteRequest_StrategyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyExecuteRequest_StrategyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyExecuteRequest_StrategyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyExecuteRequest_StrategyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyExecuteRequest_StrategyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyExecuteRequest_StrategyValidationError) ErrorName() string {
+	return "StrategyExecuteRequest_StrategyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategyExecuteRequest_StrategyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyExecuteRequest_Strategy.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyExecuteRequest_StrategyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyExecuteRequest_StrategyValidationError{}

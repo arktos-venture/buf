@@ -57,10 +57,10 @@ func (m *IndexesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetRef()); l < 2 || l > 32 {
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 2 || l > 36 {
 		err := IndexesRequestValidationError{
-			field:  "Ref",
-			reason: "value length must be between 2 and 32 runes, inclusive",
+			field:  "Ticker",
+			reason: "value length must be between 2 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -179,8 +179,6 @@ func (m *IndexesSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 
 	}
-
-	// no validation rules for Public
 
 	if m.GetPage() == nil {
 		err := IndexesSearchRequestValidationError{
@@ -324,10 +322,10 @@ func (m *IndexesCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetRef()); l < 1 || l > 32 {
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 2 || l > 36 {
 		err := IndexesCreateRequestValidationError{
-			field:  "Ref",
-			reason: "value length must be between 1 and 32 runes, inclusive",
+			field:  "Ticker",
+			reason: "value length must be between 2 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -450,7 +448,7 @@ func (m *IndexesReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ref
+	// no validation rules for Ticker
 
 	// no validation rules for Public
 
@@ -781,7 +779,7 @@ func (m *IndexesSearchReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ref
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
 		return IndexesSearchReplyMultiError(errors)

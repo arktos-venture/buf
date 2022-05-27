@@ -57,9 +57,9 @@ func (m *ForexRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetForex()) != 6 {
+	if utf8.RuneCountInString(m.GetTicker()) != 6 {
 		err := ForexRequestValidationError{
-			field:  "Forex",
+			field:  "Ticker",
 			reason: "value length must be 6 runes",
 		}
 		if !all {
@@ -279,8 +279,6 @@ func (m *ForexReply) validate(all bool) error {
 	}
 
 	var errors []error
-
-	// no validation rules for Id
 
 	// no validation rules for Ticker
 
