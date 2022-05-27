@@ -180,8 +180,6 @@ func (m *IndexesSearchRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for Public
-
 	if m.GetPage() == nil {
 		err := IndexesSearchRequestValidationError{
 			field:  "Page",

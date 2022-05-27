@@ -90,11 +90,10 @@ message IndicesReply {
 
 message IndicesShortReply {
 	string ticker = 1;
-	string exchange = 2;
-	string name = 3;
-	string description = 4;
-	google.protobuf.Timestamp created_at = 5;
-	google.protobuf.Timestamp updated_at = 6;
+	string name = 2;
+	string description = 3;
+	google.protobuf.Timestamp created_at = 4;
+	google.protobuf.Timestamp updated_at = 5;
 }
 
 message IndicesShortReplies {

@@ -278,9 +278,6 @@
         "ticker": {
           "type": "string"
         },
-        "exchange": {
-          "type": "string"
-        },
         "name": {
           "type": "string"
         },

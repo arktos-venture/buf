@@ -511,8 +511,6 @@ func (m *IndicesShortReply) validate(all bool) error {
 
 	// no validation rules for Ticker
 
-	// no validation rules for Exchange
-
 	// no validation rules for Name
 
 	// no validation rules for Description

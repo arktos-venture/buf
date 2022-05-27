@@ -95,8 +95,7 @@ message IndexesSearchRequest {
   }
   
   string currency = 1 [(validate.rules).string.len = 3];
-  bool public = 2;
-  Page page = 3 [(validate.rules).message.required = true];
+  Page page = 2 [(validate.rules).message.required = true];
 }
 
 message IndexesCreateRequest {

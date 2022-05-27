@@ -51,12 +51,6 @@
             "type": "string"
           },
           {
-            "name": "public",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
             "name": "page.number",
             "in": "query",
             "required": false,
