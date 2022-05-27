@@ -21,7 +21,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  	};
+  };
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
@@ -34,25 +34,25 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 		  		name: "Authorization"
 		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
 			}
-	  	}
+	  }
 	}
 	security: {
-	  	security_requirement: {
+	  security_requirement: {
 			key: "bearer"
-	  	}
+	  }
 	}
 };
 
-service Position {
+service Positions {
   rpc Companies (PositionRequest) returns (PositionCompanyReplies)  {
     option (google.api.http) = {
-      get: "/v1/positions/{accountId}/companies"
+      get: "/v1/positions/{account}/companies"
     };
   }
 
   rpc Currencies (PositionRequest) returns (PositionCurrencyReplies)  {
     option (google.api.http) = {
-      get: "/v1/positions/{accountId}/currencies"
+      get: "/v1/positions/{account}/currencies"
     };
   }
 }
@@ -63,7 +63,7 @@ service Position {
 // 
 
 message PositionRequest {
-  string accountId = 1 [(validate.rules).string.uuid = true];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
 
