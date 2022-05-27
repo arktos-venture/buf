@@ -24,11 +24,11 @@ type CompanyTrendsHTTPServer interface {
 
 func RegisterCompanyTrendsHTTPServer(s *http.Server, srv CompanyTrendsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/company/trendId", _CompanyTrends_Get8_HTTP_Handler(srv))
+	r.POST("/v1/company/trendId", _CompanyTrends_Get9_HTTP_Handler(srv))
 	r.POST("/v1/company/trends", _CompanyTrends_Search10_HTTP_Handler(srv))
 }
 
-func _CompanyTrends_Get8_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx http.Context) error {
+func _CompanyTrends_Get9_HTTP_Handler(srv CompanyTrendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in TrendRequest
 		if err := ctx.Bind(&in); err != nil {

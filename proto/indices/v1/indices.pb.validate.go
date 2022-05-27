@@ -57,9 +57,9 @@ func (m *IndicesRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetIndice()); l < 2 || l > 16 {
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 2 || l > 16 {
 		err := IndicesRequestValidationError{
-			field:  "Indice",
+			field:  "Ticker",
 			reason: "value length must be between 2 and 16 runes, inclusive",
 		}
 		if !all {
@@ -281,9 +281,9 @@ func (m *IndicesReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
 	// no validation rules for Ticker
+
+	// no validation rules for Exchange
 
 	// no validation rules for Name
 
@@ -509,9 +509,9 @@ func (m *IndicesShortReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
 	// no validation rules for Ticker
+
+	// no validation rules for Exchange
 
 	// no validation rules for Name
 
