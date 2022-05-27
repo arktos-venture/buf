@@ -24,11 +24,11 @@ type ForexesHTTPServer interface {
 
 func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/forexes/{forex}", _Forexes_Get4_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List4_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}", _Forexes_Get5_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List5_HTTP_Handler(srv))
 }
 
-func _Forexes_Get4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Get5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -50,7 +50,7 @@ func _Forexes_Get4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Forexes_List4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_List5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -87,7 +87,7 @@ func NewForexesHTTPClient(client *http.Client) ForexesHTTPClient {
 
 func (c *ForexesHTTPClientImpl) Get(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*ForexReply, error) {
 	var out ForexReply
-	pattern := "/v1/forexes/{forex}"
+	pattern := "/v1/forexes/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/forexes.v1.Forexes/Get"))
 	opts = append(opts, http.PathTemplate(pattern))
