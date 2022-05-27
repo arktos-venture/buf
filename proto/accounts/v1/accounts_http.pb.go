@@ -25,9 +25,9 @@ type AccountsHTTPServer interface {
 
 func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/account/{accountId}/positions", _Accounts_Positions0_HTTP_Handler(srv))
-	r.POST("/v1/account", _Accounts_Create1_HTTP_Handler(srv))
-	r.PUT("/v1/account/{accountId}", _Accounts_Update1_HTTP_Handler(srv))
+	r.GET("/v1/account/{account}/positions", _Accounts_Positions0_HTTP_Handler(srv))
+	r.POST("/v1/accounts", _Accounts_Create2_HTTP_Handler(srv))
+	r.PUT("/v1/account/{account}", _Accounts_Update2_HTTP_Handler(srv))
 }
 
 func _Accounts_Positions0_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
@@ -52,7 +52,7 @@ func _Accounts_Positions0_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Con
 	}
 }
 
-func _Accounts_Create1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Create2_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -71,7 +71,7 @@ func _Accounts_Create1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Update1_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Update2_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -109,7 +109,7 @@ func NewAccountsHTTPClient(client *http.Client) AccountsHTTPClient {
 
 func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountCreateRequest, opts ...http.CallOption) (*AccountReply, error) {
 	var out AccountReply
-	pattern := "/v1/account"
+	pattern := "/v1/accounts"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -122,7 +122,7 @@ func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountCreateRe
 
 func (c *AccountsHTTPClientImpl) Positions(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountPositionsReply, error) {
 	var out AccountPositionsReply
-	pattern := "/v1/account/{accountId}/positions"
+	pattern := "/v1/account/{account}/positions"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Positions"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -135,7 +135,7 @@ func (c *AccountsHTTPClientImpl) Positions(ctx context.Context, in *AccountReque
 
 func (c *AccountsHTTPClientImpl) Update(ctx context.Context, in *AccountUpdateRequest, opts ...http.CallOption) (*AccountReply, error) {
 	var out AccountReply
-	pattern := "/v1/account/{accountId}"
+	pattern := "/v1/account/{account}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

@@ -35,9 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// define the regex for a UUID once up-front
-var _accounts_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on AccountRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -60,11 +57,10 @@ func (m *AccountRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetAccountId()); err != nil {
-		err = AccountRequestValidationError{
-			field:  "AccountId",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := AccountRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -74,14 +70,6 @@ func (m *AccountRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return AccountRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *AccountRequest) _validateUuid(uuid string) error {
-	if matched := _accounts_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -316,11 +304,10 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetAccountId()); err != nil {
-		err = AccountUpdateRequestValidationError{
-			field:  "AccountId",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := AccountUpdateRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -364,14 +351,6 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return AccountUpdateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *AccountUpdateRequest) _validateUuid(uuid string) error {
-	if matched := _accounts_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -472,7 +451,7 @@ func (m *AccountPositionsReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for Account
 
 	for idx, item := range m.GetOrders() {
 		_, _ = idx, item
@@ -639,9 +618,7 @@ func (m *AccountReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for Name
+	// no validation rules for Account
 
 	// no validation rules for Description
 

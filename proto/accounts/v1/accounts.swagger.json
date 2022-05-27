@@ -26,39 +26,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/account": {
-      "post": {
-        "operationId": "Accounts_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AccountReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1AccountCreateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Accounts"
-        ]
-      }
-    },
-    "/v1/account/{accountId}": {
+    "/v1/account/{account}": {
       "put": {
         "operationId": "Accounts_Update",
         "responses": {
@@ -77,7 +45,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
@@ -107,7 +75,7 @@
         ]
       }
     },
-    "/v1/account/{accountId}/positions": {
+    "/v1/account/{account}/positions": {
       "get": {
         "operationId": "Accounts_Positions",
         "responses": {
@@ -126,10 +94,42 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/v1/accounts": {
+      "post": {
+        "operationId": "Accounts_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AccountReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AccountCreateRequest"
+            }
           }
         ],
         "tags": [
@@ -286,7 +286,7 @@
     "v1AccountPositionsReply": {
       "type": "object",
       "properties": {
-        "id": {
+        "account": {
           "type": "string"
         },
         "orders": {
@@ -303,10 +303,7 @@
     "v1AccountReply": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
+        "account": {
           "type": "string"
         },
         "description": {
