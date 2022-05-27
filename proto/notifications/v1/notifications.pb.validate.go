@@ -35,9 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// define the regex for a UUID once up-front
-var _notifications_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Page with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
 // encountered is returned, or nil if there are no violations.
@@ -180,11 +177,10 @@ func (m *NotificationCreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetAccountId()); err != nil {
-		err = NotificationCreateRequestValidationError{
-			field:  "AccountId",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := NotificationCreateRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -238,14 +234,6 @@ func (m *NotificationCreateRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return NotificationCreateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *NotificationCreateRequest) _validateUuid(uuid string) error {
-	if matched := _notifications_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -346,11 +334,10 @@ func (m *NotificationSearchRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetAccountId()); err != nil {
-		err = NotificationSearchRequestValidationError{
-			field:  "AccountId",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := NotificationSearchRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -422,14 +409,6 @@ func (m *NotificationSearchRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return NotificationSearchRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *NotificationSearchRequest) _validateUuid(uuid string) error {
-	if matched := _notifications_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil

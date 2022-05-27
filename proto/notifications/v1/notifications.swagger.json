@@ -26,7 +26,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/notifications/{accountId}": {
+    "/v1/notifications/{account}": {
       "get": {
         "operationId": "Notifications_Search",
         "responses": {
@@ -45,7 +45,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
@@ -107,7 +107,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account",
             "in": "path",
             "required": true,
             "type": "string"
