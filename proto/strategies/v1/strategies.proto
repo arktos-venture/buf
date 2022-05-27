@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package strategies.v1;
 
+import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -14,8 +15,8 @@ option java_package = "dev.kratos.api.strategies.v1";
 option java_outer_classname = "APIStrategiesProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Dividends APIs";
-		description: "Dividends APIs";
+        title: "Strategies APIs";
+		description: "Strategies APIs";
         version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
@@ -45,24 +46,77 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Strategies {
-	rpc Execute (StrategyRequest) returns (StrategyReply)  {
+	rpc Get (StrategyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  	post: "/v1/strategy/execute"
+		  	get: "/v1/strategy/{ticker}"
+		};
+	}
+
+	rpc List (google.protobuf.Empty) returns (StrategyReplies)  {
+		option (google.api.http) = {
+		  	get: "/v1/strategies"
+		};
+	}
+
+	rpc Create (StrategyUpdateRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+		  	post: "/v1/strategy"
+			body: "*"
+		};
+	}
+
+	rpc Update (StrategyUpdateRequest) returns (StrategyReply)  {
+		option (google.api.http) = {
+			put: "/v1/strategy/{ticker}"
+			body: "*"
+		};
+	}
+
+	rpc Delete (StrategyRequest) returns (google.protobuf.Empty)  {
+		option (google.api.http) = {
+		  	delete: "/v1/strategy/{ticker}"
+		};
+	}
+
+	rpc Execute (StrategyExecuteRequest) returns (StrategyExecutedReply)  {
+		option (google.api.http) = {
+		  	post: "/v1/strategy/{strategy.ticker}/execute"
 		  	body: "*"
 		};
 	}
 }
+
+
+// Transverse
+message Request {
+	map<string, int32> parameters = 1;
+	map<string, int32> period = 2;
+}
+
+
 // 
 // Request
 // 
 
-message Strategy {
-	string name = 1;
-	map<string, int32> params = 2 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
-	float inject = 3;
+message StrategyRequest {
+	string ticker = 1;
+}
+
+message StrategyUpdateRequest {
+	string ticker = 1;
+	string account = 2;
+	string name = 3;
+	string description = 4;
+	Request parameters = 5;
 }
   
-message StrategyRequest {
+message StrategyExecuteRequest {
+	message Strategy {
+		string ticker = 1;
+		map<string, int32> params = 2 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
+		float inject = 3;
+	}
+
 	quotes.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	quotes.v1.Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
 	Strategy strategy = 3;
@@ -74,6 +128,20 @@ message StrategyRequest {
 // 
 
 message StrategyReply {
+	string ticker = 1;
+	string description = 2;
+	string account = 3;
+	Request request = 4;
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6; 
+}
+
+message StrategyReplies {
+	repeated StrategyReply results = 1;
+	int32 total = 2; 
+}
+
+message StrategyExecutedReply {
 	enum Action {
 		BUY = 0;
 		SELL = 1;
