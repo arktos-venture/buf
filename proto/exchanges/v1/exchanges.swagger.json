@@ -155,20 +155,6 @@
         }
       }
     },
-    "ExchangeReplyIndice": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -262,7 +248,7 @@
         "indices": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ExchangeReplyIndice"
+            "$ref": "#/definitions/v1IndicesShortReply"
           }
         },
         "routing": {
@@ -352,6 +338,25 @@
         },
         "currency": {
           "type": "string"
+        }
+      }
+    },
+    "v1IndicesShortReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

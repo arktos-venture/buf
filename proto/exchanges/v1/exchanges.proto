@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/indices/v1/indices.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;exchanges_v1";
 option java_multiple_files = true;
@@ -111,17 +112,11 @@ message ExchangeReply {
 		string isin = 4;
 		int64 activity = 5;
 	}
-
-	message Indice {
-		string ticker = 1;
-		string name = 2;
-		string description = 3;
-	}
   
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
-	repeated Indice indices = 4;
+	repeated indices.v1.IndicesShortReply indices = 4;
 	string routing = 5;
 	string country = 6;
 	string currency = 7;
