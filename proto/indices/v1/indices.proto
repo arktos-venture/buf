@@ -80,20 +80,18 @@ message IndicesExchangeRequest {
 message IndicesReply {
 	string ticker = 1;
 	string exchange = 2;
-	string name = 3;
-	string description = 4;
-	quotes.v1.QuotesLastReply quote = 5;
-	repeated screener.v1.ScreenerReply companies = 6;
-	google.protobuf.Timestamp created_at = 7;
-	google.protobuf.Timestamp updated_at = 8;
+	string description = 3;
+	quotes.v1.QuotesLastReply quote = 4;
+	repeated screener.v1.ScreenerReply companies = 5;
+	google.protobuf.Timestamp created_at = 6;
+	google.protobuf.Timestamp updated_at = 7;
 }
 
 message IndicesShortReply {
 	string ticker = 1;
-	string name = 2;
-	string description = 3;
-	google.protobuf.Timestamp created_at = 4;
-	google.protobuf.Timestamp updated_at = 5;
+	string description = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4;
 }
 
 message IndicesShortReplies {
