@@ -226,19 +226,22 @@
           "type": "number",
           "format": "float"
         },
-        "avg10d": {
+        "stats": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/VolumeStats"
+          }
+        }
+      }
+    },
+    "VolumeStats": {
+      "type": "object",
+      "properties": {
+        "avg": {
           "type": "number",
           "format": "float"
         },
-        "avg90d": {
-          "type": "number",
-          "format": "float"
-        },
-        "share10dRatio": {
-          "type": "number",
-          "format": "float"
-        },
-        "share90dRatio": {
+        "variation": {
           "type": "number",
           "format": "float"
         }

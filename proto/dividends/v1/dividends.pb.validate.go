@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	quotes_v1 "github.com/arktos-venture/buf/proto/quotes/v1"
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -36,7 +36,7 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 
-	_ = quotes_v1.Operator(0)
+	_ = screener_v1.Operator(0)
 )
 
 // Validate checks the field values on Filter with the rules defined in the
@@ -60,7 +60,7 @@ func (m *Filter) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := quotes_v1.Operator_name[int32(m.GetOperator())]; !ok {
+	if _, ok := screener_v1.Operator_name[int32(m.GetOperator())]; !ok {
 		err := FilterValidationError{
 			field:  "Operator",
 			reason: "value must be one of the defined enum values",
@@ -71,7 +71,7 @@ func (m *Filter) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := quotes_v1.Argument_name[int32(m.GetArgument())]; !ok {
+	if _, ok := screener_v1.Argument_name[int32(m.GetArgument())]; !ok {
 		err := FilterValidationError{
 			field:  "Argument",
 			reason: "value must be one of the defined enum values",

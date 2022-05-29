@@ -148,21 +148,11 @@
           "type": "number",
           "format": "float"
         },
-        "avg10d": {
-          "type": "number",
-          "format": "float"
-        },
-        "avg90d": {
-          "type": "number",
-          "format": "float"
-        },
-        "share10dRatio": {
-          "type": "number",
-          "format": "float"
-        },
-        "share90dRatio": {
-          "type": "number",
-          "format": "float"
+        "stats": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/VolumeStats"
+          }
         }
       }
     },
@@ -173,6 +163,19 @@
         "DESC"
       ],
       "default": "ASC"
+    },
+    "VolumeStats": {
+      "type": "object",
+      "properties": {
+        "avg": {
+          "type": "number",
+          "format": "float"
+        },
+        "variation": {
+          "type": "number",
+          "format": "float"
+        }
+      }
     },
     "googlerpcStatus": {
       "type": "object",
@@ -224,15 +227,15 @@
         "StrategyDecision",
         "StrategyDecisionAgo",
         "SharesFloatRatio",
-        "SharesVolume10dRatio",
-        "SharesVolume90dRatio",
         "Volume",
         "VolumeAvg10d",
+        "VolumeAvg30d",
         "VolumeAvg90d",
         "Isin",
         "Adr",
         "Id",
-        "Country"
+        "Country",
+        "Time"
       ],
       "default": "Ticker"
     },
