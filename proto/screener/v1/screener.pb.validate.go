@@ -166,6 +166,129 @@ var _ interface {
 	ErrorName() string
 } = FilterValidationError{}
 
+// Validate checks the field values on FilterSimple with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *FilterSimple) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FilterSimple with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in FilterSimpleMultiError, or
+// nil if none found.
+func (m *FilterSimple) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FilterSimple) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := Operator_name[int32(m.GetOperator())]; !ok {
+		err := FilterSimpleValidationError{
+			field:  "Operator",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := Argument_name[int32(m.GetArgument())]; !ok {
+		err := FilterSimpleValidationError{
+			field:  "Argument",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Value
+
+	if len(errors) > 0 {
+		return FilterSimpleMultiError(errors)
+	}
+
+	return nil
+}
+
+// FilterSimpleMultiError is an error wrapping multiple validation errors
+// returned by FilterSimple.ValidateAll() if the designated constraints aren't met.
+type FilterSimpleMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FilterSimpleMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FilterSimpleMultiError) AllErrors() []error { return m }
+
+// FilterSimpleValidationError is the validation error returned by
+// FilterSimple.Validate if the designated constraints aren't met.
+type FilterSimpleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FilterSimpleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FilterSimpleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FilterSimpleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FilterSimpleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FilterSimpleValidationError) ErrorName() string { return "FilterSimpleValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FilterSimpleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFilterSimple.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FilterSimpleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FilterSimpleValidationError{}
+
 // Validate checks the field values on ScreenerRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1295,13 +1418,51 @@ func (m *ScreenerReply_Volume) validate(all bool) error {
 
 	// no validation rules for Last
 
-	// no validation rules for Avg10D
+	{
+		sorted_keys := make([]int32, len(m.GetStats()))
+		i := 0
+		for key := range m.GetStats() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetStats()[key]
+			_ = val
 
-	// no validation rules for Avg90D
+			// no validation rules for Stats[key]
 
-	// no validation rules for Share10DRatio
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ScreenerReply_VolumeValidationError{
+							field:  fmt.Sprintf("Stats[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ScreenerReply_VolumeValidationError{
+							field:  fmt.Sprintf("Stats[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ScreenerReply_VolumeValidationError{
+						field:  fmt.Sprintf("Stats[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
 
-	// no validation rules for Share90DRatio
+		}
+	}
 
 	if len(errors) > 0 {
 		return ScreenerReply_VolumeMultiError(errors)
@@ -1488,3 +1649,109 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ScreenerReply_DividendsValidationError{}
+
+// Validate checks the field values on ScreenerReply_Volume_Stats with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ScreenerReply_Volume_Stats) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ScreenerReply_Volume_Stats with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ScreenerReply_Volume_StatsMultiError, or nil if none found.
+func (m *ScreenerReply_Volume_Stats) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ScreenerReply_Volume_Stats) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Avg
+
+	// no validation rules for Variation
+
+	if len(errors) > 0 {
+		return ScreenerReply_Volume_StatsMultiError(errors)
+	}
+
+	return nil
+}
+
+// ScreenerReply_Volume_StatsMultiError is an error wrapping multiple
+// validation errors returned by ScreenerReply_Volume_Stats.ValidateAll() if
+// the designated constraints aren't met.
+type ScreenerReply_Volume_StatsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ScreenerReply_Volume_StatsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ScreenerReply_Volume_StatsMultiError) AllErrors() []error { return m }
+
+// ScreenerReply_Volume_StatsValidationError is the validation error returned
+// by ScreenerReply_Volume_Stats.Validate if the designated constraints aren't met.
+type ScreenerReply_Volume_StatsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScreenerReply_Volume_StatsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScreenerReply_Volume_StatsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScreenerReply_Volume_StatsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScreenerReply_Volume_StatsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScreenerReply_Volume_StatsValidationError) ErrorName() string {
+	return "ScreenerReply_Volume_StatsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScreenerReply_Volume_StatsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScreenerReply_Volume_Stats.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScreenerReply_Volume_StatsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScreenerReply_Volume_StatsValidationError{}

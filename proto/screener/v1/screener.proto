@@ -88,21 +88,27 @@ enum Argument {
 	StrategyDecision = 14;
 	StrategyDecisionAgo = 15;
 	SharesFloatRatio = 16;
-	SharesVolume10dRatio = 17;
-	SharesVolume90dRatio = 18;
-	Volume = 19;
-	VolumeAvg10d = 20;
-	VolumeAvg90d = 21;
-	Isin = 22;
-	Adr = 23;
-	Id = 24;
-	Country = 25;
+	Volume = 17;
+	VolumeAvg10d = 18;
+	VolumeAvg30d = 19;
+	VolumeAvg90d = 20;
+	Isin = 21;
+	Adr = 22;
+	Id = 23;
+	Country = 24;
+	Time = 25;
 }
 
 message Filter {
 	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
 	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
 	repeated string values = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 1000];
+}
+
+message FilterSimple {
+	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
+	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
+	string value = 3;
 }
 
 message ScreenerRequest {
@@ -150,11 +156,13 @@ message ScreenerReply {
 	}
 
 	message Volume {
+		message Stats {
+			float avg = 1;
+			float variation = 2;
+		}
+
 		float last = 1;
-		float avg10d = 2;
-		float avg90d = 3;
-		float share10dRatio = 4;
-		float share90dRatio = 5;
+		map<int32, Stats> stats = 2;
 	}
 
 	message Dividends {

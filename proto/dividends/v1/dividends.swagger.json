@@ -135,37 +135,50 @@
         }
       }
     },
-    "quotesv1Argument": {
+    "screenerv1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
         "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
         "Time"
       ],
       "default": "Ticker"
     },
-    "quotesv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/quotesv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/quotesv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "quotesv1Operator": {
+    "screenerv1Operator": {
       "type": "string",
       "enum": [
         "Equal",
+        "NotEqual",
         "Greater",
         "GreaterEqual",
         "Less",
-        "LessEqual"
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
       ],
       "default": "Equal"
     },
@@ -243,8 +256,22 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/quotesv1Filter"
+            "$ref": "#/definitions/v1FilterSimple"
           }
+        }
+      }
+    },
+    "v1FilterSimple": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/screenerv1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/screenerv1Argument"
+        },
+        "value": {
+          "type": "string"
         }
       }
     }

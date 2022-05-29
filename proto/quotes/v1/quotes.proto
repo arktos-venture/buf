@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/quotes/v1;quotes_v1";
 option java_multiple_files = true;
@@ -77,34 +78,14 @@ enum Interval {
   y = 3;
 }
 
-enum Operator {
-	Equal = 0;
-	Greater = 1;
-	GreaterEqual = 2;
-	Less = 3;
-	LessEqual = 4;
-}
-
-enum Argument {
-	Ticker = 0;
-	Exchange = 1;
-  Time = 2;
-}
-
-message Filter {
-	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
-	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
-	string value = 3;
-}
-
 message QuotesRequest {
-  TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-  Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
-	repeated Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+  	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+  	Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
+	repeated screener.v1.FilterSimple filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message QuotesLastRequest {
-  TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+  	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	string exchange = 2;
 	string ticker = 3;
 }
