@@ -495,6 +495,119 @@ var _NotificationSearchRequest_Period_InLookup = map[string]struct{}{
 	"1m":   {},
 }
 
+// Validate checks the field values on NotificationDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NotificationDeleteRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationDeleteRequestMultiError, or nil if none found.
+func (m *NotificationDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NotificationDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := NotificationDeleteRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return NotificationDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// NotificationDeleteRequestMultiError is an error wrapping multiple validation
+// errors returned by NotificationDeleteRequest.ValidateAll() if the
+// designated constraints aren't met.
+type NotificationDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotificationDeleteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotificationDeleteRequestMultiError) AllErrors() []error { return m }
+
+// NotificationDeleteRequestValidationError is the validation error returned by
+// NotificationDeleteRequest.Validate if the designated constraints aren't met.
+type NotificationDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotificationDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotificationDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotificationDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotificationDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotificationDeleteRequestValidationError) ErrorName() string {
+	return "NotificationDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotificationDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotificationDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotificationDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotificationDeleteRequestValidationError{}
+
 // Validate checks the field values on NotificationReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -771,3 +884,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationRepliesValidationError{}
+
+// Validate checks the field values on NotificationDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationDeleteReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NotificationDeleteReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationDeleteReplyMultiError, or nil if none found.
+func (m *NotificationDeleteReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NotificationDeleteReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return NotificationDeleteReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// NotificationDeleteReplyMultiError is an error wrapping multiple validation
+// errors returned by NotificationDeleteReply.ValidateAll() if the designated
+// constraints aren't met.
+type NotificationDeleteReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotificationDeleteReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotificationDeleteReplyMultiError) AllErrors() []error { return m }
+
+// NotificationDeleteReplyValidationError is the validation error returned by
+// NotificationDeleteReply.Validate if the designated constraints aren't met.
+type NotificationDeleteReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotificationDeleteReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotificationDeleteReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotificationDeleteReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotificationDeleteReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotificationDeleteReplyValidationError) ErrorName() string {
+	return "NotificationDeleteReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotificationDeleteReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotificationDeleteReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotificationDeleteReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotificationDeleteReplyValidationError{}

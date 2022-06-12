@@ -26,8 +26,40 @@
     "application/json"
   ],
   "paths": {
+    "/v1/notifications": {
+      "delete": {
+        "summary": "Private API\nDelete Notifications by exchanges or tickers",
+        "operationId": "Notifications_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1NotificationDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
     "/v1/notifications/{account}": {
       "get": {
+        "summary": "Public API\nSearch Notifications",
         "operationId": "Notifications_Search",
         "responses": {
           "200": {
@@ -90,6 +122,7 @@
         ]
       },
       "post": {
+        "summary": "Private API\nCreate Notifications",
         "operationId": "Notifications_Create",
         "responses": {
           "200": {
@@ -196,6 +229,15 @@
       ],
       "default": "CRITICAL"
     },
+    "v1NotificationDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1NotificationReplies": {
       "type": "object",
       "properties": {
@@ -206,8 +248,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },

@@ -44,6 +44,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Notifications {
+	// Private API
+	// Create Notifications
 	rpc Create (NotificationCreateRequest) returns (NotificationReply)  {
 		option (google.api.http) = {
 		  	post: "/v1/notifications/{account}"
@@ -51,9 +53,19 @@ service Notifications {
 		};
 	}
 
+	// Public API
+	// Search Notifications
 	rpc Search (NotificationSearchRequest) returns (NotificationReplies)  {
 		option (google.api.http) = {
 		  	get: "/v1/notifications/{account}"
+		};
+	}
+
+	// Private API
+	// Delete Notifications by exchanges or tickers
+	rpc Delete (NotificationDeleteRequest) returns (NotificationDeleteReply)  {
+		option (google.api.http) = {
+		  	delete: "/v1/notifications"
 		};
 	}
 }
@@ -104,6 +116,10 @@ message NotificationSearchRequest {
 	Page page = 4 [(validate.rules).message.required = true];
 }
 
+message NotificationDeleteRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+}
+
 
 // 
 // Reply
@@ -119,5 +135,9 @@ message NotificationReply {
 
 message NotificationReplies {
 	repeated NotificationReply results = 1;
-	int32 total = 2;
+	int64 total = 2;
+}
+
+message NotificationDeleteReply {
+	int64 total = 1;
 }

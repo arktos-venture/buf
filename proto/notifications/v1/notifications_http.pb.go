@@ -19,16 +19,18 @@ const _ = http.SupportPackageIsVersion1
 
 type NotificationsHTTPServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
+	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDeleteReply, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 }
 
 func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notifications/{account}", _Notifications_Create3_HTTP_Handler(srv))
-	r.GET("/v1/notifications/{account}", _Notifications_Search7_HTTP_Handler(srv))
+	r.POST("/v1/notifications/{account}", _Notifications_Create4_HTTP_Handler(srv))
+	r.GET("/v1/notifications/{account}", _Notifications_Search8_HTTP_Handler(srv))
+	r.DELETE("/v1/notifications", _Notifications_Delete11_HTTP_Handler(srv))
 }
 
-func _Notifications_Create3_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+func _Notifications_Create4_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -50,7 +52,7 @@ func _Notifications_Create3_HTTP_Handler(srv NotificationsHTTPServer) func(ctx h
 	}
 }
 
-func _Notifications_Search7_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+func _Notifications_Search8_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -72,8 +74,28 @@ func _Notifications_Search7_HTTP_Handler(srv NotificationsHTTPServer) func(ctx h
 	}
 }
 
+func _Notifications_Delete11_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in NotificationDeleteRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/notifications.v1.Notifications/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*NotificationDeleteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*NotificationDeleteReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NotificationsHTTPClient interface {
 	Create(ctx context.Context, req *NotificationCreateRequest, opts ...http.CallOption) (rsp *NotificationReply, err error)
+	Delete(ctx context.Context, req *NotificationDeleteRequest, opts ...http.CallOption) (rsp *NotificationDeleteReply, err error)
 	Search(ctx context.Context, req *NotificationSearchRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
 }
 
@@ -92,6 +114,19 @@ func (c *NotificationsHTTPClientImpl) Create(ctx context.Context, in *Notificati
 	opts = append(opts, http.Operation("/notifications.v1.Notifications/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NotificationsHTTPClientImpl) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...http.CallOption) (*NotificationDeleteReply, error) {
+	var out NotificationDeleteReply
+	pattern := "/v1/notifications"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/notifications.v1.Notifications/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
