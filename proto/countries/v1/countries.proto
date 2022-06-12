@@ -13,43 +13,47 @@ option java_package = "dev.kratos.api.countries.v1";
 option java_outer_classname = "CountriesProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Countries APIs";
+    title: "Countries APIs";
 		description: "Countries APIs";
-        version: "1.0";
+    version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  	};
+  };
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  	security: {
+	  security: {
 			key: "bearer"
 			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  	type: TYPE_API_KEY
+		  	in: IN_HEADER
+		  	name: "Authorization"
+		  	description: "Authentication token, prefixed by Bearer: Bearer <token>"
 			}
-	  	}
+	  }
 	}
 	security: {
-	  	security_requirement: {
+	  security_requirement: {
 			key: "bearer"
-	  	}
+	  }
 	}
 };
 
 service Countries {
+  // Public API
+  // Get Country properties
   rpc Get (CountryRequest) returns (CountryReply)  {
     option (google.api.http) = {
       get: "/v1/country/{country}"
     };
   }
 
+  // Public API
+  // Search Country results
   rpc Search (CountrySearchRequest) returns (CountryReplies)  {
     option (google.api.http) = {
       post: "/v1/countries"
@@ -57,6 +61,8 @@ service Countries {
     };
   }
 
+  // Private API
+  // Get Indicator Country
   rpc Indicator (CountryIndicatorRequest) returns (CountryIndicatorReply)  {
     option (google.api.http) = {
       get: "/v1/country/{country}/{indicator}"
@@ -154,7 +160,7 @@ message CountryReply {
 
 message CountryReplies {
   repeated CountryReply results = 1;
-  int32 total = 2;
+  int64 total = 2;
 }
 
 message CountryIndicatorReply {
@@ -167,5 +173,5 @@ message CountryIndicatorReply {
 	Indicator indicator = 1;
 	string country = 2;
 	Result results = 3;
-	int32 total = 4;
+	int64 total = 4;
 }

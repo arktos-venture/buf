@@ -28,6 +28,7 @@
   "paths": {
     "/v1/countries": {
       "post": {
+        "summary": "Public API\nSearch Country results",
         "operationId": "Countries_Search",
         "responses": {
           "200": {
@@ -60,6 +61,7 @@
     },
     "/v1/country/{country}": {
       "get": {
+        "summary": "Public API\nGet Country properties",
         "operationId": "Countries_Get",
         "responses": {
           "200": {
@@ -90,6 +92,7 @@
     },
     "/v1/country/{country}/{indicator}": {
       "get": {
+        "summary": "Private API\nGet Indicator Country",
         "operationId": "Countries_Indicator",
         "responses": {
           "200": {
@@ -135,6 +138,32 @@
     }
   },
   "definitions": {
+    "CountryIndicatorReplyResult": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "forecast": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
     "CountryReplyCode": {
       "type": "object",
       "properties": {
@@ -302,37 +331,11 @@
           "type": "string"
         },
         "results": {
-          "$ref": "#/definitions/v1CountryIndicatorReplyResult"
+          "$ref": "#/definitions/CountryIndicatorReplyResult"
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1CountryIndicatorReplyResult": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "forecast": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -346,8 +349,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },

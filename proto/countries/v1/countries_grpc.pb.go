@@ -18,8 +18,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CountriesClient interface {
+	// Public API
+	// Get Country properties
 	Get(ctx context.Context, in *CountryRequest, opts ...grpc.CallOption) (*CountryReply, error)
+	// Public API
+	// Search Country results
 	Search(ctx context.Context, in *CountrySearchRequest, opts ...grpc.CallOption) (*CountryReplies, error)
+	// Private API
+	// Get Indicator Country
 	Indicator(ctx context.Context, in *CountryIndicatorRequest, opts ...grpc.CallOption) (*CountryIndicatorReply, error)
 }
 
@@ -62,8 +68,14 @@ func (c *countriesClient) Indicator(ctx context.Context, in *CountryIndicatorReq
 // All implementations must embed UnimplementedCountriesServer
 // for forward compatibility
 type CountriesServer interface {
+	// Public API
+	// Get Country properties
 	Get(context.Context, *CountryRequest) (*CountryReply, error)
+	// Public API
+	// Search Country results
 	Search(context.Context, *CountrySearchRequest) (*CountryReplies, error)
+	// Private API
+	// Get Indicator Country
 	Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error)
 	mustEmbedUnimplementedCountriesServer()
 }
