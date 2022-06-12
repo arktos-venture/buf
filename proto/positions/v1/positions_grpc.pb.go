@@ -18,8 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PositionsClient interface {
-	Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error)
-	Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error)
+	Search(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionReplies, error)
+	Delete(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionDeleteReply, error)
 }
 
 type positionsClient struct {
@@ -30,18 +30,18 @@ func NewPositionsClient(cc grpc.ClientConnInterface) PositionsClient {
 	return &positionsClient{cc}
 }
 
-func (c *positionsClient) Companies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCompanyReplies, error) {
-	out := new(PositionCompanyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Companies", in, out, opts...)
+func (c *positionsClient) Search(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionReplies, error) {
+	out := new(PositionReplies)
+	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *positionsClient) Currencies(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionCurrencyReplies, error) {
-	out := new(PositionCurrencyReplies)
-	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Currencies", in, out, opts...)
+func (c *positionsClient) Delete(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionDeleteReply, error) {
+	out := new(PositionDeleteReply)
+	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +52,8 @@ func (c *positionsClient) Currencies(ctx context.Context, in *PositionRequest, o
 // All implementations must embed UnimplementedPositionsServer
 // for forward compatibility
 type PositionsServer interface {
-	Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error)
-	Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error)
+	Search(context.Context, *PositionRequest) (*PositionReplies, error)
+	Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error)
 	mustEmbedUnimplementedPositionsServer()
 }
 
@@ -61,11 +61,11 @@ type PositionsServer interface {
 type UnimplementedPositionsServer struct {
 }
 
-func (UnimplementedPositionsServer) Companies(context.Context, *PositionRequest) (*PositionCompanyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Companies not implemented")
+func (UnimplementedPositionsServer) Search(context.Context, *PositionRequest) (*PositionReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedPositionsServer) Currencies(context.Context, *PositionRequest) (*PositionCurrencyReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Currencies not implemented")
+func (UnimplementedPositionsServer) Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedPositionsServer) mustEmbedUnimplementedPositionsServer() {}
 
@@ -80,38 +80,38 @@ func RegisterPositionsServer(s grpc.ServiceRegistrar, srv PositionsServer) {
 	s.RegisterService(&Positions_ServiceDesc, srv)
 }
 
-func _Positions_Companies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Positions_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionsServer).Companies(ctx, in)
+		return srv.(PositionsServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Positions/Companies",
+		FullMethod: "/positions.v1.Positions/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionsServer).Companies(ctx, req.(*PositionRequest))
+		return srv.(PositionsServer).Search(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Positions_Currencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Positions_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PositionsServer).Currencies(ctx, in)
+		return srv.(PositionsServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/positions.v1.Positions/Currencies",
+		FullMethod: "/positions.v1.Positions/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionsServer).Currencies(ctx, req.(*PositionRequest))
+		return srv.(PositionsServer).Delete(ctx, req.(*PositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,12 +124,12 @@ var Positions_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PositionsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Companies",
-			Handler:    _Positions_Companies_Handler,
+			MethodName: "Search",
+			Handler:    _Positions_Search_Handler,
 		},
 		{
-			MethodName: "Currencies",
-			Handler:    _Positions_Currencies_Handler,
+			MethodName: "Delete",
+			Handler:    _Positions_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -26,14 +26,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/positions/{account}/companies": {
-      "get": {
-        "operationId": "Positions_Companies",
+    "/v1/positions": {
+      "post": {
+        "operationId": "Positions_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1PositionCompanyReplies"
+              "$ref": "#/definitions/v1PositionReplies"
             }
           },
           "default": {
@@ -45,10 +45,12 @@
         },
         "parameters": [
           {
-            "name": "account",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/v1PositionRequest"
+            }
           }
         ],
         "tags": [
@@ -56,14 +58,14 @@
         ]
       }
     },
-    "/v1/positions/{account}/currencies": {
+    "/v1/positions/{account}": {
       "get": {
-        "operationId": "Positions_Currencies",
+        "operationId": "Positions_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1PositionCurrencyReplies"
+              "$ref": "#/definitions/v1PositionDeleteReply"
             }
           },
           "default": {
@@ -79,6 +81,17 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "positions",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Companies",
+              "Currencies"
+            ],
+            "default": "Companies"
           }
         ],
         "tags": [
@@ -88,7 +101,7 @@
     }
   },
   "definitions": {
-    "PositionCompanyReplyCost": {
+    "PositionReplyCost": {
       "type": "object",
       "properties": {
         "unit": {
@@ -101,7 +114,7 @@
         }
       }
     },
-    "PositionCompanyReplyPerformance": {
+    "PositionReplyPerformance": {
       "type": "object",
       "properties": {
         "percent": {
@@ -144,22 +157,31 @@
         }
       }
     },
-    "v1PositionCompanyReplies": {
+    "v1PositionDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PositionReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1PositionCompanyReply"
+            "$ref": "#/definitions/v1PositionReply"
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
-    "v1PositionCompanyReply": {
+    "v1PositionReply": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -173,10 +195,10 @@
           "format": "float"
         },
         "cost": {
-          "$ref": "#/definitions/PositionCompanyReplyCost"
+          "$ref": "#/definitions/PositionReplyCost"
         },
         "performance": {
-          "$ref": "#/definitions/PositionCompanyReplyPerformance"
+          "$ref": "#/definitions/PositionReplyPerformance"
         },
         "created_at": {
           "type": "string",
@@ -188,40 +210,24 @@
         }
       }
     },
-    "v1PositionCurrencyReplies": {
+    "v1PositionRequest": {
       "type": "object",
       "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1PositionCurrencyReply"
-          }
+        "positions": {
+          "$ref": "#/definitions/v1PositionTypes"
         },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1PositionCurrencyReply": {
-      "type": "object",
-      "properties": {
-        "currency": {
+        "account": {
           "type": "string"
-        },
-        "size": {
-          "type": "number",
-          "format": "float"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
         }
       }
+    },
+    "v1PositionTypes": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Currencies"
+      ],
+      "default": "Companies"
     }
   },
   "securityDefinitions": {
