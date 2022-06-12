@@ -26,46 +26,15 @@
     "application/json"
   ],
   "paths": {
-    "/v1/dividends": {
-      "post": {
-        "operationId": "Dividends_Search",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DividendsReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1DividendsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Dividends"
-        ]
-      }
-    },
-    "/v1/dividends/{exchange}/{ticker}": {
+    "/v1/dividend/{exchange}/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Last dividend result",
         "operationId": "Dividends_Last",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DividendsLastReply"
+              "$ref": "#/definitions/v1DividendLastReply"
             }
           },
           "default": {
@@ -87,6 +56,82 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Dividends"
+        ]
+      }
+    },
+    "/v1/dividends": {
+      "delete": {
+        "summary": "Private API\nDelete dividends by exchanges or tickers",
+        "operationId": "Dividends_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DividendDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Dividends"
+        ]
+      },
+      "post": {
+        "summary": "Public API\nSearch dividends by date",
+        "operationId": "Dividends_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DividendReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DividendRequest"
+            }
           }
         ],
         "tags": [
@@ -182,7 +227,16 @@
       ],
       "default": "Equal"
     },
-    "v1DividendsLastReply": {
+    "v1DividendDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1DividendLastReply": {
       "type": "object",
       "properties": {
         "values": {
@@ -207,7 +261,7 @@
         }
       }
     },
-    "v1DividendsReply": {
+    "v1DividendReply": {
       "type": "object",
       "properties": {
         "values": {
@@ -247,7 +301,7 @@
         }
       }
     },
-    "v1DividendsRequest": {
+    "v1DividendRequest": {
       "type": "object",
       "properties": {
         "interval": {

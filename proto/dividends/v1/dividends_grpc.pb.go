@@ -18,8 +18,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DividendsClient interface {
-	Last(ctx context.Context, in *DividendsLastRequest, opts ...grpc.CallOption) (*DividendsLastReply, error)
-	Search(ctx context.Context, in *DividendsRequest, opts ...grpc.CallOption) (*DividendsReply, error)
+	// Public API
+	// Get Last dividend result
+	Last(ctx context.Context, in *DividendLastRequest, opts ...grpc.CallOption) (*DividendLastReply, error)
+	// Public API
+	// Search dividends by date
+	Search(ctx context.Context, in *DividendRequest, opts ...grpc.CallOption) (*DividendReply, error)
+	// Private API
+	// Delete dividends by exchanges or tickers
+	Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDeleteReply, error)
 }
 
 type dividendsClient struct {
@@ -30,8 +37,8 @@ func NewDividendsClient(cc grpc.ClientConnInterface) DividendsClient {
 	return &dividendsClient{cc}
 }
 
-func (c *dividendsClient) Last(ctx context.Context, in *DividendsLastRequest, opts ...grpc.CallOption) (*DividendsLastReply, error) {
-	out := new(DividendsLastReply)
+func (c *dividendsClient) Last(ctx context.Context, in *DividendLastRequest, opts ...grpc.CallOption) (*DividendLastReply, error) {
+	out := new(DividendLastReply)
 	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Last", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,9 +46,18 @@ func (c *dividendsClient) Last(ctx context.Context, in *DividendsLastRequest, op
 	return out, nil
 }
 
-func (c *dividendsClient) Search(ctx context.Context, in *DividendsRequest, opts ...grpc.CallOption) (*DividendsReply, error) {
-	out := new(DividendsReply)
+func (c *dividendsClient) Search(ctx context.Context, in *DividendRequest, opts ...grpc.CallOption) (*DividendReply, error) {
+	out := new(DividendReply)
 	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Search", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dividendsClient) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDeleteReply, error) {
+	out := new(DividendDeleteReply)
+	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +68,15 @@ func (c *dividendsClient) Search(ctx context.Context, in *DividendsRequest, opts
 // All implementations must embed UnimplementedDividendsServer
 // for forward compatibility
 type DividendsServer interface {
-	Last(context.Context, *DividendsLastRequest) (*DividendsLastReply, error)
-	Search(context.Context, *DividendsRequest) (*DividendsReply, error)
+	// Public API
+	// Get Last dividend result
+	Last(context.Context, *DividendLastRequest) (*DividendLastReply, error)
+	// Public API
+	// Search dividends by date
+	Search(context.Context, *DividendRequest) (*DividendReply, error)
+	// Private API
+	// Delete dividends by exchanges or tickers
+	Delete(context.Context, *DividendDeleteRequest) (*DividendDeleteReply, error)
 	mustEmbedUnimplementedDividendsServer()
 }
 
@@ -61,11 +84,14 @@ type DividendsServer interface {
 type UnimplementedDividendsServer struct {
 }
 
-func (UnimplementedDividendsServer) Last(context.Context, *DividendsLastRequest) (*DividendsLastReply, error) {
+func (UnimplementedDividendsServer) Last(context.Context, *DividendLastRequest) (*DividendLastReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedDividendsServer) Search(context.Context, *DividendsRequest) (*DividendsReply, error) {
+func (UnimplementedDividendsServer) Search(context.Context, *DividendRequest) (*DividendReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedDividendsServer) Delete(context.Context, *DividendDeleteRequest) (*DividendDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedDividendsServer) mustEmbedUnimplementedDividendsServer() {}
 
@@ -81,7 +107,7 @@ func RegisterDividendsServer(s grpc.ServiceRegistrar, srv DividendsServer) {
 }
 
 func _Dividends_Last_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DividendsLastRequest)
+	in := new(DividendLastRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -93,13 +119,13 @@ func _Dividends_Last_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/dividends.v1.Dividends/Last",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DividendsServer).Last(ctx, req.(*DividendsLastRequest))
+		return srv.(DividendsServer).Last(ctx, req.(*DividendLastRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Dividends_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DividendsRequest)
+	in := new(DividendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,7 +137,25 @@ func _Dividends_Search_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/dividends.v1.Dividends/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DividendsServer).Search(ctx, req.(*DividendsRequest))
+		return srv.(DividendsServer).Search(ctx, req.(*DividendRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dividends_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DividendDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DividendsServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dividends.v1.Dividends/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DividendsServer).Delete(ctx, req.(*DividendDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -130,6 +174,10 @@ var Dividends_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Dividends_Search_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Dividends_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
