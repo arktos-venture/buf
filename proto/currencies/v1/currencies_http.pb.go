@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type CurrenciesHTTPServer interface {
+	Delete(context.Context, *CurrencyDeleteRequest) (*CurrencyDeleteReply, error)
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
 	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
 }
@@ -27,6 +28,7 @@ func RegisterCurrenciesHTTPServer(s *http.Server, srv CurrenciesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/currency/{ticker}", _Currencies_Get2_HTTP_Handler(srv))
 	r.GET("/v1/currencies", _Currencies_List1_HTTP_Handler(srv))
+	r.DELETE("/v1/currencies", _Currencies_Delete3_HTTP_Handler(srv))
 }
 
 func _Currencies_Get2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
@@ -70,7 +72,27 @@ func _Currencies_List1_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _Currencies_Delete3_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CurrencyDeleteRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/currencies.v1.Currencies/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*CurrencyDeleteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CurrencyDeleteReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type CurrenciesHTTPClient interface {
+	Delete(ctx context.Context, req *CurrencyDeleteRequest, opts ...http.CallOption) (rsp *CurrencyDeleteReply, err error)
 	Get(ctx context.Context, req *CurrencyRequest, opts ...http.CallOption) (rsp *CurrencyReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *CurrencyReplies, err error)
 }
@@ -81,6 +103,19 @@ type CurrenciesHTTPClientImpl struct {
 
 func NewCurrenciesHTTPClient(client *http.Client) CurrenciesHTTPClient {
 	return &CurrenciesHTTPClientImpl{client}
+}
+
+func (c *CurrenciesHTTPClientImpl) Delete(ctx context.Context, in *CurrencyDeleteRequest, opts ...http.CallOption) (*CurrencyDeleteReply, error) {
+	var out CurrencyDeleteReply
+	pattern := "/v1/currencies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/currencies.v1.Currencies/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *CurrenciesHTTPClientImpl) Get(ctx context.Context, in *CurrencyRequest, opts ...http.CallOption) (*CurrencyReply, error) {

@@ -28,6 +28,7 @@
   "paths": {
     "/v1/currencies": {
       "get": {
+        "summary": "Public API\nList Currencies available",
         "operationId": "Currencies_List",
         "responses": {
           "200": {
@@ -46,10 +47,44 @@
         "tags": [
           "Currencies"
         ]
+      },
+      "delete": {
+        "summary": "Private API\nDelete Currency \u0026 deps",
+        "operationId": "Currencies_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CurrencyDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Currencies"
+        ]
       }
     },
     "/v1/currency/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Currency properties",
         "operationId": "Currencies_Get",
         "responses": {
           "200": {
@@ -110,6 +145,15 @@
         }
       }
     },
+    "v1CurrencyDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1CurrencyReplies": {
       "type": "object",
       "properties": {
@@ -120,8 +164,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
