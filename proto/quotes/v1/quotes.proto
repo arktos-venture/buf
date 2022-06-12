@@ -14,20 +14,20 @@ option java_package = "dev.kratos.api.quotes.v1";
 option java_outer_classname = "APIQuotesProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-    title: "Quotes APIs";
-    description: "Quotes APIs";
-    version: "1.0";
-    contact: {
-      name: "Arktos Venture project";
-      url: "https://github.com/arktos-venture/buf";
-      email: "oss@arktos-consulting.cloud";
-    };
-  };
+		title: "Quotes APIs";
+		description: "Quotes APIs";
+		version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  security: {
+	  	security: {
 			key: "bearer"
 			value: {
 		  		type: TYPE_API_KEY
@@ -35,28 +35,40 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 		  		name: "Authorization"
 		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
 			}
-	  }
+	  	}
 	}
 	security: {
-	  security_requirement: {
+	  	security_requirement: {
 			key: "bearer"
-	  }
+	  	}
 	}
 };
 
 service Quotes {
-  rpc Last (QuotesLastRequest) returns (QuotesLastReply)  {
-    option (google.api.http) = {
-      get: "/v1/quotes/{exchange}/{ticker}"
-    };
-  }
+	// Public API
+	// Get Last Quotes for one ticker
+	rpc Last (QuoteLastRequest) returns (QuoteLastReply)  {
+		option (google.api.http) = {
+			get: "/v1/quotes/{exchange}/{ticker}"
+		};
+	}
 
-  rpc Search (QuotesRequest) returns (QuotesReply)  {
-    option (google.api.http) = {
-      post: "/v1/quotes"
-      body: "*"
-    };
-  }
+	// Public API
+	// Search Quotes by dates
+	rpc Search (QuoteRequest) returns (QuoteReply)  {
+		option (google.api.http) = {
+			post: "/v1/quotes"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete Quotes
+	rpc Delete (QuoteDeleteRequest) returns (QuoteDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/quotes"
+		};
+	}
 }
 
 // 
@@ -64,30 +76,36 @@ service Quotes {
 // 
 
 enum TSDB {
-  Companies = 0;
-  Forexes = 1;
-  Indices = 2;
-  Indexes = 3;
-  Accounts = 4;
+	Companies = 0;
+	Forexes = 1;
+	Indices = 2;
+	Indexes = 3;
+	Accounts = 4;
 }
 
 enum Interval {
-  d = 0;
-  w = 1;
-  m = 2;
-  y = 3;
+	d = 0;
+	w = 1;
+	m = 2;
+	y = 3;
 }
 
-message QuotesRequest {
+message QuoteRequest {
   	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
   	Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
 	repeated screener.v1.FilterSimple filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
-message QuotesLastRequest {
+message QuoteLastRequest {
   	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	string exchange = 2;
 	string ticker = 3;
+}
+
+message QuoteDeleteRequest {
+	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+	repeated string exchanges = 2;
+	repeated string tickers = 3;
 }
 
 
@@ -95,7 +113,7 @@ message QuotesLastRequest {
 // Reply
 // 
 
-message QuotesReply {
+message QuoteReply {
 	repeated float open = 1;
 	repeated float close = 2;
 	repeated float low = 3;
@@ -104,11 +122,15 @@ message QuotesReply {
 	repeated google.protobuf.Timestamp created_at = 7;
 }
 
-message QuotesLastReply {
+message QuoteLastReply {
 	float open = 1;
 	float close = 2;
 	float low = 3;
 	float high = 4;
 	float volume = 5;
 	google.protobuf.Timestamp created_at = 7;
+}
+
+message QuoteDeleteReply {
+	int64 total = 1;
 }

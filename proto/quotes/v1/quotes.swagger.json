@@ -27,13 +27,71 @@
   ],
   "paths": {
     "/v1/quotes": {
+      "delete": {
+        "summary": "Private API\nDelete Quotes",
+        "operationId": "Quotes_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuoteDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tsdb",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Companies",
+              "Forexes",
+              "Indices",
+              "Indexes",
+              "Accounts"
+            ],
+            "default": "Companies"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Quotes"
+        ]
+      },
       "post": {
+        "summary": "Public API\nSearch Quotes by dates",
         "operationId": "Quotes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1QuotesReply"
+              "$ref": "#/definitions/v1QuoteReply"
             }
           },
           "default": {
@@ -49,7 +107,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1QuotesRequest"
+              "$ref": "#/definitions/v1QuoteRequest"
             }
           }
         ],
@@ -60,12 +118,13 @@
     },
     "/v1/quotes/{exchange}/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Last Quotes for one ticker",
         "operationId": "Quotes_Last",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1QuotesLastReply"
+              "$ref": "#/definitions/v1QuoteLastReply"
             }
           },
           "default": {
@@ -211,7 +270,16 @@
         }
       }
     },
-    "v1QuotesLastReply": {
+    "v1QuoteDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1QuoteLastReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -240,7 +308,7 @@
         }
       }
     },
-    "v1QuotesReply": {
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -287,7 +355,7 @@
         }
       }
     },
-    "v1QuotesRequest": {
+    "v1QuoteRequest": {
       "type": "object",
       "properties": {
         "tsdb": {
