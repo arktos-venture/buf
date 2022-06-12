@@ -18,7 +18,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PositionsClient interface {
+	// Public API
+	// Search Positions opened
 	Search(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionReplies, error)
+	// Private API
+	// Delete Positions open or closed
 	Delete(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionDeleteReply, error)
 }
 
@@ -52,7 +56,11 @@ func (c *positionsClient) Delete(ctx context.Context, in *PositionRequest, opts 
 // All implementations must embed UnimplementedPositionsServer
 // for forward compatibility
 type PositionsServer interface {
+	// Public API
+	// Search Positions opened
 	Search(context.Context, *PositionRequest) (*PositionReplies, error)
+	// Private API
+	// Delete Positions open or closed
 	Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error)
 	mustEmbedUnimplementedPositionsServer()
 }

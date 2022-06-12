@@ -44,6 +44,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Positions {
+	// Public API
+	// Search Positions opened
   rpc Search (PositionRequest) returns (PositionReplies)  {
     option (google.api.http) = {
       post: "/v1/positions"
@@ -51,6 +53,8 @@ service Positions {
     };
   }
 
+	// Private API
+	// Delete Positions open or closed
   rpc Delete (PositionRequest) returns (PositionDeleteReply)  {
     option (google.api.http) = {
       get: "/v1/positions/{account}"

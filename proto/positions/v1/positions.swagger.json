@@ -28,6 +28,7 @@
   "paths": {
     "/v1/positions": {
       "post": {
+        "summary": "Public API\nSearch Positions opened",
         "operationId": "Positions_Search",
         "responses": {
           "200": {
@@ -60,6 +61,7 @@
     },
     "/v1/positions/{account}": {
       "get": {
+        "summary": "Private API\nDelete Positions open or closed",
         "operationId": "Positions_Delete",
         "responses": {
           "200": {
