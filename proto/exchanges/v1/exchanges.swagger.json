@@ -28,6 +28,7 @@
   "paths": {
     "/v1/exchange/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Exchange properties",
         "operationId": "Exchanges_Get",
         "responses": {
           "200": {
@@ -70,6 +71,7 @@
     },
     "/v1/exchange/{ticker}/isopen": {
       "get": {
+        "summary": "Public API\nGet Exchange if is Open",
         "operationId": "Exchanges_IsOpen",
         "responses": {
           "200": {
@@ -100,6 +102,7 @@
     },
     "/v1/exchanges": {
       "get": {
+        "summary": "Public API\nList Exchange available",
         "operationId": "Exchanges_List",
         "responses": {
           "200": {
@@ -129,6 +132,39 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
+      },
+      "delete": {
+        "summary": "Private API\nDelete Exchange",
+        "operationId": "Exchanges_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -185,6 +221,15 @@
         }
       }
     },
+    "v1ExchangeDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1ExchangeIsOpenReply": {
       "type": "object",
       "properties": {
@@ -228,8 +273,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -248,7 +293,7 @@
         "indices": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndicesShortReply"
+            "$ref": "#/definitions/v1IndiceShortReply"
           }
         },
         "routing": {
@@ -341,7 +386,7 @@
         }
       }
     },
-    "v1IndicesShortReply": {
+    "v1IndiceShortReply": {
       "type": "object",
       "properties": {
         "ticker": {
