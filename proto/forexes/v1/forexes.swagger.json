@@ -26,8 +26,71 @@
     "application/json"
   ],
   "paths": {
+    "/v1/forexes": {
+      "delete": {
+        "summary": "Private API\nDelete Forexes",
+        "operationId": "Forexes_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForexDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      },
+      "post": {
+        "summary": "Private API\nCreate new Forexes",
+        "operationId": "Forexes_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForexReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ForexCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      }
+    },
     "/v1/forexes/{currency}/pairs": {
       "get": {
+        "summary": "Public API\nList Forexes available",
         "operationId": "Forexes_List",
         "responses": {
           "200": {
@@ -58,6 +121,7 @@
     },
     "/v1/forexes/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Forexes properties",
         "operationId": "Forexes_Get",
         "responses": {
           "200": {
@@ -132,6 +196,26 @@
         }
       }
     },
+    "v1ForexCreateRequest": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ForexDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1ForexListReply": {
       "type": "object",
       "properties": {
@@ -153,7 +237,7 @@
           "type": "string"
         },
         "quote": {
-          "$ref": "#/definitions/v1QuotesLastReply"
+          "$ref": "#/definitions/v1QuoteLastReply"
         },
         "from": {
           "$ref": "#/definitions/ForexReplyCurrency"
@@ -163,7 +247,7 @@
         }
       }
     },
-    "v1QuotesLastReply": {
+    "v1QuoteLastReply": {
       "type": "object",
       "properties": {
         "open": {

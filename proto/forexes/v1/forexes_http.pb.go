@@ -18,6 +18,8 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type ForexesHTTPServer interface {
+	Create(context.Context, *ForexCreateRequest) (*ForexReply, error)
+	Delete(context.Context, *ForexRequest) (*ForexDeleteReply, error)
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
 	List(context.Context, *ForexListRequest) (*ForexListReply, error)
 }
@@ -26,6 +28,8 @@ func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/forexes/{ticker}", _Forexes_Get5_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List5_HTTP_Handler(srv))
+	r.POST("/v1/forexes", _Forexes_Create2_HTTP_Handler(srv))
+	r.DELETE("/v1/forexes", _Forexes_Delete6_HTTP_Handler(srv))
 }
 
 func _Forexes_Get5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
@@ -72,7 +76,47 @@ func _Forexes_List5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
+func _Forexes_Create2_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ForexCreateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/forexes.v1.Forexes/Create")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Create(ctx, req.(*ForexCreateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ForexReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Forexes_Delete6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ForexRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/forexes.v1.Forexes/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*ForexRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ForexDeleteReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ForexesHTTPClient interface {
+	Create(ctx context.Context, req *ForexCreateRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
+	Delete(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexDeleteReply, err error)
 	Get(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
 	List(ctx context.Context, req *ForexListRequest, opts ...http.CallOption) (rsp *ForexListReply, err error)
 }
@@ -83,6 +127,32 @@ type ForexesHTTPClientImpl struct {
 
 func NewForexesHTTPClient(client *http.Client) ForexesHTTPClient {
 	return &ForexesHTTPClientImpl{client}
+}
+
+func (c *ForexesHTTPClientImpl) Create(ctx context.Context, in *ForexCreateRequest, opts ...http.CallOption) (*ForexReply, error) {
+	var out ForexReply
+	pattern := "/v1/forexes"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/forexes.v1.Forexes/Create"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ForexesHTTPClientImpl) Delete(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*ForexDeleteReply, error) {
+	var out ForexDeleteReply
+	pattern := "/v1/forexes"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/forexes.v1.Forexes/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *ForexesHTTPClientImpl) Get(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*ForexReply, error) {

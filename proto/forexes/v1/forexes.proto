@@ -44,15 +44,36 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Forexes {
+	// Public API
+	// Get Forexes properties
 	rpc Get (ForexRequest) returns (ForexReply)  {
 		option (google.api.http) = {
 			get: "/v1/forexes/{ticker}"
 		};
 	}
 
+	// Public API
+	// List Forexes available
 	rpc List (ForexListRequest) returns (ForexListReply)  {
 		option (google.api.http) = {
 			get: "/v1/forexes/{currency}/pairs"
+		};
+	}
+
+	// Private API
+	// Create new Forexes
+	rpc Create (ForexCreateRequest) returns (ForexReply)  {
+		option (google.api.http) = {
+			post: "/v1/forexes"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete Forexes
+	rpc Delete (ForexRequest) returns (ForexDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/forexes"
 		};
 	}
 }
@@ -70,6 +91,15 @@ message ForexListRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
 }
 
+message ForexCreateRequest {
+	string from = 1 [(validate.rules).string.len = 3];
+	string to = 2 [(validate.rules).string.len = 3];
+}
+
+message ForexDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
+}
+
 
 // 
 // Reply
@@ -82,7 +112,7 @@ message ForexReply {
 	}
 
 	string ticker = 1;
-	quotes.v1.QuotesLastReply quote = 2;
+	quotes.v1.QuoteLastReply quote = 2;
 	Currency from = 3;
 	Currency to = 4;
 	
@@ -91,4 +121,8 @@ message ForexReply {
 message ForexListReply {
 	string currency = 1;
 	repeated string forexes = 2;
+}
+
+message ForexDeleteReply {
+	int64 total = 1;
 }
