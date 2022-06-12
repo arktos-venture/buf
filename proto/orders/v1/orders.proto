@@ -14,37 +14,39 @@ option java_package = "dev.kratos.api.orders.v1";
 option java_outer_classname = "APIOrdersProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Orders APIs";
+    title: "Orders APIs";
 		description: "Orders APIs accounts";
-        version: "1.0";
+    version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  	};
+  };
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  	security: {
-			key: "bearer"
-			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
-			}
-	  	}
-	}
+	  security: {
+		  key: "bearer"
+		  value: {
+		    type: TYPE_API_KEY
+		    in: IN_HEADER
+		    name: "Authorization"
+		    description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  }
+	  }
+  }
 	security: {
-	  	security_requirement: {
+	  security_requirement: {
 			key: "bearer"
-	  	}
+	  }
 	}
 };
 
 service Orders {
+	// Public API
+	// Search Orders open or executed
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
       post: "/v1/orders/{account}/search"
@@ -52,6 +54,8 @@ service Orders {
     };
   }
 
+	// Public API
+	// Create Orders
   rpc Create (OrderCreateRequest) returns (OrderReply)  {
     option (google.api.http) = {
       post: "/v1/order/{account}"
@@ -59,6 +63,8 @@ service Orders {
     };
   }
 
+	// Public API
+	// Update existing Orders
   rpc Update (OrderUpdateRequest) returns (OrderReply)  {
     option (google.api.http) = {
       put: "/v1/order/{account}/{orderId}"
@@ -66,9 +72,11 @@ service Orders {
     };
   }
 
+	// Private API
+	// Delete/cancel existing Orders
   rpc Delete (OrderDeleteRequest) returns (OrderDelete)  {
     option (google.api.http) = {
-      delete: "/v1/order/{account}/{orderId}"
+      delete: "/v1/orders/{account}"
     };
   }
 }
@@ -166,7 +174,6 @@ message OrderUpdateRequest {
 
 message OrderDeleteRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
 }
 
 
@@ -201,9 +208,9 @@ message OrderReply {
 
 message OrderReplies {
   repeated OrderReply results = 1;
-  int32 total = 2;
+  int64 total = 2;
 }
 
 message OrderDelete {
-  bool deleted = 1;
+  int64 total = 1;
 }

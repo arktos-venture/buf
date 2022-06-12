@@ -29,7 +29,7 @@ func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r.POST("/v1/orders/{account}/search", _Orders_Search1_HTTP_Handler(srv))
 	r.POST("/v1/order/{account}", _Orders_Create0_HTTP_Handler(srv))
 	r.PUT("/v1/order/{account}/{orderId}", _Orders_Update0_HTTP_Handler(srv))
-	r.DELETE("/v1/order/{account}/{orderId}", _Orders_Delete0_HTTP_Handler(srv))
+	r.DELETE("/v1/orders/{account}", _Orders_Delete0_HTTP_Handler(srv))
 }
 
 func _Orders_Search1_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
@@ -150,7 +150,7 @@ func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateReques
 
 func (c *OrdersHTTPClientImpl) Delete(ctx context.Context, in *OrderDeleteRequest, opts ...http.CallOption) (*OrderDelete, error) {
 	var out OrderDelete
-	pattern := "/v1/order/{account}/{orderId}"
+	pattern := "/v1/orders/{account}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))

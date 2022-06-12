@@ -28,6 +28,7 @@
   "paths": {
     "/v1/order/{account}": {
       "post": {
+        "summary": "Public API\nCreate Orders",
         "operationId": "Orders_Create",
         "responses": {
           "200": {
@@ -93,42 +94,8 @@
       }
     },
     "/v1/order/{account}/{orderId}": {
-      "delete": {
-        "operationId": "Orders_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1OrderDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "Orders"
-        ]
-      },
       "put": {
+        "summary": "Public API\nUpdate existing Orders",
         "operationId": "Orders_Update",
         "responses": {
           "200": {
@@ -191,8 +158,40 @@
         ]
       }
     },
+    "/v1/orders/{account}": {
+      "delete": {
+        "summary": "Private API\nDelete/cancel existing Orders",
+        "operationId": "Orders_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OrderDelete"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
     "/v1/orders/{account}/search": {
       "post": {
+        "summary": "Public API\nSearch Orders open or executed",
         "operationId": "Orders_Search",
         "responses": {
           "200": {
@@ -394,8 +393,9 @@
     "v1OrderDelete": {
       "type": "object",
       "properties": {
-        "deleted": {
-          "type": "boolean"
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -409,8 +409,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
