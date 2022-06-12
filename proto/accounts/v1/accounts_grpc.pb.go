@@ -18,9 +18,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountsClient interface {
+	// Public API
+	// Get Account properties
 	Get(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	// Public API
+	// Create a new Account
 	Create(ctx context.Context, in *AccountModifyRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	// Public API
+	// Update properties of Account
 	Update(ctx context.Context, in *AccountModifyRequest, opts ...grpc.CallOption) (*AccountReply, error)
+	// Public API
+	// Delete existing Account
 	Delete(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountDeleteReply, error)
 }
 
@@ -72,9 +80,17 @@ func (c *accountsClient) Delete(ctx context.Context, in *AccountRequest, opts ..
 // All implementations must embed UnimplementedAccountsServer
 // for forward compatibility
 type AccountsServer interface {
+	// Public API
+	// Get Account properties
 	Get(context.Context, *AccountRequest) (*AccountReply, error)
+	// Public API
+	// Create a new Account
 	Create(context.Context, *AccountModifyRequest) (*AccountReply, error)
+	// Public API
+	// Update properties of Account
 	Update(context.Context, *AccountModifyRequest) (*AccountReply, error)
+	// Public API
+	// Delete existing Account
 	Delete(context.Context, *AccountRequest) (*AccountDeleteReply, error)
 	mustEmbedUnimplementedAccountsServer()
 }

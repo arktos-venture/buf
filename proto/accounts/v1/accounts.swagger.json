@@ -28,6 +28,7 @@
   "paths": {
     "/v1/account/{account}": {
       "get": {
+        "summary": "Public API\nGet Account properties",
         "operationId": "Accounts_Get",
         "responses": {
           "200": {
@@ -56,6 +57,7 @@
         ]
       },
       "delete": {
+        "summary": "Public API\nDelete existing Account",
         "operationId": "Accounts_Delete",
         "responses": {
           "200": {
@@ -84,6 +86,7 @@
         ]
       },
       "put": {
+        "summary": "Public API\nUpdate properties of Account",
         "operationId": "Accounts_Update",
         "responses": {
           "200": {
@@ -130,6 +133,7 @@
     },
     "/v1/accounts": {
       "post": {
+        "summary": "Public API\nCreate a new Account",
         "operationId": "Accounts_Create",
         "responses": {
           "200": {

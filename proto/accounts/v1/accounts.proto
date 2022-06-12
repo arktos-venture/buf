@@ -45,12 +45,16 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Accounts {
+	// Public API
+	// Get Account properties
 	rpc Get (AccountRequest) returns (AccountReply)  {
 		option (google.api.http) = {
 			get: "/v1/account/{account}"
 		};
 	}
 
+	// Public API
+	// Create a new Account
 	rpc Create (AccountModifyRequest) returns (AccountReply)  {
 		option (google.api.http) = {
 			post: "/v1/accounts"
@@ -58,6 +62,8 @@ service Accounts {
 		};
 	}
 
+	// Public API
+	// Update properties of Account
 	rpc Update (AccountModifyRequest) returns (AccountReply)  {
 		option (google.api.http) = {
 			put: "/v1/account/{account}"
@@ -65,6 +71,8 @@ service Accounts {
 		};
 	}
 
+	// Public API
+	// Delete existing Account
 	rpc Delete (AccountRequest) returns (AccountDeleteReply)  {
 		option (google.api.http) = {
 			delete: "/v1/account/{account}"
