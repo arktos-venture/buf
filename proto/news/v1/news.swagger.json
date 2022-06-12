@@ -27,7 +27,51 @@
   ],
   "paths": {
     "/v1/news": {
+      "delete": {
+        "summary": "Private API",
+        "operationId": "News_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1NewsDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "News"
+        ]
+      },
       "post": {
+        "summary": "Public API",
         "operationId": "News_Search",
         "responses": {
           "200": {
@@ -90,6 +134,15 @@
         }
       }
     },
+    "v1NewsDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1NewsReplies": {
       "type": "object",
       "properties": {
@@ -100,8 +153,8 @@
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },

@@ -18,12 +18,14 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type NewsHTTPServer interface {
+	Delete(context.Context, *NewsDeleteRequest) (*NewsDeleteReply, error)
 	Search(context.Context, *NewsRequest) (*NewsReplies, error)
 }
 
 func RegisterNewsHTTPServer(s *http.Server, srv NewsHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/news", _News_Search4_HTTP_Handler(srv))
+	r.DELETE("/v1/news", _News_Delete7_HTTP_Handler(srv))
 }
 
 func _News_Search4_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
@@ -45,7 +47,27 @@ func _News_Search4_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error
 	}
 }
 
+func _News_Delete7_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in NewsDeleteRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/news.v1.News/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*NewsDeleteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*NewsDeleteReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NewsHTTPClient interface {
+	Delete(ctx context.Context, req *NewsDeleteRequest, opts ...http.CallOption) (rsp *NewsDeleteReply, err error)
 	Search(ctx context.Context, req *NewsRequest, opts ...http.CallOption) (rsp *NewsReplies, err error)
 }
 
@@ -55,6 +77,19 @@ type NewsHTTPClientImpl struct {
 
 func NewNewsHTTPClient(client *http.Client) NewsHTTPClient {
 	return &NewsHTTPClientImpl{client}
+}
+
+func (c *NewsHTTPClientImpl) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...http.CallOption) (*NewsDeleteReply, error) {
+	var out NewsDeleteReply
+	pattern := "/v1/news"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/news.v1.News/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *NewsHTTPClientImpl) Search(ctx context.Context, in *NewsRequest, opts ...http.CallOption) (*NewsReplies, error) {
