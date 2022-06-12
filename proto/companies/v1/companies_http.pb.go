@@ -18,19 +18,21 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type CompaniesHTTPServer interface {
+	Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error)
+	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error)
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
-	Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error)
-	Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error)
+	Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error)
 }
 
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get7_HTTP_Handler(srv))
-	r.GET("/v1/company/{exchange}/{ticker}/stats", _Companies_Stats0_HTTP_Handler(srv))
-	r.GET("/v1/company/{exchange}/{ticker}/similars", _Companies_Similars0_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get8_HTTP_Handler(srv))
+	r.POST("/v1/companies", _Companies_Create4_HTTP_Handler(srv))
+	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update3_HTTP_Handler(srv))
+	r.DELETE("/v1/companies", _Companies_Delete12_HTTP_Handler(srv))
 }
 
-func _Companies_Get7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Get8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -52,54 +54,71 @@ func _Companies_Get7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Companies_Stats0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Create4_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CompanyRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		var in CompanyCreateRequest
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/companies.v1.Companies/Stats")
+		http.SetOperation(ctx, "/companies.v1.Companies/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Stats(ctx, req.(*CompanyRequest))
+			return srv.Create(ctx, req.(*CompanyCreateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*CompanyStatsReply)
+		reply := out.(*CompanyReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Companies_Similars0_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Update3_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CompanyRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		var in CompanyUpdateRequest
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/companies.v1.Companies/Similars")
+		http.SetOperation(ctx, "/companies.v1.Companies/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Similars(ctx, req.(*CompanyRequest))
+			return srv.Update(ctx, req.(*CompanyUpdateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*CompanySimilarsReply)
+		reply := out.(*CompanyReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Companies_Delete12_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CompanyDeleteRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/companies.v1.Companies/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*CompanyDeleteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CompanyDeleteReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type CompaniesHTTPClient interface {
+	Create(ctx context.Context, req *CompanyCreateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
+	Delete(ctx context.Context, req *CompanyDeleteRequest, opts ...http.CallOption) (rsp *CompanyDeleteReply, err error)
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
-	Similars(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanySimilarsReply, err error)
-	Stats(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyStatsReply, err error)
+	Update(ctx context.Context, req *CompanyUpdateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 }
 
 type CompaniesHTTPClientImpl struct {
@@ -108,6 +127,32 @@ type CompaniesHTTPClientImpl struct {
 
 func NewCompaniesHTTPClient(client *http.Client) CompaniesHTTPClient {
 	return &CompaniesHTTPClientImpl{client}
+}
+
+func (c *CompaniesHTTPClientImpl) Create(ctx context.Context, in *CompanyCreateRequest, opts ...http.CallOption) (*CompanyReply, error) {
+	var out CompanyReply
+	pattern := "/v1/companies"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/companies.v1.Companies/Create"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *CompaniesHTTPClientImpl) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...http.CallOption) (*CompanyDeleteReply, error) {
+	var out CompanyDeleteReply
+	pattern := "/v1/companies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/companies.v1.Companies/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *CompaniesHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyReply, error) {
@@ -123,26 +168,13 @@ func (c *CompaniesHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, o
 	return &out, err
 }
 
-func (c *CompaniesHTTPClientImpl) Similars(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanySimilarsReply, error) {
-	var out CompanySimilarsReply
-	pattern := "/v1/company/{exchange}/{ticker}/similars"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/companies.v1.Companies/Similars"))
+func (c *CompaniesHTTPClientImpl) Update(ctx context.Context, in *CompanyUpdateRequest, opts ...http.CallOption) (*CompanyReply, error) {
+	var out CompanyReply
+	pattern := "/v1/company/{exchange}/{ticker}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/companies.v1.Companies/Update"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *CompaniesHTTPClientImpl) Stats(ctx context.Context, in *CompanyRequest, opts ...http.CallOption) (*CompanyStatsReply, error) {
-	var out CompanyStatsReply
-	pattern := "/v1/company/{exchange}/{ticker}/stats"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/companies.v1.Companies/Stats"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
