@@ -188,5 +188,5 @@ message ScreenerReply {
 
 message ScreenerReplies {
 	repeated ScreenerReply results = 1;
-	int32 total = 2;
+	int64 total = 2;
 }
