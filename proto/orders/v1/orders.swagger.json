@@ -64,9 +64,6 @@
                 "exchange": {
                   "type": "string"
                 },
-                "currency": {
-                  "type": "string"
-                },
                 "action": {
                   "$ref": "#/definitions/v1Action"
                 },
@@ -91,9 +88,7 @@
         "tags": [
           "Orders"
         ]
-      }
-    },
-    "/v1/order/{account}/{orderId}": {
+      },
       "put": {
         "summary": "Public API\nUpdate existing Orders",
         "operationId": "Orders_Update",
@@ -119,19 +114,18 @@
             "type": "string"
           },
           {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
+                "ticker": {
+                  "type": "string"
+                },
+                "exchange": {
+                  "type": "string"
+                },
                 "action": {
                   "$ref": "#/definitions/v1Action"
                 },
@@ -182,6 +176,26 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -423,9 +437,6 @@
         "exchange": {
           "type": "string"
         },
-        "currency": {
-          "type": "string"
-        },
         "action": {
           "$ref": "#/definitions/v1Action"
         },
@@ -448,6 +459,10 @@
           "$ref": "#/definitions/ordersv1Status"
         },
         "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
           "type": "string",
           "format": "date-time"
         }

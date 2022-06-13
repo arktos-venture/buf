@@ -18,17 +18,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type OrdersHTTPServer interface {
-	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
+	Create(context.Context, *OrderModifyRequest) (*OrderReply, error)
 	Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error)
 	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
-	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
+	Update(context.Context, *OrderModifyRequest) (*OrderReply, error)
 }
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/orders/{account}/search", _Orders_Search4_HTTP_Handler(srv))
 	r.POST("/v1/order/{account}", _Orders_Create3_HTTP_Handler(srv))
-	r.PUT("/v1/order/{account}/{orderId}", _Orders_Update2_HTTP_Handler(srv))
+	r.PUT("/v1/order/{account}", _Orders_Update2_HTTP_Handler(srv))
 	r.DELETE("/v1/orders/{account}", _Orders_Delete7_HTTP_Handler(srv))
 }
 
@@ -56,7 +56,7 @@ func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 
 func _Orders_Create3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in OrderCreateRequest
+		var in OrderModifyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -65,7 +65,7 @@ func _Orders_Create3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 		}
 		http.SetOperation(ctx, "/orders.v1.Orders/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Create(ctx, req.(*OrderCreateRequest))
+			return srv.Create(ctx, req.(*OrderModifyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -78,7 +78,7 @@ func _Orders_Create3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 
 func _Orders_Update2_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in OrderUpdateRequest
+		var in OrderModifyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -87,7 +87,7 @@ func _Orders_Update2_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 		}
 		http.SetOperation(ctx, "/orders.v1.Orders/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*OrderUpdateRequest))
+			return srv.Update(ctx, req.(*OrderModifyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -121,10 +121,10 @@ func _Orders_Delete7_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 }
 
 type OrdersHTTPClient interface {
-	Create(ctx context.Context, req *OrderCreateRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
+	Create(ctx context.Context, req *OrderModifyRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
 	Delete(ctx context.Context, req *OrderDeleteRequest, opts ...http.CallOption) (rsp *OrderDelete, err error)
 	Search(ctx context.Context, req *OrderSearchRequest, opts ...http.CallOption) (rsp *OrderReplies, err error)
-	Update(ctx context.Context, req *OrderUpdateRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
+	Update(ctx context.Context, req *OrderModifyRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
 }
 
 type OrdersHTTPClientImpl struct {
@@ -135,7 +135,7 @@ func NewOrdersHTTPClient(client *http.Client) OrdersHTTPClient {
 	return &OrdersHTTPClientImpl{client}
 }
 
-func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderReply, error) {
+func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderModifyRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
 	pattern := "/v1/order/{account}"
 	path := binding.EncodeURL(pattern, in, false)
@@ -174,9 +174,9 @@ func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchReques
 	return &out, err
 }
 
-func (c *OrdersHTTPClientImpl) Update(ctx context.Context, in *OrderUpdateRequest, opts ...http.CallOption) (*OrderReply, error) {
+func (c *OrdersHTTPClientImpl) Update(ctx context.Context, in *OrderModifyRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
-	pattern := "/v1/order/{account}/{orderId}"
+	pattern := "/v1/order/{account}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

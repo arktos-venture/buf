@@ -56,7 +56,7 @@ service Orders {
 
 	// Public API
 	// Create Orders
-  rpc Create (OrderCreateRequest) returns (OrderReply)  {
+  rpc Create (OrderModifyRequest) returns (OrderReply)  {
     option (google.api.http) = {
       post: "/v1/order/{account}"
       body: "*"
@@ -65,9 +65,9 @@ service Orders {
 
 	// Public API
 	// Update existing Orders
-  rpc Update (OrderUpdateRequest) returns (OrderReply)  {
+  rpc Update (OrderModifyRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      put: "/v1/order/{account}/{orderId}"
+      put: "/v1/order/{account}"
       body: "*"
     };
   }
@@ -135,7 +135,9 @@ message Filter {
 }
 
 message OrderRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
 
 message OrderSearchRequest {
@@ -150,11 +152,10 @@ message OrderSearchRequest {
   int32 limit = 4 [(validate.rules).int32 = {gt: 0, lte: 10000}];
 }
 
-message OrderCreateRequest {  
+message OrderModifyRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string currency = 4 [(validate.rules).string.len = 3];
   Action action = 5 [(validate.rules).enum = {defined_only: true}];
   OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
   float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
@@ -162,18 +163,10 @@ message OrderCreateRequest {
   float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
 }
 
-message OrderUpdateRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  int64 orderId = 2 [(validate.rules).int64 = {gte: 1}];
-  Action action = 3 [(validate.rules).enum = {defined_only: true}];
-  OrderType orderType = 4 [(validate.rules).enum = {defined_only: true}];
-  float size = 5 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
-  Duration duration = 6 [(validate.rules).enum = {defined_only: true}];
-  float price = 7 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
-}
-
 message OrderDeleteRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  repeated string tickers = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+  repeated string exchanges = 3 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -186,7 +179,7 @@ message OrderReply {
     float ask = 1;
     float buy = 2;
   }
-
+  
   message Price {
     float ask = 1;
     float buy = 2;
@@ -195,15 +188,15 @@ message OrderReply {
 
   string ticker = 1;
   string exchange = 2;
-  string currency = 3;
-  Action action = 4;
-  OrderType orderType = 5;
-  string routing = 6;
-  Duration duration = 7;
-  Size size = 8;
-  Price price = 9;
-  Status status = 10;
-  google.protobuf.Timestamp created_at = 11;
+  Action action = 3;
+  OrderType orderType = 4;
+  string routing = 5;
+  Duration duration = 6;
+  Size size = 7;
+  Price price = 8;
+  Status status = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 message OrderReplies {
