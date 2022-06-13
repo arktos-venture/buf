@@ -57,17 +57,6 @@ func (m *PositionRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := PositionTypes_name[int32(m.GetPositions())]; !ok {
-		err := PositionRequestValidationError{
-			field:  "Positions",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
 		err := PositionRequestValidationError{
 			field:  "Account",
@@ -156,6 +145,119 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PositionRequestValidationError{}
+
+// Validate checks the field values on PositionDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PositionDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PositionDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PositionDeleteRequestMultiError, or nil if none found.
+func (m *PositionDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PositionDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := PositionDeleteRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PositionDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PositionDeleteRequestMultiError is an error wrapping multiple validation
+// errors returned by PositionDeleteRequest.ValidateAll() if the designated
+// constraints aren't met.
+type PositionDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PositionDeleteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PositionDeleteRequestMultiError) AllErrors() []error { return m }
+
+// PositionDeleteRequestValidationError is the validation error returned by
+// PositionDeleteRequest.Validate if the designated constraints aren't met.
+type PositionDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PositionDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PositionDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PositionDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PositionDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PositionDeleteRequestValidationError) ErrorName() string {
+	return "PositionDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PositionDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPositionDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PositionDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PositionDeleteRequestValidationError{}
 
 // Validate checks the field values on PositionReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -515,22 +617,22 @@ var _ interface {
 	ErrorName() string
 } = PositionRepliesValidationError{}
 
-// Validate checks the field values on PositionDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *PositionDeleteReply) Validate() error {
+// Validate checks the field values on PositionDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PositionDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PositionDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// PositionDeleteReplyMultiError, or nil if none found.
-func (m *PositionDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on PositionDelete with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PositionDeleteMultiError,
+// or nil if none found.
+func (m *PositionDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PositionDeleteReply) validate(all bool) error {
+func (m *PositionDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -540,19 +642,19 @@ func (m *PositionDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return PositionDeleteReplyMultiError(errors)
+		return PositionDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// PositionDeleteReplyMultiError is an error wrapping multiple validation
-// errors returned by PositionDeleteReply.ValidateAll() if the designated
-// constraints aren't met.
-type PositionDeleteReplyMultiError []error
+// PositionDeleteMultiError is an error wrapping multiple validation errors
+// returned by PositionDelete.ValidateAll() if the designated constraints
+// aren't met.
+type PositionDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PositionDeleteReplyMultiError) Error() string {
+func (m PositionDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -561,11 +663,11 @@ func (m PositionDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PositionDeleteReplyMultiError) AllErrors() []error { return m }
+func (m PositionDeleteMultiError) AllErrors() []error { return m }
 
-// PositionDeleteReplyValidationError is the validation error returned by
-// PositionDeleteReply.Validate if the designated constraints aren't met.
-type PositionDeleteReplyValidationError struct {
+// PositionDeleteValidationError is the validation error returned by
+// PositionDelete.Validate if the designated constraints aren't met.
+type PositionDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -573,24 +675,22 @@ type PositionDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e PositionDeleteReplyValidationError) Field() string { return e.field }
+func (e PositionDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PositionDeleteReplyValidationError) Reason() string { return e.reason }
+func (e PositionDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PositionDeleteReplyValidationError) Cause() error { return e.cause }
+func (e PositionDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PositionDeleteReplyValidationError) Key() bool { return e.key }
+func (e PositionDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PositionDeleteReplyValidationError) ErrorName() string {
-	return "PositionDeleteReplyValidationError"
-}
+func (e PositionDeleteValidationError) ErrorName() string { return "PositionDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PositionDeleteReplyValidationError) Error() string {
+func (e PositionDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -602,14 +702,14 @@ func (e PositionDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPositionDeleteReply.%s: %s%s",
+		"invalid %sPositionDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PositionDeleteReplyValidationError{}
+var _ error = PositionDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -617,7 +717,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PositionDeleteReplyValidationError{}
+} = PositionDeleteValidationError{}
 
 // Validate checks the field values on PositionReply_Performance with the rules
 // defined in the proto definition for this message. If any rules are

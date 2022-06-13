@@ -26,8 +26,8 @@
     "application/json"
   ],
   "paths": {
-    "/v1/positions": {
-      "post": {
+    "/v1/positions/{account}": {
+      "get": {
         "summary": "Public API\nSearch Positions opened",
         "operationId": "Positions_Search",
         "responses": {
@@ -46,28 +46,39 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "account",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1PositionRequest"
-            }
+            "type": "string"
+          },
+          {
+            "name": "asset",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "STOCK",
+                "OPTION",
+                "CASH"
+              ]
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
           "Positions"
         ]
-      }
-    },
-    "/v1/positions/{account}": {
-      "get": {
+      },
+      "delete": {
         "summary": "Private API\nDelete Positions open or closed",
         "operationId": "Positions_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1PositionDeleteReply"
+              "$ref": "#/definitions/v1PositionDelete"
             }
           },
           "default": {
@@ -83,17 +94,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "positions",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "Companies",
-              "Currencies"
-            ],
-            "default": "Companies"
           }
         ],
         "tags": [
@@ -159,7 +159,16 @@
         }
       }
     },
-    "v1PositionDeleteReply": {
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "STOCK",
+        "OPTION",
+        "CASH"
+      ],
+      "default": "STOCK"
+    },
+    "v1PositionDelete": {
       "type": "object",
       "properties": {
         "total": {
@@ -211,25 +220,6 @@
           "format": "date-time"
         }
       }
-    },
-    "v1PositionRequest": {
-      "type": "object",
-      "properties": {
-        "positions": {
-          "$ref": "#/definitions/v1PositionTypes"
-        },
-        "account": {
-          "type": "string"
-        }
-      }
-    },
-    "v1PositionTypes": {
-      "type": "string",
-      "enum": [
-        "Companies",
-        "Currencies"
-      ],
-      "default": "Companies"
     }
   },
   "securityDefinitions": {
