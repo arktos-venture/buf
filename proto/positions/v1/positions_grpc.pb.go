@@ -23,7 +23,7 @@ type PositionsClient interface {
 	Search(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionReplies, error)
 	// Private API
 	// Delete Positions open or closed
-	Delete(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionDeleteReply, error)
+	Delete(ctx context.Context, in *PositionDeleteRequest, opts ...grpc.CallOption) (*PositionDelete, error)
 }
 
 type positionsClient struct {
@@ -43,8 +43,8 @@ func (c *positionsClient) Search(ctx context.Context, in *PositionRequest, opts 
 	return out, nil
 }
 
-func (c *positionsClient) Delete(ctx context.Context, in *PositionRequest, opts ...grpc.CallOption) (*PositionDeleteReply, error) {
-	out := new(PositionDeleteReply)
+func (c *positionsClient) Delete(ctx context.Context, in *PositionDeleteRequest, opts ...grpc.CallOption) (*PositionDelete, error) {
+	out := new(PositionDelete)
 	err := c.cc.Invoke(ctx, "/positions.v1.Positions/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ type PositionsServer interface {
 	Search(context.Context, *PositionRequest) (*PositionReplies, error)
 	// Private API
 	// Delete Positions open or closed
-	Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error)
+	Delete(context.Context, *PositionDeleteRequest) (*PositionDelete, error)
 	mustEmbedUnimplementedPositionsServer()
 }
 
@@ -72,7 +72,7 @@ type UnimplementedPositionsServer struct {
 func (UnimplementedPositionsServer) Search(context.Context, *PositionRequest) (*PositionReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedPositionsServer) Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error) {
+func (UnimplementedPositionsServer) Delete(context.Context, *PositionDeleteRequest) (*PositionDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedPositionsServer) mustEmbedUnimplementedPositionsServer() {}
@@ -107,7 +107,7 @@ func _Positions_Search_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _Positions_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PositionRequest)
+	in := new(PositionDeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -119,7 +119,7 @@ func _Positions_Delete_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/positions.v1.Positions/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionsServer).Delete(ctx, req.(*PositionRequest))
+		return srv.(PositionsServer).Delete(ctx, req.(*PositionDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

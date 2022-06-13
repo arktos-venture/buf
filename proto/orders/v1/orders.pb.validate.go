@@ -192,10 +192,32 @@ func (m *OrderRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 32 {
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
 		err := OrderRequestValidationError{
 			field:  "Account",
-			reason: "value length must be between 3 and 32 runes, inclusive",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
+		err := OrderRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
+		err := OrderRequestValidationError{
+			field:  "Exchange",
+			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -489,22 +511,22 @@ var _ interface {
 	ErrorName() string
 } = OrderSearchRequestValidationError{}
 
-// Validate checks the field values on OrderCreateRequest with the rules
+// Validate checks the field values on OrderModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *OrderCreateRequest) Validate() error {
+func (m *OrderModifyRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on OrderCreateRequest with the rules
+// ValidateAll checks the field values on OrderModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// OrderCreateRequestMultiError, or nil if none found.
-func (m *OrderCreateRequest) ValidateAll() error {
+// OrderModifyRequestMultiError, or nil if none found.
+func (m *OrderModifyRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *OrderCreateRequest) validate(all bool) error {
+func (m *OrderModifyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -512,7 +534,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	var errors []error
 
 	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Account",
 			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
@@ -523,7 +545,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Ticker",
 			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
@@ -534,7 +556,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Exchange",
 			reason: "value length must be between 1 and 8 runes, inclusive",
 		}
@@ -544,20 +566,8 @@ func (m *OrderCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := OrderCreateRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
 	if _, ok := Action_name[int32(m.GetAction())]; !ok {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Action",
 			reason: "value must be one of the defined enum values",
 		}
@@ -568,7 +578,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if _, ok := OrderType_name[int32(m.GetOrderType())]; !ok {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "OrderType",
 			reason: "value must be one of the defined enum values",
 		}
@@ -579,7 +589,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if val := m.GetSize(); val <= 0.01 || val >= 1e+08 {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Size",
 			reason: "value must be inside range (0.01, 1e+08)",
 		}
@@ -590,7 +600,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if _, ok := Duration_name[int32(m.GetDuration())]; !ok {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Duration",
 			reason: "value must be one of the defined enum values",
 		}
@@ -601,7 +611,7 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if val := m.GetPrice(); val <= 1e-06 || val >= 1e+08 {
-		err := OrderCreateRequestValidationError{
+		err := OrderModifyRequestValidationError{
 			field:  "Price",
 			reason: "value must be inside range (1e-06, 1e+08)",
 		}
@@ -612,19 +622,19 @@ func (m *OrderCreateRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return OrderCreateRequestMultiError(errors)
+		return OrderModifyRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// OrderCreateRequestMultiError is an error wrapping multiple validation errors
-// returned by OrderCreateRequest.ValidateAll() if the designated constraints
+// OrderModifyRequestMultiError is an error wrapping multiple validation errors
+// returned by OrderModifyRequest.ValidateAll() if the designated constraints
 // aren't met.
-type OrderCreateRequestMultiError []error
+type OrderModifyRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m OrderCreateRequestMultiError) Error() string {
+func (m OrderModifyRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -633,11 +643,11 @@ func (m OrderCreateRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m OrderCreateRequestMultiError) AllErrors() []error { return m }
+func (m OrderModifyRequestMultiError) AllErrors() []error { return m }
 
-// OrderCreateRequestValidationError is the validation error returned by
-// OrderCreateRequest.Validate if the designated constraints aren't met.
-type OrderCreateRequestValidationError struct {
+// OrderModifyRequestValidationError is the validation error returned by
+// OrderModifyRequest.Validate if the designated constraints aren't met.
+type OrderModifyRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -645,24 +655,24 @@ type OrderCreateRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e OrderCreateRequestValidationError) Field() string { return e.field }
+func (e OrderModifyRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e OrderCreateRequestValidationError) Reason() string { return e.reason }
+func (e OrderModifyRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e OrderCreateRequestValidationError) Cause() error { return e.cause }
+func (e OrderModifyRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e OrderCreateRequestValidationError) Key() bool { return e.key }
+func (e OrderModifyRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e OrderCreateRequestValidationError) ErrorName() string {
-	return "OrderCreateRequestValidationError"
+func (e OrderModifyRequestValidationError) ErrorName() string {
+	return "OrderModifyRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e OrderCreateRequestValidationError) Error() string {
+func (e OrderModifyRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -674,14 +684,14 @@ func (e OrderCreateRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sOrderCreateRequest.%s: %s%s",
+		"invalid %sOrderModifyRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = OrderCreateRequestValidationError{}
+var _ error = OrderModifyRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -689,186 +699,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = OrderCreateRequestValidationError{}
-
-// Validate checks the field values on OrderUpdateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *OrderUpdateRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on OrderUpdateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// OrderUpdateRequestMultiError, or nil if none found.
-func (m *OrderUpdateRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *OrderUpdateRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
-		err := OrderUpdateRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 36 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetOrderId() < 1 {
-		err := OrderUpdateRequestValidationError{
-			field:  "OrderId",
-			reason: "value must be greater than or equal to 1",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if _, ok := Action_name[int32(m.GetAction())]; !ok {
-		err := OrderUpdateRequestValidationError{
-			field:  "Action",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if _, ok := OrderType_name[int32(m.GetOrderType())]; !ok {
-		err := OrderUpdateRequestValidationError{
-			field:  "OrderType",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetSize(); val <= 0.01 || val >= 1e+08 {
-		err := OrderUpdateRequestValidationError{
-			field:  "Size",
-			reason: "value must be inside range (0.01, 1e+08)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if _, ok := Duration_name[int32(m.GetDuration())]; !ok {
-		err := OrderUpdateRequestValidationError{
-			field:  "Duration",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetPrice(); val <= 1e-06 || val >= 1e+08 {
-		err := OrderUpdateRequestValidationError{
-			field:  "Price",
-			reason: "value must be inside range (1e-06, 1e+08)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return OrderUpdateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// OrderUpdateRequestMultiError is an error wrapping multiple validation errors
-// returned by OrderUpdateRequest.ValidateAll() if the designated constraints
-// aren't met.
-type OrderUpdateRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m OrderUpdateRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m OrderUpdateRequestMultiError) AllErrors() []error { return m }
-
-// OrderUpdateRequestValidationError is the validation error returned by
-// OrderUpdateRequest.Validate if the designated constraints aren't met.
-type OrderUpdateRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e OrderUpdateRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e OrderUpdateRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e OrderUpdateRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e OrderUpdateRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e OrderUpdateRequestValidationError) ErrorName() string {
-	return "OrderUpdateRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e OrderUpdateRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sOrderUpdateRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = OrderUpdateRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = OrderUpdateRequestValidationError{}
+} = OrderModifyRequestValidationError{}
 
 // Validate checks the field values on OrderDeleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -901,6 +732,48 @@ func (m *OrderDeleteRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	_OrderDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
+
+	for idx, item := range m.GetTickers() {
+		_, _ = idx, item
+
+		if _, exists := _OrderDeleteRequest_Tickers_Unique[item]; exists {
+			err := OrderDeleteRequestValidationError{
+				field:  fmt.Sprintf("Tickers[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_OrderDeleteRequest_Tickers_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Tickers[idx]
+	}
+
+	_OrderDeleteRequest_Exchanges_Unique := make(map[string]struct{}, len(m.GetExchanges()))
+
+	for idx, item := range m.GetExchanges() {
+		_, _ = idx, item
+
+		if _, exists := _OrderDeleteRequest_Exchanges_Unique[item]; exists {
+			err := OrderDeleteRequestValidationError{
+				field:  fmt.Sprintf("Exchanges[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_OrderDeleteRequest_Exchanges_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Exchanges[idx]
 	}
 
 	if len(errors) > 0 {
@@ -1009,8 +882,6 @@ func (m *OrderReply) validate(all bool) error {
 
 	// no validation rules for Exchange
 
-	// no validation rules for Currency
-
 	// no validation rules for Action
 
 	// no validation rules for OrderType
@@ -1102,6 +973,35 @@ func (m *OrderReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return OrderReplyValidationError{
 				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderReplyValidationError{
+				field:  "UpdatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

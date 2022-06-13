@@ -18,20 +18,23 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type PositionsHTTPServer interface {
-	Delete(context.Context, *PositionRequest) (*PositionDeleteReply, error)
+	Delete(context.Context, *PositionDeleteRequest) (*PositionDelete, error)
 	Search(context.Context, *PositionRequest) (*PositionReplies, error)
 }
 
 func RegisterPositionsHTTPServer(s *http.Server, srv PositionsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/positions", _Positions_Search5_HTTP_Handler(srv))
-	r.GET("/v1/positions/{account}", _Positions_Delete8_HTTP_Handler(srv))
+	r.GET("/v1/positions/{account}", _Positions_Search5_HTTP_Handler(srv))
+	r.DELETE("/v1/positions/{account}", _Positions_Delete8_HTTP_Handler(srv))
 }
 
 func _Positions_Search5_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PositionRequest
-		if err := ctx.Bind(&in); err != nil {
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/positions.v1.Positions/Search")
@@ -49,7 +52,7 @@ func _Positions_Search5_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Cont
 
 func _Positions_Delete8_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PositionRequest
+		var in PositionDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -58,19 +61,19 @@ func _Positions_Delete8_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Cont
 		}
 		http.SetOperation(ctx, "/positions.v1.Positions/Delete")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Delete(ctx, req.(*PositionRequest))
+			return srv.Delete(ctx, req.(*PositionDeleteRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*PositionDeleteReply)
+		reply := out.(*PositionDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type PositionsHTTPClient interface {
-	Delete(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionDeleteReply, err error)
+	Delete(ctx context.Context, req *PositionDeleteRequest, opts ...http.CallOption) (rsp *PositionDelete, err error)
 	Search(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionReplies, err error)
 }
 
@@ -82,13 +85,13 @@ func NewPositionsHTTPClient(client *http.Client) PositionsHTTPClient {
 	return &PositionsHTTPClientImpl{client}
 }
 
-func (c *PositionsHTTPClientImpl) Delete(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionDeleteReply, error) {
-	var out PositionDeleteReply
+func (c *PositionsHTTPClientImpl) Delete(ctx context.Context, in *PositionDeleteRequest, opts ...http.CallOption) (*PositionDelete, error) {
+	var out PositionDelete
 	pattern := "/v1/positions/{account}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Positions/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,11 +100,11 @@ func (c *PositionsHTTPClientImpl) Delete(ctx context.Context, in *PositionReques
 
 func (c *PositionsHTTPClientImpl) Search(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionReplies, error) {
 	var out PositionReplies
-	pattern := "/v1/positions"
-	path := binding.EncodeURL(pattern, in, false)
+	pattern := "/v1/positions/{account}"
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/positions.v1.Positions/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

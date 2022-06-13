@@ -23,10 +23,10 @@ type OrdersClient interface {
 	Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*OrderReplies, error)
 	// Public API
 	// Create Orders
-	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	Create(ctx context.Context, in *OrderModifyRequest, opts ...grpc.CallOption) (*OrderReply, error)
 	// Public API
 	// Update existing Orders
-	Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	Update(ctx context.Context, in *OrderModifyRequest, opts ...grpc.CallOption) (*OrderReply, error)
 	// Private API
 	// Delete/cancel existing Orders
 	Delete(ctx context.Context, in *OrderDeleteRequest, opts ...grpc.CallOption) (*OrderDelete, error)
@@ -49,7 +49,7 @@ func (c *ordersClient) Search(ctx context.Context, in *OrderSearchRequest, opts 
 	return out, nil
 }
 
-func (c *ordersClient) Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error) {
+func (c *ordersClient) Create(ctx context.Context, in *OrderModifyRequest, opts ...grpc.CallOption) (*OrderReply, error) {
 	out := new(OrderReply)
 	err := c.cc.Invoke(ctx, "/orders.v1.Orders/Create", in, out, opts...)
 	if err != nil {
@@ -58,7 +58,7 @@ func (c *ordersClient) Create(ctx context.Context, in *OrderCreateRequest, opts 
 	return out, nil
 }
 
-func (c *ordersClient) Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error) {
+func (c *ordersClient) Update(ctx context.Context, in *OrderModifyRequest, opts ...grpc.CallOption) (*OrderReply, error) {
 	out := new(OrderReply)
 	err := c.cc.Invoke(ctx, "/orders.v1.Orders/Update", in, out, opts...)
 	if err != nil {
@@ -85,10 +85,10 @@ type OrdersServer interface {
 	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
 	// Public API
 	// Create Orders
-	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
+	Create(context.Context, *OrderModifyRequest) (*OrderReply, error)
 	// Public API
 	// Update existing Orders
-	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
+	Update(context.Context, *OrderModifyRequest) (*OrderReply, error)
 	// Private API
 	// Delete/cancel existing Orders
 	Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error)
@@ -102,10 +102,10 @@ type UnimplementedOrdersServer struct {
 func (UnimplementedOrdersServer) Search(context.Context, *OrderSearchRequest) (*OrderReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedOrdersServer) Create(context.Context, *OrderCreateRequest) (*OrderReply, error) {
+func (UnimplementedOrdersServer) Create(context.Context, *OrderModifyRequest) (*OrderReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedOrdersServer) Update(context.Context, *OrderUpdateRequest) (*OrderReply, error) {
+func (UnimplementedOrdersServer) Update(context.Context, *OrderModifyRequest) (*OrderReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedOrdersServer) Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error) {
@@ -143,7 +143,7 @@ func _Orders_Search_Handler(srv interface{}, ctx context.Context, dec func(inter
 }
 
 func _Orders_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OrderCreateRequest)
+	in := new(OrderModifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -155,13 +155,13 @@ func _Orders_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/orders.v1.Orders/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrdersServer).Create(ctx, req.(*OrderCreateRequest))
+		return srv.(OrdersServer).Create(ctx, req.(*OrderModifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Orders_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OrderUpdateRequest)
+	in := new(OrderModifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func _Orders_Update_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/orders.v1.Orders/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrdersServer).Update(ctx, req.(*OrderUpdateRequest))
+		return srv.(OrdersServer).Update(ctx, req.(*OrderModifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

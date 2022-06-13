@@ -48,16 +48,15 @@ service Positions {
 	// Search Positions opened
   rpc Search (PositionRequest) returns (PositionReplies)  {
     option (google.api.http) = {
-      post: "/v1/positions"
-      body: "*"
+      get: "/v1/positions/{account}"
     };
   }
 
 	// Private API
 	// Delete Positions open or closed
-  rpc Delete (PositionRequest) returns (PositionDeleteReply)  {
+  rpc Delete (PositionDeleteRequest) returns (PositionDelete)  {
     option (google.api.http) = {
-      get: "/v1/positions/{account}"
+      delete: "/v1/positions/{account}"
     };
   }
 }
@@ -67,14 +66,19 @@ service Positions {
 // Request
 // 
 
-enum PositionTypes {
-  Companies = 0;
-  Currencies = 1;
+enum Asset {
+  STOCK = 0;
+  OPTION = 1;
+  CASH = 2;
 }
 
 message PositionRequest {
-  PositionTypes positions = 1 [(validate.rules).enum = {defined_only: true}];
+  repeated Asset asset = 1;
   string account = 2 [(validate.rules).string = {min_len: 3, max_len: 36}];
+}
+
+message PositionDeleteRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
 
@@ -107,6 +111,6 @@ message PositionReplies {
   int64 total = 2;
 }
 
-message PositionDeleteReply {
+message PositionDelete {
   int64 total = 1;
 }
