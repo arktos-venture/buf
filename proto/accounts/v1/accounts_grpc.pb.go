@@ -29,7 +29,7 @@ type AccountsClient interface {
 	Update(ctx context.Context, in *AccountModifyRequest, opts ...grpc.CallOption) (*AccountReply, error)
 	// Public API
 	// Delete existing Account
-	Delete(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountDeleteReply, error)
+	Delete(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountDelete, error)
 }
 
 type accountsClient struct {
@@ -67,8 +67,8 @@ func (c *accountsClient) Update(ctx context.Context, in *AccountModifyRequest, o
 	return out, nil
 }
 
-func (c *accountsClient) Delete(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountDeleteReply, error) {
-	out := new(AccountDeleteReply)
+func (c *accountsClient) Delete(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*AccountDelete, error) {
+	out := new(AccountDelete)
 	err := c.cc.Invoke(ctx, "/accounts.v1.Accounts/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ type AccountsServer interface {
 	Update(context.Context, *AccountModifyRequest) (*AccountReply, error)
 	// Public API
 	// Delete existing Account
-	Delete(context.Context, *AccountRequest) (*AccountDeleteReply, error)
+	Delete(context.Context, *AccountRequest) (*AccountDelete, error)
 	mustEmbedUnimplementedAccountsServer()
 }
 
@@ -108,7 +108,7 @@ func (UnimplementedAccountsServer) Create(context.Context, *AccountModifyRequest
 func (UnimplementedAccountsServer) Update(context.Context, *AccountModifyRequest) (*AccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedAccountsServer) Delete(context.Context, *AccountRequest) (*AccountDeleteReply, error) {
+func (UnimplementedAccountsServer) Delete(context.Context, *AccountRequest) (*AccountDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedAccountsServer) mustEmbedUnimplementedAccountsServer() {}

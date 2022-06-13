@@ -19,7 +19,7 @@ const _ = http.SupportPackageIsVersion1
 
 type AccountsHTTPServer interface {
 	Create(context.Context, *AccountModifyRequest) (*AccountReply, error)
-	Delete(context.Context, *AccountRequest) (*AccountDeleteReply, error)
+	Delete(context.Context, *AccountRequest) (*AccountDelete, error)
 	Get(context.Context, *AccountRequest) (*AccountReply, error)
 	Update(context.Context, *AccountModifyRequest) (*AccountReply, error)
 }
@@ -112,14 +112,14 @@ func _Accounts_Delete9_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 		if err != nil {
 			return err
 		}
-		reply := out.(*AccountDeleteReply)
+		reply := out.(*AccountDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type AccountsHTTPClient interface {
 	Create(ctx context.Context, req *AccountModifyRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
-	Delete(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountDeleteReply, err error)
+	Delete(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountDelete, err error)
 	Get(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 	Update(ctx context.Context, req *AccountModifyRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 }
@@ -145,8 +145,8 @@ func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountModifyRe
 	return &out, err
 }
 
-func (c *AccountsHTTPClientImpl) Delete(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountDeleteReply, error) {
-	var out AccountDeleteReply
+func (c *AccountsHTTPClientImpl) Delete(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountDelete, error) {
+	var out AccountDelete
 	pattern := "/v1/account/{account}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Delete"))

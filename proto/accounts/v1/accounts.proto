@@ -73,7 +73,7 @@ service Accounts {
 
 	// Public API
 	// Delete existing Account
-	rpc Delete (AccountRequest) returns (AccountDeleteReply)  {
+	rpc Delete (AccountRequest) returns (AccountDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/account/{account}"
 		};
@@ -102,8 +102,9 @@ message AccountModifyRequest {
 
 message AccountReply {
 	message Positions {
-		repeated positions.v1.PositionReply companies = 1;
-		repeated positions.v1.PositionReply currencies = 2;
+		repeated positions.v1.PositionReply stocks = 1;
+		repeated positions.v1.PositionReply options = 2;
+		repeated positions.v1.PositionReply cash = 3;
 	}
 
 	string account = 1;
@@ -113,6 +114,6 @@ message AccountReply {
 	Positions positions = 5;
 }
 
-message AccountDeleteReply {
+message AccountDelete {
 	int64 total = 1;
 }
