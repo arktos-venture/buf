@@ -18,11 +18,21 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndexesClient interface {
-	Get(ctx context.Context, in *IndexesRequest, opts ...grpc.CallOption) (*IndexesReply, error)
-	Search(ctx context.Context, in *IndexesSearchRequest, opts ...grpc.CallOption) (*IndexesSearchReplies, error)
-	Create(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error)
-	Update(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error)
-	Delete(ctx context.Context, in *IndexesRequest, opts ...grpc.CallOption) (*IndexesReply, error)
+	// Public API
+	// Get Index properties
+	Get(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
+	// Public API
+	// Search Index companies
+	Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexSearchReplies, error)
+	// Public API
+	// Create Index companies
+	Create(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
+	// Public API
+	// Update Index companies
+	Update(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
+	// Public API
+	// Delete Index companies
+	Delete(ctx context.Context, in *IndexDeleteRequest, opts ...grpc.CallOption) (*IndexDeleteReply, error)
 }
 
 type indexesClient struct {
@@ -33,8 +43,8 @@ func NewIndexesClient(cc grpc.ClientConnInterface) IndexesClient {
 	return &indexesClient{cc}
 }
 
-func (c *indexesClient) Get(ctx context.Context, in *IndexesRequest, opts ...grpc.CallOption) (*IndexesReply, error) {
-	out := new(IndexesReply)
+func (c *indexesClient) Get(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error) {
+	out := new(IndexReply)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -42,8 +52,8 @@ func (c *indexesClient) Get(ctx context.Context, in *IndexesRequest, opts ...grp
 	return out, nil
 }
 
-func (c *indexesClient) Search(ctx context.Context, in *IndexesSearchRequest, opts ...grpc.CallOption) (*IndexesSearchReplies, error) {
-	out := new(IndexesSearchReplies)
+func (c *indexesClient) Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexSearchReplies, error) {
+	out := new(IndexSearchReplies)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,8 +61,8 @@ func (c *indexesClient) Search(ctx context.Context, in *IndexesSearchRequest, op
 	return out, nil
 }
 
-func (c *indexesClient) Create(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error) {
-	out := new(IndexesReply)
+func (c *indexesClient) Create(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error) {
+	out := new(IndexReply)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -60,8 +70,8 @@ func (c *indexesClient) Create(ctx context.Context, in *IndexesCreateRequest, op
 	return out, nil
 }
 
-func (c *indexesClient) Update(ctx context.Context, in *IndexesCreateRequest, opts ...grpc.CallOption) (*IndexesReply, error) {
-	out := new(IndexesReply)
+func (c *indexesClient) Update(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error) {
+	out := new(IndexReply)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -69,8 +79,8 @@ func (c *indexesClient) Update(ctx context.Context, in *IndexesCreateRequest, op
 	return out, nil
 }
 
-func (c *indexesClient) Delete(ctx context.Context, in *IndexesRequest, opts ...grpc.CallOption) (*IndexesReply, error) {
-	out := new(IndexesReply)
+func (c *indexesClient) Delete(ctx context.Context, in *IndexDeleteRequest, opts ...grpc.CallOption) (*IndexDeleteReply, error) {
+	out := new(IndexDeleteReply)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -82,11 +92,21 @@ func (c *indexesClient) Delete(ctx context.Context, in *IndexesRequest, opts ...
 // All implementations must embed UnimplementedIndexesServer
 // for forward compatibility
 type IndexesServer interface {
-	Get(context.Context, *IndexesRequest) (*IndexesReply, error)
-	Search(context.Context, *IndexesSearchRequest) (*IndexesSearchReplies, error)
-	Create(context.Context, *IndexesCreateRequest) (*IndexesReply, error)
-	Update(context.Context, *IndexesCreateRequest) (*IndexesReply, error)
-	Delete(context.Context, *IndexesRequest) (*IndexesReply, error)
+	// Public API
+	// Get Index properties
+	Get(context.Context, *IndexRequest) (*IndexReply, error)
+	// Public API
+	// Search Index companies
+	Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error)
+	// Public API
+	// Create Index companies
+	Create(context.Context, *IndexCreateRequest) (*IndexReply, error)
+	// Public API
+	// Update Index companies
+	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
+	// Public API
+	// Delete Index companies
+	Delete(context.Context, *IndexDeleteRequest) (*IndexDeleteReply, error)
 	mustEmbedUnimplementedIndexesServer()
 }
 
@@ -94,19 +114,19 @@ type IndexesServer interface {
 type UnimplementedIndexesServer struct {
 }
 
-func (UnimplementedIndexesServer) Get(context.Context, *IndexesRequest) (*IndexesReply, error) {
+func (UnimplementedIndexesServer) Get(context.Context, *IndexRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedIndexesServer) Search(context.Context, *IndexesSearchRequest) (*IndexesSearchReplies, error) {
+func (UnimplementedIndexesServer) Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedIndexesServer) Create(context.Context, *IndexesCreateRequest) (*IndexesReply, error) {
+func (UnimplementedIndexesServer) Create(context.Context, *IndexCreateRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedIndexesServer) Update(context.Context, *IndexesCreateRequest) (*IndexesReply, error) {
+func (UnimplementedIndexesServer) Update(context.Context, *IndexCreateRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedIndexesServer) Delete(context.Context, *IndexesRequest) (*IndexesReply, error) {
+func (UnimplementedIndexesServer) Delete(context.Context, *IndexDeleteRequest) (*IndexDeleteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedIndexesServer) mustEmbedUnimplementedIndexesServer() {}
@@ -123,7 +143,7 @@ func RegisterIndexesServer(s grpc.ServiceRegistrar, srv IndexesServer) {
 }
 
 func _Indexes_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexesRequest)
+	in := new(IndexRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -135,13 +155,13 @@ func _Indexes_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: "/indexes.v1.Indexes/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Get(ctx, req.(*IndexesRequest))
+		return srv.(IndexesServer).Get(ctx, req.(*IndexRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Indexes_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexesSearchRequest)
+	in := new(IndexSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -153,13 +173,13 @@ func _Indexes_Search_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/indexes.v1.Indexes/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Search(ctx, req.(*IndexesSearchRequest))
+		return srv.(IndexesServer).Search(ctx, req.(*IndexSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Indexes_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexesCreateRequest)
+	in := new(IndexCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -171,13 +191,13 @@ func _Indexes_Create_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/indexes.v1.Indexes/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Create(ctx, req.(*IndexesCreateRequest))
+		return srv.(IndexesServer).Create(ctx, req.(*IndexCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Indexes_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexesCreateRequest)
+	in := new(IndexCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -189,13 +209,13 @@ func _Indexes_Update_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/indexes.v1.Indexes/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Update(ctx, req.(*IndexesCreateRequest))
+		return srv.(IndexesServer).Update(ctx, req.(*IndexCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Indexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexesRequest)
+	in := new(IndexDeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -207,7 +227,7 @@ func _Indexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/indexes.v1.Indexes/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndexesServer).Delete(ctx, req.(*IndexesRequest))
+		return srv.(IndexesServer).Delete(ctx, req.(*IndexDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

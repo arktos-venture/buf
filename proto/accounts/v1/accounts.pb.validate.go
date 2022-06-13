@@ -146,158 +146,22 @@ var _ interface {
 	ErrorName() string
 } = AccountRequestValidationError{}
 
-// Validate checks the field values on AccountCreateRequest with the rules
+// Validate checks the field values on AccountModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *AccountCreateRequest) Validate() error {
+func (m *AccountModifyRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AccountCreateRequest with the rules
+// ValidateAll checks the field values on AccountModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// AccountCreateRequestMultiError, or nil if none found.
-func (m *AccountCreateRequest) ValidateAll() error {
+// AccountModifyRequestMultiError, or nil if none found.
+func (m *AccountModifyRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AccountCreateRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 100 {
-		err := AccountCreateRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 100 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetDescription()); l < 4 || l > 128 {
-		err := AccountCreateRequestValidationError{
-			field:  "Description",
-			reason: "value length must be between 4 and 128 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := AccountCreateRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	if len(errors) > 0 {
-		return AccountCreateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// AccountCreateRequestMultiError is an error wrapping multiple validation
-// errors returned by AccountCreateRequest.ValidateAll() if the designated
-// constraints aren't met.
-type AccountCreateRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m AccountCreateRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m AccountCreateRequestMultiError) AllErrors() []error { return m }
-
-// AccountCreateRequestValidationError is the validation error returned by
-// AccountCreateRequest.Validate if the designated constraints aren't met.
-type AccountCreateRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e AccountCreateRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e AccountCreateRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e AccountCreateRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e AccountCreateRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e AccountCreateRequestValidationError) ErrorName() string {
-	return "AccountCreateRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e AccountCreateRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sAccountCreateRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = AccountCreateRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = AccountCreateRequestValidationError{}
-
-// Validate checks the field values on AccountUpdateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *AccountUpdateRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on AccountUpdateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// AccountUpdateRequestMultiError, or nil if none found.
-func (m *AccountUpdateRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *AccountUpdateRequest) validate(all bool) error {
+func (m *AccountModifyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -305,7 +169,7 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 	var errors []error
 
 	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
-		err := AccountUpdateRequestValidationError{
+		err := AccountModifyRequestValidationError{
 			field:  "Account",
 			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
@@ -315,21 +179,10 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 100 {
-		err := AccountUpdateRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 100 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetDescription()); l < 4 || l > 128 {
-		err := AccountUpdateRequestValidationError{
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 3 || l > 512 {
+		err := AccountModifyRequestValidationError{
 			field:  "Description",
-			reason: "value length must be between 4 and 128 runes, inclusive",
+			reason: "value length must be between 3 and 512 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -338,7 +191,7 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 	}
 
 	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := AccountUpdateRequestValidationError{
+		err := AccountModifyRequestValidationError{
 			field:  "Currency",
 			reason: "value length must be 3 runes",
 		}
@@ -350,19 +203,19 @@ func (m *AccountUpdateRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return AccountUpdateRequestMultiError(errors)
+		return AccountModifyRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// AccountUpdateRequestMultiError is an error wrapping multiple validation
-// errors returned by AccountUpdateRequest.ValidateAll() if the designated
+// AccountModifyRequestMultiError is an error wrapping multiple validation
+// errors returned by AccountModifyRequest.ValidateAll() if the designated
 // constraints aren't met.
-type AccountUpdateRequestMultiError []error
+type AccountModifyRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AccountUpdateRequestMultiError) Error() string {
+func (m AccountModifyRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -371,11 +224,11 @@ func (m AccountUpdateRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AccountUpdateRequestMultiError) AllErrors() []error { return m }
+func (m AccountModifyRequestMultiError) AllErrors() []error { return m }
 
-// AccountUpdateRequestValidationError is the validation error returned by
-// AccountUpdateRequest.Validate if the designated constraints aren't met.
-type AccountUpdateRequestValidationError struct {
+// AccountModifyRequestValidationError is the validation error returned by
+// AccountModifyRequest.Validate if the designated constraints aren't met.
+type AccountModifyRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -383,24 +236,24 @@ type AccountUpdateRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e AccountUpdateRequestValidationError) Field() string { return e.field }
+func (e AccountModifyRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AccountUpdateRequestValidationError) Reason() string { return e.reason }
+func (e AccountModifyRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AccountUpdateRequestValidationError) Cause() error { return e.cause }
+func (e AccountModifyRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AccountUpdateRequestValidationError) Key() bool { return e.key }
+func (e AccountModifyRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AccountUpdateRequestValidationError) ErrorName() string {
-	return "AccountUpdateRequestValidationError"
+func (e AccountModifyRequestValidationError) ErrorName() string {
+	return "AccountModifyRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e AccountUpdateRequestValidationError) Error() string {
+func (e AccountModifyRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -412,14 +265,14 @@ func (e AccountUpdateRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAccountUpdateRequest.%s: %s%s",
+		"invalid %sAccountModifyRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AccountUpdateRequestValidationError{}
+var _ error = AccountModifyRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -427,174 +280,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AccountUpdateRequestValidationError{}
-
-// Validate checks the field values on AccountPositionsReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *AccountPositionsReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on AccountPositionsReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// AccountPositionsReplyMultiError, or nil if none found.
-func (m *AccountPositionsReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *AccountPositionsReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Account
-
-	for idx, item := range m.GetOrders() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, AccountPositionsReplyValidationError{
-						field:  fmt.Sprintf("Orders[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, AccountPositionsReplyValidationError{
-						field:  fmt.Sprintf("Orders[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return AccountPositionsReplyValidationError{
-					field:  fmt.Sprintf("Orders[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if all {
-		switch v := interface{}(m.GetPositions()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, AccountPositionsReplyValidationError{
-					field:  "Positions",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, AccountPositionsReplyValidationError{
-					field:  "Positions",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPositions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return AccountPositionsReplyValidationError{
-				field:  "Positions",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return AccountPositionsReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// AccountPositionsReplyMultiError is an error wrapping multiple validation
-// errors returned by AccountPositionsReply.ValidateAll() if the designated
-// constraints aren't met.
-type AccountPositionsReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m AccountPositionsReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m AccountPositionsReplyMultiError) AllErrors() []error { return m }
-
-// AccountPositionsReplyValidationError is the validation error returned by
-// AccountPositionsReply.Validate if the designated constraints aren't met.
-type AccountPositionsReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e AccountPositionsReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e AccountPositionsReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e AccountPositionsReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e AccountPositionsReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e AccountPositionsReplyValidationError) ErrorName() string {
-	return "AccountPositionsReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e AccountPositionsReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sAccountPositionsReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = AccountPositionsReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = AccountPositionsReplyValidationError{}
+} = AccountModifyRequestValidationError{}
 
 // Validate checks the field values on AccountReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -623,6 +309,69 @@ func (m *AccountReply) validate(all bool) error {
 	// no validation rules for Description
 
 	// no validation rules for Currency
+
+	for idx, item := range m.GetOrders() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AccountReplyValidationError{
+						field:  fmt.Sprintf("Orders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AccountReplyValidationError{
+						field:  fmt.Sprintf("Orders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AccountReplyValidationError{
+					field:  fmt.Sprintf("Orders[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetPositions()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AccountReplyValidationError{
+					field:  "Positions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AccountReplyValidationError{
+					field:  "Positions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPositions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AccountReplyValidationError{
+				field:  "Positions",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return AccountReplyMultiError(errors)
@@ -701,22 +450,126 @@ var _ interface {
 	ErrorName() string
 } = AccountReplyValidationError{}
 
-// Validate checks the field values on AccountPositionsReply_Positions with the
-// rules defined in the proto definition for this message. If any rules are
+// Validate checks the field values on AccountDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *AccountPositionsReply_Positions) Validate() error {
+func (m *AccountDeleteReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AccountPositionsReply_Positions with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// AccountPositionsReply_PositionsMultiError, or nil if none found.
-func (m *AccountPositionsReply_Positions) ValidateAll() error {
+// ValidateAll checks the field values on AccountDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AccountDeleteReplyMultiError, or nil if none found.
+func (m *AccountDeleteReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AccountPositionsReply_Positions) validate(all bool) error {
+func (m *AccountDeleteReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return AccountDeleteReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// AccountDeleteReplyMultiError is an error wrapping multiple validation errors
+// returned by AccountDeleteReply.ValidateAll() if the designated constraints
+// aren't met.
+type AccountDeleteReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AccountDeleteReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AccountDeleteReplyMultiError) AllErrors() []error { return m }
+
+// AccountDeleteReplyValidationError is the validation error returned by
+// AccountDeleteReply.Validate if the designated constraints aren't met.
+type AccountDeleteReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AccountDeleteReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AccountDeleteReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AccountDeleteReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AccountDeleteReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AccountDeleteReplyValidationError) ErrorName() string {
+	return "AccountDeleteReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AccountDeleteReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAccountDeleteReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AccountDeleteReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AccountDeleteReplyValidationError{}
+
+// Validate checks the field values on AccountReply_Positions with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AccountReply_Positions) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AccountReply_Positions with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AccountReply_PositionsMultiError, or nil if none found.
+func (m *AccountReply_Positions) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AccountReply_Positions) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -730,7 +583,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, AccountPositionsReply_PositionsValidationError{
+					errors = append(errors, AccountReply_PositionsValidationError{
 						field:  fmt.Sprintf("Companies[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -738,7 +591,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, AccountPositionsReply_PositionsValidationError{
+					errors = append(errors, AccountReply_PositionsValidationError{
 						field:  fmt.Sprintf("Companies[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -747,7 +600,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return AccountPositionsReply_PositionsValidationError{
+				return AccountReply_PositionsValidationError{
 					field:  fmt.Sprintf("Companies[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -764,7 +617,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, AccountPositionsReply_PositionsValidationError{
+					errors = append(errors, AccountReply_PositionsValidationError{
 						field:  fmt.Sprintf("Currencies[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -772,7 +625,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, AccountPositionsReply_PositionsValidationError{
+					errors = append(errors, AccountReply_PositionsValidationError{
 						field:  fmt.Sprintf("Currencies[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -781,7 +634,7 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return AccountPositionsReply_PositionsValidationError{
+				return AccountReply_PositionsValidationError{
 					field:  fmt.Sprintf("Currencies[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -792,19 +645,19 @@ func (m *AccountPositionsReply_Positions) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return AccountPositionsReply_PositionsMultiError(errors)
+		return AccountReply_PositionsMultiError(errors)
 	}
 
 	return nil
 }
 
-// AccountPositionsReply_PositionsMultiError is an error wrapping multiple
-// validation errors returned by AccountPositionsReply_Positions.ValidateAll()
-// if the designated constraints aren't met.
-type AccountPositionsReply_PositionsMultiError []error
+// AccountReply_PositionsMultiError is an error wrapping multiple validation
+// errors returned by AccountReply_Positions.ValidateAll() if the designated
+// constraints aren't met.
+type AccountReply_PositionsMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AccountPositionsReply_PositionsMultiError) Error() string {
+func (m AccountReply_PositionsMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -813,12 +666,11 @@ func (m AccountPositionsReply_PositionsMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AccountPositionsReply_PositionsMultiError) AllErrors() []error { return m }
+func (m AccountReply_PositionsMultiError) AllErrors() []error { return m }
 
-// AccountPositionsReply_PositionsValidationError is the validation error
-// returned by AccountPositionsReply_Positions.Validate if the designated
-// constraints aren't met.
-type AccountPositionsReply_PositionsValidationError struct {
+// AccountReply_PositionsValidationError is the validation error returned by
+// AccountReply_Positions.Validate if the designated constraints aren't met.
+type AccountReply_PositionsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -826,24 +678,24 @@ type AccountPositionsReply_PositionsValidationError struct {
 }
 
 // Field function returns field value.
-func (e AccountPositionsReply_PositionsValidationError) Field() string { return e.field }
+func (e AccountReply_PositionsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AccountPositionsReply_PositionsValidationError) Reason() string { return e.reason }
+func (e AccountReply_PositionsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AccountPositionsReply_PositionsValidationError) Cause() error { return e.cause }
+func (e AccountReply_PositionsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AccountPositionsReply_PositionsValidationError) Key() bool { return e.key }
+func (e AccountReply_PositionsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AccountPositionsReply_PositionsValidationError) ErrorName() string {
-	return "AccountPositionsReply_PositionsValidationError"
+func (e AccountReply_PositionsValidationError) ErrorName() string {
+	return "AccountReply_PositionsValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e AccountPositionsReply_PositionsValidationError) Error() string {
+func (e AccountReply_PositionsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -855,14 +707,14 @@ func (e AccountPositionsReply_PositionsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAccountPositionsReply_Positions.%s: %s%s",
+		"invalid %sAccountReply_Positions.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AccountPositionsReply_PositionsValidationError{}
+var _ error = AccountReply_PositionsValidationError{}
 
 var _ interface {
 	Field() string
@@ -870,4 +722,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AccountPositionsReply_PositionsValidationError{}
+} = AccountReply_PositionsValidationError{}

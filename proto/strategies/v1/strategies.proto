@@ -7,8 +7,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/quotes/v1/quotes.proto";
-import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/strategies/v1;strategies_v1";
 option java_multiple_files = true;
@@ -47,18 +45,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Strategies {
+	// Public API
+	// Get Strategy properties
 	rpc Get (StrategyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
 		  	get: "/v1/strategy/{ticker}"
 		};
 	}
 
+	// Public API
+	// List Strategies
 	rpc List (google.protobuf.Empty) returns (StrategyReplies)  {
 		option (google.api.http) = {
 		  	get: "/v1/strategies"
 		};
 	}
 
+	// Public API
+	// Create Strategy
 	rpc Create (StrategyUpdateRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
 		  	post: "/v1/strategy"
@@ -66,6 +70,8 @@ service Strategies {
 		};
 	}
 
+	// Public API
+	// Update Strategy properties
 	rpc Update (StrategyUpdateRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
 			put: "/v1/strategy/{ticker}"
@@ -73,16 +79,11 @@ service Strategies {
 		};
 	}
 
-	rpc Delete (StrategyRequest) returns (google.protobuf.Empty)  {
+	// Public API
+	// Delete Strategy
+	rpc Delete (StrategyDeleteRequest) returns (StrategyDeleteReply)  {
 		option (google.api.http) = {
-		  	delete: "/v1/strategy/{ticker}"
-		};
-	}
-
-	rpc Execute (StrategyExecuteRequest) returns (StrategyExecutedReply)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategy/{strategy.ticker}/execute"
-		  	body: "*"
+		  	delete: "/v1/strategies"
 		};
 	}
 }
@@ -110,19 +111,11 @@ message StrategyUpdateRequest {
 	string description = 4;
 	Request parameters = 5;
 }
-  
-message StrategyExecuteRequest {
-	message Strategy {
-		string ticker = 1;
-		map<string, int32> params = 2 [(validate.rules).map = {min_pairs: 2, max_pairs: 10}];
-		float inject = 3;
-	}
 
-	quotes.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	quotes.v1.Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
-	Strategy strategy = 3;
-	repeated screener.v1.FilterSimple filters = 4 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+message StrategyDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
 }
+
 
 // 
 // Reply
@@ -139,18 +132,9 @@ message StrategyReply {
 
 message StrategyReplies {
 	repeated StrategyReply results = 1;
-	int32 total = 2; 
+	int64 total = 2; 
 }
 
-message StrategyExecutedReply {
-	enum Action {
-		BUY = 0;
-		SELL = 1;
-		HOLD = 2;
-	}
-
-	Action action = 1;
-	google.protobuf.Timestamp date = 2;
-	float last_quote = 3;
-	google.protobuf.Timestamp last_quote_date = 4;
+message StrategyDeleteReply {
+	int64 total = 1;
 }

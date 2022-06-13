@@ -18,35 +18,52 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndicatorsClient interface {
+	// Public API
 	// AVGPRICE - Average Price
 	AVGPRICE(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// SMA - Simple Moving Average
 	SMA(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// EMA - Exponential Moving Average
 	EMA(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
+	// WMA - Weighted Moving Average
 	WMA(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// VAR - Variance
 	VAR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// RSI - Relative Strength Index
 	RSI(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorRsiReply, error)
+	// Public API
 	// STDDEV - Standard Deviation
 	STDDEV(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// LINEARREG_SLOPE - Linear Regression Slope
 	LINEARREG_SLOPE(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// DX - Directional Movement Index
 	DMI(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// ADX - Average Directional Movement Index
 	ADX(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// MACD - Moving Average Convergence/Divergence
 	MACD(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorMacdReply, error)
+	// Public API
 	// ATR - Average True Range
 	ATR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// CCI - Commodity Channel Index
 	CCI(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// BBANDS - Bollinger Bands
 	BBANDS(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorBBandsReply, error)
+	// Public API
 	// WILLR - Williams' %R
 	WILLR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
+	// Public API
 	// SAR - Parabolic SAR
 	SAR(ctx context.Context, in *IndicatorRequest, opts ...grpc.CallOption) (*IndicatorReply, error)
 }
@@ -207,35 +224,52 @@ func (c *indicatorsClient) SAR(ctx context.Context, in *IndicatorRequest, opts .
 // All implementations must embed UnimplementedIndicatorsServer
 // for forward compatibility
 type IndicatorsServer interface {
+	// Public API
 	// AVGPRICE - Average Price
 	AVGPRICE(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// SMA - Simple Moving Average
 	SMA(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// EMA - Exponential Moving Average
 	EMA(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
+	// WMA - Weighted Moving Average
 	WMA(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// VAR - Variance
 	VAR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// RSI - Relative Strength Index
 	RSI(context.Context, *IndicatorRequest) (*IndicatorRsiReply, error)
+	// Public API
 	// STDDEV - Standard Deviation
 	STDDEV(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// LINEARREG_SLOPE - Linear Regression Slope
 	LINEARREG_SLOPE(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// DX - Directional Movement Index
 	DMI(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// ADX - Average Directional Movement Index
 	ADX(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// MACD - Moving Average Convergence/Divergence
 	MACD(context.Context, *IndicatorRequest) (*IndicatorMacdReply, error)
+	// Public API
 	// ATR - Average True Range
 	ATR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// CCI - Commodity Channel Index
 	CCI(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// BBANDS - Bollinger Bands
 	BBANDS(context.Context, *IndicatorRequest) (*IndicatorBBandsReply, error)
+	// Public API
 	// WILLR - Williams' %R
 	WILLR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
+	// Public API
 	// SAR - Parabolic SAR
 	SAR(context.Context, *IndicatorRequest) (*IndicatorReply, error)
 	mustEmbedUnimplementedIndicatorsServer()

@@ -45,18 +45,30 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Dividends {
-	rpc Last (DividendsLastRequest) returns (DividendsLastReply)  {
+	// Public API
+	// Get Last dividend result
+	rpc Last (DividendLastRequest) returns (DividendLastReply)  {
         option (google.api.http) = {
-            get: "/v1/dividends/{exchange}/{ticker}"
+            get: "/v1/dividend/{exchange}/{ticker}"
         };
     }
 
-  	rpc Search (DividendsRequest) returns (DividendsReply)  {
+	// Public API
+	// Search dividends by date
+  	rpc Search (DividendRequest) returns (DividendReply)  {
         option (google.api.http) = {
             post: "/v1/dividends"
 			body: "*"
         };
     }
+
+	// Private API
+	// Delete dividends by exchanges or tickers
+	rpc Delete (DividendDeleteRequest) returns (DividendDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/dividends"
+		};
+	}
 }
 
 
@@ -76,14 +88,19 @@ message Filter {
 	string value = 3;
 }
   
-message DividendsRequest {
+message DividendRequest {
 	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
 	repeated screener.v1.FilterSimple filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
-message DividendsLastRequest {
+message DividendLastRequest {
 	string exchange = 1;
 	string ticker = 2;
+}
+
+message DividendDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -91,7 +108,7 @@ message DividendsLastRequest {
 // Reply
 // 
 
-message DividendsLastReply {
+message DividendLastReply {
 	float values = 1;
 	google.protobuf.Timestamp declarationDate = 2;
 	google.protobuf.Timestamp recordDate = 3;
@@ -99,10 +116,14 @@ message DividendsLastReply {
 	google.protobuf.Timestamp created_at = 5;
 }
 
-message DividendsReply {
+message DividendReply {
 	repeated float values = 1;
 	repeated google.protobuf.Timestamp declarationDate = 2;
 	repeated google.protobuf.Timestamp recordDate = 3;
 	repeated google.protobuf.Timestamp paymentDate = 4;
 	repeated google.protobuf.Timestamp created_at = 5;
+}
+
+message DividendDeleteReply {
+	int64 total = 1;
 }

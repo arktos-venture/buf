@@ -20,8 +20,7 @@ const _ = http.SupportPackageIsVersion1
 
 type StrategiesHTTPServer interface {
 	Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
-	Delete(context.Context, *StrategyRequest) (*emptypb.Empty, error)
-	Execute(context.Context, *StrategyExecuteRequest) (*StrategyExecutedReply, error)
+	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error)
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
 	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
 	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
@@ -33,8 +32,7 @@ func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r.GET("/v1/strategies", _Strategies_List3_HTTP_Handler(srv))
 	r.POST("/v1/strategy", _Strategies_Create1_HTTP_Handler(srv))
 	r.PUT("/v1/strategy/{ticker}", _Strategies_Update1_HTTP_Handler(srv))
-	r.DELETE("/v1/strategy/{ticker}", _Strategies_Delete1_HTTP_Handler(srv))
-	r.POST("/v1/strategy/{strategy.ticker}/execute", _Strategies_Execute1_HTTP_Handler(srv))
+	r.DELETE("/v1/strategies", _Strategies_Delete4_HTTP_Handler(srv))
 }
 
 func _Strategies_Get4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
@@ -119,54 +117,28 @@ func _Strategies_Update1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Strategies_Delete1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Delete4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StrategyRequest
+		var in StrategyDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/strategies.v1.Strategies/Delete")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Delete(ctx, req.(*StrategyRequest))
+			return srv.Delete(ctx, req.(*StrategyDeleteRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*emptypb.Empty)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Strategies_Execute1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in StrategyExecuteRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/strategies.v1.Strategies/Execute")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Execute(ctx, req.(*StrategyExecuteRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*StrategyExecutedReply)
+		reply := out.(*StrategyDeleteReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type StrategiesHTTPClient interface {
 	Create(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
-	Delete(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
-	Execute(ctx context.Context, req *StrategyExecuteRequest, opts ...http.CallOption) (rsp *StrategyExecutedReply, err error)
+	Delete(ctx context.Context, req *StrategyDeleteRequest, opts ...http.CallOption) (rsp *StrategyDeleteReply, err error)
 	Get(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *StrategyReplies, err error)
 	Update(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
@@ -193,26 +165,13 @@ func (c *StrategiesHTTPClientImpl) Create(ctx context.Context, in *StrategyUpdat
 	return &out, err
 }
 
-func (c *StrategiesHTTPClientImpl) Delete(ctx context.Context, in *StrategyRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
-	var out emptypb.Empty
-	pattern := "/v1/strategy/{ticker}"
+func (c *StrategiesHTTPClientImpl) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...http.CallOption) (*StrategyDeleteReply, error) {
+	var out StrategyDeleteReply
+	pattern := "/v1/strategies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/strategies.v1.Strategies/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *StrategiesHTTPClientImpl) Execute(ctx context.Context, in *StrategyExecuteRequest, opts ...http.CallOption) (*StrategyExecutedReply, error) {
-	var out StrategyExecutedReply
-	pattern := "/v1/strategy/{strategy.ticker}/execute"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/strategies.v1.Strategies/Execute"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

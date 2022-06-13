@@ -18,19 +18,21 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type QuotesHTTPServer interface {
-	Last(context.Context, *QuotesLastRequest) (*QuotesLastReply, error)
-	Search(context.Context, *QuotesRequest) (*QuotesReply, error)
+	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error)
+	Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error)
+	Search(context.Context, *QuoteRequest) (*QuoteReply, error)
 }
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/quotes/{exchange}/{ticker}", _Quotes_Last0_HTTP_Handler(srv))
-	r.POST("/v1/quotes", _Quotes_Search2_HTTP_Handler(srv))
+	r.POST("/v1/quotes", _Quotes_Search1_HTTP_Handler(srv))
+	r.DELETE("/v1/quotes", _Quotes_Delete0_HTTP_Handler(srv))
 }
 
 func _Quotes_Last0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesLastRequest
+		var in QuoteLastRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -39,39 +41,59 @@ func _Quotes_Last0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Last")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Last(ctx, req.(*QuotesLastRequest))
+			return srv.Last(ctx, req.(*QuoteLastRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*QuotesLastReply)
+		reply := out.(*QuoteLastReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Quotes_Search2_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Search1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in QuotesRequest
+		var in QuoteRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/quotes.v1.Quotes/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Search(ctx, req.(*QuotesRequest))
+			return srv.Search(ctx, req.(*QuoteRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*QuotesReply)
+		reply := out.(*QuoteReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Quotes_Delete0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QuoteDeleteRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/quotes.v1.Quotes/Delete")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Delete(ctx, req.(*QuoteDeleteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QuoteDeleteReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type QuotesHTTPClient interface {
-	Last(ctx context.Context, req *QuotesLastRequest, opts ...http.CallOption) (rsp *QuotesLastReply, err error)
-	Search(ctx context.Context, req *QuotesRequest, opts ...http.CallOption) (rsp *QuotesReply, err error)
+	Delete(ctx context.Context, req *QuoteDeleteRequest, opts ...http.CallOption) (rsp *QuoteDeleteReply, err error)
+	Last(ctx context.Context, req *QuoteLastRequest, opts ...http.CallOption) (rsp *QuoteLastReply, err error)
+	Search(ctx context.Context, req *QuoteRequest, opts ...http.CallOption) (rsp *QuoteReply, err error)
 }
 
 type QuotesHTTPClientImpl struct {
@@ -82,8 +104,21 @@ func NewQuotesHTTPClient(client *http.Client) QuotesHTTPClient {
 	return &QuotesHTTPClientImpl{client}
 }
 
-func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuotesLastRequest, opts ...http.CallOption) (*QuotesLastReply, error) {
-	var out QuotesLastReply
+func (c *QuotesHTTPClientImpl) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...http.CallOption) (*QuoteDeleteReply, error) {
+	var out QuoteDeleteReply
+	pattern := "/v1/quotes"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/quotes.v1.Quotes/Delete"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuoteLastRequest, opts ...http.CallOption) (*QuoteLastReply, error) {
+	var out QuoteLastReply
 	pattern := "/v1/quotes/{exchange}/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Last"))
@@ -95,8 +130,8 @@ func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuotesLastRequest, 
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Search(ctx context.Context, in *QuotesRequest, opts ...http.CallOption) (*QuotesReply, error) {
-	var out QuotesReply
+func (c *QuotesHTTPClientImpl) Search(ctx context.Context, in *QuoteRequest, opts ...http.CallOption) (*QuoteReply, error) {
+	var out QuoteReply
 	pattern := "/v1/quotes"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Search"))

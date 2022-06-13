@@ -903,17 +903,6 @@ func (m *OrderDeleteRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetOrderId() < 1 {
-		err := OrderDeleteRequestValidationError{
-			field:  "OrderId",
-			reason: "value must be greater than or equal to 1",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(errors) > 0 {
 		return OrderDeleteRequestMultiError(errors)
 	}
@@ -1353,7 +1342,7 @@ func (m *OrderDelete) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Deleted
+	// no validation rules for Total
 
 	if len(errors) > 0 {
 		return OrderDeleteMultiError(errors)

@@ -19,11 +19,17 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CompaniesClient interface {
 	// Public API
+	// Get Company properties
 	Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error)
-	// Public API
-	Stats(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyStatsReply, error)
-	// Public API
-	Similars(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanySimilarsReply, error)
+	// Private API
+	// Create a new Company
+	Create(ctx context.Context, in *CompanyCreateRequest, opts ...grpc.CallOption) (*CompanyReply, error)
+	// Private API
+	// Update properties of Company
+	Update(ctx context.Context, in *CompanyUpdateRequest, opts ...grpc.CallOption) (*CompanyReply, error)
+	// Private API
+	// Delete Company
+	Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDeleteReply, error)
 }
 
 type companiesClient struct {
@@ -43,18 +49,27 @@ func (c *companiesClient) Get(ctx context.Context, in *CompanyRequest, opts ...g
 	return out, nil
 }
 
-func (c *companiesClient) Stats(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyStatsReply, error) {
-	out := new(CompanyStatsReply)
-	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Stats", in, out, opts...)
+func (c *companiesClient) Create(ctx context.Context, in *CompanyCreateRequest, opts ...grpc.CallOption) (*CompanyReply, error) {
+	out := new(CompanyReply)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *companiesClient) Similars(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanySimilarsReply, error) {
-	out := new(CompanySimilarsReply)
-	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Similars", in, out, opts...)
+func (c *companiesClient) Update(ctx context.Context, in *CompanyUpdateRequest, opts ...grpc.CallOption) (*CompanyReply, error) {
+	out := new(CompanyReply)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *companiesClient) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDeleteReply, error) {
+	out := new(CompanyDeleteReply)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,11 +81,17 @@ func (c *companiesClient) Similars(ctx context.Context, in *CompanyRequest, opts
 // for forward compatibility
 type CompaniesServer interface {
 	// Public API
+	// Get Company properties
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
-	// Public API
-	Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error)
-	// Public API
-	Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error)
+	// Private API
+	// Create a new Company
+	Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error)
+	// Private API
+	// Update properties of Company
+	Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error)
+	// Private API
+	// Delete Company
+	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error)
 	mustEmbedUnimplementedCompaniesServer()
 }
 
@@ -81,11 +102,14 @@ type UnimplementedCompaniesServer struct {
 func (UnimplementedCompaniesServer) Get(context.Context, *CompanyRequest) (*CompanyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCompaniesServer) Stats(context.Context, *CompanyRequest) (*CompanyStatsReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
+func (UnimplementedCompaniesServer) Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedCompaniesServer) Similars(context.Context, *CompanyRequest) (*CompanySimilarsReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Similars not implemented")
+func (UnimplementedCompaniesServer) Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedCompaniesServer) Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedCompaniesServer) mustEmbedUnimplementedCompaniesServer() {}
 
@@ -118,38 +142,56 @@ func _Companies_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Companies_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanyRequest)
+func _Companies_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CompaniesServer).Stats(ctx, in)
+		return srv.(CompaniesServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/companies.v1.Companies/Stats",
+		FullMethod: "/companies.v1.Companies/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompaniesServer).Stats(ctx, req.(*CompanyRequest))
+		return srv.(CompaniesServer).Create(ctx, req.(*CompanyCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Companies_Similars_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompanyRequest)
+func _Companies_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CompaniesServer).Similars(ctx, in)
+		return srv.(CompaniesServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/companies.v1.Companies/Similars",
+		FullMethod: "/companies.v1.Companies/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CompaniesServer).Similars(ctx, req.(*CompanyRequest))
+		return srv.(CompaniesServer).Update(ctx, req.(*CompanyUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Companies_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompaniesServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/companies.v1.Companies/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompaniesServer).Delete(ctx, req.(*CompanyDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -166,12 +208,16 @@ var Companies_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Companies_Get_Handler,
 		},
 		{
-			MethodName: "Stats",
-			Handler:    _Companies_Stats_Handler,
+			MethodName: "Create",
+			Handler:    _Companies_Create_Handler,
 		},
 		{
-			MethodName: "Similars",
-			Handler:    _Companies_Similars_Handler,
+			MethodName: "Update",
+			Handler:    _Companies_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Companies_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -27,7 +27,66 @@
   ],
   "paths": {
     "/v1/account/{account}": {
+      "get": {
+        "summary": "Public API\nGet Account properties",
+        "operationId": "Accounts_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AccountReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "delete": {
+        "summary": "Public API\nDelete existing Account",
+        "operationId": "Accounts_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AccountDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Accounts"
+        ]
+      },
       "put": {
+        "summary": "Public API\nUpdate properties of Account",
         "operationId": "Accounts_Update",
         "responses": {
           "200": {
@@ -57,9 +116,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "type": "string"
-                },
                 "description": {
                   "type": "string"
                 },
@@ -75,38 +131,9 @@
         ]
       }
     },
-    "/v1/account/{account}/positions": {
-      "get": {
-        "operationId": "Accounts_Positions",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AccountPositionsReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Accounts"
-        ]
-      }
-    },
     "/v1/accounts": {
       "post": {
+        "summary": "Public API\nCreate a new Account",
         "operationId": "Accounts_Create",
         "responses": {
           "200": {
@@ -128,7 +155,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1AccountCreateRequest"
+              "$ref": "#/definitions/v1AccountModifyRequest"
             }
           }
         ],
@@ -139,19 +166,19 @@
     }
   },
   "definitions": {
-    "AccountPositionsReplyPositions": {
+    "AccountReplyPositions": {
       "type": "object",
       "properties": {
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1PositionCompanyReply"
+            "$ref": "#/definitions/v1PositionReply"
           }
         },
         "currencies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1PositionCurrencyReply"
+            "$ref": "#/definitions/v1PositionReply"
           }
         }
       }
@@ -186,7 +213,7 @@
         }
       }
     },
-    "PositionCompanyReplyCost": {
+    "PositionReplyCost": {
       "type": "object",
       "properties": {
         "unit": {
@@ -199,7 +226,7 @@
         }
       }
     },
-    "PositionCompanyReplyPerformance": {
+    "PositionReplyPerformance": {
       "type": "object",
       "properties": {
         "percent": {
@@ -229,15 +256,6 @@
           }
         }
       }
-    },
-    "ordersv1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
     },
     "ordersv1Duration": {
       "type": "string",
@@ -269,10 +287,19 @@
         }
       }
     },
-    "v1AccountCreateRequest": {
+    "v1AccountDeleteReply": {
       "type": "object",
       "properties": {
-        "name": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1AccountModifyRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
           "type": "string"
         },
         "description": {
@@ -280,23 +307,6 @@
         },
         "currency": {
           "type": "string"
-        }
-      }
-    },
-    "v1AccountPositionsReply": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "orders": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1OrderReply"
-          }
-        },
-        "positions": {
-          "$ref": "#/definitions/AccountPositionsReplyPositions"
         }
       }
     },
@@ -311,8 +321,26 @@
         },
         "currency": {
           "type": "string"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OrderReply"
+          }
+        },
+        "positions": {
+          "$ref": "#/definitions/AccountReplyPositions"
         }
       }
+    },
+    "v1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
     },
     "v1OrderReply": {
       "type": "object",
@@ -327,7 +355,7 @@
           "type": "string"
         },
         "action": {
-          "$ref": "#/definitions/ordersv1Action"
+          "$ref": "#/definitions/v1Action"
         },
         "orderType": {
           "$ref": "#/definitions/v1OrderType"
@@ -365,7 +393,7 @@
       ],
       "default": "LMT"
     },
-    "v1PositionCompanyReply": {
+    "v1PositionReply": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -379,30 +407,10 @@
           "format": "float"
         },
         "cost": {
-          "$ref": "#/definitions/PositionCompanyReplyCost"
+          "$ref": "#/definitions/PositionReplyCost"
         },
         "performance": {
-          "$ref": "#/definitions/PositionCompanyReplyPerformance"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1PositionCurrencyReply": {
-      "type": "object",
-      "properties": {
-        "currency": {
-          "type": "string"
-        },
-        "size": {
-          "type": "number",
-          "format": "float"
+          "$ref": "#/definitions/PositionReplyPerformance"
         },
         "created_at": {
           "type": "string",

@@ -173,6 +173,172 @@ var _NewsRequest_Period_InLookup = map[string]struct{}{
 	"1w":   {},
 }
 
+// Validate checks the field values on NewsDeleteRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *NewsDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NewsDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NewsDeleteRequestMultiError, or nil if none found.
+func (m *NewsDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NewsDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetTickers()) < 1 {
+		err := NewsDeleteRequestValidationError{
+			field:  "Tickers",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_NewsDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
+
+	for idx, item := range m.GetTickers() {
+		_, _ = idx, item
+
+		if _, exists := _NewsDeleteRequest_Tickers_Unique[item]; exists {
+			err := NewsDeleteRequestValidationError{
+				field:  fmt.Sprintf("Tickers[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_NewsDeleteRequest_Tickers_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Tickers[idx]
+	}
+
+	if len(m.GetExchanges()) < 1 {
+		err := NewsDeleteRequestValidationError{
+			field:  "Exchanges",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_NewsDeleteRequest_Exchanges_Unique := make(map[string]struct{}, len(m.GetExchanges()))
+
+	for idx, item := range m.GetExchanges() {
+		_, _ = idx, item
+
+		if _, exists := _NewsDeleteRequest_Exchanges_Unique[item]; exists {
+			err := NewsDeleteRequestValidationError{
+				field:  fmt.Sprintf("Exchanges[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_NewsDeleteRequest_Exchanges_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Exchanges[idx]
+	}
+
+	if len(errors) > 0 {
+		return NewsDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// NewsDeleteRequestMultiError is an error wrapping multiple validation errors
+// returned by NewsDeleteRequest.ValidateAll() if the designated constraints
+// aren't met.
+type NewsDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NewsDeleteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NewsDeleteRequestMultiError) AllErrors() []error { return m }
+
+// NewsDeleteRequestValidationError is the validation error returned by
+// NewsDeleteRequest.Validate if the designated constraints aren't met.
+type NewsDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NewsDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NewsDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NewsDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NewsDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NewsDeleteRequestValidationError) ErrorName() string {
+	return "NewsDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NewsDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNewsDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NewsDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NewsDeleteRequestValidationError{}
+
 // Validate checks the field values on NewsReply with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -439,3 +605,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NewsRepliesValidationError{}
+
+// Validate checks the field values on NewsDeleteReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *NewsDeleteReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NewsDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NewsDeleteReplyMultiError, or nil if none found.
+func (m *NewsDeleteReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NewsDeleteReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return NewsDeleteReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// NewsDeleteReplyMultiError is an error wrapping multiple validation errors
+// returned by NewsDeleteReply.ValidateAll() if the designated constraints
+// aren't met.
+type NewsDeleteReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NewsDeleteReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NewsDeleteReplyMultiError) AllErrors() []error { return m }
+
+// NewsDeleteReplyValidationError is the validation error returned by
+// NewsDeleteReply.Validate if the designated constraints aren't met.
+type NewsDeleteReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NewsDeleteReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NewsDeleteReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NewsDeleteReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NewsDeleteReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NewsDeleteReplyValidationError) ErrorName() string { return "NewsDeleteReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e NewsDeleteReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNewsDeleteReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NewsDeleteReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NewsDeleteReplyValidationError{}

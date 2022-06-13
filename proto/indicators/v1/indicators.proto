@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;indicators_v1";
 option java_multiple_files = true;
@@ -13,37 +14,38 @@ option java_package = "dev.kratos.api.indicators.v1";
 option java_outer_classname = "APIIndicatorsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Indicators APIs";
-		description: "Indicators APIs";
-        version: "1.0";
+    title: "Indicators APIs";
+	  description: "Indicators APIs";
+    version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  	};
+  };
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  	security: {
+	  security: {
 			key: "bearer"
 			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  	type: TYPE_API_KEY
+		  	in: IN_HEADER
+		  	name: "Authorization"
+		  	description: "Authentication token, prefixed by Bearer: Bearer <token>"
 			}
-	  	}
+	  }
 	}
 	security: {
-	  	security_requirement: {
-			key: "bearer"
-	  	}
+	  security_requirement: {
+		  key: "bearer"
+	  }
 	}
 };
 
 service Indicators {
+  // Public API
   // AVGPRICE - Average Price
   rpc AVGPRICE (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -52,6 +54,7 @@ service Indicators {
     };
   }
 
+  // Public API
   // SMA - Simple Moving Average
   rpc SMA (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -60,6 +63,7 @@ service Indicators {
     };
   }
 
+  // Public API
   // EMA - Exponential Moving Average
   rpc EMA (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -68,6 +72,8 @@ service Indicators {
     };
   }
 
+  // Public API
+  // WMA - Weighted Moving Average
   rpc WMA (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
       post: "/v1/quotes/indicator/wma"
@@ -75,6 +81,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // VAR - Variance
   rpc VAR (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -83,6 +90,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // RSI - Relative Strength Index
   rpc RSI (IndicatorRequest) returns (IndicatorRsiReply)  {
     option (google.api.http) = {
@@ -91,6 +99,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // STDDEV - Standard Deviation
   rpc STDDEV (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -99,6 +108,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // LINEARREG_SLOPE - Linear Regression Slope
   rpc LINEARREG_SLOPE (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -107,6 +117,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // DX - Directional Movement Index
   rpc DMI (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -115,6 +126,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // ADX - Average Directional Movement Index
   rpc ADX (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -123,6 +135,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // MACD - Moving Average Convergence/Divergence
   rpc MACD (IndicatorRequest) returns (IndicatorMacdReply)  {
     option (google.api.http) = {
@@ -131,6 +144,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // ATR - Average True Range
   rpc ATR (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -139,6 +153,7 @@ service Indicators {
     };
   }
 
+  // Public API
   // CCI - Commodity Channel Index
   rpc CCI (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -147,6 +162,7 @@ service Indicators {
     };
   }
   
+  // Public API
   // BBANDS - Bollinger Bands
   rpc BBANDS (IndicatorRequest) returns (IndicatorBBandsReply)  {
     option (google.api.http) = {
@@ -155,6 +171,7 @@ service Indicators {
     };
   }
 
+  // Public API
   // WILLR - Williams' %R
   rpc WILLR (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -163,6 +180,7 @@ service Indicators {
     };
   }
 
+  // Public API
   // SAR - Parabolic SAR
   rpc SAR (IndicatorRequest) returns (IndicatorReply)  {
     option (google.api.http) = {
@@ -177,17 +195,8 @@ service Indicators {
 // Request
 // 
 
-message Quotes {
-  repeated float open = 1 [(validate.rules).repeated.min_items = 1];
-  repeated float high = 2 [(validate.rules).repeated.min_items = 1];
-  repeated float close = 3 [(validate.rules).repeated.min_items = 1];
-  repeated float low = 4 [(validate.rules).repeated.min_items = 1];
-  repeated int64 volume = 5 [(validate.rules).repeated.min_items = 1];
-  repeated google.protobuf.Timestamp created_at = 6 [(validate.rules).repeated.min_items = 1];
-}
-
 message IndicatorRequest {
-  Quotes quotes = 1 [(validate.rules).message.required = true];
+  quotes.v1.QuoteReply quotes = 1 [(validate.rules).message.required = true];
   map<string, float> parameters = 2 [(validate.rules).map.min_pairs = 1];
 }
 

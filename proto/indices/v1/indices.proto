@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
 
@@ -46,15 +47,45 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Indices {
-	rpc Get (IndicesRequest) returns (IndicesReply)  {
+	// Public API
+	// Get Indice properties
+	rpc Get (IndiceRequest) returns (IndiceReply)  {
 		option (google.api.http) = {
 			get: "/v1/indice/{ticker}"
 		};
 	}
 
-	rpc List (IndicesExchangeRequest) returns (IndicesShortReplies)  {
+	// Public API
+	// List Indices available
+	rpc List (google.protobuf.Empty) returns (IndiceShortReplies)  {
 		option (google.api.http) = {
-			get: "/v1/indices/exchange/{exchange}"
+			get: "/v1/indices"
+		};
+	}
+
+	// Private API
+	// Create Indice properties
+	rpc Create (IndiceModifyRequest) returns (IndiceReply)  {
+		option (google.api.http) = {
+			post: "/v1/indices/exchange/{exchange}"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Update Indice properties
+	rpc Update (IndiceModifyRequest) returns (IndiceReply)  {
+		option (google.api.http) = {
+			put: "/v1/indices/exchange/{exchange}"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete Indices
+	rpc Delete (IndiceDeleteRequest) returns (IndiceDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/indices"
 		};
 	}
 }
@@ -64,12 +95,19 @@ service Indices {
 // Request
 // 
 
-message IndicesRequest {
+message IndiceRequest {
   	string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
 }
 
-message IndicesExchangeRequest {
-  	string exchange = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
+message IndiceModifyRequest {
+	string ticker = 1;
+	string exchange = 2;
+	string description = 3;
+}
+
+message IndiceDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -77,24 +115,28 @@ message IndicesExchangeRequest {
 // Reply
 // 
 
-message IndicesReply {
+message IndiceReply {
 	string ticker = 1;
 	string exchange = 2;
 	string description = 3;
-	quotes.v1.QuotesLastReply quote = 4;
+	quotes.v1.QuoteLastReply quote = 4;
 	repeated screener.v1.ScreenerReply companies = 5;
 	google.protobuf.Timestamp created_at = 6;
 	google.protobuf.Timestamp updated_at = 7;
 }
 
-message IndicesShortReply {
+message IndiceShortReply {
 	string ticker = 1;
 	string description = 2;
 	google.protobuf.Timestamp created_at = 3;
 	google.protobuf.Timestamp updated_at = 4;
 }
 
-message IndicesShortReplies {
-	repeated IndicesShortReply results = 1;
-	int32 total = 2;
+message IndiceShortReplies {
+	repeated IndiceShortReply results = 1;
+	int64 total = 2;
+}
+
+message IndiceDeleteReply {
+	int64 total = 1;
 }

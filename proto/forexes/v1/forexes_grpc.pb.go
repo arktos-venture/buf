@@ -18,8 +18,18 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ForexesClient interface {
+	// Public API
+	// Get Forexes properties
 	Get(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexReply, error)
+	// Public API
+	// List Forexes available
 	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexListReply, error)
+	// Private API
+	// Create new Forexes
+	Create(ctx context.Context, in *ForexCreateRequest, opts ...grpc.CallOption) (*ForexReply, error)
+	// Private API
+	// Delete Forexes
+	Delete(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexDeleteReply, error)
 }
 
 type forexesClient struct {
@@ -48,12 +58,40 @@ func (c *forexesClient) List(ctx context.Context, in *ForexListRequest, opts ...
 	return out, nil
 }
 
+func (c *forexesClient) Create(ctx context.Context, in *ForexCreateRequest, opts ...grpc.CallOption) (*ForexReply, error) {
+	out := new(ForexReply)
+	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *forexesClient) Delete(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexDeleteReply, error) {
+	out := new(ForexDeleteReply)
+	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ForexesServer is the server API for Forexes service.
 // All implementations must embed UnimplementedForexesServer
 // for forward compatibility
 type ForexesServer interface {
+	// Public API
+	// Get Forexes properties
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
+	// Public API
+	// List Forexes available
 	List(context.Context, *ForexListRequest) (*ForexListReply, error)
+	// Private API
+	// Create new Forexes
+	Create(context.Context, *ForexCreateRequest) (*ForexReply, error)
+	// Private API
+	// Delete Forexes
+	Delete(context.Context, *ForexRequest) (*ForexDeleteReply, error)
 	mustEmbedUnimplementedForexesServer()
 }
 
@@ -66,6 +104,12 @@ func (UnimplementedForexesServer) Get(context.Context, *ForexRequest) (*ForexRep
 }
 func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedForexesServer) Create(context.Context, *ForexCreateRequest) (*ForexReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedForexesServer) Delete(context.Context, *ForexRequest) (*ForexDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedForexesServer) mustEmbedUnimplementedForexesServer() {}
 
@@ -116,6 +160,42 @@ func _Forexes_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Forexes_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForexCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ForexesServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/forexes.v1.Forexes/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ForexesServer).Create(ctx, req.(*ForexCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Forexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForexRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ForexesServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/forexes.v1.Forexes/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ForexesServer).Delete(ctx, req.(*ForexRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Forexes_ServiceDesc is the grpc.ServiceDesc for Forexes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +210,14 @@ var Forexes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Forexes_List_Handler,
+		},
+		{
+			MethodName: "Create",
+			Handler:    _Forexes_Create_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Forexes_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

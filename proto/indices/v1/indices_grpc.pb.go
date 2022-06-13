@@ -7,6 +7,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -18,8 +19,21 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndicesClient interface {
-	Get(ctx context.Context, in *IndicesRequest, opts ...grpc.CallOption) (*IndicesReply, error)
-	List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReplies, error)
+	// Public API
+	// Get Indice properties
+	Get(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceReply, error)
+	// Public API
+	// List Indices available
+	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndiceShortReplies, error)
+	// Private API
+	// Create Indice properties
+	Create(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
+	// Private API
+	// Update Indice properties
+	Update(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
+	// Private API
+	// Delete Indices
+	Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDeleteReply, error)
 }
 
 type indicesClient struct {
@@ -30,8 +44,8 @@ func NewIndicesClient(cc grpc.ClientConnInterface) IndicesClient {
 	return &indicesClient{cc}
 }
 
-func (c *indicesClient) Get(ctx context.Context, in *IndicesRequest, opts ...grpc.CallOption) (*IndicesReply, error) {
-	out := new(IndicesReply)
+func (c *indicesClient) Get(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceReply, error) {
+	out := new(IndiceReply)
 	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,9 +53,36 @@ func (c *indicesClient) Get(ctx context.Context, in *IndicesRequest, opts ...grp
 	return out, nil
 }
 
-func (c *indicesClient) List(ctx context.Context, in *IndicesExchangeRequest, opts ...grpc.CallOption) (*IndicesShortReplies, error) {
-	out := new(IndicesShortReplies)
+func (c *indicesClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndiceShortReplies, error) {
+	out := new(IndiceShortReplies)
 	err := c.cc.Invoke(ctx, "/indices.v1.Indices/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *indicesClient) Create(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error) {
+	out := new(IndiceReply)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *indicesClient) Update(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error) {
+	out := new(IndiceReply)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *indicesClient) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDeleteReply, error) {
+	out := new(IndiceDeleteReply)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +93,21 @@ func (c *indicesClient) List(ctx context.Context, in *IndicesExchangeRequest, op
 // All implementations must embed UnimplementedIndicesServer
 // for forward compatibility
 type IndicesServer interface {
-	Get(context.Context, *IndicesRequest) (*IndicesReply, error)
-	List(context.Context, *IndicesExchangeRequest) (*IndicesShortReplies, error)
+	// Public API
+	// Get Indice properties
+	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
+	// Public API
+	// List Indices available
+	List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error)
+	// Private API
+	// Create Indice properties
+	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
+	// Private API
+	// Update Indice properties
+	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
+	// Private API
+	// Delete Indices
+	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDeleteReply, error)
 	mustEmbedUnimplementedIndicesServer()
 }
 
@@ -61,11 +115,20 @@ type IndicesServer interface {
 type UnimplementedIndicesServer struct {
 }
 
-func (UnimplementedIndicesServer) Get(context.Context, *IndicesRequest) (*IndicesReply, error) {
+func (UnimplementedIndicesServer) Get(context.Context, *IndiceRequest) (*IndiceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedIndicesServer) List(context.Context, *IndicesExchangeRequest) (*IndicesShortReplies, error) {
+func (UnimplementedIndicesServer) List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedIndicesServer) Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedIndicesServer) Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedIndicesServer) Delete(context.Context, *IndiceDeleteRequest) (*IndiceDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedIndicesServer) mustEmbedUnimplementedIndicesServer() {}
 
@@ -81,7 +144,7 @@ func RegisterIndicesServer(s grpc.ServiceRegistrar, srv IndicesServer) {
 }
 
 func _Indices_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndicesRequest)
+	in := new(IndiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -93,13 +156,13 @@ func _Indices_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: "/indices.v1.Indices/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).Get(ctx, req.(*IndicesRequest))
+		return srv.(IndicesServer).Get(ctx, req.(*IndiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Indices_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndicesExchangeRequest)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,7 +174,61 @@ func _Indices_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/indices.v1.Indices/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).List(ctx, req.(*IndicesExchangeRequest))
+		return srv.(IndicesServer).List(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Indices_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceModifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndicesServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indices.v1.Indices/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndicesServer).Create(ctx, req.(*IndiceModifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Indices_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceModifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndicesServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indices.v1.Indices/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndicesServer).Update(ctx, req.(*IndiceModifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Indices_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndicesServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indices.v1.Indices/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndicesServer).Delete(ctx, req.(*IndiceDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -130,6 +247,18 @@ var Indices_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Indices_List_Handler,
+		},
+		{
+			MethodName: "Create",
+			Handler:    _Indices_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Indices_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Indices_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

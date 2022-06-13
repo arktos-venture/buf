@@ -45,23 +45,37 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Accounts {
-	rpc Positions (AccountRequest) returns (AccountPositionsReply)  {
+	// Public API
+	// Get Account properties
+	rpc Get (AccountRequest) returns (AccountReply)  {
 		option (google.api.http) = {
-			get: "/v1/account/{account}/positions"
+			get: "/v1/account/{account}"
 		};
 	}
 
-	rpc Create (AccountCreateRequest) returns (AccountReply)  {
+	// Public API
+	// Create a new Account
+	rpc Create (AccountModifyRequest) returns (AccountReply)  {
 		option (google.api.http) = {
 			post: "/v1/accounts"
 			body: "*"
 		};
 	}
 
-	rpc Update (AccountUpdateRequest) returns (AccountReply)  {
+	// Public API
+	// Update properties of Account
+	rpc Update (AccountModifyRequest) returns (AccountReply)  {
 		option (google.api.http) = {
 			put: "/v1/account/{account}"
 			body: "*"
+		};
+	}
+
+	// Public API
+	// Delete existing Account
+	rpc Delete (AccountRequest) returns (AccountDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/account/{account}"
 		};
 	}
 }
@@ -75,17 +89,10 @@ message AccountRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
-message AccountCreateRequest {
-	string name = 1 [(validate.rules).string = {min_len: 3, max_len: 100}];
-	string description = 2 [(validate.rules).string = {min_len: 4, max_len: 128}];
-	string currency = 3 [(validate.rules).string.len = 3];
-}
-
-message AccountUpdateRequest {
+message AccountModifyRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 100}];
-	string description = 3 [(validate.rules).string = {min_len: 4, max_len: 128}];
-	string currency = 4 [(validate.rules).string.len = 3];
+	string description = 2 [(validate.rules).string = {min_len: 3, max_len: 512}];
+	string currency = 3 [(validate.rules).string.len = 3];
 }
 
 
@@ -93,19 +100,19 @@ message AccountUpdateRequest {
 // Reply
 // 
 
-message AccountPositionsReply {
+message AccountReply {
 	message Positions {
-		repeated positions.v1.PositionCompanyReply companies = 1;
-		repeated positions.v1.PositionCurrencyReply currencies = 2;
+		repeated positions.v1.PositionReply companies = 1;
+		repeated positions.v1.PositionReply currencies = 2;
 	}
 
 	string account = 1;
-	repeated orders.v1.OrderReply orders = 2;
-	Positions positions = 3;
-}
-
-message AccountReply {
-	string account = 1;
 	string description = 2;
 	string currency = 3;
+	repeated orders.v1.OrderReply orders = 4;
+	Positions positions = 5;
+}
+
+message AccountDeleteReply {
+	int64 total = 1;
 }

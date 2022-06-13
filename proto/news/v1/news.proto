@@ -45,10 +45,20 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 
 service News {
+	// Public API
+	// Search news results
 	rpc Search (NewsRequest) returns (NewsReplies)  {
 		option (google.api.http) = {
 		  	post: "/v1/news"
 			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete news by exchanges or tickers
+	rpc Delete (NewsDeleteRequest) returns (NewsDeleteReply)  {
+		option (google.api.http) = {
+		  	delete: "/v1/news"
 		};
 	}
 }
@@ -62,6 +72,11 @@ message NewsRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w"]}];
+}
+
+message NewsDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
 }
 
 
@@ -78,5 +93,9 @@ message NewsReply {
 
 message NewsReplies {
 	repeated NewsReply results = 1;
-	int32 total = 2;
+	int64 total = 2;
+}
+
+message NewsDeleteReply {
+	int64 total = 1;
 }

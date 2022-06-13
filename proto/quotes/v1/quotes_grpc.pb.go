@@ -18,8 +18,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuotesClient interface {
-	Last(ctx context.Context, in *QuotesLastRequest, opts ...grpc.CallOption) (*QuotesLastReply, error)
-	Search(ctx context.Context, in *QuotesRequest, opts ...grpc.CallOption) (*QuotesReply, error)
+	// Public API
+	// Get Last Quotes for one ticker
+	Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteLastReply, error)
+	// Public API
+	// Search Quotes by dates
+	Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error)
+	// Private API
+	// Delete Quotes
+	Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDeleteReply, error)
 }
 
 type quotesClient struct {
@@ -30,8 +37,8 @@ func NewQuotesClient(cc grpc.ClientConnInterface) QuotesClient {
 	return &quotesClient{cc}
 }
 
-func (c *quotesClient) Last(ctx context.Context, in *QuotesLastRequest, opts ...grpc.CallOption) (*QuotesLastReply, error) {
-	out := new(QuotesLastReply)
+func (c *quotesClient) Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteLastReply, error) {
+	out := new(QuoteLastReply)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Last", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,9 +46,18 @@ func (c *quotesClient) Last(ctx context.Context, in *QuotesLastRequest, opts ...
 	return out, nil
 }
 
-func (c *quotesClient) Search(ctx context.Context, in *QuotesRequest, opts ...grpc.CallOption) (*QuotesReply, error) {
-	out := new(QuotesReply)
+func (c *quotesClient) Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error) {
+	out := new(QuoteReply)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Search", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *quotesClient) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDeleteReply, error) {
+	out := new(QuoteDeleteReply)
+	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +68,15 @@ func (c *quotesClient) Search(ctx context.Context, in *QuotesRequest, opts ...gr
 // All implementations must embed UnimplementedQuotesServer
 // for forward compatibility
 type QuotesServer interface {
-	Last(context.Context, *QuotesLastRequest) (*QuotesLastReply, error)
-	Search(context.Context, *QuotesRequest) (*QuotesReply, error)
+	// Public API
+	// Get Last Quotes for one ticker
+	Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error)
+	// Public API
+	// Search Quotes by dates
+	Search(context.Context, *QuoteRequest) (*QuoteReply, error)
+	// Private API
+	// Delete Quotes
+	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error)
 	mustEmbedUnimplementedQuotesServer()
 }
 
@@ -61,11 +84,14 @@ type QuotesServer interface {
 type UnimplementedQuotesServer struct {
 }
 
-func (UnimplementedQuotesServer) Last(context.Context, *QuotesLastRequest) (*QuotesLastReply, error) {
+func (UnimplementedQuotesServer) Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedQuotesServer) Search(context.Context, *QuotesRequest) (*QuotesReply, error) {
+func (UnimplementedQuotesServer) Search(context.Context, *QuoteRequest) (*QuoteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedQuotesServer) Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedQuotesServer) mustEmbedUnimplementedQuotesServer() {}
 
@@ -81,7 +107,7 @@ func RegisterQuotesServer(s grpc.ServiceRegistrar, srv QuotesServer) {
 }
 
 func _Quotes_Last_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesLastRequest)
+	in := new(QuoteLastRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -93,13 +119,13 @@ func _Quotes_Last_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: "/quotes.v1.Quotes/Last",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Last(ctx, req.(*QuotesLastRequest))
+		return srv.(QuotesServer).Last(ctx, req.(*QuoteLastRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Quotes_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuotesRequest)
+	in := new(QuoteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,7 +137,25 @@ func _Quotes_Search_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/quotes.v1.Quotes/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuotesServer).Search(ctx, req.(*QuotesRequest))
+		return srv.(QuotesServer).Search(ctx, req.(*QuoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Quotes_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuoteDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuotesServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/quotes.v1.Quotes/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuotesServer).Delete(ctx, req.(*QuoteDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -130,6 +174,10 @@ var Quotes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Quotes_Search_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Quotes_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

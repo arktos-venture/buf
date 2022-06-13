@@ -147,6 +147,140 @@ var _ interface {
 	ErrorName() string
 } = CurrencyRequestValidationError{}
 
+// Validate checks the field values on CurrencyDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CurrencyDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CurrencyDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CurrencyDeleteRequestMultiError, or nil if none found.
+func (m *CurrencyDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CurrencyDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetTickers()) < 1 {
+		err := CurrencyDeleteRequestValidationError{
+			field:  "Tickers",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_CurrencyDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
+
+	for idx, item := range m.GetTickers() {
+		_, _ = idx, item
+
+		if _, exists := _CurrencyDeleteRequest_Tickers_Unique[item]; exists {
+			err := CurrencyDeleteRequestValidationError{
+				field:  fmt.Sprintf("Tickers[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_CurrencyDeleteRequest_Tickers_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Tickers[idx]
+	}
+
+	if len(errors) > 0 {
+		return CurrencyDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CurrencyDeleteRequestMultiError is an error wrapping multiple validation
+// errors returned by CurrencyDeleteRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CurrencyDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CurrencyDeleteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CurrencyDeleteRequestMultiError) AllErrors() []error { return m }
+
+// CurrencyDeleteRequestValidationError is the validation error returned by
+// CurrencyDeleteRequest.Validate if the designated constraints aren't met.
+type CurrencyDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CurrencyDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CurrencyDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CurrencyDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CurrencyDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CurrencyDeleteRequestValidationError) ErrorName() string {
+	return "CurrencyDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CurrencyDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCurrencyDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CurrencyDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CurrencyDeleteRequestValidationError{}
+
 // Validate checks the field values on CurrencyReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -350,3 +484,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CurrencyRepliesValidationError{}
+
+// Validate checks the field values on CurrencyDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CurrencyDeleteReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CurrencyDeleteReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CurrencyDeleteReplyMultiError, or nil if none found.
+func (m *CurrencyDeleteReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CurrencyDeleteReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return CurrencyDeleteReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// CurrencyDeleteReplyMultiError is an error wrapping multiple validation
+// errors returned by CurrencyDeleteReply.ValidateAll() if the designated
+// constraints aren't met.
+type CurrencyDeleteReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CurrencyDeleteReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CurrencyDeleteReplyMultiError) AllErrors() []error { return m }
+
+// CurrencyDeleteReplyValidationError is the validation error returned by
+// CurrencyDeleteReply.Validate if the designated constraints aren't met.
+type CurrencyDeleteReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CurrencyDeleteReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CurrencyDeleteReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CurrencyDeleteReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CurrencyDeleteReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CurrencyDeleteReplyValidationError) ErrorName() string {
+	return "CurrencyDeleteReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CurrencyDeleteReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCurrencyDeleteReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CurrencyDeleteReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CurrencyDeleteReplyValidationError{}

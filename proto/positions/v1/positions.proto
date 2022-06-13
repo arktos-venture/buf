@@ -13,9 +13,9 @@ option java_package = "dev.kratos.api.positions.v1";
 option java_outer_classname = "APIPositionsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Positions APIs";
+    title: "Positions APIs";
 		description: "Positions APIs accounts";
-        version: "1.0";
+    version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
@@ -26,14 +26,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  	security: {
-			key: "bearer"
-			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
-			}
+	  security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
 	  }
 	}
 	security: {
@@ -44,15 +44,20 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Positions {
-  rpc Companies (PositionRequest) returns (PositionCompanyReplies)  {
+	// Public API
+	// Search Positions opened
+  rpc Search (PositionRequest) returns (PositionReplies)  {
     option (google.api.http) = {
-      get: "/v1/positions/{account}/companies"
+      post: "/v1/positions"
+      body: "*"
     };
   }
 
-  rpc Currencies (PositionRequest) returns (PositionCurrencyReplies)  {
+	// Private API
+	// Delete Positions open or closed
+  rpc Delete (PositionRequest) returns (PositionDeleteReply)  {
     option (google.api.http) = {
-      get: "/v1/positions/{account}/currencies"
+      get: "/v1/positions/{account}"
     };
   }
 }
@@ -62,8 +67,14 @@ service Positions {
 // Request
 // 
 
+enum PositionTypes {
+  Companies = 0;
+  Currencies = 1;
+}
+
 message PositionRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  PositionTypes positions = 1 [(validate.rules).enum = {defined_only: true}];
+  string account = 2 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
 
@@ -71,7 +82,7 @@ message PositionRequest {
 // Reply
 // 
 
-message PositionCompanyReply {
+message PositionReply {
   message Performance {
     float percent = 1;
     float money = 2;
@@ -91,19 +102,11 @@ message PositionCompanyReply {
   google.protobuf.Timestamp updated_at = 7;
 }
 
-message PositionCompanyReplies {
-  repeated PositionCompanyReply results = 1;
-  int32 total = 2;
+message PositionReplies {
+  repeated PositionReply results = 1;
+  int64 total = 2;
 }
 
-message PositionCurrencyReply {
-  string currency = 1;
-  float size = 2;
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp updated_at = 4;
-}
-
-message PositionCurrencyReplies {
-  repeated PositionCurrencyReply results = 1;
-  int32 total = 2;
+message PositionDeleteReply {
+  int64 total = 1;
 }

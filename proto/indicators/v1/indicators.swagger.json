@@ -28,7 +28,7 @@
   "paths": {
     "/v1/quotes/indicator/adx": {
       "post": {
-        "summary": "ADX - Average Directional Movement Index",
+        "summary": "Public API\nADX - Average Directional Movement Index",
         "operationId": "Indicators_ADX",
         "responses": {
           "200": {
@@ -61,7 +61,7 @@
     },
     "/v1/quotes/indicator/atr": {
       "post": {
-        "summary": "ATR - Average True Range",
+        "summary": "Public API\nATR - Average True Range",
         "operationId": "Indicators_ATR",
         "responses": {
           "200": {
@@ -94,7 +94,7 @@
     },
     "/v1/quotes/indicator/avgprice": {
       "post": {
-        "summary": "AVGPRICE - Average Price",
+        "summary": "Public API\nAVGPRICE - Average Price",
         "operationId": "Indicators_AVGPRICE",
         "responses": {
           "200": {
@@ -127,7 +127,7 @@
     },
     "/v1/quotes/indicator/bbands": {
       "post": {
-        "summary": "BBANDS - Bollinger Bands",
+        "summary": "Public API\nBBANDS - Bollinger Bands",
         "operationId": "Indicators_BBANDS",
         "responses": {
           "200": {
@@ -160,7 +160,7 @@
     },
     "/v1/quotes/indicator/cci": {
       "post": {
-        "summary": "CCI - Commodity Channel Index",
+        "summary": "Public API\nCCI - Commodity Channel Index",
         "operationId": "Indicators_CCI",
         "responses": {
           "200": {
@@ -193,7 +193,7 @@
     },
     "/v1/quotes/indicator/dmi": {
       "post": {
-        "summary": "DX - Directional Movement Index",
+        "summary": "Public API\nDX - Directional Movement Index",
         "operationId": "Indicators_DMI",
         "responses": {
           "200": {
@@ -226,7 +226,7 @@
     },
     "/v1/quotes/indicator/ema": {
       "post": {
-        "summary": "EMA - Exponential Moving Average",
+        "summary": "Public API\nEMA - Exponential Moving Average",
         "operationId": "Indicators_EMA",
         "responses": {
           "200": {
@@ -259,7 +259,7 @@
     },
     "/v1/quotes/indicator/macd": {
       "post": {
-        "summary": "MACD - Moving Average Convergence/Divergence",
+        "summary": "Public API\nMACD - Moving Average Convergence/Divergence",
         "operationId": "Indicators_MACD",
         "responses": {
           "200": {
@@ -292,7 +292,7 @@
     },
     "/v1/quotes/indicator/rsi": {
       "post": {
-        "summary": "RSI - Relative Strength Index",
+        "summary": "Public API\nRSI - Relative Strength Index",
         "operationId": "Indicators_RSI",
         "responses": {
           "200": {
@@ -325,7 +325,7 @@
     },
     "/v1/quotes/indicator/sar": {
       "post": {
-        "summary": "SAR - Parabolic SAR",
+        "summary": "Public API\nSAR - Parabolic SAR",
         "operationId": "Indicators_SAR",
         "responses": {
           "200": {
@@ -358,7 +358,7 @@
     },
     "/v1/quotes/indicator/slope": {
       "post": {
-        "summary": "LINEARREG_SLOPE - Linear Regression Slope",
+        "summary": "Public API\nLINEARREG_SLOPE - Linear Regression Slope",
         "operationId": "Indicators_LINEARREG_SLOPE",
         "responses": {
           "200": {
@@ -391,7 +391,7 @@
     },
     "/v1/quotes/indicator/sma": {
       "post": {
-        "summary": "SMA - Simple Moving Average",
+        "summary": "Public API\nSMA - Simple Moving Average",
         "operationId": "Indicators_SMA",
         "responses": {
           "200": {
@@ -424,7 +424,7 @@
     },
     "/v1/quotes/indicator/stddev": {
       "post": {
-        "summary": "STDDEV - Standard Deviation",
+        "summary": "Public API\nSTDDEV - Standard Deviation",
         "operationId": "Indicators_STDDEV",
         "responses": {
           "200": {
@@ -457,7 +457,7 @@
     },
     "/v1/quotes/indicator/volatility": {
       "post": {
-        "summary": "VAR - Variance",
+        "summary": "Public API\nVAR - Variance",
         "operationId": "Indicators_VAR",
         "responses": {
           "200": {
@@ -490,7 +490,7 @@
     },
     "/v1/quotes/indicator/willr": {
       "post": {
-        "summary": "WILLR - Williams' %R",
+        "summary": "Public API\nWILLR - Williams' %R",
         "operationId": "Indicators_WILLR",
         "responses": {
           "200": {
@@ -523,6 +523,7 @@
     },
     "/v1/quotes/indicator/wma": {
       "post": {
+        "summary": "Public API\nWMA - Weighted Moving Average",
         "operationId": "Indicators_WMA",
         "responses": {
           "200": {
@@ -711,7 +712,7 @@
       "type": "object",
       "properties": {
         "quotes": {
-          "$ref": "#/definitions/v1Quotes"
+          "$ref": "#/definitions/v1QuoteReply"
         },
         "parameters": {
           "type": "object",
@@ -763,17 +764,10 @@
         }
       }
     },
-    "v1Quotes": {
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "high": {
           "type": "array",
           "items": {
             "type": "number",
@@ -794,11 +788,18 @@
             "format": "float"
           }
         },
+        "high": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
         "volume": {
           "type": "array",
           "items": {
-            "type": "string",
-            "format": "int64"
+            "type": "number",
+            "format": "float"
           }
         },
         "created_at": {

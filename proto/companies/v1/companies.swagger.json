@@ -26,9 +26,85 @@
     "application/json"
   ],
   "paths": {
+    "/v1/companies": {
+      "delete": {
+        "summary": "Private API\nDelete Company",
+        "operationId": "Companies_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Companies"
+        ]
+      },
+      "post": {
+        "summary": "Private API\nCreate a new Company",
+        "operationId": "Companies_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompanyCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Companies"
+        ]
+      }
+    },
     "/v1/company/{exchange}/{ticker}": {
       "get": {
-        "summary": "Public API",
+        "summary": "Public API\nGet Company properties",
         "operationId": "Companies_Get",
         "responses": {
           "200": {
@@ -61,17 +137,15 @@
         "tags": [
           "Companies"
         ]
-      }
-    },
-    "/v1/company/{exchange}/{ticker}/similars": {
-      "get": {
-        "summary": "Public API",
-        "operationId": "Companies_Similars",
+      },
+      "put": {
+        "summary": "Private API\nUpdate properties of Company",
+        "operationId": "Companies_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CompanySimilarsReply"
+              "$ref": "#/definitions/v1CompanyReply"
             }
           },
           "default": {
@@ -93,43 +167,63 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Companies"
-        ]
-      }
-    },
-    "/v1/company/{exchange}/{ticker}/stats": {
-      "get": {
-        "summary": "Public API",
-        "operationId": "Companies_Stats",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyStatsReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
           },
           {
-            "name": "ticker",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tickerIBKR": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "isin": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "activity": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "adr": {
+                  "type": "boolean"
+                },
+                "fiscalMonthEnd": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "currencyReport": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "website": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -161,89 +255,6 @@
         "activity": {
           "type": "string",
           "format": "int64"
-        }
-      }
-    },
-    "ScreenerReplyDividends": {
-      "type": "object",
-      "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
-        },
-        "annual": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "stats": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/VolumeStats"
-          }
-        }
-      }
-    },
-    "VolumeStats": {
-      "type": "object",
-      "properties": {
-        "avg": {
-          "type": "number",
-          "format": "float"
-        },
-        "variation": {
-          "type": "number",
-          "format": "float"
         }
       }
     },
@@ -308,6 +319,77 @@
         }
       }
     },
+    "v1CompanyCreateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "tickerIBKR": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        },
+        "adr": {
+          "type": "boolean"
+        },
+        "fiscalMonthEnd": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currencyReport": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1CompanyReply": {
       "type": "object",
       "properties": {
@@ -346,18 +428,15 @@
         "activity": {
           "$ref": "#/definitions/ScreenerReplyActivity"
         },
-        "shares": {
-          "$ref": "#/definitions/ScreenerReplyShares"
-        },
         "quote": {
-          "$ref": "#/definitions/v1QuotesLastReply"
+          "$ref": "#/definitions/v1QuoteLastReply"
         },
         "currencyReport": {
           "type": "string"
         },
         "fiscalYearEnd": {
-          "type": "string",
-          "format": "int64"
+          "type": "integer",
+          "format": "int32"
         },
         "contact": {
           "$ref": "#/definitions/v1CompanyContact"
@@ -375,75 +454,7 @@
         }
       }
     },
-    "v1CompanySimilarsReply": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1CompanySimilarsReplyResult"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1CompanySimilarsReplyResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "marketCap": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1CompanyStatsReply": {
-      "type": "object",
-      "properties": {
-        "shares": {
-          "$ref": "#/definitions/ScreenerReplyShares"
-        },
-        "pricing": {
-          "$ref": "#/definitions/ScreenerReplyPricing"
-        },
-        "dividends": {
-          "$ref": "#/definitions/ScreenerReplyDividends"
-        },
-        "volume": {
-          "$ref": "#/definitions/ScreenerReplyVolume"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1QuotesLastReply": {
+    "v1QuoteLastReply": {
       "type": "object",
       "properties": {
         "open": {

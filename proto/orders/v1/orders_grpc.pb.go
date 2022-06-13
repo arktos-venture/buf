@@ -18,9 +18,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrdersClient interface {
+	// Public API
+	// Search Orders open or executed
 	Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*OrderReplies, error)
+	// Public API
+	// Create Orders
 	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	// Public API
+	// Update existing Orders
 	Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	// Private API
+	// Delete/cancel existing Orders
 	Delete(ctx context.Context, in *OrderDeleteRequest, opts ...grpc.CallOption) (*OrderDelete, error)
 }
 
@@ -72,9 +80,17 @@ func (c *ordersClient) Delete(ctx context.Context, in *OrderDeleteRequest, opts 
 // All implementations must embed UnimplementedOrdersServer
 // for forward compatibility
 type OrdersServer interface {
+	// Public API
+	// Search Orders open or executed
 	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
+	// Public API
+	// Create Orders
 	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
+	// Public API
+	// Update existing Orders
 	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
+	// Private API
+	// Delete/cancel existing Orders
 	Delete(context.Context, *OrderDeleteRequest) (*OrderDelete, error)
 	mustEmbedUnimplementedOrdersServer()
 }

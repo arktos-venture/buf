@@ -28,12 +28,13 @@
   "paths": {
     "/v1/indexes": {
       "get": {
+        "summary": "Public API\nSearch Index companies",
         "operationId": "Indexes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexesSearchReplies"
+              "$ref": "#/definitions/v1IndexSearchReplies"
             }
           },
           "default": {
@@ -69,13 +70,47 @@
           "Indexes"
         ]
       },
+      "delete": {
+        "summary": "Public API\nDelete Index companies",
+        "operationId": "Indexes_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndexDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Indexes"
+        ]
+      },
       "post": {
+        "summary": "Public API\nCreate Index companies",
         "operationId": "Indexes_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexesReply"
+              "$ref": "#/definitions/v1IndexReply"
             }
           },
           "default": {
@@ -91,7 +126,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexesCreateRequest"
+              "$ref": "#/definitions/v1IndexCreateRequest"
             }
           }
         ],
@@ -100,12 +135,13 @@
         ]
       },
       "put": {
+        "summary": "Public API\nUpdate Index companies",
         "operationId": "Indexes_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexesReply"
+              "$ref": "#/definitions/v1IndexReply"
             }
           },
           "default": {
@@ -121,7 +157,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndexesCreateRequest"
+              "$ref": "#/definitions/v1IndexCreateRequest"
             }
           }
         ],
@@ -132,40 +168,13 @@
     },
     "/v1/indexes/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Index properties",
         "operationId": "Indexes_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexesReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Indexes"
-        ]
-      },
-      "delete": {
-        "operationId": "Indexes_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndexesReply"
+              "$ref": "#/definitions/v1IndexReply"
             }
           },
           "default": {
@@ -328,7 +337,7 @@
         }
       }
     },
-    "v1IndexesCreateRequest": {
+    "v1IndexCreateRequest": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -342,7 +351,16 @@
         }
       }
     },
-    "v1IndexesReply": {
+    "v1IndexDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1IndexReply": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -367,22 +385,22 @@
         }
       }
     },
-    "v1IndexesSearchReplies": {
+    "v1IndexSearchReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndexesSearchReply"
+            "$ref": "#/definitions/v1IndexSearchReply"
           }
         },
         "total": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
-    "v1IndexesSearchReply": {
+    "v1IndexSearchReply": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -390,7 +408,7 @@
         }
       }
     },
-    "v1IndexesSearchRequestPage": {
+    "v1IndexSearchRequestPage": {
       "type": "object",
       "properties": {
         "number": {

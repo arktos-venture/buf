@@ -14,67 +14,77 @@ option java_package = "dev.kratos.api.indexes.v1";
 option java_outer_classname = "APIIndexesProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-        title: "Indexes APIs";
+    title: "Indexes APIs";
 		description: "Indexes APIs";
-        version: "1.0";
+    version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  	};
+  };
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  	security: {
+	  security: {
 			key: "bearer"
 			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  	type: TYPE_API_KEY
+		  	in: IN_HEADER
+		  	name: "Authorization"
+		  	description: "Authentication token, prefixed by Bearer: Bearer <token>"
 			}
-	  	}
+	  }
 	}
 	security: {
-	  	security_requirement: {
+	  security_requirement: {
 			key: "bearer"
-	  	}
+	  }
 	}
 };
 
 
 service Indexes {
-  rpc Get (IndexesRequest) returns (IndexesReply)  {
+	// Public API
+	// Get Index properties
+  rpc Get (IndexRequest) returns (IndexReply)  {
     option (google.api.http) = {
       get: "/v1/indexes/{ticker}"
     };
   }
 
-  rpc Search (IndexesSearchRequest) returns (IndexesSearchReplies)  {
+	// Public API
+	// Search Index companies
+  rpc Search (IndexSearchRequest) returns (IndexSearchReplies)  {
     option (google.api.http) = {
       get: "/v1/indexes"
     };
   }
 
-  rpc Create (IndexesCreateRequest) returns (IndexesReply)  {
+	// Public API
+	// Create Index companies
+  rpc Create (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       post: "/v1/indexes"
       body: "*"
     };
   }
 
-  rpc Update (IndexesCreateRequest) returns (IndexesReply)  {
+	// Public API
+	// Update Index companies
+  rpc Update (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       put: "/v1/indexes"
       body: "*"
     };
   }
 
-  rpc Delete (IndexesRequest) returns (IndexesReply)  {
+	// Public API
+	// Delete Index companies
+  rpc Delete (IndexDeleteRequest) returns (IndexDeleteReply)  {
     option (google.api.http) = {
-      delete: "/v1/indexes/{ticker}"
+      delete: "/v1/indexes"
     };
   }
 }
@@ -84,11 +94,11 @@ service Indexes {
 // Request
 // 
 
-message IndexesRequest {
+message IndexRequest {
   string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 36}];
 }
 
-message IndexesSearchRequest {
+message IndexSearchRequest {
   message Page {
     int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
     int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
@@ -98,10 +108,14 @@ message IndexesSearchRequest {
   Page page = 2 [(validate.rules).message.required = true];
 }
 
-message IndexesCreateRequest {
+message IndexCreateRequest {
   string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 36}];
   string request = 2 [(validate.rules).string = {min_len: 8, max_len: 8196}];
   bool public = 3;
+}
+
+message IndexDeleteRequest {
+  repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
 }
 
 
@@ -109,7 +123,7 @@ message IndexesCreateRequest {
 // Reply
 // 
 
-message IndexesReply {
+message IndexReply {
   string ticker = 1;
   bool public = 2;
   repeated screener.v1.ScreenerReply companies = 3;
@@ -117,16 +131,20 @@ message IndexesReply {
 	google.protobuf.Timestamp updated_at = 5;
 }
 
-message IndexesReplies {
-  repeated IndexesReply results = 1;
-  int32 total = 2;
+message IndexReplies {
+  repeated IndexReply results = 1;
+  int64 total = 2;
 }
 
-message IndexesSearchReply {
+message IndexSearchReply {
   string ticker = 1;
 }
 
-message IndexesSearchReplies {
-  repeated IndexesSearchReply results = 1;
-  int32 total = 2;
+message IndexSearchReplies {
+  repeated IndexSearchReply results = 1;
+  int64 total = 2;
+}
+
+message IndexDeleteReply {
+  int64 total = 1;
 }

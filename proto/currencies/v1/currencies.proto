@@ -44,15 +44,27 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Currencies {
+	// Public API
+  	// Get Currency properties
 	rpc Get (CurrencyRequest) returns (CurrencyReply)  {
 		option (google.api.http) = {
 			get: "/v1/currency/{ticker}"
 		};
 	}
 
+	// Public API
+  	// List Currencies available
 	rpc List (google.protobuf.Empty) returns (CurrencyReplies)  {
 		option (google.api.http) = {
 			get: "/v1/currencies"
+		};
+	}
+
+	// Private API
+  	// Delete Currency & deps
+	rpc Delete (CurrencyDeleteRequest) returns (CurrencyDeleteReply)  {
+		option (google.api.http) = {
+			delete: "/v1/currencies"
 		};
 	}
 }
@@ -64,6 +76,10 @@ service Currencies {
 
 message CurrencyRequest {
 	string ticker = 1 [(validate.rules).string.len = 3];
+}
+
+message CurrencyDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
 }
 
 
@@ -78,5 +94,9 @@ message CurrencyReply {
 
 message CurrencyReplies {
 	repeated string results = 1;
-	int32 total = 2;
+	int64 total = 2;
+}
+
+message CurrencyDeleteReply {
+	int64 total = 1;
 }

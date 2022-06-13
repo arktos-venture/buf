@@ -25,12 +25,12 @@ type CountriesHTTPServer interface {
 
 func RegisterCountriesHTTPServer(s *http.Server, srv CountriesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/country/{country}", _Countries_Get6_HTTP_Handler(srv))
-	r.POST("/v1/countries", _Countries_Search5_HTTP_Handler(srv))
+	r.GET("/v1/country/{country}", _Countries_Get7_HTTP_Handler(srv))
+	r.POST("/v1/countries", _Countries_Search6_HTTP_Handler(srv))
 	r.GET("/v1/country/{country}/{indicator}", _Countries_Indicator0_HTTP_Handler(srv))
 }
 
-func _Countries_Get6_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
+func _Countries_Get7_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CountryRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -52,7 +52,7 @@ func _Countries_Get6_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Countries_Search5_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
+func _Countries_Search6_HTTP_Handler(srv CountriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CountrySearchRequest
 		if err := ctx.Bind(&in); err != nil {

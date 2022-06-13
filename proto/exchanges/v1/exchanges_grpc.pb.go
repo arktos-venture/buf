@@ -18,9 +18,18 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExchangesClient interface {
+	// Public API
+	// Get Exchange if is Open
 	IsOpen(ctx context.Context, in *ExchangeIsOpenRequest, opts ...grpc.CallOption) (*ExchangeIsOpenReply, error)
+	// Public API
+	// Get Exchange properties
 	Get(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
+	// Public API
+	// List Exchange available
 	List(ctx context.Context, in *ExchangeListRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
+	// Private API
+	// Delete Exchange
+	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDeleteReply, error)
 }
 
 type exchangesClient struct {
@@ -58,13 +67,31 @@ func (c *exchangesClient) List(ctx context.Context, in *ExchangeListRequest, opt
 	return out, nil
 }
 
+func (c *exchangesClient) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDeleteReply, error) {
+	out := new(ExchangeDeleteReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ExchangesServer is the server API for Exchanges service.
 // All implementations must embed UnimplementedExchangesServer
 // for forward compatibility
 type ExchangesServer interface {
+	// Public API
+	// Get Exchange if is Open
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
+	// Public API
+	// Get Exchange properties
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
+	// Public API
+	// List Exchange available
 	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
+	// Private API
+	// Delete Exchange
+	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDeleteReply, error)
 	mustEmbedUnimplementedExchangesServer()
 }
 
@@ -80,6 +107,9 @@ func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*Exc
 }
 func (UnimplementedExchangesServer) List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedExchangesServer) mustEmbedUnimplementedExchangesServer() {}
 
@@ -148,6 +178,24 @@ func _Exchanges_List_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Exchanges_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Delete(ctx, req.(*ExchangeDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Exchanges_ServiceDesc is the grpc.ServiceDesc for Exchanges service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +214,10 @@ var Exchanges_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Exchanges_List_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Exchanges_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

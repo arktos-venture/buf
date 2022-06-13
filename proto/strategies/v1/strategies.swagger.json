@@ -28,6 +28,7 @@
   "paths": {
     "/v1/strategies": {
       "get": {
+        "summary": "Public API\nList Strategies",
         "operationId": "Strategies_List",
         "responses": {
           "200": {
@@ -46,16 +47,50 @@
         "tags": [
           "Strategies"
         ]
+      },
+      "delete": {
+        "summary": "Public API\nDelete Strategy",
+        "operationId": "Strategies_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategyDeleteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Strategies"
+        ]
       }
     },
     "/v1/strategy": {
       "post": {
+        "summary": "Public API\nCreate Strategy",
         "operationId": "Strategies_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
+              "$ref": "#/definitions/v1StrategyReply"
             }
           },
           "default": {
@@ -80,80 +115,15 @@
         ]
       }
     },
-    "/v1/strategy/{strategy.ticker}/execute": {
-      "post": {
-        "operationId": "Strategies_Execute",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1StrategyExecutedReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "strategy.ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StrategyExecuteRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      }
-    },
     "/v1/strategy/{ticker}": {
       "get": {
+        "summary": "Public API\nGet Strategy properties",
         "operationId": "Strategies_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Strategies"
-        ]
-      },
-      "delete": {
-        "operationId": "Strategies_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
+              "$ref": "#/definitions/v1StrategyReply"
             }
           },
           "default": {
@@ -176,12 +146,13 @@
         ]
       },
       "put": {
+        "summary": "Public API\nUpdate Strategy properties",
         "operationId": "Strategies_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/strategiesv1StrategyReply"
+              "$ref": "#/definitions/v1StrategyReply"
             }
           },
           "default": {
@@ -228,25 +199,6 @@
     }
   },
   "definitions": {
-    "StrategyExecuteRequestStrategy": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "params": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "inject": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -277,63 +229,6 @@
         }
       }
     },
-    "quotesv1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "y"
-      ],
-      "default": "d"
-    },
-    "screenerv1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Industry",
-        "Index",
-        "Currency",
-        "MarketCap",
-        "ReturnYear",
-        "Beta5Y",
-        "ShareVolumeRatio",
-        "DividendYield",
-        "Price",
-        "PriceLastChange",
-        "Strategy",
-        "StrategyPeriod",
-        "StrategyDecision",
-        "StrategyDecisionAgo",
-        "SharesFloatRatio",
-        "Volume",
-        "VolumeAvg10d",
-        "VolumeAvg30d",
-        "VolumeAvg90d",
-        "Isin",
-        "Adr",
-        "Id",
-        "Country",
-        "Time"
-      ],
-      "default": "Ticker"
-    },
-    "screenerv1Operator": {
-      "type": "string",
-      "enum": [
-        "Equal",
-        "NotEqual",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual",
-        "In",
-        "NotIn",
-        "Between"
-      ],
-      "default": "Equal"
-    },
     "strategiesv1Request": {
       "type": "object",
       "properties": {
@@ -354,7 +249,31 @@
       },
       "title": "Transverse"
     },
-    "strategiesv1StrategyReply": {
+    "v1StrategyDeleteReply": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1StrategyReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1StrategyReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1StrategyReply": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -379,84 +298,6 @@
         }
       }
     },
-    "v1FilterSimple": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/screenerv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "v1StrategyExecuteRequest": {
-      "type": "object",
-      "properties": {
-        "tsdb": {
-          "$ref": "#/definitions/v1TSDB"
-        },
-        "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
-        },
-        "strategy": {
-          "$ref": "#/definitions/StrategyExecuteRequestStrategy"
-        },
-        "filters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1FilterSimple"
-          }
-        }
-      }
-    },
-    "v1StrategyExecutedReply": {
-      "type": "object",
-      "properties": {
-        "action": {
-          "$ref": "#/definitions/v1StrategyExecutedReplyAction"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "last_quote": {
-          "type": "number",
-          "format": "float"
-        },
-        "last_quote_date": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1StrategyExecutedReplyAction": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
-    },
-    "v1StrategyReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/strategiesv1StrategyReply"
-          }
-        },
-        "total": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "v1StrategyUpdateRequest": {
       "type": "object",
       "properties": {
@@ -476,17 +317,6 @@
           "$ref": "#/definitions/strategiesv1Request"
         }
       }
-    },
-    "v1TSDB": {
-      "type": "string",
-      "enum": [
-        "Companies",
-        "Forexes",
-        "Indices",
-        "Indexes",
-        "Accounts"
-      ],
-      "default": "Companies"
     }
   },
   "securityDefinitions": {

@@ -45,23 +45,37 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Exchanges {
+	// Public API
+	// Get Exchange if is Open
 	rpc IsOpen (ExchangeIsOpenRequest) returns (ExchangeIsOpenReply) {
 		option (google.api.http) = {
             get: "/v1/exchange/{ticker}/isopen"
         };
 	}
 
+	// Public API
+	// Get Exchange properties
   	rpc Get (ExchangeRequest) returns (ExchangeReply)  {
         option (google.api.http) = {
             get: "/v1/exchange/{ticker}"
         };
     }
 
+	// Public API
+	// List Exchange available
 	rpc List (ExchangeListRequest) returns (ExchangeReplies)  {
         option (google.api.http) = {
             get: "/v1/exchanges"
         };
     }
+
+	// Private API
+	// Delete Exchange
+	rpc Delete(ExchangeDeleteRequest) returns (ExchangeDeleteReply) {
+		option (google.api.http) = {
+            delete: "/v1/exchanges"
+        };
+	}
 }
 
 
@@ -92,6 +106,10 @@ message ExchangeListRequest {
 	Page page = 1 [(validate.rules).message.required = true];
 }
 
+message ExchangeDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
+}
+
 
 // 
 // Reply
@@ -116,7 +134,7 @@ message ExchangeReply {
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
-	repeated indices.v1.IndicesShortReply indices = 4;
+	repeated indices.v1.IndiceShortReply indices = 4;
 	string routing = 5;
 	string country = 6;
 	string currency = 7;
@@ -153,5 +171,9 @@ message ExchangeReplies {
 	}
 
 	repeated ExchangeShortReply results = 1;
-	int32 total = 2;
+	int64 total = 2;
+}
+
+message ExchangeDeleteReply {
+	int64 total = 1;
 }

@@ -47,23 +47,36 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Companies {
 	// Public API
+	// Get Company properties
 	rpc Get (CompanyRequest) returns (CompanyReply)  {
 		option (google.api.http) = {
 		  	get: "/v1/company/{exchange}/{ticker}"
 		};
 	}
 
-	// Public API
-	rpc Stats (CompanyRequest) returns (CompanyStatsReply)  {
+	// Private API
+	// Create a new Company
+	rpc Create (CompanyCreateRequest) returns (CompanyReply)  {
 		option (google.api.http) = {
-		  	get: "/v1/company/{exchange}/{ticker}/stats"
+		  	post: "/v1/companies"
+			body: "*"
 		};
 	}
 
-	// Public API
-	rpc Similars (CompanyRequest) returns (CompanySimilarsReply)  {
+	// Private API
+	// Update properties of Company
+	rpc Update (CompanyUpdateRequest) returns (CompanyReply)  {
 		option (google.api.http) = {
-		  	get: "/v1/company/{exchange}/{ticker}/similars"
+			put: "/v1/company/{exchange}/{ticker}"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete Company
+	rpc Delete (CompanyDeleteRequest) returns (CompanyDeleteReply)  {
+		option (google.api.http) = {
+		  	delete: "/v1/companies"
 		};
 	}
 }
@@ -78,6 +91,57 @@ message CompanyRequest {
 	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
 
+message CompanyCreateRequest {
+	int64 id = 1 [(validate.rules).int64 = {lt: 0}];
+	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 16}];
+	string tickerIBKR = 3 [(validate.rules).string = {min_len: 0, max_len: 16}];
+	string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 5 [(validate.rules).string = {min_len: 1, max_len: 64}];
+	string isin = 6 [(validate.rules).string.len = 16];
+	string description = 7 [(validate.rules).string = {min_len: 1, max_len: 8164}];
+	int64 activity = 8 [(validate.rules).int64 = {lte: 50}];
+	bool adr = 9;
+	int32 fiscalMonthEnd = 10 [(validate.rules).int32 = {lt: 1}];
+	string currencyReport = 11 [(validate.rules).string.len = 3];
+	string email = 12 [(validate.rules).string.ignore_empty = true];
+	string website = 13 [(validate.rules).string.ignore_empty = true];
+	string phone = 14 [(validate.rules).string.ignore_empty = true];
+	string street = 15 [(validate.rules).string.ignore_empty = true];
+	string city = 16 [(validate.rules).string.ignore_empty = true];
+	string state = 17 [(validate.rules).string.ignore_empty = true];
+	string country = 18 [(validate.rules).string.len = 2];
+}
+
+message CompanyUpdateRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 16}];
+	string tickerIBKR = 2 [(validate.rules).string = {min_len: 0, max_len: 16}];
+	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 4 [(validate.rules).string = {min_len: 1, max_len: 64}];
+	string isin = 5 [(validate.rules).string.len = 16];
+	string description = 6 [(validate.rules).string = {min_len: 1, max_len: 8164}];
+	int64 activity = 7 [(validate.rules).int64 = {lte: 50}];
+	bool adr = 8;
+	int32 fiscalMonthEnd = 9 [(validate.rules).int32 = {lt: 1}];
+	string currencyReport = 10 [(validate.rules).string.len = 3];
+	string email = 11 [(validate.rules).string.ignore_empty = true];
+	string website = 12 [(validate.rules).string.ignore_empty = true];
+	string phone = 13 [(validate.rules).string.ignore_empty = true];
+	string street = 14 [(validate.rules).string.ignore_empty = true];
+	string city = 15 [(validate.rules).string.ignore_empty = true];
+	string state = 16 [(validate.rules).string.ignore_empty = true];
+	string country = 17 [(validate.rules).string.len = 2];
+}
+
+message CompanyDeleteRequest {
+	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+}
+
+
+// 
+// Reply
+// 
+
 message CompanyAddress {
 	string street = 1;
 	string city = 2;
@@ -91,11 +155,6 @@ message CompanyContact {
 	string email = 3;
 }
 
-
-// 
-// Reply
-// 
-
 message CompanyReply {
 	int64 id = 1;
 	string ticker = 2;
@@ -108,36 +167,15 @@ message CompanyReply {
 	int64 employees = 9;
 	bool adr = 10;
 	screener.v1.ScreenerReply.Activity activity = 11;
-	screener.v1.ScreenerReply.Shares shares = 12;
-	quotes.v1.QuotesLastReply quote = 13;
+	quotes.v1.QuoteLastReply quote = 13;
 	string currencyReport = 14;
-	int64 fiscalYearEnd = 15;
+	int32 fiscalYearEnd = 15;
 	CompanyContact contact = 16;
 	CompanyAddress address = 17;
 	google.protobuf.Timestamp created_at = 18;
 	google.protobuf.Timestamp updated_at = 19; 
 }
 
-message CompanyStatsReply {
-	screener.v1.ScreenerReply.Shares shares = 1;
-	screener.v1.ScreenerReply.Pricing pricing = 2;
-	screener.v1.ScreenerReply.Dividends dividends = 3;
-	screener.v1.ScreenerReply.Volume volume = 4;
-	google.protobuf.Timestamp created_at = 5;
-	google.protobuf.Timestamp updated_at = 6; 
-}
-
-message CompanySimilarsReply {
-	message Result {
-		int64 id = 1;
-		string ticker = 2;
-		string ticker_alternative = 3;
-		string name = 4;
-		string exchange = 5;
-		string isin = 6;
-		int64 marketCap = 7;
-	}
-
-	repeated Result results = 1;
-	int32 total = 2;
+message CompanyDeleteReply {
+	int64 total = 1;
 }
