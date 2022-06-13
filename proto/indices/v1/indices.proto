@@ -125,15 +125,15 @@ message IndiceReply {
 	google.protobuf.Timestamp updated_at = 7;
 }
 
-message IndiceShortReply {
-	string ticker = 1;
-	string exchange = 2;
-	google.protobuf.Timestamp created_at = 3;
-	google.protobuf.Timestamp updated_at = 4;
-}
-
 message IndiceShortReplies {
-	repeated IndiceShortReply results = 1;
+	message Result {
+		string ticker = 1;
+		string exchange = 2;
+		google.protobuf.Timestamp created_at = 3;
+		google.protobuf.Timestamp updated_at = 4;
+	}
+
+	repeated Result results = 1;
 	int64 total = 2;
 }
 
