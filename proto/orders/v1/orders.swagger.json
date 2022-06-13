@@ -68,7 +68,7 @@
                   "type": "string"
                 },
                 "action": {
-                  "$ref": "#/definitions/ordersv1Action"
+                  "$ref": "#/definitions/v1Action"
                 },
                 "orderType": {
                   "$ref": "#/definitions/v1OrderType"
@@ -133,7 +133,7 @@
               "type": "object",
               "properties": {
                 "action": {
-                  "$ref": "#/definitions/ordersv1Action"
+                  "$ref": "#/definitions/v1Action"
                 },
                 "orderType": {
                   "$ref": "#/definitions/v1OrderType"
@@ -301,15 +301,6 @@
         }
       }
     },
-    "ordersv1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
-    },
     "ordersv1Argument": {
       "type": "string",
       "enum": [
@@ -390,6 +381,15 @@
       ],
       "default": "Equal"
     },
+    "v1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
     "v1OrderDelete": {
       "type": "object",
       "properties": {
@@ -427,7 +427,7 @@
           "type": "string"
         },
         "action": {
-          "$ref": "#/definitions/ordersv1Action"
+          "$ref": "#/definitions/v1Action"
         },
         "orderType": {
           "$ref": "#/definitions/v1OrderType"

@@ -78,15 +78,6 @@
         }
       }
     },
-    "ordersv1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -112,7 +103,7 @@
         "actions": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ordersv1Action"
+            "$ref": "#/definitions/v1Action"
           }
         },
         "date": {
@@ -152,6 +143,15 @@
           }
         }
       }
+    },
+    "v1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
     }
   },
   "securityDefinitions": {

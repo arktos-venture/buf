@@ -257,15 +257,6 @@
         }
       }
     },
-    "ordersv1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
-    },
     "ordersv1Duration": {
       "type": "string",
       "enum": [
@@ -342,6 +333,15 @@
         }
       }
     },
+    "v1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
     "v1OrderReply": {
       "type": "object",
       "properties": {
@@ -355,7 +355,7 @@
           "type": "string"
         },
         "action": {
-          "$ref": "#/definitions/ordersv1Action"
+          "$ref": "#/definitions/v1Action"
         },
         "orderType": {
           "$ref": "#/definitions/v1OrderType"

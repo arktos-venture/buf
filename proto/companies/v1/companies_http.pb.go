@@ -27,8 +27,8 @@ type CompaniesHTTPServer interface {
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get8_HTTP_Handler(srv))
-	r.POST("/v1/companies", _Companies_Create4_HTTP_Handler(srv))
-	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update3_HTTP_Handler(srv))
+	r.POST("/v1/companies", _Companies_Create6_HTTP_Handler(srv))
+	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update4_HTTP_Handler(srv))
 	r.DELETE("/v1/companies", _Companies_Delete12_HTTP_Handler(srv))
 }
 
@@ -54,7 +54,7 @@ func _Companies_Get8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Companies_Create4_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Create6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -73,7 +73,7 @@ func _Companies_Create4_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Companies_Update3_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Update4_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyUpdateRequest
 		if err := ctx.Bind(&in); err != nil {

@@ -29,8 +29,8 @@ func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/indexes/{ticker}", _Indexes_Get9_HTTP_Handler(srv))
 	r.GET("/v1/indexes", _Indexes_Search10_HTTP_Handler(srv))
-	r.POST("/v1/indexes", _Indexes_Create6_HTTP_Handler(srv))
-	r.PUT("/v1/indexes", _Indexes_Update4_HTTP_Handler(srv))
+	r.POST("/v1/indexes", _Indexes_Create7_HTTP_Handler(srv))
+	r.PUT("/v1/indexes", _Indexes_Update5_HTTP_Handler(srv))
 	r.DELETE("/v1/indexes", _Indexes_Delete13_HTTP_Handler(srv))
 }
 
@@ -75,7 +75,7 @@ func _Indexes_Search10_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Indexes_Create6_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Create7_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -94,7 +94,7 @@ func _Indexes_Create6_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Update4_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Update5_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {

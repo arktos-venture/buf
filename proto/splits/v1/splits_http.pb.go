@@ -25,7 +25,7 @@ type SplitsHTTPServer interface {
 func RegisterSplitsHTTPServer(s *http.Server, srv SplitsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/splits/{exchange}/{ticker}", _Splits_Last2_HTTP_Handler(srv))
-	r.POST("/v1/splits", _Splits_Search8_HTTP_Handler(srv))
+	r.POST("/v1/splits", _Splits_Search9_HTTP_Handler(srv))
 }
 
 func _Splits_Last2_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
@@ -50,7 +50,7 @@ func _Splits_Last2_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Splits_Search8_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
+func _Splits_Search9_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SplitsRequest
 		if err := ctx.Bind(&in); err != nil {

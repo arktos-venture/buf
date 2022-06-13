@@ -25,12 +25,12 @@ type NotificationsHTTPServer interface {
 
 func RegisterNotificationsHTTPServer(s *http.Server, srv NotificationsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notifications/{account}", _Notifications_Create4_HTTP_Handler(srv))
+	r.POST("/v1/notifications/{account}", _Notifications_Create5_HTTP_Handler(srv))
 	r.GET("/v1/notifications/{account}", _Notifications_Search8_HTTP_Handler(srv))
 	r.DELETE("/v1/notifications", _Notifications_Delete11_HTTP_Handler(srv))
 }
 
-func _Notifications_Create4_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
+func _Notifications_Create5_HTTP_Handler(srv NotificationsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationCreateRequest
 		if err := ctx.Bind(&in); err != nil {

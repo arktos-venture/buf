@@ -19,8 +19,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NewsClient interface {
 	// Public API
+	// Search news results
 	Search(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (*NewsReplies, error)
 	// Private API
+	// Delete news by exchanges or tickers
 	Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDeleteReply, error)
 }
 
@@ -55,8 +57,10 @@ func (c *newsClient) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...
 // for forward compatibility
 type NewsServer interface {
 	// Public API
+	// Search news results
 	Search(context.Context, *NewsRequest) (*NewsReplies, error)
 	// Private API
+	// Delete news by exchanges or tickers
 	Delete(context.Context, *NewsDeleteRequest) (*NewsDeleteReply, error)
 	mustEmbedUnimplementedNewsServer()
 }

@@ -28,7 +28,7 @@
   "paths": {
     "/v1/news": {
       "delete": {
-        "summary": "Private API",
+        "summary": "Private API\nDelete news by exchanges or tickers",
         "operationId": "News_Delete",
         "responses": {
           "200": {
@@ -71,7 +71,7 @@
         ]
       },
       "post": {
-        "summary": "Public API",
+        "summary": "Public API\nSearch news results",
         "operationId": "News_Search",
         "responses": {
           "200": {
