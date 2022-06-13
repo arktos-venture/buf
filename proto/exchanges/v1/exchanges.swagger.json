@@ -293,7 +293,7 @@
         "indices": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndiceShortReply"
+            "$ref": "#/definitions/v1IndiceShortRepliesResult"
           }
         },
         "routing": {
@@ -386,13 +386,13 @@
         }
       }
     },
-    "v1IndiceShortReply": {
+    "v1IndiceShortRepliesResult": {
       "type": "object",
       "properties": {
         "ticker": {
           "type": "string"
         },
-        "description": {
+        "exchange": {
           "type": "string"
         },
         "created_at": {
