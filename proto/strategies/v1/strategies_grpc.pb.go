@@ -19,12 +19,21 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StrategiesClient interface {
+	// Public API
+	// Get Strategy properties
 	Get(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
+	// Public API
+	// List Strategies
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StrategyReplies, error)
+	// Public API
+	// Create Strategy
 	Create(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error)
+	// Public API
+	// Update Strategy properties
 	Update(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error)
-	Delete(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	Execute(ctx context.Context, in *StrategyExecuteRequest, opts ...grpc.CallOption) (*StrategyExecutedReply, error)
+	// Public API
+	// Delete Strategy
+	Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDeleteReply, error)
 }
 
 type strategiesClient struct {
@@ -71,18 +80,9 @@ func (c *strategiesClient) Update(ctx context.Context, in *StrategyUpdateRequest
 	return out, nil
 }
 
-func (c *strategiesClient) Delete(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *strategiesClient) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDeleteReply, error) {
+	out := new(StrategyDeleteReply)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Execute(ctx context.Context, in *StrategyExecuteRequest, opts ...grpc.CallOption) (*StrategyExecutedReply, error) {
-	out := new(StrategyExecutedReply)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Execute", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,12 +93,21 @@ func (c *strategiesClient) Execute(ctx context.Context, in *StrategyExecuteReque
 // All implementations must embed UnimplementedStrategiesServer
 // for forward compatibility
 type StrategiesServer interface {
+	// Public API
+	// Get Strategy properties
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
+	// Public API
+	// List Strategies
 	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
+	// Public API
+	// Create Strategy
 	Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
+	// Public API
+	// Update Strategy properties
 	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
-	Delete(context.Context, *StrategyRequest) (*emptypb.Empty, error)
-	Execute(context.Context, *StrategyExecuteRequest) (*StrategyExecutedReply, error)
+	// Public API
+	// Delete Strategy
+	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error)
 	mustEmbedUnimplementedStrategiesServer()
 }
 
@@ -118,11 +127,8 @@ func (UnimplementedStrategiesServer) Create(context.Context, *StrategyUpdateRequ
 func (UnimplementedStrategiesServer) Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedStrategiesServer) Delete(context.Context, *StrategyRequest) (*emptypb.Empty, error) {
+func (UnimplementedStrategiesServer) Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedStrategiesServer) Execute(context.Context, *StrategyExecuteRequest) (*StrategyExecutedReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Execute not implemented")
 }
 func (UnimplementedStrategiesServer) mustEmbedUnimplementedStrategiesServer() {}
 
@@ -210,7 +216,7 @@ func _Strategies_Update_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _Strategies_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyRequest)
+	in := new(StrategyDeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -222,25 +228,7 @@ func _Strategies_Delete_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/strategies.v1.Strategies/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Delete(ctx, req.(*StrategyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Execute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyExecuteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Execute(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Execute",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Execute(ctx, req.(*StrategyExecuteRequest))
+		return srv.(StrategiesServer).Delete(ctx, req.(*StrategyDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -271,10 +259,6 @@ var Strategies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _Strategies_Delete_Handler,
-		},
-		{
-			MethodName: "Execute",
-			Handler:    _Strategies_Execute_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

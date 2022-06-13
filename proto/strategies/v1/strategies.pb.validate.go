@@ -17,8 +17,6 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
-
-	quotes_v1 "github.com/arktos-venture/buf/proto/quotes/v1"
 )
 
 // ensure the imports are used
@@ -35,8 +33,6 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
-
-	_ = quotes_v1.TSDB(0)
 )
 
 // Validate checks the field values on Request with the rules defined in the
@@ -382,32 +378,32 @@ var _ interface {
 	ErrorName() string
 } = StrategyUpdateRequestValidationError{}
 
-// Validate checks the field values on StrategyExecuteRequest with the rules
+// Validate checks the field values on StrategyDeleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *StrategyExecuteRequest) Validate() error {
+func (m *StrategyDeleteRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StrategyExecuteRequest with the rules
+// ValidateAll checks the field values on StrategyDeleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StrategyExecuteRequestMultiError, or nil if none found.
-func (m *StrategyExecuteRequest) ValidateAll() error {
+// StrategyDeleteRequestMultiError, or nil if none found.
+func (m *StrategyDeleteRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StrategyExecuteRequest) validate(all bool) error {
+func (m *StrategyDeleteRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if _, ok := quotes_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
-		err := StrategyExecuteRequestValidationError{
-			field:  "Tsdb",
-			reason: "value must be one of the defined enum values",
+	if len(m.GetTickers()) < 1 {
+		err := StrategyDeleteRequestValidationError{
+			field:  "Tickers",
+			reason: "value must contain at least 1 item(s)",
 		}
 		if !all {
 			return err
@@ -415,105 +411,41 @@ func (m *StrategyExecuteRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := quotes_v1.Interval_name[int32(m.GetInterval())]; !ok {
-		err := StrategyExecuteRequestValidationError{
-			field:  "Interval",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	_StrategyDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
 
-	if all {
-		switch v := interface{}(m.GetStrategy()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategyExecuteRequestValidationError{
-					field:  "Strategy",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategyExecuteRequestValidationError{
-					field:  "Strategy",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetStrategy()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StrategyExecuteRequestValidationError{
-				field:  "Strategy",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if l := len(m.GetFilters()); l < 1 || l > 20 {
-		err := StrategyExecuteRequestValidationError{
-			field:  "Filters",
-			reason: "value must contain between 1 and 20 items, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	for idx, item := range m.GetFilters() {
+	for idx, item := range m.GetTickers() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyExecuteRequestValidationError{
-						field:  fmt.Sprintf("Filters[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyExecuteRequestValidationError{
-						field:  fmt.Sprintf("Filters[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
+		if _, exists := _StrategyDeleteRequest_Tickers_Unique[item]; exists {
+			err := StrategyDeleteRequestValidationError{
+				field:  fmt.Sprintf("Tickers[%v]", idx),
+				reason: "repeated value must contain unique items",
 			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StrategyExecuteRequestValidationError{
-					field:  fmt.Sprintf("Filters[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
+			if !all {
+				return err
 			}
+			errors = append(errors, err)
+		} else {
+			_StrategyDeleteRequest_Tickers_Unique[item] = struct{}{}
 		}
 
+		// no validation rules for Tickers[idx]
 	}
 
 	if len(errors) > 0 {
-		return StrategyExecuteRequestMultiError(errors)
+		return StrategyDeleteRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyExecuteRequestMultiError is an error wrapping multiple validation
-// errors returned by StrategyExecuteRequest.ValidateAll() if the designated
+// StrategyDeleteRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategyDeleteRequest.ValidateAll() if the designated
 // constraints aren't met.
-type StrategyExecuteRequestMultiError []error
+type StrategyDeleteRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyExecuteRequestMultiError) Error() string {
+func (m StrategyDeleteRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -522,11 +454,11 @@ func (m StrategyExecuteRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyExecuteRequestMultiError) AllErrors() []error { return m }
+func (m StrategyDeleteRequestMultiError) AllErrors() []error { return m }
 
-// StrategyExecuteRequestValidationError is the validation error returned by
-// StrategyExecuteRequest.Validate if the designated constraints aren't met.
-type StrategyExecuteRequestValidationError struct {
+// StrategyDeleteRequestValidationError is the validation error returned by
+// StrategyDeleteRequest.Validate if the designated constraints aren't met.
+type StrategyDeleteRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -534,24 +466,24 @@ type StrategyExecuteRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyExecuteRequestValidationError) Field() string { return e.field }
+func (e StrategyDeleteRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyExecuteRequestValidationError) Reason() string { return e.reason }
+func (e StrategyDeleteRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyExecuteRequestValidationError) Cause() error { return e.cause }
+func (e StrategyDeleteRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyExecuteRequestValidationError) Key() bool { return e.key }
+func (e StrategyDeleteRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyExecuteRequestValidationError) ErrorName() string {
-	return "StrategyExecuteRequestValidationError"
+func (e StrategyDeleteRequestValidationError) ErrorName() string {
+	return "StrategyDeleteRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StrategyExecuteRequestValidationError) Error() string {
+func (e StrategyDeleteRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -563,14 +495,14 @@ func (e StrategyExecuteRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategyExecuteRequest.%s: %s%s",
+		"invalid %sStrategyDeleteRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyExecuteRequestValidationError{}
+var _ error = StrategyDeleteRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -578,7 +510,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyExecuteRequestValidationError{}
+} = StrategyDeleteRequestValidationError{}
 
 // Validate checks the field values on StrategyReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -909,104 +841,44 @@ var _ interface {
 	ErrorName() string
 } = StrategyRepliesValidationError{}
 
-// Validate checks the field values on StrategyExecutedReply with the rules
+// Validate checks the field values on StrategyDeleteReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *StrategyExecutedReply) Validate() error {
+func (m *StrategyDeleteReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StrategyExecutedReply with the rules
+// ValidateAll checks the field values on StrategyDeleteReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StrategyExecutedReplyMultiError, or nil if none found.
-func (m *StrategyExecutedReply) ValidateAll() error {
+// StrategyDeleteReplyMultiError, or nil if none found.
+func (m *StrategyDeleteReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StrategyExecutedReply) validate(all bool) error {
+func (m *StrategyDeleteReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Action
-
-	if all {
-		switch v := interface{}(m.GetDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategyExecutedReplyValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategyExecutedReplyValidationError{
-					field:  "Date",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StrategyExecutedReplyValidationError{
-				field:  "Date",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for LastQuote
-
-	if all {
-		switch v := interface{}(m.GetLastQuoteDate()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategyExecutedReplyValidationError{
-					field:  "LastQuoteDate",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategyExecutedReplyValidationError{
-					field:  "LastQuoteDate",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetLastQuoteDate()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StrategyExecutedReplyValidationError{
-				field:  "LastQuoteDate",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return StrategyExecutedReplyMultiError(errors)
+		return StrategyDeleteReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyExecutedReplyMultiError is an error wrapping multiple validation
-// errors returned by StrategyExecutedReply.ValidateAll() if the designated
+// StrategyDeleteReplyMultiError is an error wrapping multiple validation
+// errors returned by StrategyDeleteReply.ValidateAll() if the designated
 // constraints aren't met.
-type StrategyExecutedReplyMultiError []error
+type StrategyDeleteReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyExecutedReplyMultiError) Error() string {
+func (m StrategyDeleteReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1015,11 +887,11 @@ func (m StrategyExecutedReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyExecutedReplyMultiError) AllErrors() []error { return m }
+func (m StrategyDeleteReplyMultiError) AllErrors() []error { return m }
 
-// StrategyExecutedReplyValidationError is the validation error returned by
-// StrategyExecutedReply.Validate if the designated constraints aren't met.
-type StrategyExecutedReplyValidationError struct {
+// StrategyDeleteReplyValidationError is the validation error returned by
+// StrategyDeleteReply.Validate if the designated constraints aren't met.
+type StrategyDeleteReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1027,24 +899,24 @@ type StrategyExecutedReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyExecutedReplyValidationError) Field() string { return e.field }
+func (e StrategyDeleteReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyExecutedReplyValidationError) Reason() string { return e.reason }
+func (e StrategyDeleteReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyExecutedReplyValidationError) Cause() error { return e.cause }
+func (e StrategyDeleteReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyExecutedReplyValidationError) Key() bool { return e.key }
+func (e StrategyDeleteReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyExecutedReplyValidationError) ErrorName() string {
-	return "StrategyExecutedReplyValidationError"
+func (e StrategyDeleteReplyValidationError) ErrorName() string {
+	return "StrategyDeleteReplyValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StrategyExecutedReplyValidationError) Error() string {
+func (e StrategyDeleteReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1056,14 +928,14 @@ func (e StrategyExecutedReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategyExecutedReply.%s: %s%s",
+		"invalid %sStrategyDeleteReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyExecutedReplyValidationError{}
+var _ error = StrategyDeleteReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -1071,122 +943,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyExecutedReplyValidationError{}
-
-// Validate checks the field values on StrategyExecuteRequest_Strategy with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *StrategyExecuteRequest_Strategy) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on StrategyExecuteRequest_Strategy with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// StrategyExecuteRequest_StrategyMultiError, or nil if none found.
-func (m *StrategyExecuteRequest_Strategy) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *StrategyExecuteRequest_Strategy) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Ticker
-
-	if l := len(m.GetParams()); l < 2 || l > 10 {
-		err := StrategyExecuteRequest_StrategyValidationError{
-			field:  "Params",
-			reason: "value must contain between 2 and 10 pairs, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	// no validation rules for Inject
-
-	if len(errors) > 0 {
-		return StrategyExecuteRequest_StrategyMultiError(errors)
-	}
-
-	return nil
-}
-
-// StrategyExecuteRequest_StrategyMultiError is an error wrapping multiple
-// validation errors returned by StrategyExecuteRequest_Strategy.ValidateAll()
-// if the designated constraints aren't met.
-type StrategyExecuteRequest_StrategyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m StrategyExecuteRequest_StrategyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m StrategyExecuteRequest_StrategyMultiError) AllErrors() []error { return m }
-
-// StrategyExecuteRequest_StrategyValidationError is the validation error
-// returned by StrategyExecuteRequest_Strategy.Validate if the designated
-// constraints aren't met.
-type StrategyExecuteRequest_StrategyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e StrategyExecuteRequest_StrategyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e StrategyExecuteRequest_StrategyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e StrategyExecuteRequest_StrategyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e StrategyExecuteRequest_StrategyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e StrategyExecuteRequest_StrategyValidationError) ErrorName() string {
-	return "StrategyExecuteRequest_StrategyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e StrategyExecuteRequest_StrategyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sStrategyExecuteRequest_Strategy.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = StrategyExecuteRequest_StrategyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = StrategyExecuteRequest_StrategyValidationError{}
+} = StrategyDeleteReplyValidationError{}
