@@ -28,7 +28,7 @@ func RegisterCurrenciesHTTPServer(s *http.Server, srv CurrenciesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/currency/{ticker}", _Currencies_Get2_HTTP_Handler(srv))
 	r.GET("/v1/currencies", _Currencies_List1_HTTP_Handler(srv))
-	r.DELETE("/v1/currencies", _Currencies_Delete3_HTTP_Handler(srv))
+	r.DELETE("/v1/currencies", _Currencies_Delete2_HTTP_Handler(srv))
 }
 
 func _Currencies_Get2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
@@ -72,7 +72,7 @@ func _Currencies_List1_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Currencies_Delete3_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
+func _Currencies_Delete2_HTTP_Handler(srv CurrenciesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CurrencyDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
