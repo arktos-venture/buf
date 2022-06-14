@@ -4,8 +4,10 @@ package forexes.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/quotes/v1/quotes.proto";
+import "proto/currencies/v1/currencies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;forexes_v1";
 option java_multiple_files = true;
@@ -54,7 +56,7 @@ service Forexes {
 
 	// Public API
 	// List Forexes available
-	rpc List (ForexListRequest) returns (ForexListReply)  {
+	rpc List (ForexListRequest) returns (ForexList)  {
 		option (google.api.http) = {
 			get: "/v1/forexes/{currency}/pairs"
 		};
@@ -71,7 +73,7 @@ service Forexes {
 
 	// Private API
 	// Delete Forexes
-	rpc Delete (ForexRequest) returns (ForexDeleteReply)  {
+	rpc Delete (ForexDeleteRequest) returns (ForexDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/forexes"
 		};
@@ -106,23 +108,19 @@ message ForexDeleteRequest {
 // 
 
 message ForexReply {
-	message Currency {
-		string name = 1;
-		repeated string exchanges = 2;
-	}
-
 	string ticker = 1;
 	quotes.v1.QuoteLastReply quote = 2;
-	Currency from = 3;
-	Currency to = 4;
-	
+	currencies.v1.CurrencyReply from = 3;
+	currencies.v1.CurrencyReply to = 4;
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6; 
 }
 
-message ForexListReply {
+message ForexList {
 	string currency = 1;
 	repeated string forexes = 2;
 }
 
-message ForexDeleteReply {
+message ForexDelete {
 	int64 total = 1;
 }

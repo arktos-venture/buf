@@ -23,13 +23,13 @@ type ForexesClient interface {
 	Get(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexReply, error)
 	// Public API
 	// List Forexes available
-	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexListReply, error)
+	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexList, error)
 	// Private API
 	// Create new Forexes
 	Create(ctx context.Context, in *ForexCreateRequest, opts ...grpc.CallOption) (*ForexReply, error)
 	// Private API
 	// Delete Forexes
-	Delete(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexDeleteReply, error)
+	Delete(ctx context.Context, in *ForexDeleteRequest, opts ...grpc.CallOption) (*ForexDelete, error)
 }
 
 type forexesClient struct {
@@ -49,8 +49,8 @@ func (c *forexesClient) Get(ctx context.Context, in *ForexRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *forexesClient) List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexListReply, error) {
-	out := new(ForexListReply)
+func (c *forexesClient) List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexList, error) {
+	out := new(ForexList)
 	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/List", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -67,8 +67,8 @@ func (c *forexesClient) Create(ctx context.Context, in *ForexCreateRequest, opts
 	return out, nil
 }
 
-func (c *forexesClient) Delete(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexDeleteReply, error) {
-	out := new(ForexDeleteReply)
+func (c *forexesClient) Delete(ctx context.Context, in *ForexDeleteRequest, opts ...grpc.CallOption) (*ForexDelete, error) {
+	out := new(ForexDelete)
 	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,13 +85,13 @@ type ForexesServer interface {
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
 	// Public API
 	// List Forexes available
-	List(context.Context, *ForexListRequest) (*ForexListReply, error)
+	List(context.Context, *ForexListRequest) (*ForexList, error)
 	// Private API
 	// Create new Forexes
 	Create(context.Context, *ForexCreateRequest) (*ForexReply, error)
 	// Private API
 	// Delete Forexes
-	Delete(context.Context, *ForexRequest) (*ForexDeleteReply, error)
+	Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error)
 	mustEmbedUnimplementedForexesServer()
 }
 
@@ -102,13 +102,13 @@ type UnimplementedForexesServer struct {
 func (UnimplementedForexesServer) Get(context.Context, *ForexRequest) (*ForexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexListReply, error) {
+func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedForexesServer) Create(context.Context, *ForexCreateRequest) (*ForexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedForexesServer) Delete(context.Context, *ForexRequest) (*ForexDeleteReply, error) {
+func (UnimplementedForexesServer) Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedForexesServer) mustEmbedUnimplementedForexesServer() {}
@@ -179,7 +179,7 @@ func _Forexes_Create_Handler(srv interface{}, ctx context.Context, dec func(inte
 }
 
 func _Forexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ForexRequest)
+	in := new(ForexDeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -191,7 +191,7 @@ func _Forexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/forexes.v1.Forexes/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ForexesServer).Delete(ctx, req.(*ForexRequest))
+		return srv.(ForexesServer).Delete(ctx, req.(*ForexDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
