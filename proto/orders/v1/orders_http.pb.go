@@ -27,7 +27,7 @@ type OrdersHTTPServer interface {
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/orders/{account}/search", _Orders_Search4_HTTP_Handler(srv))
-	r.POST("/v1/order/{account}", _Orders_Create3_HTTP_Handler(srv))
+	r.POST("/v1/order/{account}", _Orders_Create4_HTTP_Handler(srv))
 	r.PUT("/v1/order/{account}", _Orders_Update2_HTTP_Handler(srv))
 	r.DELETE("/v1/orders/{account}", _Orders_Delete7_HTTP_Handler(srv))
 }
@@ -54,7 +54,7 @@ func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Create3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Create4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderModifyRequest
 		if err := ctx.Bind(&in); err != nil {

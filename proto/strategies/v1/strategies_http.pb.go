@@ -30,7 +30,7 @@ func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/strategy/{ticker}", _Strategies_Get4_HTTP_Handler(srv))
 	r.GET("/v1/strategies", _Strategies_List3_HTTP_Handler(srv))
-	r.POST("/v1/strategy", _Strategies_Create1_HTTP_Handler(srv))
+	r.POST("/v1/strategy", _Strategies_Create2_HTTP_Handler(srv))
 	r.PUT("/v1/strategy/{ticker}", _Strategies_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/strategies", _Strategies_Delete4_HTTP_Handler(srv))
 }
@@ -76,7 +76,7 @@ func _Strategies_List3_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategies_Create1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Create2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyUpdateRequest
 		if err := ctx.Bind(&in); err != nil {

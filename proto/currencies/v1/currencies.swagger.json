@@ -55,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CurrencyDeleteReply"
+              "$ref": "#/definitions/v1CurrencyDelete"
             }
           },
           "default": {
@@ -75,6 +75,39 @@
               "type": "string"
             },
             "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Currencies"
+        ]
+      }
+    },
+    "/v1/currency": {
+      "post": {
+        "summary": "Private API\nCreate Currency",
+        "operationId": "Currencies_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CurrencyReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CurrencyRequest"
+            }
           }
         ],
         "tags": [
@@ -145,7 +178,7 @@
         }
       }
     },
-    "v1CurrencyDeleteReply": {
+    "v1CurrencyDelete": {
       "type": "object",
       "properties": {
         "total": {
@@ -180,6 +213,14 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "v1CurrencyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
         }
       }
     }
