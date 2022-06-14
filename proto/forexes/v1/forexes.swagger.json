@@ -34,7 +34,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ForexDeleteReply"
+              "$ref": "#/definitions/v1ForexDelete"
             }
           },
           "default": {
@@ -46,10 +46,14 @@
         },
         "parameters": [
           {
-            "name": "ticker",
+            "name": "tickers",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -96,7 +100,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ForexListReply"
+              "$ref": "#/definitions/v1ForexList"
             }
           },
           "default": {
@@ -152,20 +156,6 @@
     }
   },
   "definitions": {
-    "ForexReplyCurrency": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "exchanges": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -196,6 +186,20 @@
         }
       }
     },
+    "v1CurrencyReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "v1ForexCreateRequest": {
       "type": "object",
       "properties": {
@@ -207,7 +211,7 @@
         }
       }
     },
-    "v1ForexDeleteReply": {
+    "v1ForexDelete": {
       "type": "object",
       "properties": {
         "total": {
@@ -216,7 +220,7 @@
         }
       }
     },
-    "v1ForexListReply": {
+    "v1ForexList": {
       "type": "object",
       "properties": {
         "currency": {
@@ -240,10 +244,18 @@
           "$ref": "#/definitions/v1QuoteLastReply"
         },
         "from": {
-          "$ref": "#/definitions/ForexReplyCurrency"
+          "$ref": "#/definitions/v1CurrencyReply"
         },
         "to": {
-          "$ref": "#/definitions/ForexReplyCurrency"
+          "$ref": "#/definitions/v1CurrencyReply"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
