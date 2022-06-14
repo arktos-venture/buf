@@ -61,8 +61,17 @@ service Currencies {
 	}
 
 	// Private API
+  	// Create Currency
+	  rpc Create (CurrencyRequest) returns (CurrencyReply)  {
+		option (google.api.http) = {
+			post: "/v1/currency"
+			body: "*"
+		};
+	}
+
+	// Private API
   	// Delete Currency & deps
-	rpc Delete (CurrencyDeleteRequest) returns (CurrencyDeleteReply)  {
+	rpc Delete (CurrencyDeleteRequest) returns (CurrencyDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/currencies"
 		};
@@ -97,6 +106,6 @@ message CurrencyReplies {
 	int64 total = 2;
 }
 
-message CurrencyDeleteReply {
+message CurrencyDelete {
 	int64 total = 1;
 }

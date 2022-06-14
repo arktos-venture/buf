@@ -28,7 +28,7 @@ func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/forexes/{ticker}", _Forexes_Get5_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List5_HTTP_Handler(srv))
-	r.POST("/v1/forexes", _Forexes_Create2_HTTP_Handler(srv))
+	r.POST("/v1/forexes", _Forexes_Create3_HTTP_Handler(srv))
 	r.DELETE("/v1/forexes", _Forexes_Delete5_HTTP_Handler(srv))
 }
 
@@ -76,7 +76,7 @@ func _Forexes_List5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Forexes_Create2_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Create3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
