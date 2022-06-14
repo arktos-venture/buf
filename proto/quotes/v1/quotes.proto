@@ -64,7 +64,7 @@ service Quotes {
 
 	// Private API
 	// Delete Quotes
-	rpc Delete (QuoteDeleteRequest) returns (QuoteDeleteReply)  {
+	rpc Delete (QuoteDeleteRequest) returns (QuoteDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/quotes"
 		};
@@ -131,6 +131,6 @@ message QuoteLastReply {
 	google.protobuf.Timestamp created_at = 7;
 }
 
-message QuoteDeleteReply {
+message QuoteDelete {
 	int64 total = 1;
 }

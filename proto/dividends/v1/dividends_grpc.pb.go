@@ -26,7 +26,7 @@ type DividendsClient interface {
 	Search(ctx context.Context, in *DividendRequest, opts ...grpc.CallOption) (*DividendReply, error)
 	// Private API
 	// Delete dividends by exchanges or tickers
-	Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDeleteReply, error)
+	Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDelete, error)
 }
 
 type dividendsClient struct {
@@ -55,8 +55,8 @@ func (c *dividendsClient) Search(ctx context.Context, in *DividendRequest, opts 
 	return out, nil
 }
 
-func (c *dividendsClient) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDeleteReply, error) {
-	out := new(DividendDeleteReply)
+func (c *dividendsClient) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDelete, error) {
+	out := new(DividendDelete)
 	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ type DividendsServer interface {
 	Search(context.Context, *DividendRequest) (*DividendReply, error)
 	// Private API
 	// Delete dividends by exchanges or tickers
-	Delete(context.Context, *DividendDeleteRequest) (*DividendDeleteReply, error)
+	Delete(context.Context, *DividendDeleteRequest) (*DividendDelete, error)
 	mustEmbedUnimplementedDividendsServer()
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedDividendsServer) Last(context.Context, *DividendLastRequest) 
 func (UnimplementedDividendsServer) Search(context.Context, *DividendRequest) (*DividendReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedDividendsServer) Delete(context.Context, *DividendDeleteRequest) (*DividendDeleteReply, error) {
+func (UnimplementedDividendsServer) Delete(context.Context, *DividendDeleteRequest) (*DividendDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedDividendsServer) mustEmbedUnimplementedDividendsServer() {}

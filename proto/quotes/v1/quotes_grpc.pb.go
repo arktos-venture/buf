@@ -26,7 +26,7 @@ type QuotesClient interface {
 	Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error)
 	// Private API
 	// Delete Quotes
-	Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDeleteReply, error)
+	Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDelete, error)
 }
 
 type quotesClient struct {
@@ -55,8 +55,8 @@ func (c *quotesClient) Search(ctx context.Context, in *QuoteRequest, opts ...grp
 	return out, nil
 }
 
-func (c *quotesClient) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDeleteReply, error) {
-	out := new(QuoteDeleteReply)
+func (c *quotesClient) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDelete, error) {
+	out := new(QuoteDelete)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ type QuotesServer interface {
 	Search(context.Context, *QuoteRequest) (*QuoteReply, error)
 	// Private API
 	// Delete Quotes
-	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error)
+	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDelete, error)
 	mustEmbedUnimplementedQuotesServer()
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedQuotesServer) Last(context.Context, *QuoteLastRequest) (*Quot
 func (UnimplementedQuotesServer) Search(context.Context, *QuoteRequest) (*QuoteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedQuotesServer) Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error) {
+func (UnimplementedQuotesServer) Delete(context.Context, *QuoteDeleteRequest) (*QuoteDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedQuotesServer) mustEmbedUnimplementedQuotesServer() {}

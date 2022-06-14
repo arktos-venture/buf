@@ -23,7 +23,7 @@ type NewsClient interface {
 	Search(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (*NewsReplies, error)
 	// Private API
 	// Delete news by exchanges or tickers
-	Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDeleteReply, error)
+	Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDelete, error)
 }
 
 type newsClient struct {
@@ -43,8 +43,8 @@ func (c *newsClient) Search(ctx context.Context, in *NewsRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *newsClient) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDeleteReply, error) {
-	out := new(NewsDeleteReply)
+func (c *newsClient) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDelete, error) {
+	out := new(NewsDelete)
 	err := c.cc.Invoke(ctx, "/news.v1.News/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ type NewsServer interface {
 	Search(context.Context, *NewsRequest) (*NewsReplies, error)
 	// Private API
 	// Delete news by exchanges or tickers
-	Delete(context.Context, *NewsDeleteRequest) (*NewsDeleteReply, error)
+	Delete(context.Context, *NewsDeleteRequest) (*NewsDelete, error)
 	mustEmbedUnimplementedNewsServer()
 }
 
@@ -72,7 +72,7 @@ type UnimplementedNewsServer struct {
 func (UnimplementedNewsServer) Search(context.Context, *NewsRequest) (*NewsReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedNewsServer) Delete(context.Context, *NewsDeleteRequest) (*NewsDeleteReply, error) {
+func (UnimplementedNewsServer) Delete(context.Context, *NewsDeleteRequest) (*NewsDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedNewsServer) mustEmbedUnimplementedNewsServer() {}

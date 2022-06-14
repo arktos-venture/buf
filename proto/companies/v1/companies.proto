@@ -74,7 +74,7 @@ service Companies {
 
 	// Private API
 	// Delete Company
-	rpc Delete (CompanyDeleteRequest) returns (CompanyDeleteReply)  {
+	rpc Delete (CompanyDeleteRequest) returns (CompanyDelete)  {
 		option (google.api.http) = {
 		  	delete: "/v1/companies"
 		};
@@ -176,6 +176,6 @@ message CompanyReply {
 	google.protobuf.Timestamp updated_at = 19; 
 }
 
-message CompanyDeleteReply {
+message CompanyDelete {
 	int64 total = 1;
 }

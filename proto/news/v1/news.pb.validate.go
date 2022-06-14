@@ -606,22 +606,22 @@ var _ interface {
 	ErrorName() string
 } = NewsRepliesValidationError{}
 
-// Validate checks the field values on NewsDeleteReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *NewsDeleteReply) Validate() error {
+// Validate checks the field values on NewsDelete with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *NewsDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on NewsDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// NewsDeleteReplyMultiError, or nil if none found.
-func (m *NewsDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on NewsDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in NewsDeleteMultiError, or
+// nil if none found.
+func (m *NewsDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *NewsDeleteReply) validate(all bool) error {
+func (m *NewsDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -631,19 +631,18 @@ func (m *NewsDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return NewsDeleteReplyMultiError(errors)
+		return NewsDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// NewsDeleteReplyMultiError is an error wrapping multiple validation errors
-// returned by NewsDeleteReply.ValidateAll() if the designated constraints
-// aren't met.
-type NewsDeleteReplyMultiError []error
+// NewsDeleteMultiError is an error wrapping multiple validation errors
+// returned by NewsDelete.ValidateAll() if the designated constraints aren't met.
+type NewsDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m NewsDeleteReplyMultiError) Error() string {
+func (m NewsDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -652,11 +651,11 @@ func (m NewsDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m NewsDeleteReplyMultiError) AllErrors() []error { return m }
+func (m NewsDeleteMultiError) AllErrors() []error { return m }
 
-// NewsDeleteReplyValidationError is the validation error returned by
-// NewsDeleteReply.Validate if the designated constraints aren't met.
-type NewsDeleteReplyValidationError struct {
+// NewsDeleteValidationError is the validation error returned by
+// NewsDelete.Validate if the designated constraints aren't met.
+type NewsDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -664,22 +663,22 @@ type NewsDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e NewsDeleteReplyValidationError) Field() string { return e.field }
+func (e NewsDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e NewsDeleteReplyValidationError) Reason() string { return e.reason }
+func (e NewsDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e NewsDeleteReplyValidationError) Cause() error { return e.cause }
+func (e NewsDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e NewsDeleteReplyValidationError) Key() bool { return e.key }
+func (e NewsDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e NewsDeleteReplyValidationError) ErrorName() string { return "NewsDeleteReplyValidationError" }
+func (e NewsDeleteValidationError) ErrorName() string { return "NewsDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e NewsDeleteReplyValidationError) Error() string {
+func (e NewsDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -691,14 +690,14 @@ func (e NewsDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sNewsDeleteReply.%s: %s%s",
+		"invalid %sNewsDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = NewsDeleteReplyValidationError{}
+var _ error = NewsDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -706,4 +705,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = NewsDeleteReplyValidationError{}
+} = NewsDeleteValidationError{}

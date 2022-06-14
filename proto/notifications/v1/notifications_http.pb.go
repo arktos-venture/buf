@@ -19,7 +19,7 @@ const _ = http.SupportPackageIsVersion1
 
 type NotificationsHTTPServer interface {
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
-	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDeleteReply, error)
+	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDelete, error)
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 }
 
@@ -88,14 +88,14 @@ func _Notifications_Delete11_HTTP_Handler(srv NotificationsHTTPServer) func(ctx 
 		if err != nil {
 			return err
 		}
-		reply := out.(*NotificationDeleteReply)
+		reply := out.(*NotificationDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type NotificationsHTTPClient interface {
 	Create(ctx context.Context, req *NotificationCreateRequest, opts ...http.CallOption) (rsp *NotificationReply, err error)
-	Delete(ctx context.Context, req *NotificationDeleteRequest, opts ...http.CallOption) (rsp *NotificationDeleteReply, err error)
+	Delete(ctx context.Context, req *NotificationDeleteRequest, opts ...http.CallOption) (rsp *NotificationDelete, err error)
 	Search(ctx context.Context, req *NotificationSearchRequest, opts ...http.CallOption) (rsp *NotificationReplies, err error)
 }
 
@@ -120,8 +120,8 @@ func (c *NotificationsHTTPClientImpl) Create(ctx context.Context, in *Notificati
 	return &out, err
 }
 
-func (c *NotificationsHTTPClientImpl) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...http.CallOption) (*NotificationDeleteReply, error) {
-	var out NotificationDeleteReply
+func (c *NotificationsHTTPClientImpl) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...http.CallOption) (*NotificationDelete, error) {
+	var out NotificationDelete
 	pattern := "/v1/notifications"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/notifications.v1.Notifications/Delete"))

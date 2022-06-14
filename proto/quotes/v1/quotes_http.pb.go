@@ -18,7 +18,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type QuotesHTTPServer interface {
-	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDeleteReply, error)
+	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDelete, error)
 	Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error)
 	Search(context.Context, *QuoteRequest) (*QuoteReply, error)
 }
@@ -85,13 +85,13 @@ func _Quotes_Delete0_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) e
 		if err != nil {
 			return err
 		}
-		reply := out.(*QuoteDeleteReply)
+		reply := out.(*QuoteDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type QuotesHTTPClient interface {
-	Delete(ctx context.Context, req *QuoteDeleteRequest, opts ...http.CallOption) (rsp *QuoteDeleteReply, err error)
+	Delete(ctx context.Context, req *QuoteDeleteRequest, opts ...http.CallOption) (rsp *QuoteDelete, err error)
 	Last(ctx context.Context, req *QuoteLastRequest, opts ...http.CallOption) (rsp *QuoteLastReply, err error)
 	Search(ctx context.Context, req *QuoteRequest, opts ...http.CallOption) (rsp *QuoteReply, err error)
 }
@@ -104,8 +104,8 @@ func NewQuotesHTTPClient(client *http.Client) QuotesHTTPClient {
 	return &QuotesHTTPClientImpl{client}
 }
 
-func (c *QuotesHTTPClientImpl) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...http.CallOption) (*QuoteDeleteReply, error) {
-	var out QuoteDeleteReply
+func (c *QuotesHTTPClientImpl) Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...http.CallOption) (*QuoteDelete, error) {
+	var out QuoteDelete
 	pattern := "/v1/quotes"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/quotes.v1.Quotes/Delete"))

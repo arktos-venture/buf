@@ -81,7 +81,7 @@ service Strategies {
 
 	// Public API
 	// Delete Strategy
-	rpc Delete (StrategyDeleteRequest) returns (StrategyDeleteReply)  {
+	rpc Delete (StrategyDeleteRequest) returns (StrategyDelete)  {
 		option (google.api.http) = {
 		  	delete: "/v1/strategies"
 		};
@@ -135,6 +135,6 @@ message StrategyReplies {
 	int64 total = 2; 
 }
 
-message StrategyDeleteReply {
+message StrategyDelete {
 	int64 total = 1;
 }

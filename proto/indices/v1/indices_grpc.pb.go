@@ -33,7 +33,7 @@ type IndicesClient interface {
 	Update(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
 	// Private API
 	// Delete Indices
-	Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDeleteReply, error)
+	Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDelete, error)
 }
 
 type indicesClient struct {
@@ -80,8 +80,8 @@ func (c *indicesClient) Update(ctx context.Context, in *IndiceModifyRequest, opt
 	return out, nil
 }
 
-func (c *indicesClient) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDeleteReply, error) {
-	out := new(IndiceDeleteReply)
+func (c *indicesClient) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDelete, error) {
+	out := new(IndiceDelete)
 	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ type IndicesServer interface {
 	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
 	// Private API
 	// Delete Indices
-	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDeleteReply, error)
+	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error)
 	mustEmbedUnimplementedIndicesServer()
 }
 
@@ -127,7 +127,7 @@ func (UnimplementedIndicesServer) Create(context.Context, *IndiceModifyRequest) 
 func (UnimplementedIndicesServer) Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedIndicesServer) Delete(context.Context, *IndiceDeleteRequest) (*IndiceDeleteReply, error) {
+func (UnimplementedIndicesServer) Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedIndicesServer) mustEmbedUnimplementedIndicesServer() {}

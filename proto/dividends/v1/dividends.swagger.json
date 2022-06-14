@@ -71,7 +71,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DividendDeleteReply"
+              "$ref": "#/definitions/v1DividendDelete"
             }
           },
           "default": {
@@ -227,7 +227,7 @@
       ],
       "default": "Equal"
     },
-    "v1DividendDeleteReply": {
+    "v1DividendDelete": {
       "type": "object",
       "properties": {
         "total": {

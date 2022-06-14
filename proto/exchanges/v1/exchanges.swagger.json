@@ -145,7 +145,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExchangeDeleteReply"
+              "$ref": "#/definitions/v1ExchangeDelete"
             }
           },
           "default": {
@@ -221,7 +221,7 @@
         }
       }
     },
-    "v1ExchangeDeleteReply": {
+    "v1ExchangeDelete": {
       "type": "object",
       "properties": {
         "total": {

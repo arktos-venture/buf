@@ -19,7 +19,7 @@ const _ = http.SupportPackageIsVersion1
 
 type CompaniesHTTPServer interface {
 	Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error)
-	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error)
+	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDelete, error)
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error)
 }
@@ -109,14 +109,14 @@ func _Companies_Delete12_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Con
 		if err != nil {
 			return err
 		}
-		reply := out.(*CompanyDeleteReply)
+		reply := out.(*CompanyDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type CompaniesHTTPClient interface {
 	Create(ctx context.Context, req *CompanyCreateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
-	Delete(ctx context.Context, req *CompanyDeleteRequest, opts ...http.CallOption) (rsp *CompanyDeleteReply, err error)
+	Delete(ctx context.Context, req *CompanyDeleteRequest, opts ...http.CallOption) (rsp *CompanyDelete, err error)
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 	Update(ctx context.Context, req *CompanyUpdateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 }
@@ -142,8 +142,8 @@ func (c *CompaniesHTTPClientImpl) Create(ctx context.Context, in *CompanyCreateR
 	return &out, err
 }
 
-func (c *CompaniesHTTPClientImpl) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...http.CallOption) (*CompanyDeleteReply, error) {
-	var out CompanyDeleteReply
+func (c *CompaniesHTTPClientImpl) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...http.CallOption) (*CompanyDelete, error) {
+	var out CompanyDelete
 	pattern := "/v1/companies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/companies.v1.Companies/Delete"))

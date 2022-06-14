@@ -83,7 +83,7 @@ service Indices {
 
 	// Private API
 	// Delete Indices
-	rpc Delete (IndiceDeleteRequest) returns (IndiceDeleteReply)  {
+	rpc Delete (IndiceDeleteRequest) returns (IndiceDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/indices"
 		};
@@ -137,6 +137,6 @@ message IndiceShortReplies {
 	int64 total = 2;
 }
 
-message IndiceDeleteReply {
+message IndiceDelete {
 	int64 total = 1;
 }

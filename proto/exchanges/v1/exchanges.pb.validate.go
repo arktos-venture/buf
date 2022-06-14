@@ -1367,22 +1367,22 @@ var _ interface {
 	ErrorName() string
 } = ExchangeRepliesValidationError{}
 
-// Validate checks the field values on ExchangeDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeDeleteReply) Validate() error {
+// Validate checks the field values on ExchangeDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ExchangeDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ExchangeDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ExchangeDeleteReplyMultiError, or nil if none found.
-func (m *ExchangeDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on ExchangeDelete with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ExchangeDeleteMultiError,
+// or nil if none found.
+func (m *ExchangeDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ExchangeDeleteReply) validate(all bool) error {
+func (m *ExchangeDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1392,19 +1392,19 @@ func (m *ExchangeDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return ExchangeDeleteReplyMultiError(errors)
+		return ExchangeDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// ExchangeDeleteReplyMultiError is an error wrapping multiple validation
-// errors returned by ExchangeDeleteReply.ValidateAll() if the designated
-// constraints aren't met.
-type ExchangeDeleteReplyMultiError []error
+// ExchangeDeleteMultiError is an error wrapping multiple validation errors
+// returned by ExchangeDelete.ValidateAll() if the designated constraints
+// aren't met.
+type ExchangeDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeDeleteReplyMultiError) Error() string {
+func (m ExchangeDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1413,11 +1413,11 @@ func (m ExchangeDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ExchangeDeleteReplyMultiError) AllErrors() []error { return m }
+func (m ExchangeDeleteMultiError) AllErrors() []error { return m }
 
-// ExchangeDeleteReplyValidationError is the validation error returned by
-// ExchangeDeleteReply.Validate if the designated constraints aren't met.
-type ExchangeDeleteReplyValidationError struct {
+// ExchangeDeleteValidationError is the validation error returned by
+// ExchangeDelete.Validate if the designated constraints aren't met.
+type ExchangeDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1425,24 +1425,22 @@ type ExchangeDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e ExchangeDeleteReplyValidationError) Field() string { return e.field }
+func (e ExchangeDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ExchangeDeleteReplyValidationError) Reason() string { return e.reason }
+func (e ExchangeDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ExchangeDeleteReplyValidationError) Cause() error { return e.cause }
+func (e ExchangeDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ExchangeDeleteReplyValidationError) Key() bool { return e.key }
+func (e ExchangeDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ExchangeDeleteReplyValidationError) ErrorName() string {
-	return "ExchangeDeleteReplyValidationError"
-}
+func (e ExchangeDeleteValidationError) ErrorName() string { return "ExchangeDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ExchangeDeleteReplyValidationError) Error() string {
+func (e ExchangeDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1454,14 +1452,14 @@ func (e ExchangeDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sExchangeDeleteReply.%s: %s%s",
+		"invalid %sExchangeDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ExchangeDeleteReplyValidationError{}
+var _ error = ExchangeDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -1469,7 +1467,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ExchangeDeleteReplyValidationError{}
+} = ExchangeDeleteValidationError{}
 
 // Validate checks the field values on ExchangeRequest_Request with the rules
 // defined in the proto definition for this message. If any rules are

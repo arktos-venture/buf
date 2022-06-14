@@ -34,7 +34,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1NewsDeleteReply"
+              "$ref": "#/definitions/v1NewsDelete"
             }
           },
           "default": {
@@ -134,7 +134,7 @@
         }
       }
     },
-    "v1NewsDeleteReply": {
+    "v1NewsDelete": {
       "type": "object",
       "properties": {
         "total": {

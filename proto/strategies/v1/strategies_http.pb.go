@@ -20,7 +20,7 @@ const _ = http.SupportPackageIsVersion1
 
 type StrategiesHTTPServer interface {
 	Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
-	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error)
+	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error)
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
 	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
 	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
@@ -131,14 +131,14 @@ func _Strategies_Delete4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 		if err != nil {
 			return err
 		}
-		reply := out.(*StrategyDeleteReply)
+		reply := out.(*StrategyDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type StrategiesHTTPClient interface {
 	Create(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
-	Delete(ctx context.Context, req *StrategyDeleteRequest, opts ...http.CallOption) (rsp *StrategyDeleteReply, err error)
+	Delete(ctx context.Context, req *StrategyDeleteRequest, opts ...http.CallOption) (rsp *StrategyDelete, err error)
 	Get(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *StrategyReplies, err error)
 	Update(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
@@ -165,8 +165,8 @@ func (c *StrategiesHTTPClientImpl) Create(ctx context.Context, in *StrategyUpdat
 	return &out, err
 }
 
-func (c *StrategiesHTTPClientImpl) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...http.CallOption) (*StrategyDeleteReply, error) {
-	var out StrategyDeleteReply
+func (c *StrategiesHTTPClientImpl) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...http.CallOption) (*StrategyDelete, error) {
+	var out StrategyDelete
 	pattern := "/v1/strategies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/strategies.v1.Strategies/Delete"))

@@ -29,7 +29,7 @@ type ExchangesClient interface {
 	List(ctx context.Context, in *ExchangeListRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
 	// Private API
 	// Delete Exchange
-	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDeleteReply, error)
+	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error)
 }
 
 type exchangesClient struct {
@@ -67,8 +67,8 @@ func (c *exchangesClient) List(ctx context.Context, in *ExchangeListRequest, opt
 	return out, nil
 }
 
-func (c *exchangesClient) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDeleteReply, error) {
-	out := new(ExchangeDeleteReply)
+func (c *exchangesClient) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error) {
+	out := new(ExchangeDelete)
 	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ type ExchangesServer interface {
 	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
 	// Private API
 	// Delete Exchange
-	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDeleteReply, error)
+	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
 	mustEmbedUnimplementedExchangesServer()
 }
 
@@ -108,7 +108,7 @@ func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*Exc
 func (UnimplementedExchangesServer) List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDeleteReply, error) {
+func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedExchangesServer) mustEmbedUnimplementedExchangesServer() {}
