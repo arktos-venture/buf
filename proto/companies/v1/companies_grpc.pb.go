@@ -29,7 +29,7 @@ type CompaniesClient interface {
 	Update(ctx context.Context, in *CompanyUpdateRequest, opts ...grpc.CallOption) (*CompanyReply, error)
 	// Private API
 	// Delete Company
-	Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDeleteReply, error)
+	Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDelete, error)
 }
 
 type companiesClient struct {
@@ -67,8 +67,8 @@ func (c *companiesClient) Update(ctx context.Context, in *CompanyUpdateRequest, 
 	return out, nil
 }
 
-func (c *companiesClient) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDeleteReply, error) {
-	out := new(CompanyDeleteReply)
+func (c *companiesClient) Delete(ctx context.Context, in *CompanyDeleteRequest, opts ...grpc.CallOption) (*CompanyDelete, error) {
+	out := new(CompanyDelete)
 	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ type CompaniesServer interface {
 	Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error)
 	// Private API
 	// Delete Company
-	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error)
+	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDelete, error)
 	mustEmbedUnimplementedCompaniesServer()
 }
 
@@ -108,7 +108,7 @@ func (UnimplementedCompaniesServer) Create(context.Context, *CompanyCreateReques
 func (UnimplementedCompaniesServer) Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedCompaniesServer) Delete(context.Context, *CompanyDeleteRequest) (*CompanyDeleteReply, error) {
+func (UnimplementedCompaniesServer) Delete(context.Context, *CompanyDeleteRequest) (*CompanyDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedCompaniesServer) mustEmbedUnimplementedCompaniesServer() {}

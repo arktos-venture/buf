@@ -19,7 +19,7 @@ const _ = http.SupportPackageIsVersion1
 
 type IndexesHTTPServer interface {
 	Create(context.Context, *IndexCreateRequest) (*IndexReply, error)
-	Delete(context.Context, *IndexDeleteRequest) (*IndexDeleteReply, error)
+	Delete(context.Context, *IndexDeleteRequest) (*IndexDelete, error)
 	Get(context.Context, *IndexRequest) (*IndexReply, error)
 	Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error)
 	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
@@ -127,14 +127,14 @@ func _Indexes_Delete13_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndexDeleteReply)
+		reply := out.(*IndexDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type IndexesHTTPClient interface {
 	Create(ctx context.Context, req *IndexCreateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
-	Delete(ctx context.Context, req *IndexDeleteRequest, opts ...http.CallOption) (rsp *IndexDeleteReply, err error)
+	Delete(ctx context.Context, req *IndexDeleteRequest, opts ...http.CallOption) (rsp *IndexDelete, err error)
 	Get(ctx context.Context, req *IndexRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
 	Search(ctx context.Context, req *IndexSearchRequest, opts ...http.CallOption) (rsp *IndexSearchReplies, err error)
 	Update(ctx context.Context, req *IndexCreateRequest, opts ...http.CallOption) (rsp *IndexReply, err error)
@@ -161,8 +161,8 @@ func (c *IndexesHTTPClientImpl) Create(ctx context.Context, in *IndexCreateReque
 	return &out, err
 }
 
-func (c *IndexesHTTPClientImpl) Delete(ctx context.Context, in *IndexDeleteRequest, opts ...http.CallOption) (*IndexDeleteReply, error) {
-	var out IndexDeleteReply
+func (c *IndexesHTTPClientImpl) Delete(ctx context.Context, in *IndexDeleteRequest, opts ...http.CallOption) (*IndexDelete, error) {
+	var out IndexDelete
 	pattern := "/v1/indexes"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indexes.v1.Indexes/Delete"))

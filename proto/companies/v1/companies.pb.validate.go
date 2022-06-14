@@ -1305,22 +1305,22 @@ var _ interface {
 	ErrorName() string
 } = CompanyReplyValidationError{}
 
-// Validate checks the field values on CompanyDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CompanyDeleteReply) Validate() error {
+// Validate checks the field values on CompanyDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CompanyDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CompanyDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CompanyDeleteReplyMultiError, or nil if none found.
-func (m *CompanyDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on CompanyDelete with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CompanyDeleteMultiError, or
+// nil if none found.
+func (m *CompanyDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CompanyDeleteReply) validate(all bool) error {
+func (m *CompanyDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1330,19 +1330,19 @@ func (m *CompanyDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return CompanyDeleteReplyMultiError(errors)
+		return CompanyDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// CompanyDeleteReplyMultiError is an error wrapping multiple validation errors
-// returned by CompanyDeleteReply.ValidateAll() if the designated constraints
+// CompanyDeleteMultiError is an error wrapping multiple validation errors
+// returned by CompanyDelete.ValidateAll() if the designated constraints
 // aren't met.
-type CompanyDeleteReplyMultiError []error
+type CompanyDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CompanyDeleteReplyMultiError) Error() string {
+func (m CompanyDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1351,11 +1351,11 @@ func (m CompanyDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CompanyDeleteReplyMultiError) AllErrors() []error { return m }
+func (m CompanyDeleteMultiError) AllErrors() []error { return m }
 
-// CompanyDeleteReplyValidationError is the validation error returned by
-// CompanyDeleteReply.Validate if the designated constraints aren't met.
-type CompanyDeleteReplyValidationError struct {
+// CompanyDeleteValidationError is the validation error returned by
+// CompanyDelete.Validate if the designated constraints aren't met.
+type CompanyDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1363,24 +1363,22 @@ type CompanyDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e CompanyDeleteReplyValidationError) Field() string { return e.field }
+func (e CompanyDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CompanyDeleteReplyValidationError) Reason() string { return e.reason }
+func (e CompanyDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CompanyDeleteReplyValidationError) Cause() error { return e.cause }
+func (e CompanyDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CompanyDeleteReplyValidationError) Key() bool { return e.key }
+func (e CompanyDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CompanyDeleteReplyValidationError) ErrorName() string {
-	return "CompanyDeleteReplyValidationError"
-}
+func (e CompanyDeleteValidationError) ErrorName() string { return "CompanyDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e CompanyDeleteReplyValidationError) Error() string {
+func (e CompanyDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1392,14 +1390,14 @@ func (e CompanyDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCompanyDeleteReply.%s: %s%s",
+		"invalid %sCompanyDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CompanyDeleteReplyValidationError{}
+var _ error = CompanyDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -1407,4 +1405,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CompanyDeleteReplyValidationError{}
+} = CompanyDeleteValidationError{}

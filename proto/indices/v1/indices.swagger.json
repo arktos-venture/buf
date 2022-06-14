@@ -86,7 +86,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndiceDeleteReply"
+              "$ref": "#/definitions/v1IndiceDelete"
             }
           },
           "default": {
@@ -355,7 +355,7 @@
         }
       }
     },
-    "v1IndiceDeleteReply": {
+    "v1IndiceDelete": {
       "type": "object",
       "properties": {
         "total": {

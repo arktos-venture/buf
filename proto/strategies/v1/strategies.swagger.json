@@ -55,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1StrategyDeleteReply"
+              "$ref": "#/definitions/v1StrategyDelete"
             }
           },
           "default": {
@@ -249,7 +249,7 @@
       },
       "title": "Transverse"
     },
-    "v1StrategyDeleteReply": {
+    "v1StrategyDelete": {
       "type": "object",
       "properties": {
         "total": {

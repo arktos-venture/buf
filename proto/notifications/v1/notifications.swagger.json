@@ -34,7 +34,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1NotificationDeleteReply"
+              "$ref": "#/definitions/v1NotificationDelete"
             }
           },
           "default": {
@@ -229,7 +229,7 @@
       ],
       "default": "CRITICAL"
     },
-    "v1NotificationDeleteReply": {
+    "v1NotificationDelete": {
       "type": "object",
       "properties": {
         "total": {

@@ -64,7 +64,7 @@ service Dividends {
 
 	// Private API
 	// Delete dividends by exchanges or tickers
-	rpc Delete (DividendDeleteRequest) returns (DividendDeleteReply)  {
+	rpc Delete (DividendDeleteRequest) returns (DividendDelete)  {
 		option (google.api.http) = {
 			delete: "/v1/dividends"
 		};
@@ -124,6 +124,6 @@ message DividendReply {
 	repeated google.protobuf.Timestamp created_at = 5;
 }
 
-message DividendDeleteReply {
+message DividendDelete {
 	int64 total = 1;
 }

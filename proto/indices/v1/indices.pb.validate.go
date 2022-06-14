@@ -762,22 +762,22 @@ var _ interface {
 	ErrorName() string
 } = IndiceShortRepliesValidationError{}
 
-// Validate checks the field values on IndiceDeleteReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *IndiceDeleteReply) Validate() error {
+// Validate checks the field values on IndiceDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *IndiceDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on IndiceDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IndiceDeleteReplyMultiError, or nil if none found.
-func (m *IndiceDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on IndiceDelete with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in IndiceDeleteMultiError, or
+// nil if none found.
+func (m *IndiceDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *IndiceDeleteReply) validate(all bool) error {
+func (m *IndiceDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -787,19 +787,18 @@ func (m *IndiceDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return IndiceDeleteReplyMultiError(errors)
+		return IndiceDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// IndiceDeleteReplyMultiError is an error wrapping multiple validation errors
-// returned by IndiceDeleteReply.ValidateAll() if the designated constraints
-// aren't met.
-type IndiceDeleteReplyMultiError []error
+// IndiceDeleteMultiError is an error wrapping multiple validation errors
+// returned by IndiceDelete.ValidateAll() if the designated constraints aren't met.
+type IndiceDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m IndiceDeleteReplyMultiError) Error() string {
+func (m IndiceDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -808,11 +807,11 @@ func (m IndiceDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m IndiceDeleteReplyMultiError) AllErrors() []error { return m }
+func (m IndiceDeleteMultiError) AllErrors() []error { return m }
 
-// IndiceDeleteReplyValidationError is the validation error returned by
-// IndiceDeleteReply.Validate if the designated constraints aren't met.
-type IndiceDeleteReplyValidationError struct {
+// IndiceDeleteValidationError is the validation error returned by
+// IndiceDelete.Validate if the designated constraints aren't met.
+type IndiceDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -820,24 +819,22 @@ type IndiceDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e IndiceDeleteReplyValidationError) Field() string { return e.field }
+func (e IndiceDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IndiceDeleteReplyValidationError) Reason() string { return e.reason }
+func (e IndiceDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IndiceDeleteReplyValidationError) Cause() error { return e.cause }
+func (e IndiceDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IndiceDeleteReplyValidationError) Key() bool { return e.key }
+func (e IndiceDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IndiceDeleteReplyValidationError) ErrorName() string {
-	return "IndiceDeleteReplyValidationError"
-}
+func (e IndiceDeleteValidationError) ErrorName() string { return "IndiceDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e IndiceDeleteReplyValidationError) Error() string {
+func (e IndiceDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -849,14 +846,14 @@ func (e IndiceDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIndiceDeleteReply.%s: %s%s",
+		"invalid %sIndiceDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IndiceDeleteReplyValidationError{}
+var _ error = IndiceDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -864,7 +861,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IndiceDeleteReplyValidationError{}
+} = IndiceDeleteValidationError{}
 
 // Validate checks the field values on IndiceShortReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

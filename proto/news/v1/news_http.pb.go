@@ -18,7 +18,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type NewsHTTPServer interface {
-	Delete(context.Context, *NewsDeleteRequest) (*NewsDeleteReply, error)
+	Delete(context.Context, *NewsDeleteRequest) (*NewsDelete, error)
 	Search(context.Context, *NewsRequest) (*NewsReplies, error)
 }
 
@@ -61,13 +61,13 @@ func _News_Delete6_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error
 		if err != nil {
 			return err
 		}
-		reply := out.(*NewsDeleteReply)
+		reply := out.(*NewsDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type NewsHTTPClient interface {
-	Delete(ctx context.Context, req *NewsDeleteRequest, opts ...http.CallOption) (rsp *NewsDeleteReply, err error)
+	Delete(ctx context.Context, req *NewsDeleteRequest, opts ...http.CallOption) (rsp *NewsDelete, err error)
 	Search(ctx context.Context, req *NewsRequest, opts ...http.CallOption) (rsp *NewsReplies, err error)
 }
 
@@ -79,8 +79,8 @@ func NewNewsHTTPClient(client *http.Client) NewsHTTPClient {
 	return &NewsHTTPClientImpl{client}
 }
 
-func (c *NewsHTTPClientImpl) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...http.CallOption) (*NewsDeleteReply, error) {
-	var out NewsDeleteReply
+func (c *NewsHTTPClientImpl) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...http.CallOption) (*NewsDelete, error) {
+	var out NewsDelete
 	pattern := "/v1/news"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/news.v1.News/Delete"))

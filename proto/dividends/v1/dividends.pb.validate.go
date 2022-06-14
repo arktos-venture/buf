@@ -1023,22 +1023,22 @@ var _ interface {
 	ErrorName() string
 } = DividendReplyValidationError{}
 
-// Validate checks the field values on DividendDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *DividendDeleteReply) Validate() error {
+// Validate checks the field values on DividendDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DividendDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DividendDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// DividendDeleteReplyMultiError, or nil if none found.
-func (m *DividendDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on DividendDelete with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DividendDeleteMultiError,
+// or nil if none found.
+func (m *DividendDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DividendDeleteReply) validate(all bool) error {
+func (m *DividendDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1048,19 +1048,19 @@ func (m *DividendDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return DividendDeleteReplyMultiError(errors)
+		return DividendDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// DividendDeleteReplyMultiError is an error wrapping multiple validation
-// errors returned by DividendDeleteReply.ValidateAll() if the designated
-// constraints aren't met.
-type DividendDeleteReplyMultiError []error
+// DividendDeleteMultiError is an error wrapping multiple validation errors
+// returned by DividendDelete.ValidateAll() if the designated constraints
+// aren't met.
+type DividendDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DividendDeleteReplyMultiError) Error() string {
+func (m DividendDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1069,11 +1069,11 @@ func (m DividendDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DividendDeleteReplyMultiError) AllErrors() []error { return m }
+func (m DividendDeleteMultiError) AllErrors() []error { return m }
 
-// DividendDeleteReplyValidationError is the validation error returned by
-// DividendDeleteReply.Validate if the designated constraints aren't met.
-type DividendDeleteReplyValidationError struct {
+// DividendDeleteValidationError is the validation error returned by
+// DividendDelete.Validate if the designated constraints aren't met.
+type DividendDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1081,24 +1081,22 @@ type DividendDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e DividendDeleteReplyValidationError) Field() string { return e.field }
+func (e DividendDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DividendDeleteReplyValidationError) Reason() string { return e.reason }
+func (e DividendDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DividendDeleteReplyValidationError) Cause() error { return e.cause }
+func (e DividendDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DividendDeleteReplyValidationError) Key() bool { return e.key }
+func (e DividendDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DividendDeleteReplyValidationError) ErrorName() string {
-	return "DividendDeleteReplyValidationError"
-}
+func (e DividendDeleteValidationError) ErrorName() string { return "DividendDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DividendDeleteReplyValidationError) Error() string {
+func (e DividendDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1110,14 +1108,14 @@ func (e DividendDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDividendDeleteReply.%s: %s%s",
+		"invalid %sDividendDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DividendDeleteReplyValidationError{}
+var _ error = DividendDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -1125,4 +1123,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DividendDeleteReplyValidationError{}
+} = DividendDeleteValidationError{}

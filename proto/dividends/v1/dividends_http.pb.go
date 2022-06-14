@@ -18,7 +18,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type DividendsHTTPServer interface {
-	Delete(context.Context, *DividendDeleteRequest) (*DividendDeleteReply, error)
+	Delete(context.Context, *DividendDeleteRequest) (*DividendDelete, error)
 	Last(context.Context, *DividendLastRequest) (*DividendLastReply, error)
 	Search(context.Context, *DividendRequest) (*DividendReply, error)
 }
@@ -85,13 +85,13 @@ func _Dividends_Delete10_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Con
 		if err != nil {
 			return err
 		}
-		reply := out.(*DividendDeleteReply)
+		reply := out.(*DividendDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type DividendsHTTPClient interface {
-	Delete(ctx context.Context, req *DividendDeleteRequest, opts ...http.CallOption) (rsp *DividendDeleteReply, err error)
+	Delete(ctx context.Context, req *DividendDeleteRequest, opts ...http.CallOption) (rsp *DividendDelete, err error)
 	Last(ctx context.Context, req *DividendLastRequest, opts ...http.CallOption) (rsp *DividendLastReply, err error)
 	Search(ctx context.Context, req *DividendRequest, opts ...http.CallOption) (rsp *DividendReply, err error)
 }
@@ -104,8 +104,8 @@ func NewDividendsHTTPClient(client *http.Client) DividendsHTTPClient {
 	return &DividendsHTTPClientImpl{client}
 }
 
-func (c *DividendsHTTPClientImpl) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...http.CallOption) (*DividendDeleteReply, error) {
-	var out DividendDeleteReply
+func (c *DividendsHTTPClientImpl) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...http.CallOption) (*DividendDelete, error) {
+	var out DividendDelete
 	pattern := "/v1/dividends"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/dividends.v1.Dividends/Delete"))

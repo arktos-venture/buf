@@ -18,7 +18,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type ExchangesHTTPServer interface {
-	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDeleteReply, error)
+	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
 	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
@@ -109,13 +109,13 @@ func _Exchanges_Delete3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Cont
 		if err != nil {
 			return err
 		}
-		reply := out.(*ExchangeDeleteReply)
+		reply := out.(*ExchangeDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type ExchangesHTTPClient interface {
-	Delete(ctx context.Context, req *ExchangeDeleteRequest, opts ...http.CallOption) (rsp *ExchangeDeleteReply, err error)
+	Delete(ctx context.Context, req *ExchangeDeleteRequest, opts ...http.CallOption) (rsp *ExchangeDelete, err error)
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	IsOpen(ctx context.Context, req *ExchangeIsOpenRequest, opts ...http.CallOption) (rsp *ExchangeIsOpenReply, err error)
 	List(ctx context.Context, req *ExchangeListRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
@@ -129,8 +129,8 @@ func NewExchangesHTTPClient(client *http.Client) ExchangesHTTPClient {
 	return &ExchangesHTTPClientImpl{client}
 }
 
-func (c *ExchangesHTTPClientImpl) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...http.CallOption) (*ExchangeDeleteReply, error) {
-	var out ExchangeDeleteReply
+func (c *ExchangesHTTPClientImpl) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...http.CallOption) (*ExchangeDelete, error) {
+	var out ExchangeDelete
 	pattern := "/v1/exchanges"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Delete"))

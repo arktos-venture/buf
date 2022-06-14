@@ -71,7 +71,7 @@ service Exchanges {
 
 	// Private API
 	// Delete Exchange
-	rpc Delete(ExchangeDeleteRequest) returns (ExchangeDeleteReply) {
+	rpc Delete(ExchangeDeleteRequest) returns (ExchangeDelete) {
 		option (google.api.http) = {
             delete: "/v1/exchanges"
         };
@@ -174,6 +174,6 @@ message ExchangeReplies {
 	int64 total = 2;
 }
 
-message ExchangeDeleteReply {
+message ExchangeDelete {
 	int64 total = 1;
 }

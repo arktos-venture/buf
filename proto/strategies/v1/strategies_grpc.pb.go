@@ -33,7 +33,7 @@ type StrategiesClient interface {
 	Update(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	// Public API
 	// Delete Strategy
-	Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDeleteReply, error)
+	Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDelete, error)
 }
 
 type strategiesClient struct {
@@ -80,8 +80,8 @@ func (c *strategiesClient) Update(ctx context.Context, in *StrategyUpdateRequest
 	return out, nil
 }
 
-func (c *strategiesClient) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDeleteReply, error) {
-	out := new(StrategyDeleteReply)
+func (c *strategiesClient) Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDelete, error) {
+	out := new(StrategyDelete)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ type StrategiesServer interface {
 	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
 	// Public API
 	// Delete Strategy
-	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error)
+	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error)
 	mustEmbedUnimplementedStrategiesServer()
 }
 
@@ -127,7 +127,7 @@ func (UnimplementedStrategiesServer) Create(context.Context, *StrategyUpdateRequ
 func (UnimplementedStrategiesServer) Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedStrategiesServer) Delete(context.Context, *StrategyDeleteRequest) (*StrategyDeleteReply, error) {
+func (UnimplementedStrategiesServer) Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedStrategiesServer) mustEmbedUnimplementedStrategiesServer() {}

@@ -20,7 +20,7 @@ const _ = http.SupportPackageIsVersion1
 
 type IndicesHTTPServer interface {
 	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
-	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDeleteReply, error)
+	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error)
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
 	List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error)
 	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
@@ -134,14 +134,14 @@ func _Indices_Delete1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndiceDeleteReply)
+		reply := out.(*IndiceDelete)
 		return ctx.Result(200, reply)
 	}
 }
 
 type IndicesHTTPClient interface {
 	Create(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
-	Delete(ctx context.Context, req *IndiceDeleteRequest, opts ...http.CallOption) (rsp *IndiceDeleteReply, err error)
+	Delete(ctx context.Context, req *IndiceDeleteRequest, opts ...http.CallOption) (rsp *IndiceDelete, err error)
 	Get(ctx context.Context, req *IndiceRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *IndiceShortReplies, err error)
 	Update(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
@@ -168,8 +168,8 @@ func (c *IndicesHTTPClientImpl) Create(ctx context.Context, in *IndiceModifyRequ
 	return &out, err
 }
 
-func (c *IndicesHTTPClientImpl) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...http.CallOption) (*IndiceDeleteReply, error) {
-	var out IndiceDeleteReply
+func (c *IndicesHTTPClientImpl) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...http.CallOption) (*IndiceDelete, error) {
+	var out IndiceDelete
 	pattern := "/v1/indices"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indices.v1.Indices/Delete"))

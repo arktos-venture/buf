@@ -56,7 +56,7 @@ service News {
 
 	// Private API
 	// Delete news by exchanges or tickers
-	rpc Delete (NewsDeleteRequest) returns (NewsDeleteReply)  {
+	rpc Delete (NewsDeleteRequest) returns (NewsDelete)  {
 		option (google.api.http) = {
 		  	delete: "/v1/news"
 		};
@@ -96,6 +96,6 @@ message NewsReplies {
 	int64 total = 2;
 }
 
-message NewsDeleteReply {
+message NewsDelete {
 	int64 total = 1;
 }

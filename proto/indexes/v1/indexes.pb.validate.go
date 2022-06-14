@@ -1129,22 +1129,22 @@ var _ interface {
 	ErrorName() string
 } = IndexSearchRepliesValidationError{}
 
-// Validate checks the field values on IndexDeleteReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *IndexDeleteReply) Validate() error {
+// Validate checks the field values on IndexDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *IndexDelete) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on IndexDeleteReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IndexDeleteReplyMultiError, or nil if none found.
-func (m *IndexDeleteReply) ValidateAll() error {
+// ValidateAll checks the field values on IndexDelete with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in IndexDeleteMultiError, or
+// nil if none found.
+func (m *IndexDelete) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *IndexDeleteReply) validate(all bool) error {
+func (m *IndexDelete) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1154,19 +1154,18 @@ func (m *IndexDeleteReply) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return IndexDeleteReplyMultiError(errors)
+		return IndexDeleteMultiError(errors)
 	}
 
 	return nil
 }
 
-// IndexDeleteReplyMultiError is an error wrapping multiple validation errors
-// returned by IndexDeleteReply.ValidateAll() if the designated constraints
-// aren't met.
-type IndexDeleteReplyMultiError []error
+// IndexDeleteMultiError is an error wrapping multiple validation errors
+// returned by IndexDelete.ValidateAll() if the designated constraints aren't met.
+type IndexDeleteMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m IndexDeleteReplyMultiError) Error() string {
+func (m IndexDeleteMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1175,11 +1174,11 @@ func (m IndexDeleteReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m IndexDeleteReplyMultiError) AllErrors() []error { return m }
+func (m IndexDeleteMultiError) AllErrors() []error { return m }
 
-// IndexDeleteReplyValidationError is the validation error returned by
-// IndexDeleteReply.Validate if the designated constraints aren't met.
-type IndexDeleteReplyValidationError struct {
+// IndexDeleteValidationError is the validation error returned by
+// IndexDelete.Validate if the designated constraints aren't met.
+type IndexDeleteValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1187,22 +1186,22 @@ type IndexDeleteReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e IndexDeleteReplyValidationError) Field() string { return e.field }
+func (e IndexDeleteValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IndexDeleteReplyValidationError) Reason() string { return e.reason }
+func (e IndexDeleteValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IndexDeleteReplyValidationError) Cause() error { return e.cause }
+func (e IndexDeleteValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IndexDeleteReplyValidationError) Key() bool { return e.key }
+func (e IndexDeleteValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IndexDeleteReplyValidationError) ErrorName() string { return "IndexDeleteReplyValidationError" }
+func (e IndexDeleteValidationError) ErrorName() string { return "IndexDeleteValidationError" }
 
 // Error satisfies the builtin error interface
-func (e IndexDeleteReplyValidationError) Error() string {
+func (e IndexDeleteValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1214,14 +1213,14 @@ func (e IndexDeleteReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIndexDeleteReply.%s: %s%s",
+		"invalid %sIndexDelete.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IndexDeleteReplyValidationError{}
+var _ error = IndexDeleteValidationError{}
 
 var _ interface {
 	Field() string
@@ -1229,7 +1228,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IndexDeleteReplyValidationError{}
+} = IndexDeleteValidationError{}
 
 // Validate checks the field values on IndexSearchRequest_Page with the rules
 // defined in the proto definition for this message. If any rules are

@@ -82,7 +82,7 @@ service Indexes {
 
 	// Public API
 	// Delete Index companies
-  rpc Delete (IndexDeleteRequest) returns (IndexDeleteReply)  {
+  rpc Delete (IndexDeleteRequest) returns (IndexDelete)  {
     option (google.api.http) = {
       delete: "/v1/indexes"
     };
@@ -145,6 +145,6 @@ message IndexSearchReplies {
   int64 total = 2;
 }
 
-message IndexDeleteReply {
+message IndexDelete {
   int64 total = 1;
 }

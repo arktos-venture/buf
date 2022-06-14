@@ -26,7 +26,7 @@ type NotificationsClient interface {
 	Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
 	// Private API
 	// Delete Notifications by exchanges or tickers
-	Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDeleteReply, error)
+	Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDelete, error)
 }
 
 type notificationsClient struct {
@@ -55,8 +55,8 @@ func (c *notificationsClient) Search(ctx context.Context, in *NotificationSearch
 	return out, nil
 }
 
-func (c *notificationsClient) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDeleteReply, error) {
-	out := new(NotificationDeleteReply)
+func (c *notificationsClient) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDelete, error) {
+	out := new(NotificationDelete)
 	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ type NotificationsServer interface {
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
 	// Private API
 	// Delete Notifications by exchanges or tickers
-	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDeleteReply, error)
+	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDelete, error)
 	mustEmbedUnimplementedNotificationsServer()
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedNotificationsServer) Create(context.Context, *NotificationCre
 func (UnimplementedNotificationsServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedNotificationsServer) Delete(context.Context, *NotificationDeleteRequest) (*NotificationDeleteReply, error) {
+func (UnimplementedNotificationsServer) Delete(context.Context, *NotificationDeleteRequest) (*NotificationDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedNotificationsServer) mustEmbedUnimplementedNotificationsServer() {}

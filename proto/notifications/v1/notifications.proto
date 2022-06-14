@@ -63,7 +63,7 @@ service Notifications {
 
 	// Private API
 	// Delete Notifications by exchanges or tickers
-	rpc Delete (NotificationDeleteRequest) returns (NotificationDeleteReply)  {
+	rpc Delete (NotificationDeleteRequest) returns (NotificationDelete)  {
 		option (google.api.http) = {
 		  	delete: "/v1/notifications"
 		};
@@ -138,6 +138,6 @@ message NotificationReplies {
 	int64 total = 2;
 }
 
-message NotificationDeleteReply {
+message NotificationDelete {
 	int64 total = 1;
 }
