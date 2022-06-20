@@ -243,15 +243,19 @@
           "type": "number",
           "format": "float"
         },
-        "declarationDate": {
+        "yield": {
+          "type": "number",
+          "format": "float"
+        },
+        "declaration_date": {
           "type": "string",
           "format": "date-time"
         },
-        "recordDate": {
+        "record_date": {
           "type": "string",
           "format": "date-time"
         },
-        "paymentDate": {
+        "payment_date": {
           "type": "string",
           "format": "date-time"
         },
@@ -271,21 +275,28 @@
             "format": "float"
           }
         },
-        "declarationDate": {
+        "yields": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "declaration_date": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "date-time"
           }
         },
-        "recordDate": {
+        "record_date": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "date-time"
           }
         },
-        "paymentDate": {
+        "payment_date": {
           "type": "array",
           "items": {
             "type": "string",

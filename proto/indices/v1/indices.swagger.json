@@ -297,21 +297,6 @@
         }
       }
     },
-    "ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "stats": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/VolumeStats"
-          }
-        }
-      }
-    },
     "VolumeStats": {
       "type": "object",
       "properties": {
@@ -496,7 +481,7 @@
           "$ref": "#/definitions/ScreenerReplyDividends"
         },
         "volume": {
-          "$ref": "#/definitions/ScreenerReplyVolume"
+          "$ref": "#/definitions/v1ScreenerReplyVolume"
         },
         "created_at": {
           "type": "string",
@@ -505,6 +490,21 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1ScreenerReplyVolume": {
+      "type": "object",
+      "properties": {
+        "last": {
+          "type": "number",
+          "format": "float"
+        },
+        "stats": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/VolumeStats"
+          }
         }
       }
     }

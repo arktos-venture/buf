@@ -178,17 +178,6 @@
         }
       }
     },
-    "CountryReplyExchange": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "ticker": {
-          "type": "string"
-        }
-      }
-    },
     "CountryReplyGeo": {
       "type": "object",
       "properties": {
@@ -390,7 +379,7 @@
         "exchanges": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/CountryReplyExchange"
+            "$ref": "#/definitions/v1CountryReplyExchange"
           }
         },
         "subDivision": {
@@ -404,6 +393,17 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "v1CountryReplyExchange": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ticker": {
+          "type": "string"
         }
       }
     },

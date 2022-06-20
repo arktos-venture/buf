@@ -1033,6 +1033,8 @@ func (m *ExchangeIsOpenReply) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for Routing
+
 	// no validation rules for Timezone
 
 	// no validation rules for TradingHours

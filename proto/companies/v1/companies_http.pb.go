@@ -21,12 +21,14 @@ type CompaniesHTTPServer interface {
 	Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error)
 	Delete(context.Context, *CompanyDeleteRequest) (*CompanyDelete, error)
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
+	List(context.Context, *CompanyListRequest) (*CompanyReplies, error)
 	Update(context.Context, *CompanyUpdateRequest) (*CompanyReply, error)
 }
 
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get8_HTTP_Handler(srv))
+	r.GET("/v1/companies/{exchange}", _Companies_List6_HTTP_Handler(srv))
 	r.POST("/v1/companies", _Companies_Create7_HTTP_Handler(srv))
 	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update4_HTTP_Handler(srv))
 	r.DELETE("/v1/companies", _Companies_Delete12_HTTP_Handler(srv))
@@ -50,6 +52,28 @@ func _Companies_Get8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context
 			return err
 		}
 		reply := out.(*CompanyReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Companies_List6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CompanyListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/companies.v1.Companies/List")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.List(ctx, req.(*CompanyListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CompanyReplies)
 		return ctx.Result(200, reply)
 	}
 }
@@ -118,6 +142,7 @@ type CompaniesHTTPClient interface {
 	Create(ctx context.Context, req *CompanyCreateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 	Delete(ctx context.Context, req *CompanyDeleteRequest, opts ...http.CallOption) (rsp *CompanyDelete, err error)
 	Get(ctx context.Context, req *CompanyRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
+	List(ctx context.Context, req *CompanyListRequest, opts ...http.CallOption) (rsp *CompanyReplies, err error)
 	Update(ctx context.Context, req *CompanyUpdateRequest, opts ...http.CallOption) (rsp *CompanyReply, err error)
 }
 
@@ -160,6 +185,19 @@ func (c *CompaniesHTTPClientImpl) Get(ctx context.Context, in *CompanyRequest, o
 	pattern := "/v1/company/{exchange}/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/companies.v1.Companies/Get"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *CompaniesHTTPClientImpl) List(ctx context.Context, in *CompanyListRequest, opts ...http.CallOption) (*CompanyReplies, error) {
+	var out CompanyReplies
+	pattern := "/v1/companies/{exchange}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/companies.v1.Companies/List"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

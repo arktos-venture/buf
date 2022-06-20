@@ -157,6 +157,119 @@ var _ interface {
 	ErrorName() string
 } = CompanyRequestValidationError{}
 
+// Validate checks the field values on CompanyListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyListRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyListRequestMultiError, or nil if none found.
+func (m *CompanyListRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyListRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
+		err := CompanyListRequestValidationError{
+			field:  "Exchange",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CompanyListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyListRequestMultiError is an error wrapping multiple validation errors
+// returned by CompanyListRequest.ValidateAll() if the designated constraints
+// aren't met.
+type CompanyListRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyListRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyListRequestMultiError) AllErrors() []error { return m }
+
+// CompanyListRequestValidationError is the validation error returned by
+// CompanyListRequest.Validate if the designated constraints aren't met.
+type CompanyListRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyListRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyListRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyListRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyListRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyListRequestValidationError) ErrorName() string {
+	return "CompanyListRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyListRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyListRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyListRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyListRequestValidationError{}
+
 // Validate checks the field values on CompanyCreateRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1040,13 +1153,36 @@ func (m *CompanyReply) validate(all bool) error {
 
 	// no validation rules for Description
 
-	// no validation rules for Exchange
-
-	// no validation rules for Routing
+	if all {
+		switch v := interface{}(m.GetExchange()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Exchange",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Exchange",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExchange()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplyValidationError{
+				field:  "Exchange",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Isin
-
-	// no validation rules for Employees
 
 	// no validation rules for Adr
 
@@ -1102,6 +1238,35 @@ func (m *CompanyReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return CompanyReplyValidationError{
 				field:  "Quote",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetDividends()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Dividends",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplyValidationError{
+				field:  "Dividends",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1305,6 +1470,142 @@ var _ interface {
 	ErrorName() string
 } = CompanyReplyValidationError{}
 
+// Validate checks the field values on CompanyReplies with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CompanyReplies) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReplies with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CompanyRepliesMultiError,
+// or nil if none found.
+func (m *CompanyReplies) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReplies) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetResults() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CompanyRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CompanyRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CompanyRepliesValidationError{
+					field:  fmt.Sprintf("Results[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return CompanyRepliesMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyRepliesMultiError is an error wrapping multiple validation errors
+// returned by CompanyReplies.ValidateAll() if the designated constraints
+// aren't met.
+type CompanyRepliesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyRepliesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyRepliesMultiError) AllErrors() []error { return m }
+
+// CompanyRepliesValidationError is the validation error returned by
+// CompanyReplies.Validate if the designated constraints aren't met.
+type CompanyRepliesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyRepliesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyRepliesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyRepliesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyRepliesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyRepliesValidationError) ErrorName() string { return "CompanyRepliesValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CompanyRepliesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReplies.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyRepliesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyRepliesValidationError{}
+
 // Validate checks the field values on CompanyDelete with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1406,3 +1707,419 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyDeleteValidationError{}
+
+// Validate checks the field values on CompanyReply_Exchange with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Exchange) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Exchange with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_ExchangeMultiError, or nil if none found.
+func (m *CompanyReply_Exchange) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Exchange) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	// no validation rules for Routing
+
+	// no validation rules for Open
+
+	if len(errors) > 0 {
+		return CompanyReply_ExchangeMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_ExchangeMultiError is an error wrapping multiple validation
+// errors returned by CompanyReply_Exchange.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyReply_ExchangeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_ExchangeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_ExchangeMultiError) AllErrors() []error { return m }
+
+// CompanyReply_ExchangeValidationError is the validation error returned by
+// CompanyReply_Exchange.Validate if the designated constraints aren't met.
+type CompanyReply_ExchangeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_ExchangeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_ExchangeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_ExchangeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_ExchangeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_ExchangeValidationError) ErrorName() string {
+	return "CompanyReply_ExchangeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_ExchangeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Exchange.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_ExchangeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_ExchangeValidationError{}
+
+// Validate checks the field values on CompanyReply_Dividend with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Dividend) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Dividend with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_DividendMultiError, or nil if none found.
+func (m *CompanyReply_Dividend) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Dividend) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetCreatedAt() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CompanyReply_DividendValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CompanyReply_DividendValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CompanyReply_DividendValidationError{
+					field:  fmt.Sprintf("CreatedAt[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CompanyReply_DividendMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_DividendMultiError is an error wrapping multiple validation
+// errors returned by CompanyReply_Dividend.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyReply_DividendMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_DividendMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_DividendMultiError) AllErrors() []error { return m }
+
+// CompanyReply_DividendValidationError is the validation error returned by
+// CompanyReply_Dividend.Validate if the designated constraints aren't met.
+type CompanyReply_DividendValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_DividendValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_DividendValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_DividendValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_DividendValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_DividendValidationError) ErrorName() string {
+	return "CompanyReply_DividendValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_DividendValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Dividend.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_DividendValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_DividendValidationError{}
+
+// Validate checks the field values on CompanyReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReplies_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReplies_ResultMultiError, or nil if none found.
+func (m *CompanyReplies_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReplies_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Ticker
+
+	// no validation rules for TickerAlternative
+
+	// no validation rules for Name
+
+	// no validation rules for Exchange
+
+	// no validation rules for Isin
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplies_ResultValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplies_ResultValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CompanyReplies_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReplies_ResultMultiError is an error wrapping multiple validation
+// errors returned by CompanyReplies_Result.ValidateAll() if the designated
+// constraints aren't met.
+type CompanyReplies_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReplies_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReplies_ResultMultiError) AllErrors() []error { return m }
+
+// CompanyReplies_ResultValidationError is the validation error returned by
+// CompanyReplies_Result.Validate if the designated constraints aren't met.
+type CompanyReplies_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReplies_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReplies_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReplies_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReplies_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReplies_ResultValidationError) ErrorName() string {
+	return "CompanyReplies_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReplies_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReplies_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReplies_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReplies_ResultValidationError{}
