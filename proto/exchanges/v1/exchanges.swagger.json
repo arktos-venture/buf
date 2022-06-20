@@ -239,6 +239,9 @@
         "name": {
           "type": "string"
         },
+        "routing": {
+          "type": "string"
+        },
         "timezone": {
           "type": "string"
         },

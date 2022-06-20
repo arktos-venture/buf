@@ -149,9 +149,10 @@ message ExchangeReply {
 message ExchangeIsOpenReply {
 	string ticker = 1;
 	string name = 2;
-	string timezone = 3;
-	string tradingHours = 4;
-	bool open = 5;
+	string routing = 3;
+	string timezone = 4;
+	string tradingHours = 5;
+	bool open = 6;
 }
   
 message ExchangeShortReply {
