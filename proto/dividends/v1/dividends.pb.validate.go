@@ -591,6 +591,8 @@ func (m *DividendLastReply) validate(all bool) error {
 
 	// no validation rules for Values
 
+	// no validation rules for Yield
+
 	if all {
 		switch v := interface{}(m.GetDeclarationDate()).(type) {
 		case interface{ ValidateAll() error }:
