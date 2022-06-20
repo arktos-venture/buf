@@ -8,6 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
+import "proto/dividends/v1/dividends.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
 option java_multiple_files = true;
@@ -55,6 +56,14 @@ service Companies {
 	}
 
 	// Private API
+	// List Companies, only for start imports
+	rpc List (CompanyListRequest) returns (CompanyReplies)  {
+		option (google.api.http) = {
+		  	get: "/v1/companies/{exchange}"
+		};
+	}
+
+	// Private API
 	// Create a new Company
 	rpc Create (CompanyCreateRequest) returns (CompanyReply)  {
 		option (google.api.http) = {
@@ -89,6 +98,10 @@ service Companies {
 message CompanyRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+}
+
+message CompanyListRequest {
+	string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
 
 message CompanyCreateRequest {
@@ -156,24 +169,51 @@ message CompanyContact {
 }
 
 message CompanyReply {
+	message Exchange {
+		string ticker = 1;
+		string routing = 2;
+		bool open = 3;
+	}
+
+	message Dividend {
+		repeated float values = 1;
+		repeated float yields = 2;
+		repeated google.protobuf.Timestamp created_at = 3;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
 	string name = 4;
 	string description = 5;
-	string exchange = 6;
-	string routing = 7;
-	string isin = 8;
-	int64 employees = 9;
-	bool adr = 10;
-	screener.v1.ScreenerReply.Activity activity = 11;
-	quotes.v1.QuoteLastReply quote = 13;
-	string currencyReport = 14;
-	int32 fiscalYearEnd = 15;
-	CompanyContact contact = 16;
-	CompanyAddress address = 17;
-	google.protobuf.Timestamp created_at = 18;
-	google.protobuf.Timestamp updated_at = 19; 
+	Exchange exchange = 6;
+	string isin = 7;
+	bool adr = 8;
+	screener.v1.ScreenerReply.Activity activity = 9;
+	quotes.v1.QuoteLastReply quote = 10;
+	Dividend dividends = 11;
+	string currencyReport = 12;
+	int32 fiscalYearEnd = 13;
+	CompanyContact contact = 14;
+	CompanyAddress address = 15;
+	google.protobuf.Timestamp created_at = 16;
+	google.protobuf.Timestamp updated_at = 17; 
+}
+
+message CompanyReplies {
+	message Result {
+		int64 id = 1;
+		string ticker = 2;
+		string ticker_alternative = 3;
+		string name = 4;
+		string exchange = 5;
+		string isin = 6;
+		google.protobuf.Timestamp created_at = 7;
+		google.protobuf.Timestamp updated_at = 8; 
+	}
+
+	repeated Result results = 1;
+	int64 total = 2;
 }
 
 message CompanyDelete {

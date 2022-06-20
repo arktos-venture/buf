@@ -102,6 +102,37 @@
         ]
       }
     },
+    "/v1/companies/{exchange}": {
+      "get": {
+        "summary": "Private API\nList Companies, only for start imports",
+        "operationId": "Companies_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompanyReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Companies"
+        ]
+      }
+    },
     "/v1/company/{exchange}/{ticker}": {
       "get": {
         "summary": "Public API\nGet Company properties",
@@ -390,6 +421,53 @@
         }
       }
     },
+    "v1CompanyReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CompanyRepliesResult"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CompanyRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1CompanyReply": {
       "type": "object",
       "properties": {
@@ -410,17 +488,10 @@
           "type": "string"
         },
         "exchange": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
+          "$ref": "#/definitions/v1CompanyReplyExchange"
         },
         "isin": {
           "type": "string"
-        },
-        "employees": {
-          "type": "string",
-          "format": "int64"
         },
         "adr": {
           "type": "boolean"
@@ -430,6 +501,9 @@
         },
         "quote": {
           "$ref": "#/definitions/v1QuoteLastReply"
+        },
+        "dividends": {
+          "$ref": "#/definitions/v1CompanyReplyDividend"
         },
         "currencyReport": {
           "type": "string"
@@ -451,6 +525,46 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1CompanyReplyDividend": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "yields": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "v1CompanyReplyExchange": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "open": {
+          "type": "boolean"
         }
       }
     },

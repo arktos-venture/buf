@@ -22,6 +22,9 @@ type CompaniesClient interface {
 	// Get Company properties
 	Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error)
 	// Private API
+	// List Companies, only for start imports
+	List(ctx context.Context, in *CompanyListRequest, opts ...grpc.CallOption) (*CompanyReplies, error)
+	// Private API
 	// Create a new Company
 	Create(ctx context.Context, in *CompanyCreateRequest, opts ...grpc.CallOption) (*CompanyReply, error)
 	// Private API
@@ -43,6 +46,15 @@ func NewCompaniesClient(cc grpc.ClientConnInterface) CompaniesClient {
 func (c *companiesClient) Get(ctx context.Context, in *CompanyRequest, opts ...grpc.CallOption) (*CompanyReply, error) {
 	out := new(CompanyReply)
 	err := c.cc.Invoke(ctx, "/companies.v1.Companies/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *companiesClient) List(ctx context.Context, in *CompanyListRequest, opts ...grpc.CallOption) (*CompanyReplies, error) {
+	out := new(CompanyReplies)
+	err := c.cc.Invoke(ctx, "/companies.v1.Companies/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,6 +96,9 @@ type CompaniesServer interface {
 	// Get Company properties
 	Get(context.Context, *CompanyRequest) (*CompanyReply, error)
 	// Private API
+	// List Companies, only for start imports
+	List(context.Context, *CompanyListRequest) (*CompanyReplies, error)
+	// Private API
 	// Create a new Company
 	Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error)
 	// Private API
@@ -101,6 +116,9 @@ type UnimplementedCompaniesServer struct {
 
 func (UnimplementedCompaniesServer) Get(context.Context, *CompanyRequest) (*CompanyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedCompaniesServer) List(context.Context, *CompanyListRequest) (*CompanyReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedCompaniesServer) Create(context.Context, *CompanyCreateRequest) (*CompanyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
@@ -138,6 +156,24 @@ func _Companies_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CompaniesServer).Get(ctx, req.(*CompanyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Companies_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompaniesServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/companies.v1.Companies/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompaniesServer).List(ctx, req.(*CompanyListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,6 +242,10 @@ var Companies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Companies_Get_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _Companies_List_Handler,
 		},
 		{
 			MethodName: "Create",
