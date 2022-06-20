@@ -189,23 +189,6 @@
         }
       }
     },
-    "OrderReplyPrice": {
-      "type": "object",
-      "properties": {
-        "ask": {
-          "type": "number",
-          "format": "float"
-        },
-        "buy": {
-          "type": "number",
-          "format": "float"
-        },
-        "commission": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "OrderReplySize": {
       "type": "object",
       "properties": {
@@ -373,7 +356,7 @@
           "$ref": "#/definitions/OrderReplySize"
         },
         "price": {
-          "$ref": "#/definitions/OrderReplyPrice"
+          "$ref": "#/definitions/v1OrderReplyPrice"
         },
         "status": {
           "$ref": "#/definitions/ordersv1Status"
@@ -385,6 +368,23 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1OrderReplyPrice": {
+      "type": "object",
+      "properties": {
+        "ask": {
+          "type": "number",
+          "format": "float"
+        },
+        "buy": {
+          "type": "number",
+          "format": "float"
+        },
+        "commission": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
