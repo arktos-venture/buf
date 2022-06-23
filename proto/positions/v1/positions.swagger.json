@@ -147,6 +147,15 @@
         }
       }
     },
+    "positionsv1Asset": {
+      "type": "string",
+      "enum": [
+        "STOCK",
+        "OPTION",
+        "CASH"
+      ],
+      "default": "STOCK"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -158,15 +167,6 @@
           "format": "byte"
         }
       }
-    },
-    "v1Asset": {
-      "type": "string",
-      "enum": [
-        "STOCK",
-        "OPTION",
-        "CASH"
-      ],
-      "default": "STOCK"
     },
     "v1PositionDelete": {
       "type": "object",
