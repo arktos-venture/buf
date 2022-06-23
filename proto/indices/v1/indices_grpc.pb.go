@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,8 +22,8 @@ type IndicesClient interface {
 	// Get Indice properties
 	Get(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceReply, error)
 	// Public API
-	// List Indices available
-	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndiceShortReplies, error)
+	// Search Indices available
+	Search(ctx context.Context, in *IndiceSearchRequest, opts ...grpc.CallOption) (*IndiceReplies, error)
 	// Private API
 	// Create Indice properties
 	Create(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
@@ -53,9 +52,9 @@ func (c *indicesClient) Get(ctx context.Context, in *IndiceRequest, opts ...grpc
 	return out, nil
 }
 
-func (c *indicesClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndiceShortReplies, error) {
-	out := new(IndiceShortReplies)
-	err := c.cc.Invoke(ctx, "/indices.v1.Indices/List", in, out, opts...)
+func (c *indicesClient) Search(ctx context.Context, in *IndiceSearchRequest, opts ...grpc.CallOption) (*IndiceReplies, error) {
+	out := new(IndiceReplies)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +96,8 @@ type IndicesServer interface {
 	// Get Indice properties
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
 	// Public API
-	// List Indices available
-	List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error)
+	// Search Indices available
+	Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error)
 	// Private API
 	// Create Indice properties
 	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
@@ -118,8 +117,8 @@ type UnimplementedIndicesServer struct {
 func (UnimplementedIndicesServer) Get(context.Context, *IndiceRequest) (*IndiceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedIndicesServer) List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedIndicesServer) Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedIndicesServer) Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
@@ -161,20 +160,20 @@ func _Indices_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Indices_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+func _Indices_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(IndicesServer).List(ctx, in)
+		return srv.(IndicesServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/indices.v1.Indices/List",
+		FullMethod: "/indices.v1.Indices/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).List(ctx, req.(*emptypb.Empty))
+		return srv.(IndicesServer).Search(ctx, req.(*IndiceSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -245,8 +244,8 @@ var Indices_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Indices_Get_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _Indices_List_Handler,
+			MethodName: "Search",
+			Handler:    _Indices_Search_Handler,
 		},
 		{
 			MethodName: "Create",

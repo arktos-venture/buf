@@ -241,19 +241,6 @@
       ],
       "default": "PMIM"
     },
-    "countriesv1Page": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -271,6 +258,15 @@
           }
         }
       }
+    },
+    "indicesv1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR"
+      ],
+      "default": "INDEX"
     },
     "protobufAny": {
       "type": "object",
@@ -379,7 +375,13 @@
         "exchanges": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CountryReplyExchange"
+            "$ref": "#/definitions/v1ExchangeRepliesResult"
+          }
+        },
+        "indices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IndiceRepliesResult"
           }
         },
         "subDivision": {
@@ -393,17 +395,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "v1CountryReplyExchange": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "ticker": {
-          "type": "string"
         }
       }
     },
@@ -421,9 +412,34 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "v1ExchangeRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
         },
-        "page": {
-          "$ref": "#/definitions/countriesv1Page"
+        "routing": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1IndiceRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/indicesv1Asset"
         }
       }
     }

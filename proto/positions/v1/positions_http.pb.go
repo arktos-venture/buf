@@ -24,11 +24,11 @@ type PositionsHTTPServer interface {
 
 func RegisterPositionsHTTPServer(s *http.Server, srv PositionsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/positions/{account}", _Positions_Search5_HTTP_Handler(srv))
+	r.GET("/v1/positions/{account}", _Positions_Search7_HTTP_Handler(srv))
 	r.DELETE("/v1/positions/{account}", _Positions_Delete8_HTTP_Handler(srv))
 }
 
-func _Positions_Search5_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Context) error {
+func _Positions_Search7_HTTP_Handler(srv PositionsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PositionRequest
 		if err := ctx.BindQuery(&in); err != nil {

@@ -80,9 +80,7 @@
         "tags": [
           "Strategies"
         ]
-      }
-    },
-    "/v1/strategy": {
+      },
       "post": {
         "summary": "Public API\nCreate Strategy",
         "operationId": "Strategies_Create",
@@ -106,7 +104,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StrategyUpdateRequest"
+              "$ref": "#/definitions/v1StrategyModifyRequest"
             }
           }
         ],
@@ -258,6 +256,26 @@
         }
       }
     },
+    "v1StrategyModifyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "parameters": {
+          "$ref": "#/definitions/strategiesv1Request"
+        }
+      }
+    },
     "v1StrategyReplies": {
       "type": "object",
       "properties": {
@@ -295,26 +313,6 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1StrategyUpdateRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "account": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "parameters": {
-          "$ref": "#/definitions/strategiesv1Request"
         }
       }
     }

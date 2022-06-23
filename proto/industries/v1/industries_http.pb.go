@@ -25,11 +25,11 @@ type IndustriesHTTPServer interface {
 
 func RegisterIndustriesHTTPServer(s *http.Server, srv IndustriesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/industries", _Industries_List4_HTTP_Handler(srv))
-	r.POST("/v1/industries", _Industries_Search2_HTTP_Handler(srv))
+	r.GET("/v1/industries", _Industries_List2_HTTP_Handler(srv))
+	r.POST("/v1/industries", _Industries_Search4_HTTP_Handler(srv))
 }
 
-func _Industries_List4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+func _Industries_List2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -48,7 +48,7 @@ func _Industries_List4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Industries_Search2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+func _Industries_Search4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndustrySearchRequest
 		if err := ctx.Bind(&in); err != nil {

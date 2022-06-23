@@ -455,82 +455,54 @@ var _ExchangeIsOpenRequest_Ticker_InLookup = map[string]struct{}{
 	"FOREX":  {},
 }
 
-// Validate checks the field values on ExchangeListRequest with the rules
+// Validate checks the field values on ExchangeSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeListRequest) Validate() error {
+func (m *ExchangeSearchRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ExchangeListRequest with the rules
+// ValidateAll checks the field values on ExchangeSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ExchangeListRequestMultiError, or nil if none found.
-func (m *ExchangeListRequest) ValidateAll() error {
+// ExchangeSearchRequestMultiError, or nil if none found.
+func (m *ExchangeSearchRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ExchangeListRequest) validate(all bool) error {
+func (m *ExchangeSearchRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if m.GetPage() == nil {
-		err := ExchangeListRequestValidationError{
-			field:  "Page",
-			reason: "value is required",
+	if utf8.RuneCountInString(m.GetCountry()) != 2 {
+		err := ExchangeSearchRequestValidationError{
+			field:  "Country",
+			reason: "value length must be 2 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-	}
 
-	if all {
-		switch v := interface{}(m.GetPage()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ExchangeListRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ExchangeListRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ExchangeListRequestValidationError{
-				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
 	}
 
 	if len(errors) > 0 {
-		return ExchangeListRequestMultiError(errors)
+		return ExchangeSearchRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// ExchangeListRequestMultiError is an error wrapping multiple validation
-// errors returned by ExchangeListRequest.ValidateAll() if the designated
+// ExchangeSearchRequestMultiError is an error wrapping multiple validation
+// errors returned by ExchangeSearchRequest.ValidateAll() if the designated
 // constraints aren't met.
-type ExchangeListRequestMultiError []error
+type ExchangeSearchRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeListRequestMultiError) Error() string {
+func (m ExchangeSearchRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -539,11 +511,11 @@ func (m ExchangeListRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ExchangeListRequestMultiError) AllErrors() []error { return m }
+func (m ExchangeSearchRequestMultiError) AllErrors() []error { return m }
 
-// ExchangeListRequestValidationError is the validation error returned by
-// ExchangeListRequest.Validate if the designated constraints aren't met.
-type ExchangeListRequestValidationError struct {
+// ExchangeSearchRequestValidationError is the validation error returned by
+// ExchangeSearchRequest.Validate if the designated constraints aren't met.
+type ExchangeSearchRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -551,24 +523,24 @@ type ExchangeListRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ExchangeListRequestValidationError) Field() string { return e.field }
+func (e ExchangeSearchRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ExchangeListRequestValidationError) Reason() string { return e.reason }
+func (e ExchangeSearchRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ExchangeListRequestValidationError) Cause() error { return e.cause }
+func (e ExchangeSearchRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ExchangeListRequestValidationError) Key() bool { return e.key }
+func (e ExchangeSearchRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ExchangeListRequestValidationError) ErrorName() string {
-	return "ExchangeListRequestValidationError"
+func (e ExchangeSearchRequestValidationError) ErrorName() string {
+	return "ExchangeSearchRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ExchangeListRequestValidationError) Error() string {
+func (e ExchangeSearchRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -580,14 +552,14 @@ func (e ExchangeListRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sExchangeListRequest.%s: %s%s",
+		"invalid %sExchangeSearchRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ExchangeListRequestValidationError{}
+var _ error = ExchangeSearchRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -595,7 +567,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ExchangeListRequestValidationError{}
+} = ExchangeSearchRequestValidationError{}
 
 // Validate checks the field values on ExchangeDeleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1121,118 +1093,6 @@ var _ interface {
 	ErrorName() string
 } = ExchangeIsOpenReplyValidationError{}
 
-// Validate checks the field values on ExchangeShortReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeShortReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ExchangeShortReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ExchangeShortReplyMultiError, or nil if none found.
-func (m *ExchangeShortReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ExchangeShortReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Ticker
-
-	// no validation rules for Routing
-
-	// no validation rules for Name
-
-	// no validation rules for Country
-
-	// no validation rules for Currency
-
-	if len(errors) > 0 {
-		return ExchangeShortReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// ExchangeShortReplyMultiError is an error wrapping multiple validation errors
-// returned by ExchangeShortReply.ValidateAll() if the designated constraints
-// aren't met.
-type ExchangeShortReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeShortReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ExchangeShortReplyMultiError) AllErrors() []error { return m }
-
-// ExchangeShortReplyValidationError is the validation error returned by
-// ExchangeShortReply.Validate if the designated constraints aren't met.
-type ExchangeShortReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ExchangeShortReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ExchangeShortReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ExchangeShortReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ExchangeShortReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ExchangeShortReplyValidationError) ErrorName() string {
-	return "ExchangeShortReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ExchangeShortReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sExchangeShortReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ExchangeShortReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ExchangeShortReplyValidationError{}
-
 // Validate checks the field values on ExchangeReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1577,130 +1437,6 @@ var _ interface {
 	ErrorName() string
 } = ExchangeRequest_RequestValidationError{}
 
-// Validate checks the field values on ExchangeListRequest_Page with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeListRequest_Page) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ExchangeListRequest_Page with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ExchangeListRequest_PageMultiError, or nil if none found.
-func (m *ExchangeListRequest_Page) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ExchangeListRequest_Page) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if val := m.GetNumber(); val <= 0 || val > 10000 {
-		err := ExchangeListRequest_PageValidationError{
-			field:  "Number",
-			reason: "value must be inside range (0, 10000]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetLimit(); val <= 0 || val > 150 {
-		err := ExchangeListRequest_PageValidationError{
-			field:  "Limit",
-			reason: "value must be inside range (0, 150]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return ExchangeListRequest_PageMultiError(errors)
-	}
-
-	return nil
-}
-
-// ExchangeListRequest_PageMultiError is an error wrapping multiple validation
-// errors returned by ExchangeListRequest_Page.ValidateAll() if the designated
-// constraints aren't met.
-type ExchangeListRequest_PageMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeListRequest_PageMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ExchangeListRequest_PageMultiError) AllErrors() []error { return m }
-
-// ExchangeListRequest_PageValidationError is the validation error returned by
-// ExchangeListRequest_Page.Validate if the designated constraints aren't met.
-type ExchangeListRequest_PageValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ExchangeListRequest_PageValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ExchangeListRequest_PageValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ExchangeListRequest_PageValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ExchangeListRequest_PageValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ExchangeListRequest_PageValidationError) ErrorName() string {
-	return "ExchangeListRequest_PageValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ExchangeListRequest_PageValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sExchangeListRequest_Page.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ExchangeListRequest_PageValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ExchangeListRequest_PageValidationError{}
-
 // Validate checks the field values on ExchangeReply_Holiday with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1923,50 +1659,48 @@ var _ interface {
 	ErrorName() string
 } = ExchangeReply_CompanyValidationError{}
 
-// Validate checks the field values on ExchangeReplies_Company with the rules
+// Validate checks the field values on ExchangeReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeReplies_Company) Validate() error {
+func (m *ExchangeReplies_Result) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ExchangeReplies_Company with the
-// rules defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ExchangeReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ExchangeReplies_CompanyMultiError, or nil if none found.
-func (m *ExchangeReplies_Company) ValidateAll() error {
+// ExchangeReplies_ResultMultiError, or nil if none found.
+func (m *ExchangeReplies_Result) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ExchangeReplies_Company) validate(all bool) error {
+func (m *ExchangeReplies_Result) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Id
-
 	// no validation rules for Ticker
+
+	// no validation rules for Routing
 
 	// no validation rules for Name
 
-	// no validation rules for Isin
-
 	if len(errors) > 0 {
-		return ExchangeReplies_CompanyMultiError(errors)
+		return ExchangeReplies_ResultMultiError(errors)
 	}
 
 	return nil
 }
 
-// ExchangeReplies_CompanyMultiError is an error wrapping multiple validation
-// errors returned by ExchangeReplies_Company.ValidateAll() if the designated
+// ExchangeReplies_ResultMultiError is an error wrapping multiple validation
+// errors returned by ExchangeReplies_Result.ValidateAll() if the designated
 // constraints aren't met.
-type ExchangeReplies_CompanyMultiError []error
+type ExchangeReplies_ResultMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeReplies_CompanyMultiError) Error() string {
+func (m ExchangeReplies_ResultMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1975,11 +1709,11 @@ func (m ExchangeReplies_CompanyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ExchangeReplies_CompanyMultiError) AllErrors() []error { return m }
+func (m ExchangeReplies_ResultMultiError) AllErrors() []error { return m }
 
-// ExchangeReplies_CompanyValidationError is the validation error returned by
-// ExchangeReplies_Company.Validate if the designated constraints aren't met.
-type ExchangeReplies_CompanyValidationError struct {
+// ExchangeReplies_ResultValidationError is the validation error returned by
+// ExchangeReplies_Result.Validate if the designated constraints aren't met.
+type ExchangeReplies_ResultValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1987,24 +1721,24 @@ type ExchangeReplies_CompanyValidationError struct {
 }
 
 // Field function returns field value.
-func (e ExchangeReplies_CompanyValidationError) Field() string { return e.field }
+func (e ExchangeReplies_ResultValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ExchangeReplies_CompanyValidationError) Reason() string { return e.reason }
+func (e ExchangeReplies_ResultValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ExchangeReplies_CompanyValidationError) Cause() error { return e.cause }
+func (e ExchangeReplies_ResultValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ExchangeReplies_CompanyValidationError) Key() bool { return e.key }
+func (e ExchangeReplies_ResultValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ExchangeReplies_CompanyValidationError) ErrorName() string {
-	return "ExchangeReplies_CompanyValidationError"
+func (e ExchangeReplies_ResultValidationError) ErrorName() string {
+	return "ExchangeReplies_ResultValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ExchangeReplies_CompanyValidationError) Error() string {
+func (e ExchangeReplies_ResultValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2016,14 +1750,14 @@ func (e ExchangeReplies_CompanyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sExchangeReplies_Company.%s: %s%s",
+		"invalid %sExchangeReplies_Result.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ExchangeReplies_CompanyValidationError{}
+var _ error = ExchangeReplies_ResultValidationError{}
 
 var _ interface {
 	Field() string
@@ -2031,4 +1765,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ExchangeReplies_CompanyValidationError{}
+} = ExchangeReplies_ResultValidationError{}

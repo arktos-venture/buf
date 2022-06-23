@@ -27,10 +27,10 @@ type StrategiesClient interface {
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StrategyReplies, error)
 	// Public API
 	// Create Strategy
-	Create(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error)
+	Create(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	// Public API
 	// Update Strategy properties
-	Update(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error)
+	Update(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	// Public API
 	// Delete Strategy
 	Delete(ctx context.Context, in *StrategyDeleteRequest, opts ...grpc.CallOption) (*StrategyDelete, error)
@@ -62,7 +62,7 @@ func (c *strategiesClient) List(ctx context.Context, in *emptypb.Empty, opts ...
 	return out, nil
 }
 
-func (c *strategiesClient) Create(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
+func (c *strategiesClient) Create(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
 	out := new(StrategyReply)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Create", in, out, opts...)
 	if err != nil {
@@ -71,7 +71,7 @@ func (c *strategiesClient) Create(ctx context.Context, in *StrategyUpdateRequest
 	return out, nil
 }
 
-func (c *strategiesClient) Update(ctx context.Context, in *StrategyUpdateRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
+func (c *strategiesClient) Update(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error) {
 	out := new(StrategyReply)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Update", in, out, opts...)
 	if err != nil {
@@ -101,10 +101,10 @@ type StrategiesServer interface {
 	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
 	// Public API
 	// Create Strategy
-	Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
+	Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 	// Public API
 	// Update Strategy properties
-	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
+	Update(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 	// Public API
 	// Delete Strategy
 	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error)
@@ -121,10 +121,10 @@ func (UnimplementedStrategiesServer) Get(context.Context, *StrategyRequest) (*St
 func (UnimplementedStrategiesServer) List(context.Context, *emptypb.Empty) (*StrategyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedStrategiesServer) Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error) {
+func (UnimplementedStrategiesServer) Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedStrategiesServer) Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error) {
+func (UnimplementedStrategiesServer) Update(context.Context, *StrategyModifyRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedStrategiesServer) Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error) {
@@ -180,7 +180,7 @@ func _Strategies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Strategies_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyUpdateRequest)
+	in := new(StrategyModifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -192,13 +192,13 @@ func _Strategies_Create_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/strategies.v1.Strategies/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Create(ctx, req.(*StrategyUpdateRequest))
+		return srv.(StrategiesServer).Create(ctx, req.(*StrategyModifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Strategies_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategyUpdateRequest)
+	in := new(StrategyModifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func _Strategies_Update_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/strategies.v1.Strategies/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Update(ctx, req.(*StrategyUpdateRequest))
+		return srv.(StrategiesServer).Update(ctx, req.(*StrategyModifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

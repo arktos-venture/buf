@@ -264,6 +264,20 @@
     }
   },
   "definitions": {
+    "CompanyReplyExchange": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "open": {
+          "type": "boolean"
+        }
+      }
+    },
     "ScreenerReplyActivity": {
       "type": "object",
       "properties": {
@@ -488,7 +502,7 @@
           "type": "string"
         },
         "exchange": {
-          "$ref": "#/definitions/v1CompanyReplyExchange"
+          "$ref": "#/definitions/CompanyReplyExchange"
         },
         "isin": {
           "type": "string"
@@ -551,20 +565,6 @@
             "type": "string",
             "format": "date-time"
           }
-        }
-      }
-    },
-    "v1CompanyReplyExchange": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
-        },
-        "open": {
-          "type": "boolean"
         }
       }
     },
