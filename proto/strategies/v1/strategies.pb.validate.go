@@ -239,22 +239,22 @@ var _ interface {
 	ErrorName() string
 } = StrategyRequestValidationError{}
 
-// Validate checks the field values on StrategyUpdateRequest with the rules
+// Validate checks the field values on StrategyModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *StrategyUpdateRequest) Validate() error {
+func (m *StrategyModifyRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StrategyUpdateRequest with the rules
+// ValidateAll checks the field values on StrategyModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StrategyUpdateRequestMultiError, or nil if none found.
-func (m *StrategyUpdateRequest) ValidateAll() error {
+// StrategyModifyRequestMultiError, or nil if none found.
+func (m *StrategyModifyRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StrategyUpdateRequest) validate(all bool) error {
+func (m *StrategyModifyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -273,7 +273,7 @@ func (m *StrategyUpdateRequest) validate(all bool) error {
 		switch v := interface{}(m.GetParameters()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategyUpdateRequestValidationError{
+				errors = append(errors, StrategyModifyRequestValidationError{
 					field:  "Parameters",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -281,7 +281,7 @@ func (m *StrategyUpdateRequest) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategyUpdateRequestValidationError{
+				errors = append(errors, StrategyModifyRequestValidationError{
 					field:  "Parameters",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -290,7 +290,7 @@ func (m *StrategyUpdateRequest) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetParameters()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return StrategyUpdateRequestValidationError{
+			return StrategyModifyRequestValidationError{
 				field:  "Parameters",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -299,19 +299,19 @@ func (m *StrategyUpdateRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return StrategyUpdateRequestMultiError(errors)
+		return StrategyModifyRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyUpdateRequestMultiError is an error wrapping multiple validation
-// errors returned by StrategyUpdateRequest.ValidateAll() if the designated
+// StrategyModifyRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategyModifyRequest.ValidateAll() if the designated
 // constraints aren't met.
-type StrategyUpdateRequestMultiError []error
+type StrategyModifyRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyUpdateRequestMultiError) Error() string {
+func (m StrategyModifyRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -320,11 +320,11 @@ func (m StrategyUpdateRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyUpdateRequestMultiError) AllErrors() []error { return m }
+func (m StrategyModifyRequestMultiError) AllErrors() []error { return m }
 
-// StrategyUpdateRequestValidationError is the validation error returned by
-// StrategyUpdateRequest.Validate if the designated constraints aren't met.
-type StrategyUpdateRequestValidationError struct {
+// StrategyModifyRequestValidationError is the validation error returned by
+// StrategyModifyRequest.Validate if the designated constraints aren't met.
+type StrategyModifyRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -332,24 +332,24 @@ type StrategyUpdateRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyUpdateRequestValidationError) Field() string { return e.field }
+func (e StrategyModifyRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyUpdateRequestValidationError) Reason() string { return e.reason }
+func (e StrategyModifyRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyUpdateRequestValidationError) Cause() error { return e.cause }
+func (e StrategyModifyRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyUpdateRequestValidationError) Key() bool { return e.key }
+func (e StrategyModifyRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyUpdateRequestValidationError) ErrorName() string {
-	return "StrategyUpdateRequestValidationError"
+func (e StrategyModifyRequestValidationError) ErrorName() string {
+	return "StrategyModifyRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StrategyUpdateRequestValidationError) Error() string {
+func (e StrategyModifyRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -361,14 +361,14 @@ func (e StrategyUpdateRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategyUpdateRequest.%s: %s%s",
+		"invalid %sStrategyModifyRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyUpdateRequestValidationError{}
+var _ error = StrategyModifyRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -376,7 +376,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyUpdateRequestValidationError{}
+} = StrategyModifyRequestValidationError{}
 
 // Validate checks the field values on StrategyDeleteRequest with the rules
 // defined in the proto definition for this message. If any rules are

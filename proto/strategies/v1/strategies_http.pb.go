@@ -19,18 +19,18 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type StrategiesHTTPServer interface {
-	Create(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
+	Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error)
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
 	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
-	Update(context.Context, *StrategyUpdateRequest) (*StrategyReply, error)
+	Update(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 }
 
 func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/strategy/{ticker}", _Strategies_Get4_HTTP_Handler(srv))
-	r.GET("/v1/strategies", _Strategies_List3_HTTP_Handler(srv))
-	r.POST("/v1/strategy", _Strategies_Create2_HTTP_Handler(srv))
+	r.GET("/v1/strategies", _Strategies_List1_HTTP_Handler(srv))
+	r.POST("/v1/strategies", _Strategies_Create2_HTTP_Handler(srv))
 	r.PUT("/v1/strategy/{ticker}", _Strategies_Update1_HTTP_Handler(srv))
 	r.DELETE("/v1/strategies", _Strategies_Delete4_HTTP_Handler(srv))
 }
@@ -57,7 +57,7 @@ func _Strategies_Get4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategies_List3_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_List1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,13 +78,13 @@ func _Strategies_List3_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Cont
 
 func _Strategies_Create2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StrategyUpdateRequest
+		var in StrategyModifyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/strategies.v1.Strategies/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Create(ctx, req.(*StrategyUpdateRequest))
+			return srv.Create(ctx, req.(*StrategyModifyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -97,7 +97,7 @@ func _Strategies_Create2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 
 func _Strategies_Update1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StrategyUpdateRequest
+		var in StrategyModifyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -106,7 +106,7 @@ func _Strategies_Update1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 		}
 		http.SetOperation(ctx, "/strategies.v1.Strategies/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*StrategyUpdateRequest))
+			return srv.Update(ctx, req.(*StrategyModifyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -137,11 +137,11 @@ func _Strategies_Delete4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 }
 
 type StrategiesHTTPClient interface {
-	Create(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
+	Create(ctx context.Context, req *StrategyModifyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 	Delete(ctx context.Context, req *StrategyDeleteRequest, opts ...http.CallOption) (rsp *StrategyDelete, err error)
 	Get(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *StrategyReplies, err error)
-	Update(ctx context.Context, req *StrategyUpdateRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
+	Update(ctx context.Context, req *StrategyModifyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 }
 
 type StrategiesHTTPClientImpl struct {
@@ -152,9 +152,9 @@ func NewStrategiesHTTPClient(client *http.Client) StrategiesHTTPClient {
 	return &StrategiesHTTPClientImpl{client}
 }
 
-func (c *StrategiesHTTPClientImpl) Create(ctx context.Context, in *StrategyUpdateRequest, opts ...http.CallOption) (*StrategyReply, error) {
+func (c *StrategiesHTTPClientImpl) Create(ctx context.Context, in *StrategyModifyRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
-	pattern := "/v1/strategy"
+	pattern := "/v1/strategies"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/strategies.v1.Strategies/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -204,7 +204,7 @@ func (c *StrategiesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, 
 	return &out, err
 }
 
-func (c *StrategiesHTTPClientImpl) Update(ctx context.Context, in *StrategyUpdateRequest, opts ...http.CallOption) (*StrategyReply, error) {
+func (c *StrategiesHTTPClientImpl) Update(ctx context.Context, in *StrategyModifyRequest, opts ...http.CallOption) (*StrategyReply, error) {
 	var out StrategyReply
 	pattern := "/v1/strategy/{ticker}"
 	path := binding.EncodeURL(pattern, in, false)

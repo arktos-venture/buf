@@ -63,16 +63,16 @@ service Strategies {
 
 	// Public API
 	// Create Strategy
-	rpc Create (StrategyUpdateRequest) returns (StrategyReply)  {
+	rpc Create (StrategyModifyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
-		  	post: "/v1/strategy"
+		  	post: "/v1/strategies"
 			body: "*"
 		};
 	}
 
 	// Public API
 	// Update Strategy properties
-	rpc Update (StrategyUpdateRequest) returns (StrategyReply)  {
+	rpc Update (StrategyModifyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
 			put: "/v1/strategy/{ticker}"
 			body: "*"
@@ -104,7 +104,7 @@ message StrategyRequest {
 	string ticker = 1;
 }
 
-message StrategyUpdateRequest {
+message StrategyModifyRequest {
 	string ticker = 1;
 	string account = 2;
 	string name = 3;
