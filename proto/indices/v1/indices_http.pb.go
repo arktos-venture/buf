@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,16 +21,16 @@ type IndicesHTTPServer interface {
 	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
 	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error)
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
-	List(context.Context, *emptypb.Empty) (*IndiceShortReplies, error)
+	Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error)
 	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
 }
 
 func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/indice/{ticker}", _Indices_Get1_HTTP_Handler(srv))
-	r.GET("/v1/indices", _Indices_List0_HTTP_Handler(srv))
-	r.POST("/v1/indices/exchange/{exchange}", _Indices_Create0_HTTP_Handler(srv))
-	r.PUT("/v1/indices/exchange/{exchange}", _Indices_Update0_HTTP_Handler(srv))
+	r.GET("/v1/indices", _Indices_Search2_HTTP_Handler(srv))
+	r.POST("/v1/indices", _Indices_Create0_HTTP_Handler(srv))
+	r.PUT("/v1/indice/{ticker}", _Indices_Update0_HTTP_Handler(srv))
 	r.DELETE("/v1/indices", _Indices_Delete1_HTTP_Handler(srv))
 }
 
@@ -57,21 +56,21 @@ func _Indices_Get1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Indices_List0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Search2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in emptypb.Empty
+		var in IndiceSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/indices.v1.Indices/List")
+		http.SetOperation(ctx, "/indices.v1.Indices/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*emptypb.Empty))
+			return srv.Search(ctx, req.(*IndiceSearchRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*IndiceShortReplies)
+		reply := out.(*IndiceReplies)
 		return ctx.Result(200, reply)
 	}
 }
@@ -80,9 +79,6 @@ func _Indices_Create0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 	return func(ctx http.Context) error {
 		var in IndiceModifyRequest
 		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/indices.v1.Indices/Create")
@@ -143,7 +139,7 @@ type IndicesHTTPClient interface {
 	Create(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
 	Delete(ctx context.Context, req *IndiceDeleteRequest, opts ...http.CallOption) (rsp *IndiceDelete, err error)
 	Get(ctx context.Context, req *IndiceRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
-	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *IndiceShortReplies, err error)
+	Search(ctx context.Context, req *IndiceSearchRequest, opts ...http.CallOption) (rsp *IndiceReplies, err error)
 	Update(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
 }
 
@@ -157,7 +153,7 @@ func NewIndicesHTTPClient(client *http.Client) IndicesHTTPClient {
 
 func (c *IndicesHTTPClientImpl) Create(ctx context.Context, in *IndiceModifyRequest, opts ...http.CallOption) (*IndiceReply, error) {
 	var out IndiceReply
-	pattern := "/v1/indices/exchange/{exchange}"
+	pattern := "/v1/indices"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indices.v1.Indices/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -194,11 +190,11 @@ func (c *IndicesHTTPClientImpl) Get(ctx context.Context, in *IndiceRequest, opts
 	return &out, err
 }
 
-func (c *IndicesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*IndiceShortReplies, error) {
-	var out IndiceShortReplies
+func (c *IndicesHTTPClientImpl) Search(ctx context.Context, in *IndiceSearchRequest, opts ...http.CallOption) (*IndiceReplies, error) {
+	var out IndiceReplies
 	pattern := "/v1/indices"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/indices.v1.Indices/List"))
+	opts = append(opts, http.Operation("/indices.v1.Indices/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -209,7 +205,7 @@ func (c *IndicesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opt
 
 func (c *IndicesHTTPClientImpl) Update(ctx context.Context, in *IndiceModifyRequest, opts ...http.CallOption) (*IndiceReply, error) {
 	var out IndiceReply
-	pattern := "/v1/indices/exchange/{exchange}"
+	pattern := "/v1/indice/{ticker}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indices.v1.Indices/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

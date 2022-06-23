@@ -55,17 +55,15 @@
         "tags": [
           "Indices"
         ]
-      }
-    },
-    "/v1/indices": {
-      "get": {
-        "summary": "Public API\nList Indices available",
-        "operationId": "Indices_List",
+      },
+      "put": {
+        "summary": "Private API\nUpdate Indice properties",
+        "operationId": "Indices_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndiceShortReplies"
+              "$ref": "#/definitions/v1IndiceReply"
             }
           },
           "default": {
@@ -75,6 +73,71 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "exchange": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "string"
+                },
+                "asset": {
+                  "$ref": "#/definitions/indicesv1Asset"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
+    },
+    "/v1/indices": {
+      "get": {
+        "summary": "Public API\nSearch Indices available",
+        "operationId": "Indices_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndiceReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
         "tags": [
           "Indices"
         ]
@@ -121,9 +184,7 @@
         "tags": [
           "Indices"
         ]
-      }
-    },
-    "/v1/indices/exchange/{exchange}": {
+      },
       "post": {
         "summary": "Private API\nCreate Indice properties",
         "operationId": "Indices_Create",
@@ -143,70 +204,11 @@
         },
         "parameters": [
           {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "ticker": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Indices"
-        ]
-      },
-      "put": {
-        "summary": "Private API\nUpdate Indice properties",
-        "operationId": "Indices_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndiceReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "ticker": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/v1IndiceModifyRequest"
             }
           }
         ],
@@ -328,6 +330,15 @@
         }
       }
     },
+    "indicesv1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR"
+      ],
+      "default": "INDEX"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -349,17 +360,69 @@
         }
       }
     },
+    "v1IndiceModifyRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "index": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/indicesv1Asset"
+        }
+      }
+    },
+    "v1IndiceReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IndiceRepliesResult"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1IndiceRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/indicesv1Asset"
+        }
+      }
+    },
     "v1IndiceReply": {
       "type": "object",
       "properties": {
         "ticker": {
           "type": "string"
         },
+        "description": {
+          "type": "string"
+        },
         "exchange": {
           "type": "string"
         },
-        "description": {
-          "type": "string"
+        "asset": {
+          "$ref": "#/definitions/indicesv1Asset"
         },
         "quote": {
           "$ref": "#/definitions/v1QuoteLastReply"
@@ -369,40 +432,6 @@
           "items": {
             "$ref": "#/definitions/v1ScreenerReply"
           }
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1IndiceShortReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1IndiceShortRepliesResult"
-          }
-        },
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1IndiceShortRepliesResult": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
         },
         "created_at": {
           "type": "string",
