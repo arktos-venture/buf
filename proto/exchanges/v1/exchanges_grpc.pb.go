@@ -25,8 +25,8 @@ type ExchangesClient interface {
 	// Get Exchange properties
 	Get(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
 	// Public API
-	// List Exchange available
-	List(ctx context.Context, in *ExchangeListRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
+	// Search Exchanges available
+	Search(ctx context.Context, in *ExchangeSearchRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
 	// Private API
 	// Delete Exchange
 	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error)
@@ -58,9 +58,9 @@ func (c *exchangesClient) Get(ctx context.Context, in *ExchangeRequest, opts ...
 	return out, nil
 }
 
-func (c *exchangesClient) List(ctx context.Context, in *ExchangeListRequest, opts ...grpc.CallOption) (*ExchangeReplies, error) {
+func (c *exchangesClient) Search(ctx context.Context, in *ExchangeSearchRequest, opts ...grpc.CallOption) (*ExchangeReplies, error) {
 	out := new(ExchangeReplies)
-	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +87,8 @@ type ExchangesServer interface {
 	// Get Exchange properties
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	// Public API
-	// List Exchange available
-	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
+	// Search Exchanges available
+	Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error)
 	// Private API
 	// Delete Exchange
 	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
@@ -105,8 +105,8 @@ func (UnimplementedExchangesServer) IsOpen(context.Context, *ExchangeIsOpenReque
 func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*ExchangeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedExchangesServer) List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedExchangesServer) Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -160,20 +160,20 @@ func _Exchanges_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Exchanges_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeListRequest)
+func _Exchanges_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ExchangesServer).List(ctx, in)
+		return srv.(ExchangesServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/exchanges.v1.Exchanges/List",
+		FullMethod: "/exchanges.v1.Exchanges/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExchangesServer).List(ctx, req.(*ExchangeListRequest))
+		return srv.(ExchangesServer).Search(ctx, req.(*ExchangeSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -212,8 +212,8 @@ var Exchanges_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Exchanges_Get_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _Exchanges_List_Handler,
+			MethodName: "Search",
+			Handler:    _Exchanges_Search_Handler,
 		},
 		{
 			MethodName: "Delete",

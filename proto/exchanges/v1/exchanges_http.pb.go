@@ -21,14 +21,14 @@ type ExchangesHTTPServer interface {
 	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	IsOpen(context.Context, *ExchangeIsOpenRequest) (*ExchangeIsOpenReply, error)
-	List(context.Context, *ExchangeListRequest) (*ExchangeReplies, error)
+	Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error)
 }
 
 func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/exchange/{ticker}/isopen", _Exchanges_IsOpen0_HTTP_Handler(srv))
 	r.GET("/v1/exchange/{ticker}", _Exchanges_Get3_HTTP_Handler(srv))
-	r.GET("/v1/exchanges", _Exchanges_List2_HTTP_Handler(srv))
+	r.GET("/v1/exchanges", _Exchanges_Search3_HTTP_Handler(srv))
 	r.DELETE("/v1/exchanges", _Exchanges_Delete3_HTTP_Handler(srv))
 }
 
@@ -76,15 +76,15 @@ func _Exchanges_Get3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Exchanges_List2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Search3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ExchangeListRequest
+		var in ExchangeSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/exchanges.v1.Exchanges/List")
+		http.SetOperation(ctx, "/exchanges.v1.Exchanges/Search")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*ExchangeListRequest))
+			return srv.Search(ctx, req.(*ExchangeSearchRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -118,7 +118,7 @@ type ExchangesHTTPClient interface {
 	Delete(ctx context.Context, req *ExchangeDeleteRequest, opts ...http.CallOption) (rsp *ExchangeDelete, err error)
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	IsOpen(ctx context.Context, req *ExchangeIsOpenRequest, opts ...http.CallOption) (rsp *ExchangeIsOpenReply, err error)
-	List(ctx context.Context, req *ExchangeListRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
+	Search(ctx context.Context, req *ExchangeSearchRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
 }
 
 type ExchangesHTTPClientImpl struct {
@@ -168,11 +168,11 @@ func (c *ExchangesHTTPClientImpl) IsOpen(ctx context.Context, in *ExchangeIsOpen
 	return &out, err
 }
 
-func (c *ExchangesHTTPClientImpl) List(ctx context.Context, in *ExchangeListRequest, opts ...http.CallOption) (*ExchangeReplies, error) {
+func (c *ExchangesHTTPClientImpl) Search(ctx context.Context, in *ExchangeSearchRequest, opts ...http.CallOption) (*ExchangeReplies, error) {
 	var out ExchangeReplies
 	pattern := "/v1/exchanges"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/List"))
+	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

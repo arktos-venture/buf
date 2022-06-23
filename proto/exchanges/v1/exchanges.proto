@@ -62,8 +62,8 @@ service Exchanges {
     }
 
 	// Public API
-	// List Exchange available
-	rpc List (ExchangeListRequest) returns (ExchangeReplies)  {
+	// Search Exchanges available
+	rpc Search (ExchangeSearchRequest) returns (ExchangeReplies)  {
         option (google.api.http) = {
             get: "/v1/exchanges"
         };
@@ -97,13 +97,8 @@ message ExchangeIsOpenRequest {
 	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
 }
 
-message ExchangeListRequest {
-	message Page {
-		int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-		int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-	}
-
-	Page page = 1 [(validate.rules).message.required = true];
+message ExchangeSearchRequest {
+	string country = 1 [(validate.rules).string.len = 2];
 }
 
 message ExchangeDeleteRequest {
@@ -134,7 +129,7 @@ message ExchangeReply {
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
-	repeated indices.v1.IndiceShortReplies.Result indices = 4;
+	repeated indices.v1.IndiceReplies.Result indices = 4;
 	string routing = 5;
 	string country = 6;
 	string currency = 7;
@@ -154,24 +149,15 @@ message ExchangeIsOpenReply {
 	string tradingHours = 5;
 	bool open = 6;
 }
-  
-message ExchangeShortReply {
-	string ticker = 1;
-	string routing = 2;
-	string name = 3;
-	string country = 4;
-	string currency = 5;
-}
 
 message ExchangeReplies {
-	message Company {
-		int64 id = 1;
-		string ticker = 2;
+	message Result {
+		string ticker = 1;
+		string routing = 2;
 		string name = 3;
-		string isin = 4;
 	}
 
-	repeated ExchangeShortReply results = 1;
+	repeated Result results = 1;
 	int64 total = 2;
 }
 
