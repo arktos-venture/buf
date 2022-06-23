@@ -35,126 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Page with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
-func (m *Page) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Page with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in PageMultiError, or nil if none found.
-func (m *Page) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Page) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if val := m.GetNumber(); val <= 0 || val > 10000 {
-		err := PageValidationError{
-			field:  "Number",
-			reason: "value must be inside range (0, 10000]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if val := m.GetLimit(); val <= 0 || val > 150 {
-		err := PageValidationError{
-			field:  "Limit",
-			reason: "value must be inside range (0, 150]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return PageMultiError(errors)
-	}
-
-	return nil
-}
-
-// PageMultiError is an error wrapping multiple validation errors returned by
-// Page.ValidateAll() if the designated constraints aren't met.
-type PageMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PageMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PageMultiError) AllErrors() []error { return m }
-
-// PageValidationError is the validation error returned by Page.Validate if the
-// designated constraints aren't met.
-type PageValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PageValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PageValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PageValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PageValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PageValidationError) ErrorName() string { return "PageValidationError" }
-
-// Error satisfies the builtin error interface
-func (e PageValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPage.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PageValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PageValidationError{}
-
 // Validate checks the field values on CountryRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -177,15 +57,16 @@ func (m *CountryRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetCountry()); l < 2 || l > 3 {
+	if utf8.RuneCountInString(m.GetCountry()) != 2 {
 		err := CountryRequestValidationError{
 			field:  "Country",
-			reason: "value length must be between 2 and 3 runes, inclusive",
+			reason: "value length must be 2 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if len(errors) > 0 {
@@ -350,46 +231,6 @@ func (m *CountrySearchRequest) validate(all bool) error {
 		}
 
 		// no validation rules for Continent[idx]
-	}
-
-	if m.GetPage() == nil {
-		err := CountrySearchRequestValidationError{
-			field:  "Page",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetPage()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CountrySearchRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CountrySearchRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CountrySearchRequestValidationError{
-				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
 	}
 
 	if len(errors) > 0 {
@@ -699,6 +540,40 @@ func (m *CountryReply) validate(all bool) error {
 			if err := v.Validate(); err != nil {
 				return CountryReplyValidationError{
 					field:  fmt.Sprintf("Exchanges[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetIndices() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CountryReplyValidationError{
+						field:  fmt.Sprintf("Indices[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CountryReplyValidationError{
+						field:  fmt.Sprintf("Indices[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CountryReplyValidationError{
+					field:  fmt.Sprintf("Indices[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -1312,112 +1187,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CountryReply_CodeValidationError{}
-
-// Validate checks the field values on CountryReply_Exchange with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CountryReply_Exchange) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CountryReply_Exchange with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CountryReply_ExchangeMultiError, or nil if none found.
-func (m *CountryReply_Exchange) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CountryReply_Exchange) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Name
-
-	// no validation rules for Ticker
-
-	if len(errors) > 0 {
-		return CountryReply_ExchangeMultiError(errors)
-	}
-
-	return nil
-}
-
-// CountryReply_ExchangeMultiError is an error wrapping multiple validation
-// errors returned by CountryReply_Exchange.ValidateAll() if the designated
-// constraints aren't met.
-type CountryReply_ExchangeMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CountryReply_ExchangeMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CountryReply_ExchangeMultiError) AllErrors() []error { return m }
-
-// CountryReply_ExchangeValidationError is the validation error returned by
-// CountryReply_Exchange.Validate if the designated constraints aren't met.
-type CountryReply_ExchangeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CountryReply_ExchangeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CountryReply_ExchangeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CountryReply_ExchangeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CountryReply_ExchangeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CountryReply_ExchangeValidationError) ErrorName() string {
-	return "CountryReply_ExchangeValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CountryReply_ExchangeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCountryReply_Exchange.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CountryReply_ExchangeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CountryReply_ExchangeValidationError{}
 
 // Validate checks the field values on CountryReply_Division with the rules
 // defined in the proto definition for this message. If any rules are

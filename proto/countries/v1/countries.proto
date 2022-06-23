@@ -6,6 +6,8 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/exchanges/v1/exchanges.proto";
+import "proto/indices/v1/indices.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/countries/v1;countries_v1";
 option java_multiple_files = true;
@@ -84,19 +86,13 @@ enum Indicator {
 	IPP = 6;
 }
 
-message Page {
-  int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-  int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-}
-
 message CountryRequest {
-  string country = 1 [(validate.rules).string = {min_len: 2, max_len: 3}];
+  string country = 1 [(validate.rules).string.len = 2];
 }
 
 message CountrySearchRequest {
   repeated string country = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
   repeated string continent = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
-  Page page = 3 [(validate.rules).message.required = true];
 }
 
 message CountryIndicatorRequest {
@@ -126,11 +122,6 @@ message CountryReply {
     string internationalPrefix = 6;
   }
 
-  message Exchange {
-    string name = 1;
-    string ticker = 2;
-  }
-
   message Division {
     message Coordinate {
       float minLongitude = 1;
@@ -153,9 +144,10 @@ message CountryReply {
   repeated string tlds = 5;
   map<string, string> languages = 6;
   repeated string currencies = 7;
-  repeated Exchange exchanges = 8;
-  repeated Division subDivision = 9;
-  repeated string borders = 10;
+  repeated exchanges.v1.ExchangeReplies.Result exchanges = 8;
+  repeated indices.v1.IndiceReplies.Result indices = 9;
+  repeated Division subDivision = 10;
+  repeated string borders = 11;
 }
 
 message CountryReplies {
