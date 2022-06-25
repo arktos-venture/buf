@@ -12,9 +12,11 @@ enum ErrorReason {
   option (errors.default_code) = 500;
 
   CONTENT_MISSING = 0 [(errors.code) = 400];
-  FORBIDDEN = 1 [(errors.code) = 403];
-  NOT_FOUND = 2 [(errors.code) = 404];
-  CONFLICT = 3 [(errors.code) = 409];
-  NOT_IMPLEMENTED = 4 [(errors.code) = 501];
-  UNAVAILABLE = 5 [(errors.code) = 503];
+  UNAUTHORIZED = 1 [(errors.code) = 401];
+  FORBIDDEN = 2 [(errors.code) = 403];
+  NOT_FOUND = 3 [(errors.code) = 404];
+  REQUEST_TIMEOUT = 4 [(errors.code) = 408];
+  CONFLICT = 5 [(errors.code) = 409];
+  NOT_IMPLEMENTED = 6 [(errors.code) = 501];
+  UNAVAILABLE = 7 [(errors.code) = 503];
 }

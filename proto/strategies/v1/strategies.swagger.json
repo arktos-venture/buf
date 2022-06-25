@@ -184,7 +184,7 @@
                   "type": "string"
                 },
                 "parameters": {
-                  "$ref": "#/definitions/strategiesv1Request"
+                  "$ref": "#/definitions/v1Parameters"
                 }
               }
             }
@@ -227,14 +227,14 @@
         }
       }
     },
-    "strategiesv1Request": {
+    "v1Parameters": {
       "type": "object",
       "properties": {
-        "parameters": {
+        "values": {
           "type": "object",
           "additionalProperties": {
-            "type": "integer",
-            "format": "int32"
+            "type": "number",
+            "format": "float"
           }
         },
         "period": {
@@ -272,7 +272,7 @@
           "type": "string"
         },
         "parameters": {
-          "$ref": "#/definitions/strategiesv1Request"
+          "$ref": "#/definitions/v1Parameters"
         }
       }
     },
@@ -282,12 +282,26 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1StrategyReply"
+            "$ref": "#/definitions/v1StrategyRepliesResult"
           }
         },
         "total": {
           "type": "string",
           "format": "int64"
+        }
+      }
+    },
+    "v1StrategyRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
         }
       }
     },
@@ -303,8 +317,8 @@
         "account": {
           "type": "string"
         },
-        "request": {
-          "$ref": "#/definitions/strategiesv1Request"
+        "parameters": {
+          "$ref": "#/definitions/v1Parameters"
         },
         "created_at": {
           "type": "string",

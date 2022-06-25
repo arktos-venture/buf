@@ -90,8 +90,8 @@ service Strategies {
 
 
 // Transverse
-message Request {
-	map<string, int32> parameters = 1;
+message Parameters {
+	map<string, float> values = 1;
 	map<string, int32> period = 2;
 }
 
@@ -109,7 +109,7 @@ message StrategyModifyRequest {
 	string account = 2;
 	string name = 3;
 	string description = 4;
-	Request parameters = 5;
+	Parameters parameters = 5;
 }
 
 message StrategyDeleteRequest {
@@ -125,13 +125,19 @@ message StrategyReply {
 	string ticker = 1;
 	string description = 2;
 	string account = 3;
-	Request request = 4;
+	Parameters parameters = 4;
 	google.protobuf.Timestamp created_at = 5;
 	google.protobuf.Timestamp updated_at = 6; 
 }
 
 message StrategyReplies {
-	repeated StrategyReply results = 1;
+	message Result {
+		string ticker = 1;
+		string description = 2;
+		string account = 3;
+	}
+
+	repeated Result results = 1;
 	int64 total = 2; 
 }
 
