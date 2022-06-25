@@ -205,6 +205,17 @@
         }
       }
     },
+    "ExchangeRequestRequest": {
+      "type": "object",
+      "properties": {
+        "companies": {
+          "type": "boolean"
+        },
+        "holidays": {
+          "type": "boolean"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -357,17 +368,6 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1ExchangeRequestRequest": {
-      "type": "object",
-      "properties": {
-        "companies": {
-          "type": "boolean"
-        },
-        "holidays": {
-          "type": "boolean"
         }
       }
     },

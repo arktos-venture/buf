@@ -1,20 +1,22 @@
 syntax = "proto3";
 
-package company.fundamental.v1.get;
+package fundamentals.v1;
 import "errors/errors.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/company/fundamental/v1/get;v1";
+option go_package = "github.com/arktos-venture/buf/proto/fundamentals/v1;fundamentals_v1";
 option java_multiple_files = true;
-option java_package = "company.fundamental.v1.errors";
-option objc_class_prefix = "APICompanyFundamentalErrors";
+option java_package = "dev.kratos.api.fundamentals.v1";
+option objc_class_prefix = "APIFundamentalsProtoV1";
 
 enum ErrorReason {
   option (errors.default_code) = 500;
 
   CONTENT_MISSING = 0 [(errors.code) = 400];
-  FORBIDDEN = 1 [(errors.code) = 403];
-  NOT_FOUND = 2 [(errors.code) = 404];
-  CONFLICT = 3 [(errors.code) = 409];
-  NOT_IMPLEMENTED = 4 [(errors.code) = 501];
-  UNAVAILABLE = 5 [(errors.code) = 503];
+  UNAUTHORIZED = 1 [(errors.code) = 401];
+  FORBIDDEN = 2 [(errors.code) = 403];
+  NOT_FOUND = 3 [(errors.code) = 404];
+  REQUEST_TIMEOUT = 4 [(errors.code) = 408];
+  CONFLICT = 5 [(errors.code) = 409];
+  NOT_IMPLEMENTED = 6 [(errors.code) = 501];
+  UNAVAILABLE = 7 [(errors.code) = 503];
 }
