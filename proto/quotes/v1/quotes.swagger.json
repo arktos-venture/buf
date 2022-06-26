@@ -199,16 +199,6 @@
         }
       }
     },
-    "quotesv1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "y"
-      ],
-      "default": "d"
-    },
     "screenerv1Argument": {
       "type": "string",
       "enum": [
@@ -241,7 +231,35 @@
       ],
       "default": "Ticker"
     },
-    "screenerv1Operator": {
+    "screenerv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/screenerv1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1Operator": {
       "type": "string",
       "enum": [
         "Equal",
@@ -255,20 +273,6 @@
         "Between"
       ],
       "default": "Equal"
-    },
-    "v1FilterSimple": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/screenerv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
     },
     "v1QuoteDelete": {
       "type": "object",
@@ -362,12 +366,12 @@
           "$ref": "#/definitions/v1TSDB"
         },
         "interval": {
-          "$ref": "#/definitions/quotesv1Interval"
+          "$ref": "#/definitions/v1Interval"
         },
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1FilterSimple"
+            "$ref": "#/definitions/screenerv1Filter"
           }
         }
       }

@@ -6,6 +6,8 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/quotes/v1/quotes.proto";
+import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/splits/v1;splits_v1";
 option java_multiple_files = true;
@@ -62,35 +64,9 @@ service Splits {
 // Request
 // 
 
-enum Interval {
-  d = 0;
-  w = 1;
-  m = 2;
-}
-
-enum Operator {
-	Equal = 0;
-	Greater = 1;
-	GreaterEqual = 2;
-	Less = 3;
-	LessEqual = 4;
-}
-  
-enum Argument {
-	Ticker = 0;
-	Exchange = 1;
-	Time = 2;
-}
-  
-message Filter {
-	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
-	Argument argument = 2 [(validate.rules).enum = {defined_only: true}];
-	string value = 3;
-}
-  
 message SplitsRequest {
-	Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+	quotes.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+	repeated screener.v1.FilterSimple filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message SplitsLastRequest {

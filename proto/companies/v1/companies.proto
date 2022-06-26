@@ -8,6 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
+import "proto/stats/v1/stats.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
 option java_multiple_files = true;
@@ -115,13 +116,17 @@ message CompanyCreateRequest {
 	bool adr = 9;
 	int32 fiscalMonthEnd = 10 [(validate.rules).int32 = {lt: 1}];
 	string currencyReport = 11 [(validate.rules).string.len = 3];
-	string email = 12 [(validate.rules).string.ignore_empty = true];
-	string website = 13 [(validate.rules).string.ignore_empty = true];
-	string phone = 14 [(validate.rules).string.ignore_empty = true];
-	string street = 15 [(validate.rules).string.ignore_empty = true];
-	string city = 16 [(validate.rules).string.ignore_empty = true];
-	string state = 17 [(validate.rules).string.ignore_empty = true];
-	string country = 18 [(validate.rules).string.len = 2];
+	int32 employees = 12 [(validate.rules).int32.ignore_empty = true];
+	float sharesPerListing = 13 [(validate.rules).float.ignore_empty = true];
+	int64 sharesOut = 14 [(validate.rules).int64.ignore_empty = true];
+	int64 sharesFloat = 15 [(validate.rules).int64.ignore_empty = true];
+	string email = 16 [(validate.rules).string.ignore_empty = true];
+	string website = 17 [(validate.rules).string.ignore_empty = true];
+	string phone = 18 [(validate.rules).string.ignore_empty = true];
+	string street = 19 [(validate.rules).string.ignore_empty = true];
+	string city = 20 [(validate.rules).string.ignore_empty = true];
+	string state = 21 [(validate.rules).string.ignore_empty = true];
+	string country = 22 [(validate.rules).string.len = 2];
 }
 
 message CompanyUpdateRequest {
@@ -135,13 +140,17 @@ message CompanyUpdateRequest {
 	bool adr = 8;
 	int32 fiscalMonthEnd = 9 [(validate.rules).int32 = {lt: 1}];
 	string currencyReport = 10 [(validate.rules).string.len = 3];
-	string email = 11 [(validate.rules).string.ignore_empty = true];
-	string website = 12 [(validate.rules).string.ignore_empty = true];
-	string phone = 13 [(validate.rules).string.ignore_empty = true];
-	string street = 14 [(validate.rules).string.ignore_empty = true];
-	string city = 15 [(validate.rules).string.ignore_empty = true];
-	string state = 16 [(validate.rules).string.ignore_empty = true];
-	string country = 17 [(validate.rules).string.len = 2];
+	int32 employees = 11 [(validate.rules).int32.ignore_empty = true];
+	float sharesPerListing = 12 [(validate.rules).float.ignore_empty = true];
+	int64 sharesOut = 13 [(validate.rules).int64 = {lte: 1}];
+	int64 sharesFloat = 14 [(validate.rules).int64 = {lte: 1}];
+	string email = 15 [(validate.rules).string.ignore_empty = true];
+	string website = 16 [(validate.rules).string.ignore_empty = true];
+	string phone = 17 [(validate.rules).string.ignore_empty = true];
+	string street = 18 [(validate.rules).string.ignore_empty = true];
+	string city = 19 [(validate.rules).string.ignore_empty = true];
+	string state = 20 [(validate.rules).string.ignore_empty = true];
+	string country = 21 [(validate.rules).string.len = 2];
 }
 
 message CompanyDeleteRequest {
@@ -180,6 +189,18 @@ message CompanyReply {
 		repeated google.protobuf.Timestamp created_at = 3;
 	}
 
+	message Stats {
+		message Shares {
+			int64 outstanding = 1;
+			int64 float = 2;
+			float div = 3;
+		}
+
+		stats.v1.Price price = 1;
+		stats.v1.Volume volume = 2;
+		Shares shares = 3;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
@@ -191,12 +212,14 @@ message CompanyReply {
 	screener.v1.ScreenerReply.Activity activity = 9;
 	quotes.v1.QuoteLastReply quote = 10;
 	Dividend dividends = 11;
-	string currencyReport = 12;
-	int32 fiscalYearEnd = 13;
-	CompanyContact contact = 14;
-	CompanyAddress address = 15;
-	google.protobuf.Timestamp created_at = 16;
-	google.protobuf.Timestamp updated_at = 17; 
+	Stats stats = 12;
+	int32 employees = 13;
+	string currencyReport = 17;
+	int32 fiscalYearEnd = 18;
+	CompanyContact contact = 19;
+	CompanyAddress address = 20;
+	google.protobuf.Timestamp created_at = 21;
+	google.protobuf.Timestamp updated_at = 22; 
 }
 
 message CompanyReplies {

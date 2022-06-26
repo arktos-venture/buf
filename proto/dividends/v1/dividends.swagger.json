@@ -141,15 +141,6 @@
     }
   },
   "definitions": {
-    "dividendsv1Interval": {
-      "type": "string",
-      "enum": [
-        "m",
-        "q",
-        "y"
-      ],
-      "default": "m"
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -212,20 +203,22 @@
       ],
       "default": "Ticker"
     },
-    "screenerv1Operator": {
-      "type": "string",
-      "enum": [
-        "Equal",
-        "NotEqual",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual",
-        "In",
-        "NotIn",
-        "Between"
-      ],
-      "default": "Equal"
+    "screenerv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/screenerv1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1DividendDelete": {
       "type": "object",
@@ -316,29 +309,41 @@
       "type": "object",
       "properties": {
         "interval": {
-          "$ref": "#/definitions/dividendsv1Interval"
+          "$ref": "#/definitions/v1Interval"
         },
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1FilterSimple"
+            "$ref": "#/definitions/screenerv1Filter"
           }
         }
       }
     },
-    "v1FilterSimple": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/screenerv1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
     }
   },
   "securityDefinitions": {

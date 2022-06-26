@@ -6,6 +6,7 @@ package stats_v1
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/quotes/v1"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -18,32 +19,34 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type StatsHTTPServer interface {
-	Create(context.Context, *StatModifyRequest) (*StatReply, error)
-	Delete(context.Context, *StatDeleteRequest) (*StatDelete, error)
-	Get(context.Context, *StatRequest) (*StatReply, error)
-	Update(context.Context, *StatModifyRequest) (*StatReply, error)
+	Create(context.Context, *StatCreateRequest) (*StatReply, error)
+	Delete(context.Context, *v1.QuoteDeleteRequest) (*StatDelete, error)
+	Last(context.Context, *v1.QuoteLastRequest) (*StatReply, error)
+	Search(context.Context, *v1.QuoteRequest) (*StatReplies, error)
+	Update(context.Context, *StatUpdateRequest) (*StatReply, error)
 }
 
 func RegisterStatsHTTPServer(s *http.Server, srv StatsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/stats/{exchange}/{ticker}", _Stats_Get9_HTTP_Handler(srv))
-	r.POST("/v1/stats", _Stats_Create8_HTTP_Handler(srv))
-	r.PUT("/v1/stats/{exchange}/{ticker}", _Stats_Update5_HTTP_Handler(srv))
-	r.DELETE("/v1/stats", _Stats_Delete13_HTTP_Handler(srv))
+	r.GET("/v1/stats/{exchange}/{ticker}", _Stats_Last2_HTTP_Handler(srv))
+	r.POST("/v1/stats", _Stats_Search11_HTTP_Handler(srv))
+	r.POST("/v1/stats", _Stats_Create7_HTTP_Handler(srv))
+	r.PUT("/v1/stats/{exchange}/{ticker}", _Stats_Update4_HTTP_Handler(srv))
+	r.DELETE("/v1/stats", _Stats_Delete12_HTTP_Handler(srv))
 }
 
-func _Stats_Get9_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Last2_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StatRequest
+		var in v1.QuoteLastRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/stats.v1.Stats/Get")
+		http.SetOperation(ctx, "/stats.v1.Stats/Last")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*StatRequest))
+			return srv.Last(ctx, req.(*v1.QuoteLastRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -54,15 +57,34 @@ func _Stats_Get9_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error 
 	}
 }
 
-func _Stats_Create8_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Search11_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StatModifyRequest
+		var in v1.QuoteRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/stats.v1.Stats/Search")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Search(ctx, req.(*v1.QuoteRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*StatReplies)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Stats_Create7_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StatCreateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/stats.v1.Stats/Create")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Create(ctx, req.(*StatModifyRequest))
+			return srv.Create(ctx, req.(*StatCreateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -73,9 +95,9 @@ func _Stats_Create8_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Stats_Update5_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Update4_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StatModifyRequest
+		var in StatUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -84,7 +106,7 @@ func _Stats_Update5_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) err
 		}
 		http.SetOperation(ctx, "/stats.v1.Stats/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*StatModifyRequest))
+			return srv.Update(ctx, req.(*StatUpdateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -95,15 +117,15 @@ func _Stats_Update5_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Stats_Delete13_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Delete12_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in StatDeleteRequest
+		var in v1.QuoteDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/stats.v1.Stats/Delete")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Delete(ctx, req.(*StatDeleteRequest))
+			return srv.Delete(ctx, req.(*v1.QuoteDeleteRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -115,10 +137,11 @@ func _Stats_Delete13_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) er
 }
 
 type StatsHTTPClient interface {
-	Create(ctx context.Context, req *StatModifyRequest, opts ...http.CallOption) (rsp *StatReply, err error)
-	Delete(ctx context.Context, req *StatDeleteRequest, opts ...http.CallOption) (rsp *StatDelete, err error)
-	Get(ctx context.Context, req *StatRequest, opts ...http.CallOption) (rsp *StatReply, err error)
-	Update(ctx context.Context, req *StatModifyRequest, opts ...http.CallOption) (rsp *StatReply, err error)
+	Create(ctx context.Context, req *StatCreateRequest, opts ...http.CallOption) (rsp *StatReply, err error)
+	Delete(ctx context.Context, req *v1.QuoteDeleteRequest, opts ...http.CallOption) (rsp *StatDelete, err error)
+	Last(ctx context.Context, req *v1.QuoteLastRequest, opts ...http.CallOption) (rsp *StatReply, err error)
+	Search(ctx context.Context, req *v1.QuoteRequest, opts ...http.CallOption) (rsp *StatReplies, err error)
+	Update(ctx context.Context, req *StatUpdateRequest, opts ...http.CallOption) (rsp *StatReply, err error)
 }
 
 type StatsHTTPClientImpl struct {
@@ -129,7 +152,7 @@ func NewStatsHTTPClient(client *http.Client) StatsHTTPClient {
 	return &StatsHTTPClientImpl{client}
 }
 
-func (c *StatsHTTPClientImpl) Create(ctx context.Context, in *StatModifyRequest, opts ...http.CallOption) (*StatReply, error) {
+func (c *StatsHTTPClientImpl) Create(ctx context.Context, in *StatCreateRequest, opts ...http.CallOption) (*StatReply, error) {
 	var out StatReply
 	pattern := "/v1/stats"
 	path := binding.EncodeURL(pattern, in, false)
@@ -142,7 +165,7 @@ func (c *StatsHTTPClientImpl) Create(ctx context.Context, in *StatModifyRequest,
 	return &out, err
 }
 
-func (c *StatsHTTPClientImpl) Delete(ctx context.Context, in *StatDeleteRequest, opts ...http.CallOption) (*StatDelete, error) {
+func (c *StatsHTTPClientImpl) Delete(ctx context.Context, in *v1.QuoteDeleteRequest, opts ...http.CallOption) (*StatDelete, error) {
 	var out StatDelete
 	pattern := "/v1/stats"
 	path := binding.EncodeURL(pattern, in, true)
@@ -155,11 +178,11 @@ func (c *StatsHTTPClientImpl) Delete(ctx context.Context, in *StatDeleteRequest,
 	return &out, err
 }
 
-func (c *StatsHTTPClientImpl) Get(ctx context.Context, in *StatRequest, opts ...http.CallOption) (*StatReply, error) {
+func (c *StatsHTTPClientImpl) Last(ctx context.Context, in *v1.QuoteLastRequest, opts ...http.CallOption) (*StatReply, error) {
 	var out StatReply
 	pattern := "/v1/stats/{exchange}/{ticker}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/stats.v1.Stats/Get"))
+	opts = append(opts, http.Operation("/stats.v1.Stats/Last"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -168,7 +191,20 @@ func (c *StatsHTTPClientImpl) Get(ctx context.Context, in *StatRequest, opts ...
 	return &out, err
 }
 
-func (c *StatsHTTPClientImpl) Update(ctx context.Context, in *StatModifyRequest, opts ...http.CallOption) (*StatReply, error) {
+func (c *StatsHTTPClientImpl) Search(ctx context.Context, in *v1.QuoteRequest, opts ...http.CallOption) (*StatReplies, error) {
+	var out StatReplies
+	pattern := "/v1/stats"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/stats.v1.Stats/Search"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *StatsHTTPClientImpl) Update(ctx context.Context, in *StatUpdateRequest, opts ...http.CallOption) (*StatReply, error) {
 	var out StatReply
 	pattern := "/v1/stats/{exchange}/{ticker}"
 	path := binding.EncodeURL(pattern, in, false)

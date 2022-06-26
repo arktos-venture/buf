@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	quotes_v1 "github.com/arktos-venture/buf/proto/quotes/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = quotes_v1.TSDB(0)
 )
 
 // Validate checks the field values on Price with the rules defined in the
@@ -56,13 +60,15 @@ func (m *Price) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Last
-
 	// no validation rules for MaxAnnual
 
 	// no validation rules for MinAnnual
 
 	// no validation rules for ReturnYear
+
+	// no validation rules for MarketCapUsd
+
+	// no validation rules for Beta5Y
 
 	if len(errors) > 0 {
 		return PriceMultiError(errors)
@@ -162,13 +168,11 @@ func (m *Volume) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Last
+	// no validation rules for VolumeAvg10D
 
-	// no validation rules for Volume10D
+	// no validation rules for VolumeAvg30D
 
-	// no validation rules for Volume30D
-
-	// no validation rules for Volume90D
+	// no validation rules for VolumeAvg90D
 
 	if len(errors) > 0 {
 		return VolumeMultiError(errors)
@@ -247,211 +251,6 @@ var _ interface {
 	ErrorName() string
 } = VolumeValidationError{}
 
-// Validate checks the field values on Dividend with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Dividend) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Dividend with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DividendMultiError, or nil
-// if none found.
-func (m *Dividend) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Dividend) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Yield
-
-	// no validation rules for Value
-
-	if len(errors) > 0 {
-		return DividendMultiError(errors)
-	}
-
-	return nil
-}
-
-// DividendMultiError is an error wrapping multiple validation errors returned
-// by Dividend.ValidateAll() if the designated constraints aren't met.
-type DividendMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DividendMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DividendMultiError) AllErrors() []error { return m }
-
-// DividendValidationError is the validation error returned by
-// Dividend.Validate if the designated constraints aren't met.
-type DividendValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DividendValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DividendValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DividendValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DividendValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DividendValidationError) ErrorName() string { return "DividendValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DividendValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDividend.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DividendValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DividendValidationError{}
-
-// Validate checks the field values on Share with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Share) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Share with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in ShareMultiError, or nil if none found.
-func (m *Share) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Share) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Out
-
-	// no validation rules for Float
-
-	if len(errors) > 0 {
-		return ShareMultiError(errors)
-	}
-
-	return nil
-}
-
-// ShareMultiError is an error wrapping multiple validation errors returned by
-// Share.ValidateAll() if the designated constraints aren't met.
-type ShareMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ShareMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ShareMultiError) AllErrors() []error { return m }
-
-// ShareValidationError is the validation error returned by Share.Validate if
-// the designated constraints aren't met.
-type ShareValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ShareValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ShareValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ShareValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ShareValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ShareValidationError) ErrorName() string { return "ShareValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ShareValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sShare.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ShareValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ShareValidationError{}
-
 // Validate checks the field values on StatRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -474,27 +273,11 @@ func (m *StatRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := StatRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Tsdb
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := StatRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Ticker
+
+	// no validation rules for Exchange
 
 	if len(errors) > 0 {
 		return StatRequestMultiError(errors)
@@ -573,184 +356,77 @@ var _ interface {
 	ErrorName() string
 } = StatRequestValidationError{}
 
-// Validate checks the field values on StatModifyRequest with the rules defined
+// Validate checks the field values on StatCreateRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *StatModifyRequest) Validate() error {
+func (m *StatCreateRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StatModifyRequest with the rules
+// ValidateAll checks the field values on StatCreateRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StatModifyRequestMultiError, or nil if none found.
-func (m *StatModifyRequest) ValidateAll() error {
+// StatCreateRequestMultiError, or nil if none found.
+func (m *StatCreateRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StatModifyRequest) validate(all bool) error {
+func (m *StatCreateRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
-		err := StatModifyRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 16 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Tsdb
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := StatModifyRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Ticker
 
-	// no validation rules for MarketCapUsd
+	// no validation rules for Exchange
 
 	if all {
-		switch v := interface{}(m.GetPrice()).(type) {
+		switch v := interface{}(m.GetData()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Price",
+				errors = append(errors, StatCreateRequestValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Price",
+				errors = append(errors, StatCreateRequestValidationError{
+					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return StatModifyRequestValidationError{
-				field:  "Price",
+			return StatCreateRequestValidationError{
+				field:  "Data",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
-
-	if all {
-		switch v := interface{}(m.GetVolume()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Volume",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Volume",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatModifyRequestValidationError{
-				field:  "Volume",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetShares()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Shares",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Shares",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatModifyRequestValidationError{
-				field:  "Shares",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetDividends()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Dividends",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatModifyRequestValidationError{
-					field:  "Dividends",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatModifyRequestValidationError{
-				field:  "Dividends",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for Beta5Y
 
 	if len(errors) > 0 {
-		return StatModifyRequestMultiError(errors)
+		return StatCreateRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// StatModifyRequestMultiError is an error wrapping multiple validation errors
-// returned by StatModifyRequest.ValidateAll() if the designated constraints
+// StatCreateRequestMultiError is an error wrapping multiple validation errors
+// returned by StatCreateRequest.ValidateAll() if the designated constraints
 // aren't met.
-type StatModifyRequestMultiError []error
+type StatCreateRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StatModifyRequestMultiError) Error() string {
+func (m StatCreateRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -759,11 +435,11 @@ func (m StatModifyRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StatModifyRequestMultiError) AllErrors() []error { return m }
+func (m StatCreateRequestMultiError) AllErrors() []error { return m }
 
-// StatModifyRequestValidationError is the validation error returned by
-// StatModifyRequest.Validate if the designated constraints aren't met.
-type StatModifyRequestValidationError struct {
+// StatCreateRequestValidationError is the validation error returned by
+// StatCreateRequest.Validate if the designated constraints aren't met.
+type StatCreateRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -771,24 +447,24 @@ type StatModifyRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e StatModifyRequestValidationError) Field() string { return e.field }
+func (e StatCreateRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StatModifyRequestValidationError) Reason() string { return e.reason }
+func (e StatCreateRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StatModifyRequestValidationError) Cause() error { return e.cause }
+func (e StatCreateRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StatModifyRequestValidationError) Key() bool { return e.key }
+func (e StatCreateRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StatModifyRequestValidationError) ErrorName() string {
-	return "StatModifyRequestValidationError"
+func (e StatCreateRequestValidationError) ErrorName() string {
+	return "StatCreateRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StatModifyRequestValidationError) Error() string {
+func (e StatCreateRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -800,14 +476,14 @@ func (e StatModifyRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStatModifyRequest.%s: %s%s",
+		"invalid %sStatCreateRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StatModifyRequestValidationError{}
+var _ error = StatCreateRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -815,7 +491,144 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StatModifyRequestValidationError{}
+} = StatCreateRequestValidationError{}
+
+// Validate checks the field values on StatUpdateRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *StatUpdateRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatUpdateRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StatUpdateRequestMultiError, or nil if none found.
+func (m *StatUpdateRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatUpdateRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Tsdb
+
+	// no validation rules for Ticker
+
+	// no validation rules for Exchange
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatUpdateRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatUpdateRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatUpdateRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StatUpdateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StatUpdateRequestMultiError is an error wrapping multiple validation errors
+// returned by StatUpdateRequest.ValidateAll() if the designated constraints
+// aren't met.
+type StatUpdateRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatUpdateRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatUpdateRequestMultiError) AllErrors() []error { return m }
+
+// StatUpdateRequestValidationError is the validation error returned by
+// StatUpdateRequest.Validate if the designated constraints aren't met.
+type StatUpdateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatUpdateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatUpdateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatUpdateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatUpdateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatUpdateRequestValidationError) ErrorName() string {
+	return "StatUpdateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StatUpdateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatUpdateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatUpdateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatUpdateRequestValidationError{}
 
 // Validate checks the field values on StatDeleteRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -838,6 +651,8 @@ func (m *StatDeleteRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Tsdb
 
 	_StatDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
 
@@ -983,29 +798,9 @@ func (m *StatReply) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
-		err := StatReplyValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 16 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Ticker
 
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := StatReplyValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	// no validation rules for MarketCapUsd
+	// no validation rules for Exchange
 
 	if all {
 		switch v := interface{}(m.GetPrice()).(type) {
@@ -1064,66 +859,6 @@ func (m *StatReply) validate(all bool) error {
 			}
 		}
 	}
-
-	if all {
-		switch v := interface{}(m.GetShares()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatReplyValidationError{
-					field:  "Shares",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatReplyValidationError{
-					field:  "Shares",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatReplyValidationError{
-				field:  "Shares",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetDividends()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatReplyValidationError{
-					field:  "Dividends",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatReplyValidationError{
-					field:  "Dividends",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDividends()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatReplyValidationError{
-				field:  "Dividends",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for Beta5Y
 
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
@@ -1260,6 +995,141 @@ var _ interface {
 	ErrorName() string
 } = StatReplyValidationError{}
 
+// Validate checks the field values on StatReplies with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *StatReplies) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatReplies with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in StatRepliesMultiError, or
+// nil if none found.
+func (m *StatReplies) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatReplies) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetResults() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StatRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StatRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StatRepliesValidationError{
+					field:  fmt.Sprintf("Results[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return StatRepliesMultiError(errors)
+	}
+
+	return nil
+}
+
+// StatRepliesMultiError is an error wrapping multiple validation errors
+// returned by StatReplies.ValidateAll() if the designated constraints aren't met.
+type StatRepliesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatRepliesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatRepliesMultiError) AllErrors() []error { return m }
+
+// StatRepliesValidationError is the validation error returned by
+// StatReplies.Validate if the designated constraints aren't met.
+type StatRepliesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatRepliesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatRepliesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatRepliesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatRepliesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatRepliesValidationError) ErrorName() string { return "StatRepliesValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StatRepliesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatReplies.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatRepliesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatRepliesValidationError{}
+
 // Validate checks the field values on StatDelete with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1360,3 +1230,483 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = StatDeleteValidationError{}
+
+// Validate checks the field values on StatCreateRequest_Data with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StatCreateRequest_Data) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatCreateRequest_Data with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StatCreateRequest_DataMultiError, or nil if none found.
+func (m *StatCreateRequest_Data) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatCreateRequest_Data) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatCreateRequest_DataValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatCreateRequest_DataValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatCreateRequest_DataValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatCreateRequest_DataValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatCreateRequest_DataValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatCreateRequest_DataValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StatCreateRequest_DataMultiError(errors)
+	}
+
+	return nil
+}
+
+// StatCreateRequest_DataMultiError is an error wrapping multiple validation
+// errors returned by StatCreateRequest_Data.ValidateAll() if the designated
+// constraints aren't met.
+type StatCreateRequest_DataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatCreateRequest_DataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatCreateRequest_DataMultiError) AllErrors() []error { return m }
+
+// StatCreateRequest_DataValidationError is the validation error returned by
+// StatCreateRequest_Data.Validate if the designated constraints aren't met.
+type StatCreateRequest_DataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatCreateRequest_DataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatCreateRequest_DataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatCreateRequest_DataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatCreateRequest_DataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatCreateRequest_DataValidationError) ErrorName() string {
+	return "StatCreateRequest_DataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StatCreateRequest_DataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatCreateRequest_Data.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatCreateRequest_DataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatCreateRequest_DataValidationError{}
+
+// Validate checks the field values on StatUpdateRequest_Data with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StatUpdateRequest_Data) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatUpdateRequest_Data with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StatUpdateRequest_DataMultiError, or nil if none found.
+func (m *StatUpdateRequest_Data) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatUpdateRequest_Data) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatUpdateRequest_DataValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatUpdateRequest_DataValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatUpdateRequest_DataValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatUpdateRequest_DataValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatUpdateRequest_DataValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatUpdateRequest_DataValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StatUpdateRequest_DataMultiError(errors)
+	}
+
+	return nil
+}
+
+// StatUpdateRequest_DataMultiError is an error wrapping multiple validation
+// errors returned by StatUpdateRequest_Data.ValidateAll() if the designated
+// constraints aren't met.
+type StatUpdateRequest_DataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatUpdateRequest_DataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatUpdateRequest_DataMultiError) AllErrors() []error { return m }
+
+// StatUpdateRequest_DataValidationError is the validation error returned by
+// StatUpdateRequest_Data.Validate if the designated constraints aren't met.
+type StatUpdateRequest_DataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatUpdateRequest_DataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatUpdateRequest_DataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatUpdateRequest_DataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatUpdateRequest_DataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatUpdateRequest_DataValidationError) ErrorName() string {
+	return "StatUpdateRequest_DataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StatUpdateRequest_DataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatUpdateRequest_Data.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatUpdateRequest_DataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatUpdateRequest_DataValidationError{}
+
+// Validate checks the field values on StatReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StatReplies_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StatReplies_ResultMultiError, or nil if none found.
+func (m *StatReplies_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatReplies_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatReplies_ResultValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatReplies_ResultValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatReplies_ResultValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatReplies_ResultValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatReplies_ResultValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatReplies_ResultValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return StatReplies_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// StatReplies_ResultMultiError is an error wrapping multiple validation errors
+// returned by StatReplies_Result.ValidateAll() if the designated constraints
+// aren't met.
+type StatReplies_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatReplies_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatReplies_ResultMultiError) AllErrors() []error { return m }
+
+// StatReplies_ResultValidationError is the validation error returned by
+// StatReplies_Result.Validate if the designated constraints aren't met.
+type StatReplies_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatReplies_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatReplies_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatReplies_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatReplies_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatReplies_ResultValidationError) ErrorName() string {
+	return "StatReplies_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StatReplies_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatReplies_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatReplies_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatReplies_ResultValidationError{}
