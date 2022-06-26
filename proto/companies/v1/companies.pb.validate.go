@@ -406,6 +406,22 @@ func (m *CompanyCreateRequest) validate(all bool) error {
 
 	}
 
+	if m.GetEmployees() != 0 {
+
+	}
+
+	if m.GetSharesPerListing() != 0 {
+
+	}
+
+	if m.GetSharesOut() != 0 {
+
+	}
+
+	if m.GetSharesFloat() != 0 {
+
+	}
+
 	if m.GetEmail() != "" {
 
 	}
@@ -645,6 +661,36 @@ func (m *CompanyUpdateRequest) validate(all bool) error {
 		}
 		errors = append(errors, err)
 
+	}
+
+	if m.GetEmployees() != 0 {
+
+	}
+
+	if m.GetSharesPerListing() != 0 {
+
+	}
+
+	if m.GetSharesOut() > 1 {
+		err := CompanyUpdateRequestValidationError{
+			field:  "SharesOut",
+			reason: "value must be less than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetSharesFloat() > 1 {
+		err := CompanyUpdateRequestValidationError{
+			field:  "SharesFloat",
+			reason: "value must be less than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetEmail() != "" {
@@ -1301,6 +1347,8 @@ func (m *CompanyReply) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for Employees
 
 	// no validation rules for CurrencyReport
 
@@ -2090,64 +2138,6 @@ func (m *CompanyReply_Stats) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetReport()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CompanyReply_StatsValidationError{
-					field:  "Report",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CompanyReply_StatsValidationError{
-					field:  "Report",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetReport()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CompanyReply_StatsValidationError{
-				field:  "Report",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetForecast()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CompanyReply_StatsValidationError{
-					field:  "Forecast",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CompanyReply_StatsValidationError{
-					field:  "Forecast",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetForecast()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CompanyReply_StatsValidationError{
-				field:  "Forecast",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
 		return CompanyReply_StatsMultiError(errors)
 	}
@@ -2227,6 +2217,114 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyReply_StatsValidationError{}
+
+// Validate checks the field values on CompanyReply_Stats_Shares with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Stats_Shares) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Stats_Shares with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_Stats_SharesMultiError, or nil if none found.
+func (m *CompanyReply_Stats_Shares) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Stats_Shares) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Outstanding
+
+	// no validation rules for Float
+
+	// no validation rules for Div
+
+	if len(errors) > 0 {
+		return CompanyReply_Stats_SharesMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_Stats_SharesMultiError is an error wrapping multiple validation
+// errors returned by CompanyReply_Stats_Shares.ValidateAll() if the
+// designated constraints aren't met.
+type CompanyReply_Stats_SharesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_Stats_SharesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_Stats_SharesMultiError) AllErrors() []error { return m }
+
+// CompanyReply_Stats_SharesValidationError is the validation error returned by
+// CompanyReply_Stats_Shares.Validate if the designated constraints aren't met.
+type CompanyReply_Stats_SharesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_Stats_SharesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_Stats_SharesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_Stats_SharesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_Stats_SharesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_Stats_SharesValidationError) ErrorName() string {
+	return "CompanyReply_Stats_SharesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_Stats_SharesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Stats_Shares.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_Stats_SharesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_Stats_SharesValidationError{}
 
 // Validate checks the field values on CompanyReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

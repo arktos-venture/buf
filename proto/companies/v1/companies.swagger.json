@@ -232,6 +232,22 @@
                 "currencyReport": {
                   "type": "string"
                 },
+                "employees": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sharesPerListing": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "sharesOut": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "sharesFloat": {
+                  "type": "string",
+                  "format": "int64"
+                },
                 "email": {
                   "type": "string"
                 },
@@ -264,6 +280,32 @@
     }
   },
   "definitions": {
+    "CompanyReplyDividend": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "yields": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
     "CompanyReplyExchange": {
       "type": "object",
       "properties": {
@@ -275,6 +317,23 @@
         },
         "open": {
           "type": "boolean"
+        }
+      }
+    },
+    "CompanyReplyStatsShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        },
+        "div": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -445,6 +504,22 @@
         "currencyReport": {
           "type": "string"
         },
+        "employees": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sharesPerListing": {
+          "type": "number",
+          "format": "float"
+        },
+        "sharesOut": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sharesFloat": {
+          "type": "string",
+          "format": "int64"
+        },
         "email": {
           "type": "string"
         },
@@ -559,10 +634,14 @@
           "$ref": "#/definitions/v1QuoteLastReply"
         },
         "dividends": {
-          "$ref": "#/definitions/v1CompanyReplyDividend"
+          "$ref": "#/definitions/CompanyReplyDividend"
         },
         "stats": {
           "$ref": "#/definitions/v1CompanyReplyStats"
+        },
+        "employees": {
+          "type": "integer",
+          "format": "int32"
         },
         "currencyReport": {
           "type": "string"
@@ -587,32 +666,6 @@
         }
       }
     },
-    "v1CompanyReplyDividend": {
-      "type": "object",
-      "properties": {
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "yields": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      }
-    },
     "v1CompanyReplyStats": {
       "type": "object",
       "properties": {
@@ -623,22 +676,7 @@
           "$ref": "#/definitions/statsv1Volume"
         },
         "shares": {
-          "$ref": "#/definitions/v1Share"
-        },
-        "report": {
-          "$ref": "#/definitions/v1Report"
-        },
-        "forecast": {
-          "$ref": "#/definitions/v1Forecast"
-        }
-      }
-    },
-    "v1Forecast": {
-      "type": "object",
-      "properties": {
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
+          "$ref": "#/definitions/CompanyReplyStatsShares"
         }
       }
     },
@@ -668,32 +706,6 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1Report": {
-      "type": "object",
-      "properties": {
-        "employees": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1Share": {
-      "type": "object",
-      "properties": {
-        "out": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
         }
       }
     }
