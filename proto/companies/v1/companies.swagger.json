@@ -333,6 +333,48 @@
         }
       }
     },
+    "statsv1Price": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "statsv1Volume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1CompanyAddress": {
       "type": "object",
       "properties": {
@@ -519,6 +561,9 @@
         "dividends": {
           "$ref": "#/definitions/v1CompanyReplyDividend"
         },
+        "stats": {
+          "$ref": "#/definitions/v1CompanyReplyStats"
+        },
         "currencyReport": {
           "type": "string"
         },
@@ -568,6 +613,35 @@
         }
       }
     },
+    "v1CompanyReplyStats": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/statsv1Price"
+        },
+        "volume": {
+          "$ref": "#/definitions/statsv1Volume"
+        },
+        "shares": {
+          "$ref": "#/definitions/v1Share"
+        },
+        "report": {
+          "$ref": "#/definitions/v1Report"
+        },
+        "forecast": {
+          "$ref": "#/definitions/v1Forecast"
+        }
+      }
+    },
+    "v1Forecast": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1QuoteLastReply": {
       "type": "object",
       "properties": {
@@ -594,6 +668,32 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1Report": {
+      "type": "object",
+      "properties": {
+        "employees": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1Share": {
+      "type": "object",
+      "properties": {
+        "out": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

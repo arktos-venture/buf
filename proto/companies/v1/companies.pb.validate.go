@@ -1273,6 +1273,35 @@ func (m *CompanyReply) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetStats()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStats()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReplyValidationError{
+				field:  "Stats",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for CurrencyReport
 
 	// no validation rules for FiscalYearEnd
@@ -1951,6 +1980,253 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CompanyReply_DividendValidationError{}
+
+// Validate checks the field values on CompanyReply_Stats with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompanyReply_Stats) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompanyReply_Stats with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompanyReply_StatsMultiError, or nil if none found.
+func (m *CompanyReply_Stats) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompanyReply_Stats) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReply_StatsValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReply_StatsValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetShares()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Shares",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetShares()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReply_StatsValidationError{
+				field:  "Shares",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetReport()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Report",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Report",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetReport()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReply_StatsValidationError{
+				field:  "Report",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetForecast()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Forecast",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompanyReply_StatsValidationError{
+					field:  "Forecast",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetForecast()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompanyReply_StatsValidationError{
+				field:  "Forecast",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CompanyReply_StatsMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompanyReply_StatsMultiError is an error wrapping multiple validation errors
+// returned by CompanyReply_Stats.ValidateAll() if the designated constraints
+// aren't met.
+type CompanyReply_StatsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompanyReply_StatsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompanyReply_StatsMultiError) AllErrors() []error { return m }
+
+// CompanyReply_StatsValidationError is the validation error returned by
+// CompanyReply_Stats.Validate if the designated constraints aren't met.
+type CompanyReply_StatsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompanyReply_StatsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompanyReply_StatsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompanyReply_StatsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompanyReply_StatsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompanyReply_StatsValidationError) ErrorName() string {
+	return "CompanyReply_StatsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompanyReply_StatsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompanyReply_Stats.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompanyReply_StatsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompanyReply_StatsValidationError{}
 
 // Validate checks the field values on CompanyReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

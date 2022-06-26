@@ -8,6 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
+import "proto/stats/v1/stats.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
 option java_multiple_files = true;
@@ -180,6 +181,14 @@ message CompanyReply {
 		repeated google.protobuf.Timestamp created_at = 3;
 	}
 
+	message Stats {
+		stats.v1.Price price = 1;
+		stats.v1.Volume volume = 2;
+		stats.v1.Share shares = 3;
+		stats.v1.Report report = 4;
+		stats.v1.Forecast forecast = 5;
+	}
+
 	int64 id = 1;
 	string ticker = 2;
 	string ticker_alternative = 3;
@@ -191,12 +200,13 @@ message CompanyReply {
 	screener.v1.ScreenerReply.Activity activity = 9;
 	quotes.v1.QuoteLastReply quote = 10;
 	Dividend dividends = 11;
-	string currencyReport = 12;
-	int32 fiscalYearEnd = 13;
-	CompanyContact contact = 14;
-	CompanyAddress address = 15;
-	google.protobuf.Timestamp created_at = 16;
-	google.protobuf.Timestamp updated_at = 17; 
+	Stats stats = 12;
+	string currencyReport = 13;
+	int32 fiscalYearEnd = 14;
+	CompanyContact contact = 15;
+	CompanyAddress address = 16;
+	google.protobuf.Timestamp created_at = 17;
+	google.protobuf.Timestamp updated_at = 18; 
 }
 
 message CompanyReplies {
