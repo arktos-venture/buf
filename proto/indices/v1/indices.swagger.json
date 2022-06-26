@@ -286,20 +286,7 @@
         }
       }
     },
-    "ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "VolumeStats": {
+    "ScreenerReplyVolumeStats": {
       "type": "object",
       "properties": {
         "avg": {
@@ -501,7 +488,7 @@
           "$ref": "#/definitions/ScreenerReplyActivity"
         },
         "shares": {
-          "$ref": "#/definitions/ScreenerReplyShares"
+          "$ref": "#/definitions/v1ScreenerReplyShares"
         },
         "pricing": {
           "$ref": "#/definitions/ScreenerReplyPricing"
@@ -522,6 +509,19 @@
         }
       }
     },
+    "v1ScreenerReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1ScreenerReplyVolume": {
       "type": "object",
       "properties": {
@@ -532,7 +532,7 @@
         "stats": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/VolumeStats"
+            "$ref": "#/definitions/ScreenerReplyVolumeStats"
           }
         }
       }

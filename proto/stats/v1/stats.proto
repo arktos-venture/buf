@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/stats/v1;stats_v1";
 option java_multiple_files = true;
@@ -14,7 +15,7 @@ option java_outer_classname = "APIStatsProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
         title: "Stats APIs";
-		description: "Stats APIs available for trades";
+		description: "Stats APIs";
         version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
@@ -46,15 +47,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Stats {
 	// Public API
 	// Get Stat properties
-	rpc Get (StatRequest) returns (StatReply)  {
+	rpc Last (quotes.v1.QuoteLastRequest) returns (StatReply)  {
 		option (google.api.http) = {
 		  	get: "/v1/stats/{exchange}/{ticker}"
 		};
 	}
 
+	// Public API
+	// Get Stat properties
+	rpc Search (quotes.v1.QuoteRequest) returns (StatReplies)  {
+		option (google.api.http) = {
+		  	post: "/v1/stats"
+			body: "*"
+		};
+	}
+
 	// Private API
 	// Create a new Stat
-	rpc Create (StatModifyRequest) returns (StatReply)  {
+	rpc Create (StatCreateRequest) returns (StatReply)  {
 		option (google.api.http) = {
 		  	post: "/v1/stats"
 			body: "*"
@@ -63,7 +73,7 @@ service Stats {
 
 	// Private API
 	// Update properties of Stat
-	rpc Update (StatModifyRequest) returns (StatReply)  {
+	rpc Update (StatUpdateRequest) returns (StatReply)  {
 		option (google.api.http) = {
 			put: "/v1/stats/{exchange}/{ticker}"
 			body: "*"
@@ -72,7 +82,7 @@ service Stats {
 
 	// Private API
 	// Delete Stat
-	rpc Delete (StatDeleteRequest) returns (StatDelete)  {
+	rpc Delete (quotes.v1.QuoteDeleteRequest) returns (StatDelete)  {
 		option (google.api.http) = {
 		  	delete: "/v1/stats"
 		};
@@ -80,27 +90,17 @@ service Stats {
 }
 
 message Price {
-	float last = 1;
-	float max_annual = 2;
-	float min_annual = 3;
-	float return_year = 4;
+	float max_annual = 1;
+	float min_annual = 2;
+	float return_year = 3;
+	int64 market_cap_usd = 4;
+	float beta5y = 5;
 }
-
+	
 message Volume {
-	float last = 1;
-	float volume10d = 2;
-	float volume30d = 3;
-	float volume90d = 4;
-}
-
-message Dividend {
-	float yield = 1;
-	float value = 2;
-}
-
-message Share {
-	int64 out = 1;
-	int64 float = 2;
+	int64 volumeAvg10d = 1;
+	int64 volumeAvg30d = 2;
+	int64 volumeAvg90d = 3;
 }
 
 
@@ -109,24 +109,39 @@ message Share {
 // 
 
 message StatRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	quotes.v1.TSDB tsdb = 1;
+	string ticker = 2;
+	string exchange = 3;
 }
 
-message StatModifyRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 16}];
-	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	int64 marketCapUsd = 3;
-	Price price = 4;
-	Volume volume = 5;
-	Share shares = 6;
-	Dividend dividends = 7;
-	float beta5y = 8;
+message StatCreateRequest {
+	message Data {
+		Price price = 1;
+		Volume volume = 2;
+	}
+
+	quotes.v1.TSDB tsdb = 1;
+	string ticker = 2;
+	string exchange = 3;
+	Data data = 4;
+}
+
+message StatUpdateRequest {
+	message Data {
+		Price price = 1;
+		Volume volume = 2;
+	}
+
+	quotes.v1.TSDB tsdb = 1;
+	string ticker = 2;
+	string exchange = 3;
+	Data data = 4;
 }
 
 message StatDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	quotes.v1.TSDB tsdb = 1;
+	repeated string tickers = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 3 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -135,16 +150,22 @@ message StatDeleteRequest {
 // 
 
 message StatReply {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 16}];
-	string exchange = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	int64 marketCapUsd = 3;
+	string ticker = 1;
+	string exchange = 2;
 	Price price = 4;
 	Volume volume = 5;
-	Share shares = 6;
-	Dividend dividends = 7;
-	float beta5y = 8;
-	google.protobuf.Timestamp created_at = 9;
-	google.protobuf.Timestamp updated_at = 10; 
+	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp updated_at = 8; 
+}
+
+message StatReplies {
+	message Result {
+		Price price = 1;
+		Volume volume = 2;
+	}
+
+	repeated Result results = 1;
+	int64 total = 2;
 }
 
 message StatDelete {

@@ -328,7 +328,7 @@
       "type": "object",
       "properties": {
         "operator": {
-          "$ref": "#/definitions/screenerv1Operator"
+          "$ref": "#/definitions/v1Operator"
         },
         "argument": {
           "$ref": "#/definitions/ordersv1Argument"
@@ -363,7 +363,16 @@
         }
       }
     },
-    "screenerv1Operator": {
+    "v1Action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1Operator": {
       "type": "string",
       "enum": [
         "Equal",
@@ -377,15 +386,6 @@
         "Between"
       ],
       "default": "Equal"
-    },
-    "v1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
     },
     "v1OrderDelete": {
       "type": "object",

@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Stats APIs",
-    "description": "Stats APIs available for trades",
+    "description": "Stats APIs",
     "version": "1.0",
     "contact": {
       "name": "Arktos Venture project",
@@ -46,7 +46,21 @@
         },
         "parameters": [
           {
-            "name": "tickers",
+            "name": "tsdb",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Companies",
+              "Forexes",
+              "Indices",
+              "Indexes",
+              "Accounts"
+            ],
+            "default": "Companies"
+          },
+          {
+            "name": "exchanges",
             "in": "query",
             "required": false,
             "type": "array",
@@ -56,7 +70,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "exchanges",
+            "name": "tickers",
             "in": "query",
             "required": false,
             "type": "array",
@@ -93,7 +107,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StatModifyRequest"
+              "$ref": "#/definitions/v1StatCreateRequest"
             }
           }
         ],
@@ -105,7 +119,7 @@
     "/v1/stats/{exchange}/{ticker}": {
       "get": {
         "summary": "Public API\nGet Stat properties",
-        "operationId": "Stats_Get",
+        "operationId": "Stats_Last",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -132,6 +146,20 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "tsdb",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Companies",
+              "Forexes",
+              "Indices",
+              "Indexes",
+              "Accounts"
+            ],
+            "default": "Companies"
           }
         ],
         "tags": [
@@ -175,25 +203,11 @@
             "schema": {
               "type": "object",
               "properties": {
-                "marketCapUsd": {
-                  "type": "string",
-                  "format": "int64"
+                "tsdb": {
+                  "$ref": "#/definitions/v1TSDB"
                 },
-                "price": {
-                  "$ref": "#/definitions/statsv1Price"
-                },
-                "volume": {
-                  "$ref": "#/definitions/statsv1Volume"
-                },
-                "shares": {
-                  "$ref": "#/definitions/v1Share"
-                },
-                "dividends": {
-                  "$ref": "#/definitions/statsv1Dividend"
-                },
-                "beta5y": {
-                  "type": "number",
-                  "format": "float"
+                "data": {
+                  "$ref": "#/definitions/v1StatUpdateRequestData"
                 }
               }
             }
@@ -236,26 +250,58 @@
         }
       }
     },
-    "statsv1Dividend": {
+    "screenerv1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time"
+      ],
+      "default": "Ticker"
+    },
+    "screenerv1Filter": {
       "type": "object",
       "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
         },
-        "value": {
-          "type": "number",
-          "format": "float"
+        "argument": {
+          "$ref": "#/definitions/screenerv1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "statsv1Price": {
       "type": "object",
       "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
         "max_annual": {
           "type": "number",
           "format": "float"
@@ -267,40 +313,102 @@
         "return_year": {
           "type": "number",
           "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
     "statsv1Volume": {
       "type": "object",
       "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
         },
-        "volume10d": {
-          "type": "number",
-          "format": "float"
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
         },
-        "volume30d": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume90d": {
-          "type": "number",
-          "format": "float"
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
-    "v1Share": {
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
+    },
+    "v1QuoteRequest": {
       "type": "object",
       "properties": {
-        "out": {
-          "type": "string",
-          "format": "int64"
+        "tsdb": {
+          "$ref": "#/definitions/v1TSDB"
         },
-        "float": {
-          "type": "string",
-          "format": "int64"
+        "interval": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/screenerv1Filter"
+          }
+        }
+      }
+    },
+    "v1StatCreateRequest": {
+      "type": "object",
+      "properties": {
+        "tsdb": {
+          "$ref": "#/definitions/v1TSDB"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/v1StatCreateRequestData"
+        }
+      }
+    },
+    "v1StatCreateRequestData": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/statsv1Price"
+        },
+        "volume": {
+          "$ref": "#/definitions/statsv1Volume"
         }
       }
     },
@@ -313,34 +421,29 @@
         }
       }
     },
-    "v1StatModifyRequest": {
+    "v1StatReplies": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1StatRepliesResult"
+          }
         },
-        "exchange": {
-          "type": "string"
-        },
-        "marketCapUsd": {
+        "total": {
           "type": "string",
           "format": "int64"
-        },
+        }
+      }
+    },
+    "v1StatRepliesResult": {
+      "type": "object",
+      "properties": {
         "price": {
           "$ref": "#/definitions/statsv1Price"
         },
         "volume": {
           "$ref": "#/definitions/statsv1Volume"
-        },
-        "shares": {
-          "$ref": "#/definitions/v1Share"
-        },
-        "dividends": {
-          "$ref": "#/definitions/statsv1Dividend"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
         }
       }
     },
@@ -353,25 +456,11 @@
         "exchange": {
           "type": "string"
         },
-        "marketCapUsd": {
-          "type": "string",
-          "format": "int64"
-        },
         "price": {
           "$ref": "#/definitions/statsv1Price"
         },
         "volume": {
           "$ref": "#/definitions/statsv1Volume"
-        },
-        "shares": {
-          "$ref": "#/definitions/v1Share"
-        },
-        "dividends": {
-          "$ref": "#/definitions/statsv1Dividend"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
         },
         "created_at": {
           "type": "string",
@@ -382,6 +471,28 @@
           "format": "date-time"
         }
       }
+    },
+    "v1StatUpdateRequestData": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/statsv1Price"
+        },
+        "volume": {
+          "$ref": "#/definitions/statsv1Volume"
+        }
+      }
+    },
+    "v1TSDB": {
+      "type": "string",
+      "enum": [
+        "Companies",
+        "Forexes",
+        "Indices",
+        "Indexes",
+        "Accounts"
+      ],
+      "default": "Companies"
     }
   },
   "securityDefinitions": {

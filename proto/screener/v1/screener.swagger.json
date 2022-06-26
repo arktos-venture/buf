@@ -128,28 +128,7 @@
         }
       }
     },
-    "ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "SortOrientation": {
-      "type": "string",
-      "enum": [
-        "ASC",
-        "DESC"
-      ],
-      "default": "ASC"
-    },
-    "VolumeStats": {
+    "ScreenerReplyVolumeStats": {
       "type": "object",
       "properties": {
         "avg": {
@@ -161,6 +140,14 @@
           "format": "float"
         }
       }
+    },
+    "SortOrientation": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC"
     },
     "googlerpcStatus": {
       "type": "object",
@@ -228,7 +215,7 @@
       "type": "object",
       "properties": {
         "operator": {
-          "$ref": "#/definitions/screenerv1Operator"
+          "$ref": "#/definitions/v1Operator"
         },
         "argument": {
           "$ref": "#/definitions/screenerv1Argument"
@@ -241,7 +228,7 @@
         }
       }
     },
-    "screenerv1Operator": {
+    "v1Operator": {
       "type": "string",
       "enum": [
         "Equal",
@@ -300,7 +287,7 @@
           "$ref": "#/definitions/ScreenerReplyActivity"
         },
         "shares": {
-          "$ref": "#/definitions/ScreenerReplyShares"
+          "$ref": "#/definitions/v1ScreenerReplyShares"
         },
         "pricing": {
           "$ref": "#/definitions/ScreenerReplyPricing"
@@ -321,6 +308,19 @@
         }
       }
     },
+    "v1ScreenerReplyShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1ScreenerReplyVolume": {
       "type": "object",
       "properties": {
@@ -331,7 +331,7 @@
         "stats": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/VolumeStats"
+            "$ref": "#/definitions/ScreenerReplyVolumeStats"
           }
         }
       }

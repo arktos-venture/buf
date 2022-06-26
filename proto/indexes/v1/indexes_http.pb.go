@@ -27,14 +27,14 @@ type IndexesHTTPServer interface {
 
 func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indexes/{ticker}", _Indexes_Get10_HTTP_Handler(srv))
-	r.GET("/v1/indexes", _Indexes_Search12_HTTP_Handler(srv))
+	r.GET("/v1/indexes/{ticker}", _Indexes_Get9_HTTP_Handler(srv))
+	r.GET("/v1/indexes", _Indexes_Search13_HTTP_Handler(srv))
 	r.POST("/v1/indexes", _Indexes_Create9_HTTP_Handler(srv))
 	r.PUT("/v1/indexes", _Indexes_Update6_HTTP_Handler(srv))
 	r.DELETE("/v1/indexes", _Indexes_Delete14_HTTP_Handler(srv))
 }
 
-func _Indexes_Get10_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Get9_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -56,7 +56,7 @@ func _Indexes_Get10_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Indexes_Search12_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Search13_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
