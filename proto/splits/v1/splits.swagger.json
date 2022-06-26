@@ -126,46 +126,75 @@
         }
       }
     },
-    "splitsv1Argument": {
+    "screenerv1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
         "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
         "Time"
       ],
       "default": "Ticker"
     },
-    "splitsv1Filter": {
+    "v1FilterSimple": {
       "type": "object",
       "properties": {
         "operator": {
-          "$ref": "#/definitions/splitsv1Operator"
+          "$ref": "#/definitions/v1Operator"
         },
         "argument": {
-          "$ref": "#/definitions/splitsv1Argument"
+          "$ref": "#/definitions/screenerv1Argument"
         },
         "value": {
           "type": "string"
         }
       }
     },
-    "splitsv1Interval": {
+    "v1Interval": {
       "type": "string",
       "enum": [
         "d",
         "w",
-        "m"
+        "m",
+        "q",
+        "y"
       ],
       "default": "d"
     },
-    "splitsv1Operator": {
+    "v1Operator": {
       "type": "string",
       "enum": [
         "Equal",
+        "NotEqual",
         "Greater",
         "GreaterEqual",
         "Less",
-        "LessEqual"
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
       ],
       "default": "Equal"
     },
@@ -216,12 +245,12 @@
       "type": "object",
       "properties": {
         "interval": {
-          "$ref": "#/definitions/splitsv1Interval"
+          "$ref": "#/definitions/v1Interval"
         },
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/splitsv1Filter"
+            "$ref": "#/definitions/v1FilterSimple"
           }
         }
       }
