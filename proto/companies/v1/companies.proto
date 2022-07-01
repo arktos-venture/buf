@@ -199,6 +199,7 @@ message CompanyReply {
 		stats.v1.Price price = 1;
 		stats.v1.Volume volume = 2;
 		Shares shares = 3;
+		google.protobuf.Timestamp updated_at = 4; 
 	}
 
 	int64 id = 1;

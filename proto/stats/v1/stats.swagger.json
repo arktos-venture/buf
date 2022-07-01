@@ -83,37 +83,6 @@
         "tags": [
           "Stats"
         ]
-      },
-      "post": {
-        "summary": "Private API\nCreate a new Stat",
-        "operationId": "Stats_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1StatReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StatCreateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Stats"
-        ]
       }
     },
     "/v1/stats/{exchange}/{ticker}": {
@@ -207,7 +176,7 @@
                   "$ref": "#/definitions/v1TSDB"
                 },
                 "data": {
-                  "$ref": "#/definitions/v1StatUpdateRequestData"
+                  "$ref": "#/definitions/StatUpdateRequestData"
                 }
               }
             }
@@ -220,6 +189,17 @@
     }
   },
   "definitions": {
+    "StatUpdateRequestData": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/statsv1Price"
+        },
+        "volume": {
+          "$ref": "#/definitions/statsv1Volume"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -250,55 +230,6 @@
         }
       }
     },
-    "screenerv1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Industry",
-        "Index",
-        "Currency",
-        "MarketCap",
-        "ReturnYear",
-        "Beta5Y",
-        "ShareVolumeRatio",
-        "DividendYield",
-        "Price",
-        "PriceLastChange",
-        "Strategy",
-        "StrategyPeriod",
-        "StrategyDecision",
-        "StrategyDecisionAgo",
-        "SharesFloatRatio",
-        "Volume",
-        "VolumeAvg10d",
-        "VolumeAvg30d",
-        "VolumeAvg90d",
-        "Isin",
-        "Adr",
-        "Id",
-        "Country",
-        "Time"
-      ],
-      "default": "Ticker"
-    },
-    "screenerv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "statsv1Price": {
       "type": "object",
       "properties": {
@@ -321,6 +252,10 @@
         "beta5y": {
           "type": "number",
           "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -341,109 +276,12 @@
         }
       }
     },
-    "v1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "q",
-        "y"
-      ],
-      "default": "d"
-    },
-    "v1Operator": {
-      "type": "string",
-      "enum": [
-        "Equal",
-        "NotEqual",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual",
-        "In",
-        "NotIn",
-        "Between"
-      ],
-      "default": "Equal"
-    },
-    "v1QuoteRequest": {
-      "type": "object",
-      "properties": {
-        "tsdb": {
-          "$ref": "#/definitions/v1TSDB"
-        },
-        "interval": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "filters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/screenerv1Filter"
-          }
-        }
-      }
-    },
-    "v1StatCreateRequest": {
-      "type": "object",
-      "properties": {
-        "tsdb": {
-          "$ref": "#/definitions/v1TSDB"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/v1StatCreateRequestData"
-        }
-      }
-    },
-    "v1StatCreateRequestData": {
-      "type": "object",
-      "properties": {
-        "price": {
-          "$ref": "#/definitions/statsv1Price"
-        },
-        "volume": {
-          "$ref": "#/definitions/statsv1Volume"
-        }
-      }
-    },
     "v1StatDelete": {
       "type": "object",
       "properties": {
         "total": {
           "type": "string",
           "format": "int64"
-        }
-      }
-    },
-    "v1StatReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1StatRepliesResult"
-          }
-        },
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1StatRepliesResult": {
-      "type": "object",
-      "properties": {
-        "price": {
-          "$ref": "#/definitions/statsv1Price"
-        },
-        "volume": {
-          "$ref": "#/definitions/statsv1Volume"
         }
       }
     },
@@ -469,17 +307,6 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1StatUpdateRequestData": {
-      "type": "object",
-      "properties": {
-        "price": {
-          "$ref": "#/definitions/statsv1Price"
-        },
-        "volume": {
-          "$ref": "#/definitions/statsv1Volume"
         }
       }
     },
