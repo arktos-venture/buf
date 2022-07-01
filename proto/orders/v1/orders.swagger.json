@@ -238,11 +238,11 @@
                 "filters": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/ordersv1Filter"
+                    "$ref": "#/definitions/v1Filter"
                   }
                 },
                 "sort": {
-                  "$ref": "#/definitions/v1OrderSearchRequestSort"
+                  "$ref": "#/definitions/ScreenerRequestSort"
                 },
                 "limit": {
                   "type": "integer",
@@ -272,6 +272,17 @@
         }
       }
     },
+    "ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
+        }
+      }
+    },
     "SortOrientation": {
       "type": "string",
       "enum": [
@@ -298,24 +309,6 @@
         }
       }
     },
-    "ordersv1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Currency",
-        "Price",
-        "Size",
-        "Isin",
-        "Id",
-        "oAction",
-        "oDuration",
-        "oType",
-        "oStatus",
-        "Time"
-      ],
-      "default": "Ticker"
-    },
     "ordersv1Duration": {
       "type": "string",
       "enum": [
@@ -323,23 +316,6 @@
         "GTC"
       ],
       "default": "DAY"
-    },
-    "ordersv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/ordersv1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "ordersv1Status": {
       "type": "string",
@@ -371,6 +347,59 @@
         "HOLD"
       ],
       "default": "BUY"
+    },
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status"
+      ],
+      "default": "Ticker"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1Operator": {
       "type": "string",
@@ -465,17 +494,6 @@
         "commission": {
           "type": "number",
           "format": "float"
-        }
-      }
-    },
-    "v1OrderSearchRequestSort": {
-      "type": "object",
-      "properties": {
-        "argument": {
-          "$ref": "#/definitions/ordersv1Argument"
-        },
-        "orientation": {
-          "$ref": "#/definitions/SortOrientation"
         }
       }
     },

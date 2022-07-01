@@ -171,7 +171,7 @@
         }
       }
     },
-    "screenerv1Argument": {
+    "v1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
@@ -199,26 +199,13 @@
         "Adr",
         "Id",
         "Country",
-        "Time"
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status"
       ],
       "default": "Ticker"
-    },
-    "screenerv1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "v1DividendDelete": {
       "type": "object",
@@ -314,7 +301,24 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/screenerv1Filter"
+            "$ref": "#/definitions/v1Filter"
+          }
+        }
+      }
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }

@@ -141,6 +141,17 @@
         }
       }
     },
+    "ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
+        }
+      }
+    },
     "SortOrientation": {
       "type": "string",
       "enum": [
@@ -179,7 +190,7 @@
         }
       }
     },
-    "screenerv1Argument": {
+    "v1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
@@ -207,18 +218,22 @@
         "Adr",
         "Id",
         "Country",
-        "Time"
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status"
       ],
       "default": "Ticker"
     },
-    "screenerv1Filter": {
+    "v1Filter": {
       "type": "object",
       "properties": {
         "operator": {
           "$ref": "#/definitions/v1Operator"
         },
         "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
+          "$ref": "#/definitions/v1Argument"
         },
         "values": {
           "type": "array",
@@ -342,26 +357,15 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/screenerv1Filter"
+            "$ref": "#/definitions/v1Filter"
           }
         },
         "sort": {
-          "$ref": "#/definitions/v1ScreenerRequestSort"
+          "$ref": "#/definitions/ScreenerRequestSort"
         },
         "limit": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "v1ScreenerRequestSort": {
-      "type": "object",
-      "properties": {
-        "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
-        },
-        "orientation": {
-          "$ref": "#/definitions/SortOrientation"
         }
       }
     }

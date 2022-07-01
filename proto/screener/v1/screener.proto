@@ -97,6 +97,10 @@ enum Argument {
 	Id = 23;
 	Country = 24;
 	Time = 25;
+	Action = 26;
+	Duration = 27;
+	Type = 28;
+	Status = 29;
 }
 
 message Filter {
