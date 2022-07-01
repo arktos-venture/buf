@@ -322,7 +322,8 @@
       "enum": [
         "INDEX",
         "BOND",
-        "INDICATOR"
+        "INDICATOR",
+        "COMMODITY"
       ],
       "default": "INDEX"
     },

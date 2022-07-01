@@ -129,16 +129,17 @@ message ExchangeReply {
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
-	repeated indices.v1.IndiceReplies.Result indices = 4;
-	string routing = 5;
-	string country = 6;
-	string currency = 7;
-	string timezone = 8;
-	repeated Holiday holidays = 9;
-	string tradingHours = 10;
-	repeated Company companies = 11;
-	google.protobuf.Timestamp created_at = 12;
-	google.protobuf.Timestamp updated_at = 13;
+	string primaryIndice = 4;
+	repeated indices.v1.IndiceReplies.Result indices = 5;
+	string routing = 6;
+	string country = 7;
+	string currency = 8;
+	string timezone = 9;
+	repeated Holiday holidays = 10;
+	string tradingHours = 11;
+	repeated Company companies = 12;
+	google.protobuf.Timestamp created_at = 13;
+	google.protobuf.Timestamp updated_at = 14;
 }
   
 message ExchangeIsOpenReply {
