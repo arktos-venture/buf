@@ -126,7 +126,7 @@
         }
       }
     },
-    "screenerv1Argument": {
+    "v1Argument": {
       "type": "string",
       "enum": [
         "Ticker",
@@ -154,7 +154,11 @@
         "Adr",
         "Id",
         "Country",
-        "Time"
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status"
       ],
       "default": "Ticker"
     },
@@ -165,7 +169,7 @@
           "$ref": "#/definitions/v1Operator"
         },
         "argument": {
-          "$ref": "#/definitions/screenerv1Argument"
+          "$ref": "#/definitions/v1Argument"
         },
         "value": {
           "type": "string"
