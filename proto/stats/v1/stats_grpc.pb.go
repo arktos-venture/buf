@@ -22,12 +22,6 @@ type StatsClient interface {
 	// Public API
 	// Get Stat properties
 	Last(ctx context.Context, in *v1.QuoteLastRequest, opts ...grpc.CallOption) (*StatReply, error)
-	// Public API
-	// Get Stat properties
-	Search(ctx context.Context, in *v1.QuoteRequest, opts ...grpc.CallOption) (*StatReplies, error)
-	// Private API
-	// Create a new Stat
-	Create(ctx context.Context, in *StatCreateRequest, opts ...grpc.CallOption) (*StatReply, error)
 	// Private API
 	// Update properties of Stat
 	Update(ctx context.Context, in *StatUpdateRequest, opts ...grpc.CallOption) (*StatReply, error)
@@ -47,24 +41,6 @@ func NewStatsClient(cc grpc.ClientConnInterface) StatsClient {
 func (c *statsClient) Last(ctx context.Context, in *v1.QuoteLastRequest, opts ...grpc.CallOption) (*StatReply, error) {
 	out := new(StatReply)
 	err := c.cc.Invoke(ctx, "/stats.v1.Stats/Last", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) Search(ctx context.Context, in *v1.QuoteRequest, opts ...grpc.CallOption) (*StatReplies, error) {
-	out := new(StatReplies)
-	err := c.cc.Invoke(ctx, "/stats.v1.Stats/Search", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) Create(ctx context.Context, in *StatCreateRequest, opts ...grpc.CallOption) (*StatReply, error) {
-	out := new(StatReply)
-	err := c.cc.Invoke(ctx, "/stats.v1.Stats/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,12 +72,6 @@ type StatsServer interface {
 	// Public API
 	// Get Stat properties
 	Last(context.Context, *v1.QuoteLastRequest) (*StatReply, error)
-	// Public API
-	// Get Stat properties
-	Search(context.Context, *v1.QuoteRequest) (*StatReplies, error)
-	// Private API
-	// Create a new Stat
-	Create(context.Context, *StatCreateRequest) (*StatReply, error)
 	// Private API
 	// Update properties of Stat
 	Update(context.Context, *StatUpdateRequest) (*StatReply, error)
@@ -117,12 +87,6 @@ type UnimplementedStatsServer struct {
 
 func (UnimplementedStatsServer) Last(context.Context, *v1.QuoteLastRequest) (*StatReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
-}
-func (UnimplementedStatsServer) Search(context.Context, *v1.QuoteRequest) (*StatReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedStatsServer) Create(context.Context, *StatCreateRequest) (*StatReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedStatsServer) Update(context.Context, *StatUpdateRequest) (*StatReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
@@ -157,42 +121,6 @@ func _Stats_Last_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StatsServer).Last(ctx, req.(*v1.QuoteLastRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.QuoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).Search(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.v1.Stats/Search",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).Search(ctx, req.(*v1.QuoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StatCreateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.v1.Stats/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).Create(ctx, req.(*StatCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -243,14 +171,6 @@ var Stats_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Last",
 			Handler:    _Stats_Last_Handler,
-		},
-		{
-			MethodName: "Search",
-			Handler:    _Stats_Search_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Stats_Create_Handler,
 		},
 		{
 			MethodName: "Update",

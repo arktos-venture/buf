@@ -98,6 +98,7 @@ enum Asset {
 	INDEX = 0;
 	BOND = 1;
 	INDICATOR = 2;
+	COMMODITY = 3;
 }
 
 message IndiceRequest {

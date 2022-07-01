@@ -731,6 +731,8 @@ func (m *ExchangeReply) validate(all bool) error {
 
 	// no validation rules for Description
 
+	// no validation rules for PrimaryIndice
+
 	for idx, item := range m.GetIndices() {
 		_, _ = idx, item
 

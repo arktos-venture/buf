@@ -414,6 +414,10 @@
         "beta5y": {
           "type": "number",
           "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -677,6 +681,10 @@
         },
         "shares": {
           "$ref": "#/definitions/CompanyReplyStatsShares"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

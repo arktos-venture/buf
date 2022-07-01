@@ -239,7 +239,8 @@
       "enum": [
         "INDEX",
         "BOND",
-        "INDICATOR"
+        "INDICATOR",
+        "COMMODITY"
       ],
       "default": "INDEX"
     },
@@ -326,6 +327,9 @@
           "type": "string"
         },
         "description": {
+          "type": "string"
+        },
+        "primaryIndice": {
           "type": "string"
         },
         "indices": {
