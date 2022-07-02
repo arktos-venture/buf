@@ -50,12 +50,36 @@ service Industries {
     };
   }
 
-  rpc Search (IndustrySearchRequest) returns (IndustrySearchReply)  {
+  rpc Activities (IndustryActivitiesRequest) returns (IndustrySearchReply)  {
     option (google.api.http) = {
-      post: "/v1/industries"
+      post: "/v1/industries/activities"
       body: "*"
     };
   }
+
+  rpc Search (IndustrySearchRequest) returns (IndustrySearchReply)  {
+    option (google.api.http) = {
+      get: "/v1/industry/{ticker}"
+    };
+  }
+}
+
+// 
+// Transverse
+// 
+
+message Ref {
+  enum Classication {
+    EconomicSector = 0;
+    BusinessSector = 1;
+    IndustryGroup = 2;
+    Industry = 3;
+    Activity = 4;
+  }
+
+  Classication classication = 1;
+  string name = 2;
+  map<int64, Ref> next = 3;
 }
 
 
@@ -64,7 +88,11 @@ service Industries {
 // 
 
 message IndustrySearchRequest {
-  repeated int64 refs = 1 [(validate.rules).repeated.unique = true];
+  int64 ticker = 1;
+}
+
+message IndustryActivitiesRequest {
+  repeated int64 tickers = 1 [(validate.rules).repeated.unique = true];
 }
 
 
@@ -73,23 +101,9 @@ message IndustrySearchRequest {
 // 
 
 message IndustryReply {
-  message Ref {
-    enum Classication {
-      EconomicSector = 0;
-      BusinessSector = 1;
-      IndustryGroup = 2;
-      Industry = 3;
-      Activity = 4;
-    }
-
-    Classication classication = 1;
-    string name = 2;
-    map<int64, Ref> next = 3;
-  }
-
   map<int64, Ref> results = 1;
 }
 
 message IndustrySearchReply {
-  repeated int64 results = 1;
+  map<int64, string> results = 1;
 }

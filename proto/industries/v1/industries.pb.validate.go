@@ -35,6 +35,154 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Ref with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Ref) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Ref with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in RefMultiError, or nil if none found.
+func (m *Ref) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Ref) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Classication
+
+	// no validation rules for Name
+
+	{
+		sorted_keys := make([]int64, len(m.GetNext()))
+		i := 0
+		for key := range m.GetNext() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetNext()[key]
+			_ = val
+
+			// no validation rules for Next[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, RefValidationError{
+							field:  fmt.Sprintf("Next[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, RefValidationError{
+							field:  fmt.Sprintf("Next[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return RefValidationError{
+						field:  fmt.Sprintf("Next[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
+	}
+
+	if len(errors) > 0 {
+		return RefMultiError(errors)
+	}
+
+	return nil
+}
+
+// RefMultiError is an error wrapping multiple validation errors returned by
+// Ref.ValidateAll() if the designated constraints aren't met.
+type RefMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RefMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RefMultiError) AllErrors() []error { return m }
+
+// RefValidationError is the validation error returned by Ref.Validate if the
+// designated constraints aren't met.
+type RefValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RefValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RefValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RefValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RefValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RefValidationError) ErrorName() string { return "RefValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RefValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRef.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RefValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RefValidationError{}
+
 // Validate checks the field values on IndustrySearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -57,26 +205,7 @@ func (m *IndustrySearchRequest) validate(all bool) error {
 
 	var errors []error
 
-	_IndustrySearchRequest_Refs_Unique := make(map[int64]struct{}, len(m.GetRefs()))
-
-	for idx, item := range m.GetRefs() {
-		_, _ = idx, item
-
-		if _, exists := _IndustrySearchRequest_Refs_Unique[item]; exists {
-			err := IndustrySearchRequestValidationError{
-				field:  fmt.Sprintf("Refs[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_IndustrySearchRequest_Refs_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Refs[idx]
-	}
+	// no validation rules for Ticker
 
 	if len(errors) > 0 {
 		return IndustrySearchRequestMultiError(errors)
@@ -157,6 +286,129 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndustrySearchRequestValidationError{}
+
+// Validate checks the field values on IndustryActivitiesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndustryActivitiesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndustryActivitiesRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndustryActivitiesRequestMultiError, or nil if none found.
+func (m *IndustryActivitiesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndustryActivitiesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	_IndustryActivitiesRequest_Tickers_Unique := make(map[int64]struct{}, len(m.GetTickers()))
+
+	for idx, item := range m.GetTickers() {
+		_, _ = idx, item
+
+		if _, exists := _IndustryActivitiesRequest_Tickers_Unique[item]; exists {
+			err := IndustryActivitiesRequestValidationError{
+				field:  fmt.Sprintf("Tickers[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_IndustryActivitiesRequest_Tickers_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Tickers[idx]
+	}
+
+	if len(errors) > 0 {
+		return IndustryActivitiesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndustryActivitiesRequestMultiError is an error wrapping multiple validation
+// errors returned by IndustryActivitiesRequest.ValidateAll() if the
+// designated constraints aren't met.
+type IndustryActivitiesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndustryActivitiesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndustryActivitiesRequestMultiError) AllErrors() []error { return m }
+
+// IndustryActivitiesRequestValidationError is the validation error returned by
+// IndustryActivitiesRequest.Validate if the designated constraints aren't met.
+type IndustryActivitiesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndustryActivitiesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndustryActivitiesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndustryActivitiesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndustryActivitiesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndustryActivitiesRequestValidationError) ErrorName() string {
+	return "IndustryActivitiesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndustryActivitiesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndustryActivitiesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndustryActivitiesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndustryActivitiesRequestValidationError{}
 
 // Validate checks the field values on IndustryReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -326,6 +578,8 @@ func (m *IndustrySearchReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Results
+
 	if len(errors) > 0 {
 		return IndustrySearchReplyMultiError(errors)
 	}
@@ -405,155 +659,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndustrySearchReplyValidationError{}
-
-// Validate checks the field values on IndustryReply_Ref with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *IndustryReply_Ref) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IndustryReply_Ref with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IndustryReply_RefMultiError, or nil if none found.
-func (m *IndustryReply_Ref) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IndustryReply_Ref) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Classication
-
-	// no validation rules for Name
-
-	{
-		sorted_keys := make([]int64, len(m.GetNext()))
-		i := 0
-		for key := range m.GetNext() {
-			sorted_keys[i] = key
-			i++
-		}
-		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
-		for _, key := range sorted_keys {
-			val := m.GetNext()[key]
-			_ = val
-
-			// no validation rules for Next[key]
-
-			if all {
-				switch v := interface{}(val).(type) {
-				case interface{ ValidateAll() error }:
-					if err := v.ValidateAll(); err != nil {
-						errors = append(errors, IndustryReply_RefValidationError{
-							field:  fmt.Sprintf("Next[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				case interface{ Validate() error }:
-					if err := v.Validate(); err != nil {
-						errors = append(errors, IndustryReply_RefValidationError{
-							field:  fmt.Sprintf("Next[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				}
-			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-				if err := v.Validate(); err != nil {
-					return IndustryReply_RefValidationError{
-						field:  fmt.Sprintf("Next[%v]", key),
-						reason: "embedded message failed validation",
-						cause:  err,
-					}
-				}
-			}
-
-		}
-	}
-
-	if len(errors) > 0 {
-		return IndustryReply_RefMultiError(errors)
-	}
-
-	return nil
-}
-
-// IndustryReply_RefMultiError is an error wrapping multiple validation errors
-// returned by IndustryReply_Ref.ValidateAll() if the designated constraints
-// aren't met.
-type IndustryReply_RefMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IndustryReply_RefMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IndustryReply_RefMultiError) AllErrors() []error { return m }
-
-// IndustryReply_RefValidationError is the validation error returned by
-// IndustryReply_Ref.Validate if the designated constraints aren't met.
-type IndustryReply_RefValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e IndustryReply_RefValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e IndustryReply_RefValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e IndustryReply_RefValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e IndustryReply_RefValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e IndustryReply_RefValidationError) ErrorName() string {
-	return "IndustryReply_RefValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e IndustryReply_RefValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sIndustryReply_Ref.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = IndustryReply_RefValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = IndustryReply_RefValidationError{}
