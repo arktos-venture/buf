@@ -489,6 +489,18 @@ func (m *ExchangeSearchRequest) validate(all bool) error {
 
 	}
 
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := ExchangeSearchRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
 	if len(errors) > 0 {
 		return ExchangeSearchRequestMultiError(errors)
 	}

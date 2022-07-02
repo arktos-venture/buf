@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/exchanges/v1/exchanges.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/currencies/v1;currencies_v1";
 option java_multiple_files = true;
@@ -98,7 +99,7 @@ message CurrencyDeleteRequest {
 
 message CurrencyReply {
 	string ticker = 1;
-	repeated string exchanges = 2;
+	repeated exchanges.v1.ExchangeReplies.Result exchanges = 2;
 }
 
 message CurrencyReplies {
