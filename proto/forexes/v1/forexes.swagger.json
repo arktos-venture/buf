@@ -195,8 +195,22 @@
         "exchanges": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/v1ExchangeRepliesResult"
           }
+        }
+      }
+    },
+    "v1ExchangeRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
         }
       }
     },

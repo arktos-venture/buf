@@ -44,6 +44,14 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Strategies"
         ]
@@ -66,6 +74,12 @@
           }
         },
         "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "tickers",
             "in": "query",
@@ -136,6 +150,12 @@
             "name": "ticker",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -259,10 +279,10 @@
     "v1StrategyModifyRequest": {
       "type": "object",
       "properties": {
-        "ticker": {
+        "account": {
           "type": "string"
         },
-        "account": {
+        "ticker": {
           "type": "string"
         },
         "name": {
@@ -297,11 +317,16 @@
         "ticker": {
           "type": "string"
         },
-        "description": {
+        "name": {
           "type": "string"
         },
-        "account": {
-          "type": "string"
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -311,10 +336,10 @@
         "ticker": {
           "type": "string"
         },
-        "description": {
+        "name": {
           "type": "string"
         },
-        "account": {
+        "description": {
           "type": "string"
         },
         "parameters": {

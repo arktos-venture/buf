@@ -57,9 +57,27 @@ func (m *Parameters) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Values
+	if len(m.GetValues()) < 1 {
+		err := ParametersValidationError{
+			field:  "Values",
+			reason: "value must contain at least 1 pair(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Period
+	if len(m.GetPeriod()) < 1 {
+		err := ParametersValidationError{
+			field:  "Period",
+			reason: "value must contain at least 1 pair(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ParametersMultiError(errors)
@@ -160,7 +178,27 @@ func (m *StrategyRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ticker
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := StrategyRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
+		err := StrategyRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 16 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return StrategyRequestMultiError(errors)
@@ -240,6 +278,119 @@ var _ interface {
 	ErrorName() string
 } = StrategyRequestValidationError{}
 
+// Validate checks the field values on StrategyListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategyListRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategyListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategyListRequestMultiError, or nil if none found.
+func (m *StrategyListRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategyListRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := StrategyListRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return StrategyListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategyListRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategyListRequest.ValidateAll() if the designated
+// constraints aren't met.
+type StrategyListRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategyListRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategyListRequestMultiError) AllErrors() []error { return m }
+
+// StrategyListRequestValidationError is the validation error returned by
+// StrategyListRequest.Validate if the designated constraints aren't met.
+type StrategyListRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategyListRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategyListRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategyListRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategyListRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategyListRequestValidationError) ErrorName() string {
+	return "StrategyListRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategyListRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategyListRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategyListRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategyListRequestValidationError{}
+
 // Validate checks the field values on StrategyModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -262,13 +413,60 @@ func (m *StrategyModifyRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ticker
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := StrategyModifyRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Account
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
+		err := StrategyModifyRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 16 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Name
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 64 {
+		err := StrategyModifyRequestValidationError{
+			field:  "Name",
+			reason: "value length must be between 1 and 64 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Description
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 1 || l > 8164 {
+		err := StrategyModifyRequestValidationError{
+			field:  "Description",
+			reason: "value length must be between 1 and 8164 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetParameters() == nil {
+		err := StrategyModifyRequestValidationError{
+			field:  "Parameters",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if all {
 		switch v := interface{}(m.GetParameters()).(type) {
@@ -400,6 +598,17 @@ func (m *StrategyDeleteRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := StrategyDeleteRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(m.GetTickers()) < 1 {
 		err := StrategyDeleteRequestValidationError{
@@ -537,9 +746,9 @@ func (m *StrategyReply) validate(all bool) error {
 
 	// no validation rules for Ticker
 
-	// no validation rules for Description
+	// no validation rules for Name
 
-	// no validation rules for Account
+	// no validation rules for Description
 
 	if all {
 		switch v := interface{}(m.GetParameters()).(type) {
@@ -968,9 +1177,65 @@ func (m *StrategyReplies_Result) validate(all bool) error {
 
 	// no validation rules for Ticker
 
-	// no validation rules for Description
+	// no validation rules for Name
 
-	// no validation rules for Account
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyReplies_ResultValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StrategyReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StrategyReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StrategyReplies_ResultValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return StrategyReplies_ResultMultiError(errors)
