@@ -8,7 +8,6 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +21,7 @@ type StrategiesHTTPServer interface {
 	Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 	Delete(context.Context, *StrategyDeleteRequest) (*StrategyDelete, error)
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
-	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
+	List(context.Context, *StrategyListRequest) (*StrategyReplies, error)
 	Update(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 }
 
@@ -59,13 +58,13 @@ func _Strategies_Get4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Conte
 
 func _Strategies_List1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in emptypb.Empty
+		var in StrategyListRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/strategies.v1.Strategies/List")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.List(ctx, req.(*emptypb.Empty))
+			return srv.List(ctx, req.(*StrategyListRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -140,7 +139,7 @@ type StrategiesHTTPClient interface {
 	Create(ctx context.Context, req *StrategyModifyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 	Delete(ctx context.Context, req *StrategyDeleteRequest, opts ...http.CallOption) (rsp *StrategyDelete, err error)
 	Get(ctx context.Context, req *StrategyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
-	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *StrategyReplies, err error)
+	List(ctx context.Context, req *StrategyListRequest, opts ...http.CallOption) (rsp *StrategyReplies, err error)
 	Update(ctx context.Context, req *StrategyModifyRequest, opts ...http.CallOption) (rsp *StrategyReply, err error)
 }
 
@@ -191,7 +190,7 @@ func (c *StrategiesHTTPClientImpl) Get(ctx context.Context, in *StrategyRequest,
 	return &out, err
 }
 
-func (c *StrategiesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*StrategyReplies, error) {
+func (c *StrategiesHTTPClientImpl) List(ctx context.Context, in *StrategyListRequest, opts ...http.CallOption) (*StrategyReplies, error) {
 	var out StrategyReplies
 	pattern := "/v1/strategies"
 	path := binding.EncodeURL(pattern, in, true)

@@ -99,6 +99,7 @@ message ExchangeIsOpenRequest {
 
 message ExchangeSearchRequest {
 	string country = 1 [(validate.rules).string.len = 2];
+	string currency = 2 [(validate.rules).string.len = 3];
 }
 
 message ExchangeDeleteRequest {

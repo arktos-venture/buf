@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -24,7 +23,7 @@ type StrategiesClient interface {
 	Get(ctx context.Context, in *StrategyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	// Public API
 	// List Strategies
-	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StrategyReplies, error)
+	List(ctx context.Context, in *StrategyListRequest, opts ...grpc.CallOption) (*StrategyReplies, error)
 	// Public API
 	// Create Strategy
 	Create(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
@@ -53,7 +52,7 @@ func (c *strategiesClient) Get(ctx context.Context, in *StrategyRequest, opts ..
 	return out, nil
 }
 
-func (c *strategiesClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StrategyReplies, error) {
+func (c *strategiesClient) List(ctx context.Context, in *StrategyListRequest, opts ...grpc.CallOption) (*StrategyReplies, error) {
 	out := new(StrategyReplies)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/List", in, out, opts...)
 	if err != nil {
@@ -98,7 +97,7 @@ type StrategiesServer interface {
 	Get(context.Context, *StrategyRequest) (*StrategyReply, error)
 	// Public API
 	// List Strategies
-	List(context.Context, *emptypb.Empty) (*StrategyReplies, error)
+	List(context.Context, *StrategyListRequest) (*StrategyReplies, error)
 	// Public API
 	// Create Strategy
 	Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
@@ -118,7 +117,7 @@ type UnimplementedStrategiesServer struct {
 func (UnimplementedStrategiesServer) Get(context.Context, *StrategyRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedStrategiesServer) List(context.Context, *emptypb.Empty) (*StrategyReplies, error) {
+func (UnimplementedStrategiesServer) List(context.Context, *StrategyListRequest) (*StrategyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedStrategiesServer) Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error) {
@@ -162,7 +161,7 @@ func _Strategies_Get_Handler(srv interface{}, ctx context.Context, dec func(inte
 }
 
 func _Strategies_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(StrategyListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -174,7 +173,7 @@ func _Strategies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/strategies.v1.Strategies/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).List(ctx, req.(*emptypb.Empty))
+		return srv.(StrategiesServer).List(ctx, req.(*StrategyListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
