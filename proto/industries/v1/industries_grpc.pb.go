@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndustriesClient interface {
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IndustryReply, error)
+	Activities(ctx context.Context, in *IndustryActivitiesRequest, opts ...grpc.CallOption) (*IndustrySearchReply, error)
 	Search(ctx context.Context, in *IndustrySearchRequest, opts ...grpc.CallOption) (*IndustrySearchReply, error)
 }
 
@@ -40,6 +41,15 @@ func (c *industriesClient) List(ctx context.Context, in *emptypb.Empty, opts ...
 	return out, nil
 }
 
+func (c *industriesClient) Activities(ctx context.Context, in *IndustryActivitiesRequest, opts ...grpc.CallOption) (*IndustrySearchReply, error) {
+	out := new(IndustrySearchReply)
+	err := c.cc.Invoke(ctx, "/industries.v1.Industries/Activities", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *industriesClient) Search(ctx context.Context, in *IndustrySearchRequest, opts ...grpc.CallOption) (*IndustrySearchReply, error) {
 	out := new(IndustrySearchReply)
 	err := c.cc.Invoke(ctx, "/industries.v1.Industries/Search", in, out, opts...)
@@ -54,6 +64,7 @@ func (c *industriesClient) Search(ctx context.Context, in *IndustrySearchRequest
 // for forward compatibility
 type IndustriesServer interface {
 	List(context.Context, *emptypb.Empty) (*IndustryReply, error)
+	Activities(context.Context, *IndustryActivitiesRequest) (*IndustrySearchReply, error)
 	Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error)
 	mustEmbedUnimplementedIndustriesServer()
 }
@@ -64,6 +75,9 @@ type UnimplementedIndustriesServer struct {
 
 func (UnimplementedIndustriesServer) List(context.Context, *emptypb.Empty) (*IndustryReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedIndustriesServer) Activities(context.Context, *IndustryActivitiesRequest) (*IndustrySearchReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Activities not implemented")
 }
 func (UnimplementedIndustriesServer) Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
@@ -99,6 +113,24 @@ func _Industries_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Industries_Activities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndustryActivitiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndustriesServer).Activities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/industries.v1.Industries/Activities",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndustriesServer).Activities(ctx, req.(*IndustryActivitiesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Industries_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IndustrySearchRequest)
 	if err := dec(in); err != nil {
@@ -127,6 +159,10 @@ var Industries_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Industries_List_Handler,
+		},
+		{
+			MethodName: "Activities",
+			Handler:    _Industries_Activities_Handler,
 		},
 		{
 			MethodName: "Search",

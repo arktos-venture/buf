@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type IndustriesHTTPServer interface {
+	Activities(context.Context, *IndustryActivitiesRequest) (*IndustrySearchReply, error)
 	List(context.Context, *emptypb.Empty) (*IndustryReply, error)
 	Search(context.Context, *IndustrySearchRequest) (*IndustrySearchReply, error)
 }
@@ -26,7 +27,8 @@ type IndustriesHTTPServer interface {
 func RegisterIndustriesHTTPServer(s *http.Server, srv IndustriesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/industries", _Industries_List2_HTTP_Handler(srv))
-	r.POST("/v1/industries", _Industries_Search4_HTTP_Handler(srv))
+	r.POST("/v1/industries/activities", _Industries_Activities0_HTTP_Handler(srv))
+	r.GET("/v1/industry/{ticker}", _Industries_Search4_HTTP_Handler(srv))
 }
 
 func _Industries_List2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
@@ -48,10 +50,32 @@ func _Industries_List2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _Industries_Activities0_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in IndustryActivitiesRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/industries.v1.Industries/Activities")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Activities(ctx, req.(*IndustryActivitiesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*IndustrySearchReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _Industries_Search4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndustrySearchRequest
-		if err := ctx.Bind(&in); err != nil {
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/industries.v1.Industries/Search")
@@ -68,6 +92,7 @@ func _Industries_Search4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Co
 }
 
 type IndustriesHTTPClient interface {
+	Activities(ctx context.Context, req *IndustryActivitiesRequest, opts ...http.CallOption) (rsp *IndustrySearchReply, err error)
 	List(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *IndustryReply, err error)
 	Search(ctx context.Context, req *IndustrySearchRequest, opts ...http.CallOption) (rsp *IndustrySearchReply, err error)
 }
@@ -78,6 +103,19 @@ type IndustriesHTTPClientImpl struct {
 
 func NewIndustriesHTTPClient(client *http.Client) IndustriesHTTPClient {
 	return &IndustriesHTTPClientImpl{client}
+}
+
+func (c *IndustriesHTTPClientImpl) Activities(ctx context.Context, in *IndustryActivitiesRequest, opts ...http.CallOption) (*IndustrySearchReply, error) {
+	var out IndustrySearchReply
+	pattern := "/v1/industries/activities"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/industries.v1.Industries/Activities"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *IndustriesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*IndustryReply, error) {
@@ -95,11 +133,11 @@ func (c *IndustriesHTTPClientImpl) List(ctx context.Context, in *emptypb.Empty, 
 
 func (c *IndustriesHTTPClientImpl) Search(ctx context.Context, in *IndustrySearchRequest, opts ...http.CallOption) (*IndustrySearchReply, error) {
 	var out IndustrySearchReply
-	pattern := "/v1/industries"
-	path := binding.EncodeURL(pattern, in, false)
+	pattern := "/v1/industry/{ticker}"
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/industries.v1.Industries/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

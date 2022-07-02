@@ -6,7 +6,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
 import "proto/stats/v1/stats.proto";
 
@@ -210,7 +209,7 @@ message CompanyReply {
 	Exchange exchange = 6;
 	string isin = 7;
 	bool adr = 8;
-	screener.v1.ScreenerReply.Activity activity = 9;
+	map<int64, string> activity = 9;
 	quotes.v1.QuoteLastReply quote = 10;
 	Dividend dividends = 11;
 	Stats stats = 12;

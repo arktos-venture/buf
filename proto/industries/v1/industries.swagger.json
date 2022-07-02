@@ -46,9 +46,11 @@
         "tags": [
           "Industries"
         ]
-      },
+      }
+    },
+    "/v1/industries/activities": {
       "post": {
-        "operationId": "Industries_Search",
+        "operationId": "Industries_Activities",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -69,8 +71,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1IndustrySearchRequest"
+              "$ref": "#/definitions/v1IndustryActivitiesRequest"
             }
+          }
+        ],
+        "tags": [
+          "Industries"
+        ]
+      }
+    },
+    "/v1/industry/{ticker}": {
+      "get": {
+        "operationId": "Industries_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndustrySearchReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -80,23 +113,6 @@
     }
   },
   "definitions": {
-    "IndustryReplyRef": {
-      "type": "object",
-      "properties": {
-        "classication": {
-          "$ref": "#/definitions/RefClassication"
-        },
-        "name": {
-          "type": "string"
-        },
-        "next": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/IndustryReplyRef"
-          }
-        }
-      }
-    },
     "RefClassication": {
       "type": "string",
       "enum": [
@@ -138,13 +154,25 @@
         }
       }
     },
+    "v1IndustryActivitiesRequest": {
+      "type": "object",
+      "properties": {
+        "tickers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
     "v1IndustryReply": {
       "type": "object",
       "properties": {
         "results": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/IndustryReplyRef"
+            "$ref": "#/definitions/v1Ref"
           }
         }
       }
@@ -153,22 +181,26 @@
       "type": "object",
       "properties": {
         "results": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
           }
         }
       }
     },
-    "v1IndustrySearchRequest": {
+    "v1Ref": {
       "type": "object",
       "properties": {
-        "refs": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
+        "classication": {
+          "$ref": "#/definitions/RefClassication"
+        },
+        "name": {
+          "type": "string"
+        },
+        "next": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1Ref"
           }
         }
       }
