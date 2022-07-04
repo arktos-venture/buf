@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	quotes_v1 "github.com/arktos-venture/buf/proto/quotes/v1"
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -36,7 +36,7 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 
-	_ = quotes_v1.TSDB(0)
+	_ = screener_v1.TSDB(0)
 )
 
 // Validate checks the field values on Price with the rules defined in the

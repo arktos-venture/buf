@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.OrderAction(0)
 )
 
 // Validate checks the field values on OrderRequest with the rules defined in
@@ -431,7 +435,7 @@ func (m *OrderModifyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := Action_name[int32(m.GetAction())]; !ok {
+	if _, ok := screener_v1.OrderAction_name[int32(m.GetAction())]; !ok {
 		err := OrderModifyRequestValidationError{
 			field:  "Action",
 			reason: "value must be one of the defined enum values",
@@ -442,7 +446,7 @@ func (m *OrderModifyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := OrderType_name[int32(m.GetOrderType())]; !ok {
+	if _, ok := screener_v1.OrderType_name[int32(m.GetOrderType())]; !ok {
 		err := OrderModifyRequestValidationError{
 			field:  "OrderType",
 			reason: "value must be one of the defined enum values",
@@ -464,7 +468,7 @@ func (m *OrderModifyRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := Duration_name[int32(m.GetDuration())]; !ok {
+	if _, ok := screener_v1.OrderDuration_name[int32(m.GetDuration())]; !ok {
 		err := OrderModifyRequestValidationError{
 			field:  "Duration",
 			reason: "value must be one of the defined enum values",

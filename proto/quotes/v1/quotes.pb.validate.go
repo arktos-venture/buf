@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.TSDB(0)
 )
 
 // Validate checks the field values on QuoteRequest with the rules defined in
@@ -57,7 +61,7 @@ func (m *QuoteRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := TSDB_name[int32(m.GetTsdb())]; !ok {
+	if _, ok := screener_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
 		err := QuoteRequestValidationError{
 			field:  "Tsdb",
 			reason: "value must be one of the defined enum values",
@@ -68,7 +72,7 @@ func (m *QuoteRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := Interval_name[int32(m.GetInterval())]; !ok {
+	if _, ok := screener_v1.Interval_name[int32(m.GetInterval())]; !ok {
 		err := QuoteRequestValidationError{
 			field:  "Interval",
 			reason: "value must be one of the defined enum values",
@@ -223,7 +227,7 @@ func (m *QuoteLastRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := TSDB_name[int32(m.GetTsdb())]; !ok {
+	if _, ok := screener_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
 		err := QuoteLastRequestValidationError{
 			field:  "Tsdb",
 			reason: "value must be one of the defined enum values",
@@ -338,7 +342,7 @@ func (m *QuoteDeleteRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := TSDB_name[int32(m.GetTsdb())]; !ok {
+	if _, ok := screener_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
 		err := QuoteDeleteRequestValidationError{
 			field:  "Tsdb",
 			reason: "value must be one of the defined enum values",

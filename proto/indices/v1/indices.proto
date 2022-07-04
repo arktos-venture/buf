@@ -94,13 +94,6 @@ service Indices {
 // Request
 // 
 
-enum Asset {
-	INDEX = 0;
-	BOND = 1;
-	INDICATOR = 2;
-	COMMODITY = 3;
-}
-
 message IndiceRequest {
   	string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
 }
@@ -114,7 +107,7 @@ message IndiceModifyRequest {
 	string description = 2 [(validate.rules).string = {min_len: 1, max_len: 512}];
 	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 16}];
 	string index = 4;
-	Asset asset = 5 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.Asset asset = 5 [(validate.rules).enum = {defined_only: true}];
 }
 
 message IndiceDeleteRequest {
@@ -131,7 +124,7 @@ message IndiceReply {
 	string ticker = 1;
 	string description = 2;
 	string exchange = 3;
-	Asset asset = 4;
+	screener.v1.Asset asset = 4;
 	quotes.v1.QuoteLastReply quote = 5;
 	repeated screener.v1.ScreenerReply companies = 6;
 	google.protobuf.Timestamp created_at = 7;
@@ -142,7 +135,7 @@ message IndiceReplies {
 	message Result {
 		string ticker = 1;
 		string description = 2;
-		Asset asset = 3;
+		screener.v1.Asset asset = 3;
 	}
 
 	repeated Result results = 1;
