@@ -6,7 +6,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/quotes/v1/quotes.proto";
 import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/splits/v1;splits_v1";
@@ -65,7 +64,7 @@ service Splits {
 // 
 
 message SplitsRequest {
-	quotes.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
 	repeated screener.v1.FilterSimple filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 

@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/positions/v1;positions_v1";
 option java_multiple_files = true;
@@ -66,14 +67,8 @@ service Positions {
 // Request
 // 
 
-enum Asset {
-  STOCK = 0;
-  OPTION = 1;
-  CASH = 2;
-}
-
 message PositionRequest {
-  repeated Asset asset = 1;
+  repeated screener.v1.Asset asset = 1;
   string account = 2 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 

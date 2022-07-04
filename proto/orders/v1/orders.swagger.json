@@ -65,7 +65,7 @@
                   "type": "string"
                 },
                 "action": {
-                  "$ref": "#/definitions/v1Action"
+                  "$ref": "#/definitions/v1OrderAction"
                 },
                 "orderType": {
                   "$ref": "#/definitions/v1OrderType"
@@ -75,7 +75,7 @@
                   "format": "float"
                 },
                 "duration": {
-                  "$ref": "#/definitions/ordersv1Duration"
+                  "$ref": "#/definitions/v1OrderDuration"
                 },
                 "price": {
                   "type": "number",
@@ -127,7 +127,7 @@
                   "type": "string"
                 },
                 "action": {
-                  "$ref": "#/definitions/v1Action"
+                  "$ref": "#/definitions/v1OrderAction"
                 },
                 "orderType": {
                   "$ref": "#/definitions/v1OrderType"
@@ -137,7 +137,7 @@
                   "format": "float"
                 },
                 "duration": {
-                  "$ref": "#/definitions/ordersv1Duration"
+                  "$ref": "#/definitions/v1OrderDuration"
                 },
                 "price": {
                   "type": "number",
@@ -309,24 +309,6 @@
         }
       }
     },
-    "ordersv1Duration": {
-      "type": "string",
-      "enum": [
-        "DAY",
-        "GTC"
-      ],
-      "default": "DAY"
-    },
-    "ordersv1Status": {
-      "type": "string",
-      "enum": [
-        "SUBMITTED",
-        "PRESUBMITED",
-        "CLOSE",
-        "OPEN"
-      ],
-      "default": "SUBMITTED"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -338,15 +320,6 @@
           "format": "byte"
         }
       }
-    },
-    "v1Action": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
     },
     "v1Argument": {
       "type": "string",
@@ -416,6 +389,15 @@
       ],
       "default": "Equal"
     },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
     "v1OrderDelete": {
       "type": "object",
       "properties": {
@@ -424,6 +406,14 @@
           "format": "int64"
         }
       }
+    },
+    "v1OrderDuration": {
+      "type": "string",
+      "enum": [
+        "DAY",
+        "GTC"
+      ],
+      "default": "DAY"
     },
     "v1OrderReplies": {
       "type": "object",
@@ -450,7 +440,7 @@
           "type": "string"
         },
         "action": {
-          "$ref": "#/definitions/v1Action"
+          "$ref": "#/definitions/v1OrderAction"
         },
         "orderType": {
           "$ref": "#/definitions/v1OrderType"
@@ -459,7 +449,7 @@
           "type": "string"
         },
         "duration": {
-          "$ref": "#/definitions/ordersv1Duration"
+          "$ref": "#/definitions/v1OrderDuration"
         },
         "size": {
           "$ref": "#/definitions/OrderReplySize"
@@ -468,7 +458,7 @@
           "$ref": "#/definitions/v1OrderReplyPrice"
         },
         "status": {
-          "$ref": "#/definitions/ordersv1Status"
+          "$ref": "#/definitions/v1OrderStatus"
         },
         "created_at": {
           "type": "string",
@@ -497,6 +487,16 @@
         }
       }
     },
+    "v1OrderStatus": {
+      "type": "string",
+      "enum": [
+        "SUBMITTED",
+        "PRESUBMITED",
+        "CLOSE",
+        "OPEN"
+      ],
+      "default": "SUBMITTED"
+    },
     "v1OrderType": {
       "type": "string",
       "enum": [
@@ -504,8 +504,7 @@
         "MKT",
         "STP",
         "IBALGO",
-        "MIDPRICE",
-        "OALL"
+        "MIDPRICE"
       ],
       "default": "LMT"
     }

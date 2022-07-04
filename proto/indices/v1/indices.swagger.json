@@ -97,7 +97,7 @@
                   "type": "string"
                 },
                 "asset": {
-                  "$ref": "#/definitions/indicesv1Asset"
+                  "$ref": "#/definitions/v1Asset"
                 }
               }
             }
@@ -317,16 +317,6 @@
         }
       }
     },
-    "indicesv1Asset": {
-      "type": "string",
-      "enum": [
-        "INDEX",
-        "BOND",
-        "INDICATOR",
-        "COMMODITY"
-      ],
-      "default": "INDEX"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -338,6 +328,20 @@
           "format": "byte"
         }
       }
+    },
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF"
+      ],
+      "default": "INDEX"
     },
     "v1IndiceDelete": {
       "type": "object",
@@ -364,7 +368,7 @@
           "type": "string"
         },
         "asset": {
-          "$ref": "#/definitions/indicesv1Asset"
+          "$ref": "#/definitions/v1Asset"
         }
       }
     },
@@ -393,7 +397,7 @@
           "type": "string"
         },
         "asset": {
-          "$ref": "#/definitions/indicesv1Asset"
+          "$ref": "#/definitions/v1Asset"
         }
       }
     },
@@ -410,7 +414,7 @@
           "type": "string"
         },
         "asset": {
-          "$ref": "#/definitions/indicesv1Asset"
+          "$ref": "#/definitions/v1Asset"
         },
         "quote": {
           "$ref": "#/definitions/v1QuoteLastReply"

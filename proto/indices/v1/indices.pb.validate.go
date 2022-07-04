@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.Asset(0)
 )
 
 // Validate checks the field values on IndiceRequest with the rules defined in
@@ -337,7 +341,7 @@ func (m *IndiceModifyRequest) validate(all bool) error {
 
 	// no validation rules for Index
 
-	if _, ok := Asset_name[int32(m.GetAsset())]; !ok {
+	if _, ok := screener_v1.Asset_name[int32(m.GetAsset())]; !ok {
 		err := IndiceModifyRequestValidationError{
 			field:  "Asset",
 			reason: "value must be one of the defined enum values",

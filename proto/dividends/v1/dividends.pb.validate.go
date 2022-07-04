@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	quotes_v1 "github.com/arktos-venture/buf/proto/quotes/v1"
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -36,7 +36,7 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 
-	_ = quotes_v1.Interval(0)
+	_ = screener_v1.Interval(0)
 )
 
 // Validate checks the field values on DividendRequest with the rules defined
@@ -61,7 +61,7 @@ func (m *DividendRequest) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := quotes_v1.Interval_name[int32(m.GetInterval())]; !ok {
+	if _, ok := screener_v1.Interval_name[int32(m.GetInterval())]; !ok {
 		err := DividendRequestValidationError{
 			field:  "Interval",
 			reason: "value must be one of the defined enum values",

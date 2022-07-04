@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/stats/v1;stats_v1";
@@ -92,7 +93,7 @@ message Volume {
 // 
 
 message StatRequest {
-	quotes.v1.TSDB tsdb = 1;
+	screener.v1.TSDB tsdb = 1;
 	string ticker = 2;
 	string exchange = 3;
 }
@@ -103,14 +104,14 @@ message StatUpdateRequest {
 		Volume volume = 2;
 	}
 
-	quotes.v1.TSDB tsdb = 1;
+	screener.v1.TSDB tsdb = 1;
 	string ticker = 2;
 	string exchange = 3;
 	Data data = 4;
 }
 
 message StatDeleteRequest {
-	quotes.v1.TSDB tsdb = 1;
+	screener.v1.TSDB tsdb = 1;
 	repeated string tickers = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 	repeated string exchanges = 3 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }

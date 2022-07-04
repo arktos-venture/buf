@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.TSDB(0)
 )
 
 // Validate checks the field values on Parameters with the rules defined in the
@@ -390,6 +394,175 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = StrategyListRequestValidationError{}
+
+// Validate checks the field values on StrategySearchRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategySearchRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategySearchRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategySearchRequestMultiError, or nil if none found.
+func (m *StrategySearchRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategySearchRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := StrategySearchRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := screener_v1.TSDB_name[int32(m.GetTsdb())]; !ok {
+		err := StrategySearchRequestValidationError{
+			field:  "Tsdb",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := StrategySearchRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategySearchRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategySearchRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategySearchRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return StrategySearchRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategySearchRequestMultiError is an error wrapping multiple validation
+// errors returned by StrategySearchRequest.ValidateAll() if the designated
+// constraints aren't met.
+type StrategySearchRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategySearchRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategySearchRequestMultiError) AllErrors() []error { return m }
+
+// StrategySearchRequestValidationError is the validation error returned by
+// StrategySearchRequest.Validate if the designated constraints aren't met.
+type StrategySearchRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategySearchRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategySearchRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategySearchRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategySearchRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategySearchRequestValidationError) ErrorName() string {
+	return "StrategySearchRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategySearchRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategySearchRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategySearchRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategySearchRequestValidationError{}
 
 // Validate checks the field values on StrategyModifyRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1051,6 +1224,156 @@ var _ interface {
 	ErrorName() string
 } = StrategyRepliesValidationError{}
 
+// Validate checks the field values on StrategySearchReplies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategySearchReplies) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategySearchReplies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategySearchRepliesMultiError, or nil if none found.
+func (m *StrategySearchReplies) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategySearchReplies) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	{
+		sorted_keys := make([]string, len(m.GetResults()))
+		i := 0
+		for key := range m.GetResults() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetResults()[key]
+			_ = val
+
+			// no validation rules for Results[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, StrategySearchRepliesValidationError{
+							field:  fmt.Sprintf("Results[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, StrategySearchRepliesValidationError{
+							field:  fmt.Sprintf("Results[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return StrategySearchRepliesValidationError{
+						field:  fmt.Sprintf("Results[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
+	}
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return StrategySearchRepliesMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategySearchRepliesMultiError is an error wrapping multiple validation
+// errors returned by StrategySearchReplies.ValidateAll() if the designated
+// constraints aren't met.
+type StrategySearchRepliesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategySearchRepliesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategySearchRepliesMultiError) AllErrors() []error { return m }
+
+// StrategySearchRepliesValidationError is the validation error returned by
+// StrategySearchReplies.Validate if the designated constraints aren't met.
+type StrategySearchRepliesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategySearchRepliesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategySearchRepliesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategySearchRepliesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategySearchRepliesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategySearchRepliesValidationError) ErrorName() string {
+	return "StrategySearchRepliesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategySearchRepliesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategySearchReplies.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategySearchRepliesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategySearchRepliesValidationError{}
+
 // Validate checks the field values on StrategyDelete with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1316,3 +1639,208 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = StrategyReplies_ResultValidationError{}
+
+// Validate checks the field values on StrategySearchReplies_Result with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StrategySearchReplies_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StrategySearchReplies_Result with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StrategySearchReplies_ResultMultiError, or nil if none found.
+func (m *StrategySearchReplies_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StrategySearchReplies_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetStatusAgo() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("StatusAgo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("StatusAgo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategySearchReplies_ResultValidationError{
+					field:  fmt.Sprintf("StatusAgo[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetCreatedAt() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("CreatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategySearchReplies_ResultValidationError{
+					field:  fmt.Sprintf("CreatedAt[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetUpdatedAt() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("UpdatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategySearchReplies_ResultValidationError{
+						field:  fmt.Sprintf("UpdatedAt[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StrategySearchReplies_ResultValidationError{
+					field:  fmt.Sprintf("UpdatedAt[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return StrategySearchReplies_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// StrategySearchReplies_ResultMultiError is an error wrapping multiple
+// validation errors returned by StrategySearchReplies_Result.ValidateAll() if
+// the designated constraints aren't met.
+type StrategySearchReplies_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StrategySearchReplies_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StrategySearchReplies_ResultMultiError) AllErrors() []error { return m }
+
+// StrategySearchReplies_ResultValidationError is the validation error returned
+// by StrategySearchReplies_Result.Validate if the designated constraints
+// aren't met.
+type StrategySearchReplies_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StrategySearchReplies_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StrategySearchReplies_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StrategySearchReplies_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StrategySearchReplies_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StrategySearchReplies_ResultValidationError) ErrorName() string {
+	return "StrategySearchReplies_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StrategySearchReplies_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStrategySearchReplies_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StrategySearchReplies_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StrategySearchReplies_ResultValidationError{}

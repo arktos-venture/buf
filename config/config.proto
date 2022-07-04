@@ -115,6 +115,12 @@ message Data {
     google.protobuf.Duration timeout = 5;
   }
 
+  message MeiliSearch {
+    string hostname = 1;
+    string apiKey = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+
   message Service {
     string hostname = 1;
     int32 port = 2;
@@ -124,6 +130,7 @@ message Data {
   Postgres postgres = 1;
   Redis redis = 2;
   Keycloak keycloak = 3;
-  map<string, Service> services = 4;
+  MeiliSearch meilisearch = 4;
+  map<string, Service> services = 5;
 }
 

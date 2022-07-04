@@ -75,36 +75,20 @@ service Quotes {
 // Request
 // 
 
-enum TSDB {
-	Companies = 0;
-	Forexes = 1;
-	Indices = 2;
-	Indexes = 3;
-	Accounts = 4;
-}
-
-enum Interval {
-	d = 0;
-	w = 1;
-	m = 2;
-	q = 3;
-	y = 4;
-}
-
 message QuoteRequest {
-  	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-  	Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
 	repeated screener.v1.Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message QuoteLastRequest {
-  	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	string exchange = 2;
 	string ticker = 3;
 }
 
 message QuoteDeleteRequest {
-	TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
+	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
 	repeated string exchanges = 2;
 	repeated string tickers = 3;
 }

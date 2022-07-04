@@ -86,33 +86,6 @@ service Orders {
 // Request
 // 
 
-enum OrderType {
-  LMT = 0;
-  MKT = 1;
-  STP = 2;
-  IBALGO = 3;
-  MIDPRICE = 4;
-  OALL = 5;
-}
-
-enum Duration {
-  DAY = 0;
-  GTC = 1;
-}
-
-enum Action {
-  BUY = 0;
-  SELL = 1;
-  HOLD = 2;
-}
-
-enum Status {
-  SUBMITTED = 0;
-  PRESUBMITED = 1;
-  CLOSE = 2;
-  OPEN = 3;
-}
-
 message OrderRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
@@ -130,10 +103,10 @@ message OrderModifyRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  Action action = 5 [(validate.rules).enum = {defined_only: true}];
-  OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
+  screener.v1.OrderAction action = 5 [(validate.rules).enum = {defined_only: true}];
+  screener.v1.OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
   float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
-  Duration duration = 8 [(validate.rules).enum = {defined_only: true}];
+  screener.v1.OrderDuration duration = 8 [(validate.rules).enum = {defined_only: true}];
   float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
 }
 
@@ -162,13 +135,13 @@ message OrderReply {
 
   string ticker = 1;
   string exchange = 2;
-  Action action = 3;
-  OrderType orderType = 4;
+  screener.v1.OrderAction action = 3;
+  screener.v1.OrderType orderType = 4;
   string routing = 5;
-  Duration duration = 6;
+  screener.v1.OrderDuration duration = 6;
   Size size = 7;
   Price price = 8;
-  Status status = 9;
+  screener.v1.OrderStatus status = 9;
   google.protobuf.Timestamp created_at = 10;
   google.protobuf.Timestamp updated_at = 11;
 }
