@@ -621,6 +621,12 @@
         "stats": {
           "$ref": "#/definitions/v1CompanyReplyStats"
         },
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1StrategySearchRepliesResult"
+          }
+        },
         "employees": {
           "type": "integer",
           "format": "int32"
@@ -666,6 +672,26 @@
         }
       }
     },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
     "v1QuoteLastReply": {
       "type": "object",
       "properties": {
@@ -692,6 +718,51 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1StrategySearchRepliesResult": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Interval"
+          }
+        },
+        "status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OrderAction"
+          }
+        },
+        "breakout": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "status_ago": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "updated_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       }
     }
