@@ -2,61 +2,71 @@ syntax = "proto3";
 
 package screener.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
-import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/screener/v1;screener_v1";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.screener.v1";
 option java_outer_classname = "APIScreenerProtoV1";
-option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-	info: {
-        title: "Screener APIs";
-		description: "Screener APIs";
-        version: "1.0";
-		contact: {
-			name: "Arktos Venture project";
-			url: "https://github.com/arktos-venture/buf";
-			email: "oss@arktos-consulting.cloud";
-		};
-  	};
-	schemes: [HTTP, HTTPS];
-	consumes: "application/json";
-	produces: "application/json";
-	security_definitions: {
-	  	security: {
-			key: "bearer"
-			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
-			}
-	  	}
-	}
-	security: {
-	  	security_requirement: {
-			key: "bearer"
-	  	}
-	}
-};
 
-service Screener {
-	// Public API
-	rpc Search (ScreenerRequest) returns (ScreenerReplies)  {
-		option (google.api.http) = {
-		  	post: "/v1/screener"
-			body: "*"
-		};
-	}
+
+// 
+// Transverse
+// 
+
+enum TSDB {
+	Companies = 0;
+	Forexes = 1;
+	Indices = 2;
+	Indexes = 3;
+	Accounts = 4;
 }
 
+enum Asset {
+	INDEX = 0;
+	BOND = 1;
+	INDICATOR = 2;
+	COMMODITY = 3;
+	STOCK = 4;
+	OPTION = 5;
+	CASH = 6;
+	ETF = 7;
+}
 
-// 
-// Request
-// 
+enum Interval {
+	d = 0;
+	w = 1;
+	m = 2;
+	q = 3;
+	y = 4;
+}
+
+enum OrderType {
+	LMT = 0;
+	MKT = 1;
+	STP = 2;
+	IBALGO = 3;
+	MIDPRICE = 4;
+}
+  
+enum OrderDuration {
+	DAY = 0;
+	GTC = 1;
+}
+  
+enum OrderAction {
+	BUY = 0;
+	SELL = 1;
+	HOLD = 2;
+}
+  
+enum OrderStatus {
+	SUBMITTED = 0;
+	PRESUBMITED = 1;
+	CLOSE = 2;
+	OPEN = 3;
+}
 
 enum Operator {
 	Equal = 0;
@@ -102,6 +112,21 @@ enum Argument {
 	Type = 28;
 	Status = 29;
 }
+
+enum CountryIndicator {
+	PMIM = 0;
+	PMIS = 1;
+	CC = 2;
+	TC = 3;
+	IPC = 4;
+	SPB = 5;
+	IPP = 6;
+}
+
+
+// 
+// Request
+// 
 
 message Filter {
 	Operator operator = 1 [(validate.rules).enum = {defined_only: true}];
