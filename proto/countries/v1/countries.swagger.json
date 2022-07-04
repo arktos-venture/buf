@@ -228,19 +228,6 @@
         }
       }
     },
-    "countriesv1Indicator": {
-      "type": "string",
-      "enum": [
-        "PMIM",
-        "PMIS",
-        "CC",
-        "TC",
-        "IPC",
-        "SPB",
-        "IPP"
-      ],
-      "default": "PMIM"
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -259,16 +246,6 @@
         }
       }
     },
-    "indicesv1Asset": {
-      "type": "string",
-      "enum": [
-        "INDEX",
-        "BOND",
-        "INDICATOR",
-        "COMMODITY"
-      ],
-      "default": "INDEX"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -281,11 +258,38 @@
         }
       }
     },
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF"
+      ],
+      "default": "INDEX"
+    },
+    "v1CountryIndicator": {
+      "type": "string",
+      "enum": [
+        "PMIM",
+        "PMIS",
+        "CC",
+        "TC",
+        "IPC",
+        "SPB",
+        "IPP"
+      ],
+      "default": "PMIM"
+    },
     "v1CountryIndicatorReply": {
       "type": "object",
       "properties": {
         "indicator": {
-          "$ref": "#/definitions/countriesv1Indicator"
+          "$ref": "#/definitions/v1CountryIndicator"
         },
         "country": {
           "type": "string"
@@ -440,7 +444,7 @@
           "type": "string"
         },
         "asset": {
-          "$ref": "#/definitions/indicesv1Asset"
+          "$ref": "#/definitions/v1Asset"
         }
       }
     }

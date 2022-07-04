@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	screener_v1 "github.com/arktos-venture/buf/proto/screener/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = screener_v1.CountryIndicator(0)
 )
 
 // Validate checks the field values on CountryRequest with the rules defined in
@@ -337,7 +341,7 @@ func (m *CountryIndicatorRequest) validate(all bool) error {
 
 	// no validation rules for Country
 
-	if _, ok := Indicator_name[int32(m.GetIndicator())]; !ok {
+	if _, ok := screener_v1.CountryIndicator_name[int32(m.GetIndicator())]; !ok {
 		err := CountryIndicatorRequestValidationError{
 			field:  "Indicator",
 			reason: "value must be one of the defined enum values",
