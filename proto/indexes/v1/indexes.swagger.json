@@ -46,24 +46,16 @@
         },
         "parameters": [
           {
-            "name": "currency",
+            "name": "account",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "page.number",
+            "name": "currency",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.limit",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
+            "type": "string"
           }
         ],
         "tags": [
@@ -190,6 +182,12 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -199,86 +197,6 @@
     }
   },
   "definitions": {
-    "ScreenerReplyActivity": {
-      "type": "object",
-      "properties": {
-        "economicSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "businessSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industryGroup": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industry": {
-          "type": "string",
-          "format": "int64"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "ScreenerReplyDividends": {
-      "type": "object",
-      "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
-        },
-        "annual": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyVolumeStats": {
-      "type": "object",
-      "properties": {
-        "avg": {
-          "type": "number",
-          "format": "float"
-        },
-        "variation": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -309,14 +227,49 @@
         }
       }
     },
+    "v1CompanyRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1IndexCreateRequest": {
       "type": "object",
       "properties": {
+        "account": {
+          "type": "string"
+        },
         "ticker": {
           "type": "string"
         },
         "request": {
-          "type": "string"
+          "$ref": "#/definitions/v1IndexSearch"
         },
         "public": {
           "type": "boolean"
@@ -344,7 +297,7 @@
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1ScreenerReply"
+            "$ref": "#/definitions/v1CompanyRepliesResult"
           }
         },
         "created_at": {
@@ -354,6 +307,27 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1IndexSearch": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -377,97 +351,6 @@
       "properties": {
         "ticker": {
           "type": "string"
-        }
-      }
-    },
-    "v1IndexSearchRequestPage": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "v1ScreenerReply": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "adr": {
-          "type": "boolean"
-        },
-        "activity": {
-          "$ref": "#/definitions/ScreenerReplyActivity"
-        },
-        "shares": {
-          "$ref": "#/definitions/v1ScreenerReplyShares"
-        },
-        "pricing": {
-          "$ref": "#/definitions/ScreenerReplyPricing"
-        },
-        "dividends": {
-          "$ref": "#/definitions/ScreenerReplyDividends"
-        },
-        "volume": {
-          "$ref": "#/definitions/v1ScreenerReplyVolume"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "stats": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ScreenerReplyVolumeStats"
-          }
         }
       }
     }
