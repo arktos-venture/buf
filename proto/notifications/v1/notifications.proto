@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/notifications/v1;notifications_v1";
+option go_package = "github.com/arktos-venture/buf/proto/notifications/v1;v1Notifications";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.notifications.v1";
 option java_outer_classname = "APINotificationsProtoV1";
@@ -96,11 +96,6 @@ enum Subject {
 	SELL_ORDER_SENT = 9;
 }
 
-message Page {
-	int32 number = 1 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-	int32 limit = 2 [(validate.rules).int32 = {gt: 0, lte: 150}];
-}
-
 message NotificationCreateRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
@@ -113,7 +108,6 @@ message NotificationSearchRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
 	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
-	Page page = 4 [(validate.rules).message.required = true];
 }
 
 message NotificationDeleteRequest {
