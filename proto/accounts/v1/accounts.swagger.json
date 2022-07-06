@@ -27,64 +27,6 @@
   ],
   "paths": {
     "/v1/account/{account}": {
-      "get": {
-        "summary": "Public API\nGet Account properties",
-        "operationId": "Accounts_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AccountReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Accounts"
-        ]
-      },
-      "delete": {
-        "summary": "Public API\nDelete existing Account",
-        "operationId": "Accounts_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AccountDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Accounts"
-        ]
-      },
       "put": {
         "summary": "Public API\nUpdate properties of Account",
         "operationId": "Accounts_Update",
@@ -166,68 +108,6 @@
     }
   },
   "definitions": {
-    "AccountReplyPositions": {
-      "type": "object",
-      "properties": {
-        "stocks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1PositionReply"
-          }
-        },
-        "options": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1PositionReply"
-          }
-        },
-        "cash": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1PositionReply"
-          }
-        }
-      }
-    },
-    "OrderReplySize": {
-      "type": "object",
-      "properties": {
-        "ask": {
-          "type": "number",
-          "format": "float"
-        },
-        "buy": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "PositionReplyCost": {
-      "type": "object",
-      "properties": {
-        "unit": {
-          "type": "number",
-          "format": "float"
-        },
-        "total": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "PositionReplyPerformance": {
-      "type": "object",
-      "properties": {
-        "percent": {
-          "type": "number",
-          "format": "float"
-        },
-        "money": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -258,15 +138,6 @@
         }
       }
     },
-    "v1AccountDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "v1AccountModifyRequest": {
       "type": "object",
       "properties": {
@@ -293,130 +164,46 @@
         "currency": {
           "type": "string"
         },
-        "orders": {
+        "portfolios": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1OrderReply"
+            "$ref": "#/definitions/v1PortfolioRepliesResult"
           }
-        },
-        "positions": {
-          "$ref": "#/definitions/AccountReplyPositions"
         }
       }
     },
-    "v1OrderAction": {
+    "v1Asset": {
       "type": "string",
       "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF"
       ],
-      "default": "BUY"
+      "default": "INDEX"
     },
-    "v1OrderDuration": {
-      "type": "string",
-      "enum": [
-        "DAY",
-        "GTC"
-      ],
-      "default": "DAY"
-    },
-    "v1OrderReply": {
+    "v1PortfolioRepliesResult": {
       "type": "object",
       "properties": {
-        "ticker": {
+        "id": {
           "type": "string"
         },
-        "exchange": {
+        "name": {
           "type": "string"
         },
-        "action": {
-          "$ref": "#/definitions/v1OrderAction"
-        },
-        "orderType": {
-          "$ref": "#/definitions/v1OrderType"
-        },
-        "routing": {
-          "type": "string"
-        },
-        "duration": {
-          "$ref": "#/definitions/v1OrderDuration"
-        },
-        "size": {
-          "$ref": "#/definitions/OrderReplySize"
-        },
-        "price": {
-          "$ref": "#/definitions/v1OrderReplyPrice"
-        },
-        "status": {
-          "$ref": "#/definitions/v1OrderStatus"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1OrderReplyPrice": {
-      "type": "object",
-      "properties": {
-        "ask": {
+        "cash_allocation_max": {
           "type": "number",
           "format": "float"
         },
-        "buy": {
-          "type": "number",
-          "format": "float"
-        },
-        "commission": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "v1OrderStatus": {
-      "type": "string",
-      "enum": [
-        "SUBMITTED",
-        "PRESUBMITED",
-        "CLOSE",
-        "OPEN"
-      ],
-      "default": "SUBMITTED"
-    },
-    "v1OrderType": {
-      "type": "string",
-      "enum": [
-        "LMT",
-        "MKT",
-        "STP",
-        "IBALGO",
-        "MIDPRICE"
-      ],
-      "default": "LMT"
-    },
-    "v1PositionReply": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "size": {
-          "type": "number",
-          "format": "float"
-        },
-        "cost": {
-          "$ref": "#/definitions/PositionReplyCost"
-        },
-        "performance": {
-          "$ref": "#/definitions/PositionReplyPerformance"
+        "allowed_assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Asset"
+          }
         },
         "created_at": {
           "type": "string",
