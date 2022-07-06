@@ -26,9 +26,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/order/{account}": {
+    "/v1/orders/{account}/{portfolioUUID}": {
       "post": {
-        "summary": "Public API\nCreate Orders",
+        "summary": "Public API: Create Order",
         "operationId": "Orders_Create",
         "responses": {
           "200": {
@@ -52,63 +52,7 @@
             "type": "string"
           },
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "ticker": {
-                  "type": "string"
-                },
-                "exchange": {
-                  "type": "string"
-                },
-                "action": {
-                  "$ref": "#/definitions/v1OrderAction"
-                },
-                "orderType": {
-                  "$ref": "#/definitions/v1OrderType"
-                },
-                "size": {
-                  "type": "number",
-                  "format": "float"
-                },
-                "duration": {
-                  "$ref": "#/definitions/v1OrderDuration"
-                },
-                "price": {
-                  "type": "number",
-                  "format": "float"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Orders"
-        ]
-      },
-      "put": {
-        "summary": "Public API\nUpdate existing Orders",
-        "operationId": "Orders_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1OrderReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
+            "name": "portfolioUUID",
             "in": "path",
             "required": true,
             "type": "string"
@@ -152,60 +96,9 @@
         ]
       }
     },
-    "/v1/orders/{account}": {
-      "delete": {
-        "summary": "Private API\nDelete/cancel existing Orders",
-        "operationId": "Orders_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1OrderDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "exchanges",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Orders"
-        ]
-      }
-    },
-    "/v1/orders/{account}/search": {
+    "/v1/orders/{account}/{portfolioUUID}/search": {
       "post": {
-        "summary": "Public API\nSearch Orders open or executed",
+        "summary": "Public API: Search Orders",
         "operationId": "Orders_Search",
         "responses": {
           "200": {
@@ -229,24 +122,236 @@
             "type": "string"
           },
           {
+            "name": "portfolioUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "filters": {
+                "assets": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/v1Filter"
+                    "$ref": "#/definitions/v1Asset"
                   }
                 },
                 "sort": {
                   "$ref": "#/definitions/ScreenerRequestSort"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v1/orders/{account}/{portfolioUUID}/{orderUUID}": {
+      "get": {
+        "summary": "Public API: Status Order",
+        "operationId": "Orders_Status",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OrderReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      },
+      "put": {
+        "summary": "Public API: Update existing Orders",
+        "operationId": "Orders_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OrderReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "$ref": "#/definitions/v1OrderAction"
                 },
-                "limit": {
-                  "type": "integer",
-                  "format": "int32"
+                "orderType": {
+                  "$ref": "#/definitions/v1OrderType"
+                },
+                "size": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "duration": {
+                  "$ref": "#/definitions/v1OrderDuration"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v1/orders/{account}/{portfolioUUID}/{orderUUID}/cancel": {
+      "delete": {
+        "summary": "Private API: Cancel existing Orders",
+        "operationId": "Orders_Cancel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OrderCancel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v1/positions/{account}/{portfolioUUID}": {
+      "post": {
+        "summary": "Public API : Search Positions opened",
+        "operationId": "Orders_Positions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PositionReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "assets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1Asset"
+                  }
+                },
+                "sort": {
+                  "$ref": "#/definitions/ScreenerRequestSort"
                 }
               }
             }
@@ -267,6 +372,32 @@
           "format": "float"
         },
         "buy": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ResultCost": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "number",
+          "format": "float"
+        },
+        "total": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ResultPerformance": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "number",
+          "format": "float"
+        },
+        "money": {
           "type": "number",
           "format": "float"
         }
@@ -357,37 +488,19 @@
       ],
       "default": "Ticker"
     },
-    "v1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/v1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "v1Operator": {
+    "v1Asset": {
       "type": "string",
       "enum": [
-        "Equal",
-        "NotEqual",
-        "Greater",
-        "GreaterEqual",
-        "Less",
-        "LessEqual",
-        "In",
-        "NotIn",
-        "Between"
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF"
       ],
-      "default": "Equal"
+      "default": "INDEX"
     },
     "v1OrderAction": {
       "type": "string",
@@ -398,12 +511,11 @@
       ],
       "default": "BUY"
     },
-    "v1OrderDelete": {
+    "v1OrderCancel": {
       "type": "object",
       "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
+        "id": {
+          "type": "string"
         }
       }
     },
@@ -433,6 +545,9 @@
     "v1OrderReply": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "ticker": {
           "type": "string"
         },
@@ -507,6 +622,50 @@
         "MIDPRICE"
       ],
       "default": "LMT"
+    },
+    "v1PositionReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1PositionRepliesResult"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PositionRepliesResult": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "cost": {
+          "$ref": "#/definitions/ResultCost"
+        },
+        "performance": {
+          "$ref": "#/definitions/ResultPerformance"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     }
   },
   "securityDefinitions": {
