@@ -8,7 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/indices/v1/indices.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;exchanges_v1";
+option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;v1Exchanges";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.exchanges.v1";
 option java_outer_classname = "APIExchangesProtoV1";
@@ -46,14 +46,6 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Exchanges {
 	// Public API
-	// Get Exchange if is Open
-	rpc IsOpen (ExchangeIsOpenRequest) returns (ExchangeIsOpenReply) {
-		option (google.api.http) = {
-            get: "/v1/exchange/{ticker}/isopen"
-        };
-	}
-
-	// Public API
 	// Get Exchange properties
   	rpc Get (ExchangeRequest) returns (ExchangeReply)  {
         option (google.api.http) = {
@@ -84,22 +76,13 @@ service Exchanges {
 // 
 
 message ExchangeRequest {
-	message Request {
-		bool companies = 1;
-		bool holidays = 2;
-	}
-
-	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
-	Request request = 2  [(validate.rules).message.required = true];
-}
-
-message ExchangeIsOpenRequest {
 	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
 }
 
 message ExchangeSearchRequest {
 	string country = 1 [(validate.rules).string.len = 2];
 	string currency = 2 [(validate.rules).string.len = 3];
+	bool open = 3;
 }
 
 message ExchangeDeleteRequest {
@@ -119,14 +102,6 @@ message ExchangeReply {
 		bool official = 4;
 	}
   
-	message Company {
-		int64 id = 1;
-		string ticker = 2;
-		string name = 3;
-		string isin = 4;
-		int64 activity = 5;
-	}
-  
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
@@ -138,18 +113,9 @@ message ExchangeReply {
 	string timezone = 9;
 	repeated Holiday holidays = 10;
 	string tradingHours = 11;
-	repeated Company companies = 12;
+	bool open = 12;
 	google.protobuf.Timestamp created_at = 13;
 	google.protobuf.Timestamp updated_at = 14;
-}
-  
-message ExchangeIsOpenReply {
-	string ticker = 1;
-	string name = 2;
-	string routing = 3;
-	string timezone = 4;
-	string tradingHours = 5;
-	bool open = 6;
 }
 
 message ExchangeReplies {
@@ -157,6 +123,7 @@ message ExchangeReplies {
 		string ticker = 1;
 		string routing = 2;
 		string name = 3;
+		bool open = 4;
 	}
 
 	repeated Result results = 1;
