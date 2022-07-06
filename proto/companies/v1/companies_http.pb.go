@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package companies_v1
+package v1Companies
 
 import (
 	context "context"
@@ -27,14 +27,14 @@ type CompaniesHTTPServer interface {
 
 func RegisterCompaniesHTTPServer(s *http.Server, srv CompaniesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get8_HTTP_Handler(srv))
+	r.GET("/v1/company/{exchange}/{ticker}", _Companies_Get7_HTTP_Handler(srv))
 	r.GET("/v1/companies/{exchange}", _Companies_List4_HTTP_Handler(srv))
-	r.POST("/v1/companies", _Companies_Create7_HTTP_Handler(srv))
-	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update5_HTTP_Handler(srv))
-	r.DELETE("/v1/companies", _Companies_Delete13_HTTP_Handler(srv))
+	r.POST("/v1/companies", _Companies_Create8_HTTP_Handler(srv))
+	r.PUT("/v1/company/{exchange}/{ticker}", _Companies_Update6_HTTP_Handler(srv))
+	r.DELETE("/v1/companies", _Companies_Delete11_HTTP_Handler(srv))
 }
 
-func _Companies_Get8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Get7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,7 +78,7 @@ func _Companies_List4_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Companies_Create7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Create8_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -97,7 +97,7 @@ func _Companies_Create7_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Companies_Update5_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Update6_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -119,7 +119,7 @@ func _Companies_Update5_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Companies_Delete13_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
+func _Companies_Delete11_HTTP_Handler(srv CompaniesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CompanyDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
