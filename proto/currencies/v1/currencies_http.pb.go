@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package currencies_v1
+package v1Currencies
 
 import (
 	context "context"

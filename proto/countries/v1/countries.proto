@@ -10,7 +10,7 @@ import "proto/exchanges/v1/exchanges.proto";
 import "proto/indices/v1/indices.proto";
 import "proto/screener/v1/screener.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/countries/v1;countries_v1";
+option go_package = "github.com/arktos-venture/buf/proto/countries/v1;v1Countries";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.countries.v1";
 option java_outer_classname = "CountriesProtoV1";

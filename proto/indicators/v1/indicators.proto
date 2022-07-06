@@ -8,7 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/quotes/v1/quotes.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;indicators_v1";
+option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;v1Indicators";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.indicators.v1";
 option java_outer_classname = "APIIndicatorsProtoV1";

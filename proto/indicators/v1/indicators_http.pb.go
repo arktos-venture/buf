@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package indicators_v1
+package v1Indicators
 
 import (
 	context "context"

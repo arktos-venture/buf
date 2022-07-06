@@ -3,7 +3,7 @@ syntax = "proto3";
 package currencies.v1;
 import "errors/errors.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/currencies/v1;currencies_v1";
+option go_package = "github.com/arktos-venture/buf/proto/currencies/v1;v1Currencies";
 option java_multiple_files = true;
 option java_package = "currencies.v1.errors";
 option objc_class_prefix = "APICurrenciesErrors";
