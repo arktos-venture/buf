@@ -219,86 +219,6 @@
     }
   },
   "definitions": {
-    "ScreenerReplyActivity": {
-      "type": "object",
-      "properties": {
-        "economicSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "businessSector": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industryGroup": {
-          "type": "string",
-          "format": "int64"
-        },
-        "industry": {
-          "type": "string",
-          "format": "int64"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "ScreenerReplyDividends": {
-      "type": "object",
-      "properties": {
-        "yield": {
-          "type": "number",
-          "format": "float"
-        },
-        "annual": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyPricing": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "minYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "maxYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "returnYear": {
-          "type": "number",
-          "format": "float"
-        },
-        "marketcap": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ScreenerReplyVolumeStats": {
-      "type": "object",
-      "properties": {
-        "avg": {
-          "type": "number",
-          "format": "float"
-        },
-        "variation": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -342,6 +262,38 @@
         "ETF"
       ],
       "default": "INDEX"
+    },
+    "v1CompanyRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "v1IndiceDelete": {
       "type": "object",
@@ -422,7 +374,7 @@
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1ScreenerReply"
+            "$ref": "#/definitions/v1CompanyRepliesResult"
           }
         },
         "created_at": {
@@ -461,84 +413,6 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1ScreenerReply": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "adr": {
-          "type": "boolean"
-        },
-        "activity": {
-          "$ref": "#/definitions/ScreenerReplyActivity"
-        },
-        "shares": {
-          "$ref": "#/definitions/v1ScreenerReplyShares"
-        },
-        "pricing": {
-          "$ref": "#/definitions/ScreenerReplyPricing"
-        },
-        "dividends": {
-          "$ref": "#/definitions/ScreenerReplyDividends"
-        },
-        "volume": {
-          "$ref": "#/definitions/v1ScreenerReplyVolume"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1ScreenerReplyShares": {
-      "type": "object",
-      "properties": {
-        "outstanding": {
-          "type": "string",
-          "format": "int64"
-        },
-        "float": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ScreenerReplyVolume": {
-      "type": "object",
-      "properties": {
-        "last": {
-          "type": "number",
-          "format": "float"
-        },
-        "stats": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ScreenerReplyVolumeStats"
-          }
         }
       }
     }

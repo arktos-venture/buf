@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package screener.v1;
 
-import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/screener/v1;v1Screener";
@@ -154,68 +153,4 @@ message ScreenerRequest {
 	repeated Filter filters = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 	Sort sort = 2 [(validate.rules).message.required = true];
   	int32 limit = 3 [(validate.rules).int32 = {gt: 0, lte: 10000}];
-}
-
-
-// 
-// Reply
-// 
-
-message ScreenerReply {
-	message Activity {
-		int64 economicSector = 1; 
-		int64 businessSector = 2;
-		int64 industryGroup = 3;
-		int64 industry = 4;
-		int64 activity = 5;
-	}
-
-	message Shares {
-		int64 outstanding = 1;
-		int64 float = 2;
-	}
-
-	message Pricing {
-		float last = 1;
-		float minYear = 2;
-		float maxYear = 3;
-		float returnYear = 4;
-		int64 marketcap = 5;
-		float beta5y = 6;
-	}
-
-	message Volume {
-		message Stats {
-			float avg = 1;
-			float variation = 2;
-		}
-
-		float last = 1;
-		map<int32, Stats> stats = 2;
-	}
-
-	message Dividends {
-		float yield = 1;
-		float annual = 2;
-	}
-
-	int64 id = 1;
-	string ticker = 2;
-	string ticker_alternative = 3;
-	string name = 4;
-	string isin = 5;
-	string exchange = 6;
-	bool adr = 7;
-	Activity activity = 8;
-	Shares shares = 9;
-	Pricing pricing = 10;
-	Dividends dividends = 11;
-	Volume volume = 12;
-	google.protobuf.Timestamp created_at = 13;
-	google.protobuf.Timestamp updated_at = 14; 
-}
-
-message ScreenerReplies {
-	repeated ScreenerReply results = 1;
-	int64 total = 2;
 }
