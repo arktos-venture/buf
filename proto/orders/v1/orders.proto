@@ -69,7 +69,7 @@ service Orders {
   }
 
 	// Public API: Create Order
-  rpc Create (OrderCreateRequest) returns (OrderReply)  {
+  rpc Create (OrderCreateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
       post: "/v1/orders/{account}/{portfolioUUID}"
       body: "*"
@@ -77,9 +77,9 @@ service Orders {
   }
 
 	// Public API: Update existing Orders
-  rpc Update (OrderUpdateRequest) returns (OrderReply)  {
+  rpc Update (OrderUpdateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
-      put: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
+      patch: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
       body: "*"
     };
   }
@@ -200,6 +200,18 @@ message OrderReply {
   screener.v1.OrderStatus status = 10;
   google.protobuf.Timestamp created_at = 11;
   google.protobuf.Timestamp updated_at = 12;
+}
+
+message OrderModifyReply {  
+  string ticker = 1;
+  string exchange = 2;
+  screener.v1.OrderAction action = 3;
+  screener.v1.OrderType orderType = 4;
+  string routing = 5;
+  screener.v1.OrderDuration duration = 6;
+  float size = 7;
+  float price = 8;
+  screener.v1.OrderStatus status = 9;
 }
 
 message OrderReplies {

@@ -34,7 +34,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1OrderReply"
+              "$ref": "#/definitions/v1OrderModifyReply"
             }
           },
           "default": {
@@ -194,14 +194,14 @@
           "Orders"
         ]
       },
-      "put": {
+      "patch": {
         "summary": "Public API: Update existing Orders",
         "operationId": "Orders_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1OrderReply"
+              "$ref": "#/definitions/v1OrderModifyReply"
             }
           },
           "default": {
@@ -526,6 +526,40 @@
         "GTC"
       ],
       "default": "DAY"
+    },
+    "v1OrderModifyReply": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "orderType": {
+          "$ref": "#/definitions/v1OrderType"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "duration": {
+          "$ref": "#/definitions/v1OrderDuration"
+        },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        },
+        "status": {
+          "$ref": "#/definitions/v1OrderStatus"
+        }
+      }
     },
     "v1OrderReplies": {
       "type": "object",

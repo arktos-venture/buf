@@ -1453,6 +1453,124 @@ var _ interface {
 	ErrorName() string
 } = OrderReplyValidationError{}
 
+// Validate checks the field values on OrderModifyReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *OrderModifyReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderModifyReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OrderModifyReplyMultiError, or nil if none found.
+func (m *OrderModifyReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderModifyReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	// no validation rules for Exchange
+
+	// no validation rules for Action
+
+	// no validation rules for OrderType
+
+	// no validation rules for Routing
+
+	// no validation rules for Duration
+
+	// no validation rules for Size
+
+	// no validation rules for Price
+
+	// no validation rules for Status
+
+	if len(errors) > 0 {
+		return OrderModifyReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderModifyReplyMultiError is an error wrapping multiple validation errors
+// returned by OrderModifyReply.ValidateAll() if the designated constraints
+// aren't met.
+type OrderModifyReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderModifyReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderModifyReplyMultiError) AllErrors() []error { return m }
+
+// OrderModifyReplyValidationError is the validation error returned by
+// OrderModifyReply.Validate if the designated constraints aren't met.
+type OrderModifyReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderModifyReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderModifyReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderModifyReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderModifyReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderModifyReplyValidationError) ErrorName() string { return "OrderModifyReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OrderModifyReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderModifyReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderModifyReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderModifyReplyValidationError{}
+
 // Validate checks the field values on OrderReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

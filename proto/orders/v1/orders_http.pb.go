@@ -19,11 +19,11 @@ const _ = http.SupportPackageIsVersion1
 
 type OrdersHTTPServer interface {
 	Cancel(context.Context, *OrderCancelRequest) (*OrderCancel, error)
-	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
+	Create(context.Context, *OrderCreateRequest) (*OrderModifyReply, error)
 	Positions(context.Context, *PositionRequest) (*PositionReplies, error)
 	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
 	Status(context.Context, *OrderStatusRequest) (*OrderReply, error)
-	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
+	Update(context.Context, *OrderUpdateRequest) (*OrderModifyReply, error)
 }
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
@@ -32,7 +32,7 @@ func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r.GET("/v1/orders/{account}/{portfolioUUID}/{orderUUID}", _Orders_Status0_HTTP_Handler(srv))
 	r.POST("/v1/orders/{account}/{portfolioUUID}/search", _Orders_Search4_HTTP_Handler(srv))
 	r.POST("/v1/orders/{account}/{portfolioUUID}", _Orders_Create3_HTTP_Handler(srv))
-	r.PUT("/v1/orders/{account}/{portfolioUUID}/{orderUUID}", _Orders_Update2_HTTP_Handler(srv))
+	r.PATCH("/v1/orders/{account}/{portfolioUUID}/{orderUUID}", _Orders_Update2_HTTP_Handler(srv))
 	r.DELETE("/v1/orders/{account}/{portfolioUUID}/{orderUUID}/cancel", _Orders_Cancel0_HTTP_Handler(srv))
 }
 
@@ -119,7 +119,7 @@ func _Orders_Create3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 		if err != nil {
 			return err
 		}
-		reply := out.(*OrderReply)
+		reply := out.(*OrderModifyReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -141,7 +141,7 @@ func _Orders_Update2_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 		if err != nil {
 			return err
 		}
-		reply := out.(*OrderReply)
+		reply := out.(*OrderModifyReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -170,11 +170,11 @@ func _Orders_Cancel0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 
 type OrdersHTTPClient interface {
 	Cancel(ctx context.Context, req *OrderCancelRequest, opts ...http.CallOption) (rsp *OrderCancel, err error)
-	Create(ctx context.Context, req *OrderCreateRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
+	Create(ctx context.Context, req *OrderCreateRequest, opts ...http.CallOption) (rsp *OrderModifyReply, err error)
 	Positions(ctx context.Context, req *PositionRequest, opts ...http.CallOption) (rsp *PositionReplies, err error)
 	Search(ctx context.Context, req *OrderSearchRequest, opts ...http.CallOption) (rsp *OrderReplies, err error)
 	Status(ctx context.Context, req *OrderStatusRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
-	Update(ctx context.Context, req *OrderUpdateRequest, opts ...http.CallOption) (rsp *OrderReply, err error)
+	Update(ctx context.Context, req *OrderUpdateRequest, opts ...http.CallOption) (rsp *OrderModifyReply, err error)
 }
 
 type OrdersHTTPClientImpl struct {
@@ -198,8 +198,8 @@ func (c *OrdersHTTPClientImpl) Cancel(ctx context.Context, in *OrderCancelReques
 	return &out, err
 }
 
-func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderReply, error) {
-	var out OrderReply
+func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateRequest, opts ...http.CallOption) (*OrderModifyReply, error) {
+	var out OrderModifyReply
 	pattern := "/v1/orders/{account}/{portfolioUUID}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Create"))
@@ -250,13 +250,13 @@ func (c *OrdersHTTPClientImpl) Status(ctx context.Context, in *OrderStatusReques
 	return &out, err
 }
 
-func (c *OrdersHTTPClientImpl) Update(ctx context.Context, in *OrderUpdateRequest, opts ...http.CallOption) (*OrderReply, error) {
-	var out OrderReply
+func (c *OrdersHTTPClientImpl) Update(ctx context.Context, in *OrderUpdateRequest, opts ...http.CallOption) (*OrderModifyReply, error) {
+	var out OrderModifyReply
 	pattern := "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Update"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PATCH", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -25,9 +25,9 @@ type OrdersClient interface {
 	// Public API: Search Orders
 	Search(ctx context.Context, in *OrderSearchRequest, opts ...grpc.CallOption) (*OrderReplies, error)
 	// Public API: Create Order
-	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderModifyReply, error)
 	// Public API: Update existing Orders
-	Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error)
+	Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderModifyReply, error)
 	// Private API: Cancel existing Orders
 	Cancel(ctx context.Context, in *OrderCancelRequest, opts ...grpc.CallOption) (*OrderCancel, error)
 }
@@ -67,8 +67,8 @@ func (c *ordersClient) Search(ctx context.Context, in *OrderSearchRequest, opts 
 	return out, nil
 }
 
-func (c *ordersClient) Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderReply, error) {
-	out := new(OrderReply)
+func (c *ordersClient) Create(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderModifyReply, error) {
+	out := new(OrderModifyReply)
 	err := c.cc.Invoke(ctx, "/orders.v1.Orders/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func (c *ordersClient) Create(ctx context.Context, in *OrderCreateRequest, opts 
 	return out, nil
 }
 
-func (c *ordersClient) Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderReply, error) {
-	out := new(OrderReply)
+func (c *ordersClient) Update(ctx context.Context, in *OrderUpdateRequest, opts ...grpc.CallOption) (*OrderModifyReply, error) {
+	out := new(OrderModifyReply)
 	err := c.cc.Invoke(ctx, "/orders.v1.Orders/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -105,9 +105,9 @@ type OrdersServer interface {
 	// Public API: Search Orders
 	Search(context.Context, *OrderSearchRequest) (*OrderReplies, error)
 	// Public API: Create Order
-	Create(context.Context, *OrderCreateRequest) (*OrderReply, error)
+	Create(context.Context, *OrderCreateRequest) (*OrderModifyReply, error)
 	// Public API: Update existing Orders
-	Update(context.Context, *OrderUpdateRequest) (*OrderReply, error)
+	Update(context.Context, *OrderUpdateRequest) (*OrderModifyReply, error)
 	// Private API: Cancel existing Orders
 	Cancel(context.Context, *OrderCancelRequest) (*OrderCancel, error)
 	mustEmbedUnimplementedOrdersServer()
@@ -126,10 +126,10 @@ func (UnimplementedOrdersServer) Status(context.Context, *OrderStatusRequest) (*
 func (UnimplementedOrdersServer) Search(context.Context, *OrderSearchRequest) (*OrderReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedOrdersServer) Create(context.Context, *OrderCreateRequest) (*OrderReply, error) {
+func (UnimplementedOrdersServer) Create(context.Context, *OrderCreateRequest) (*OrderModifyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedOrdersServer) Update(context.Context, *OrderUpdateRequest) (*OrderReply, error) {
+func (UnimplementedOrdersServer) Update(context.Context, *OrderUpdateRequest) (*OrderModifyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedOrdersServer) Cancel(context.Context, *OrderCancelRequest) (*OrderCancel, error) {
