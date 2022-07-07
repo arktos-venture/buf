@@ -9,6 +9,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 import "proto/screener/v1/screener.proto";
 import "proto/orders/v1/orders.proto";
+import "proto/exchanges/v1/exchanges.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/portfolios/v1;v1Portfolios";
 option java_multiple_files = true;
@@ -50,7 +51,7 @@ service Portfolios {
 	// Public API: Status Portfolio
   rpc Status (PortfolioStatusRequest) returns (PortfolioReply)  {
     option (google.api.http) = {
-      get: "/v1/portfolios/{account}/{portfolioUUID}"
+      get: "/v1/portfolios/{account}/{currency}"
     };
   }
 
@@ -72,7 +73,7 @@ service Portfolios {
 	// Public API: Update existing Portfolios
   rpc Update (PortfolioUpdateRequest) returns (PortfolioReply)  {
     option (google.api.http) = {
-      put: "/v1/portfolios/{account}/{portfolioUUID}"
+      put: "/v1/portfolios/{account}/{currency}"
       body: "*"
     };
   }
@@ -80,7 +81,7 @@ service Portfolios {
 	// Private API: Cancel existing Portfolios
   rpc Delete (PortfolioDeleteRequest) returns (PortfolioDelete)  {
     option (google.api.http) = {
-      delete: "/v1/portfolios/{account}/{portfolioUUID}"
+      delete: "/v1/portfolios/{account}/{currency}"
     };
   }
 }
@@ -92,34 +93,29 @@ service Portfolios {
 
 message PortfolioStatusRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-	string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+	string currency = 2 [(validate.rules).string.len = 3];
 }
 
 message PortfolioSearchRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  repeated string currencies = 2;
+  repeated string currencies = 2 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 0];
 }
 
 message PortfolioCreateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  string currency = 3 [(validate.rules).string.len = 3];
-  float cash_allocation_max = 4;
-  repeated screener.v1.Asset allowed_assets = 5;
+  string currency = 2 [(validate.rules).string.len = 3];
+  repeated screener.v1.Asset allowed_assets = 3 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 1];
 }
 
 message PortfolioUpdateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
-  string name = 3 [(validate.rules).string = {min_len: 3, max_len: 32}];
-  string currency = 4 [(validate.rules).string.len = 3];
-  float cash_allocation_max = 5;
-  repeated screener.v1.Asset allowed_assets = 6;
+  string currency = 2 [(validate.rules).string.len = 3];
+  repeated screener.v1.Asset allowed_assets = 3 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 1];
 }
 
 message PortfolioDeleteRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
 }
 
 
@@ -128,24 +124,21 @@ message PortfolioDeleteRequest {
 // 
 
 message PortfolioReply {
-  string id = 1;
-  string name = 2;
-  float cash_allocation_max = 3;
-  repeated screener.v1.Asset allowed_assets = 4;
-  repeated orders.v1.PositionReplies.Result positions = 5;
-  repeated orders.v1.OrderReply orders = 6;
-  google.protobuf.Timestamp created_at = 7; 
-  google.protobuf.Timestamp updated_at = 8; 
+  string currency = 1;
+  repeated screener.v1.Asset allowed_assets = 2;
+  repeated exchanges.v1.ExchangeReplies.Result exchanges = 3;
+  repeated orders.v1.PositionReplies.Result positions = 4;
+  repeated orders.v1.OrderReply orders = 5;
+  google.protobuf.Timestamp created_at = 6; 
+  google.protobuf.Timestamp updated_at = 7; 
 }
 
 message PortfolioReplies {
   message Result {
-    string id = 1;
-    string name = 2;
-    float cash_allocation_max = 3;
-    repeated screener.v1.Asset allowed_assets = 4;
-    google.protobuf.Timestamp created_at = 5; 
-    google.protobuf.Timestamp updated_at = 6; 
+    string currency = 1;
+    repeated screener.v1.Asset allowed_assets = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4; 
   }
 
   repeated Result results = 1;
@@ -153,5 +146,5 @@ message PortfolioReplies {
 }
 
 message PortfolioDelete {
-  string id = 1;
+  string currency = 1;
 }

@@ -27,11 +27,11 @@ type PortfoliosHTTPServer interface {
 
 func RegisterPortfoliosHTTPServer(s *http.Server, srv PortfoliosHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/portfolios/{account}/{portfolioUUID}", _Portfolios_Status1_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Status1_HTTP_Handler(srv))
 	r.GET("/v1/portfolios/{account}", _Portfolios_Search5_HTTP_Handler(srv))
 	r.POST("/v1/portfolios/{account}", _Portfolios_Create4_HTTP_Handler(srv))
-	r.PUT("/v1/portfolios/{account}/{portfolioUUID}", _Portfolios_Update3_HTTP_Handler(srv))
-	r.DELETE("/v1/portfolios/{account}/{portfolioUUID}", _Portfolios_Delete5_HTTP_Handler(srv))
+	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update3_HTTP_Handler(srv))
+	r.DELETE("/v1/portfolios/{account}/{currency}", _Portfolios_Delete5_HTTP_Handler(srv))
 }
 
 func _Portfolios_Status1_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
@@ -175,7 +175,7 @@ func (c *PortfoliosHTTPClientImpl) Create(ctx context.Context, in *PortfolioCrea
 
 func (c *PortfoliosHTTPClientImpl) Delete(ctx context.Context, in *PortfolioDeleteRequest, opts ...http.CallOption) (*PortfolioDelete, error) {
 	var out PortfolioDelete
-	pattern := "/v1/portfolios/{account}/{portfolioUUID}"
+	pattern := "/v1/portfolios/{account}/{currency}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Delete"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -201,7 +201,7 @@ func (c *PortfoliosHTTPClientImpl) Search(ctx context.Context, in *PortfolioSear
 
 func (c *PortfoliosHTTPClientImpl) Status(ctx context.Context, in *PortfolioStatusRequest, opts ...http.CallOption) (*PortfolioReply, error) {
 	var out PortfolioReply
-	pattern := "/v1/portfolios/{account}/{portfolioUUID}"
+	pattern := "/v1/portfolios/{account}/{currency}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Status"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -214,7 +214,7 @@ func (c *PortfoliosHTTPClientImpl) Status(ctx context.Context, in *PortfolioStat
 
 func (c *PortfoliosHTTPClientImpl) Update(ctx context.Context, in *PortfolioUpdateRequest, opts ...http.CallOption) (*PortfolioReply, error) {
 	var out PortfolioReply
-	pattern := "/v1/portfolios/{account}/{portfolioUUID}"
+	pattern := "/v1/portfolios/{account}/{currency}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

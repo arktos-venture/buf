@@ -75,16 +75,16 @@ func (m *OrderStatusRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = OrderStatusRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := OrderStatusRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if err := m._validateUuid(m.GetOrderUUID()); err != nil {
@@ -220,16 +220,16 @@ func (m *OrderSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = OrderSearchRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := OrderSearchRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if m.GetSort() == nil {
@@ -274,14 +274,6 @@ func (m *OrderSearchRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return OrderSearchRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *OrderSearchRequest) _validateUuid(uuid string) error {
-	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -393,16 +385,16 @@ func (m *PositionRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = PositionRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := PositionRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if m.GetSort() == nil {
@@ -447,14 +439,6 @@ func (m *PositionRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return PositionRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *PositionRequest) _validateUuid(uuid string) error {
-	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -564,16 +548,16 @@ func (m *OrderCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = OrderCreateRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := OrderCreateRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
@@ -655,14 +639,6 @@ func (m *OrderCreateRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return OrderCreateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *OrderCreateRequest) _validateUuid(uuid string) error {
-	if matched := _orders_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -774,16 +750,16 @@ func (m *OrderUpdateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = OrderUpdateRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := OrderUpdateRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if err := m._validateUuid(m.GetOrderUUID()); err != nil {
@@ -974,16 +950,16 @@ func (m *OrderCancelRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = OrderCancelRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := OrderCancelRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if err := m._validateUuid(m.GetOrderUUID()); err != nil {
