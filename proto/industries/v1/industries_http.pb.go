@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package industries_v1
+package v1Industries
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ func RegisterIndustriesHTTPServer(s *http.Server, srv IndustriesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/industries", _Industries_List2_HTTP_Handler(srv))
 	r.POST("/v1/industries/activities", _Industries_Activities0_HTTP_Handler(srv))
-	r.GET("/v1/industry/{ticker}", _Industries_Search4_HTTP_Handler(srv))
+	r.GET("/v1/industry/{ticker}", _Industries_Search6_HTTP_Handler(srv))
 }
 
 func _Industries_List2_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
@@ -69,7 +69,7 @@ func _Industries_Activities0_HTTP_Handler(srv IndustriesHTTPServer) func(ctx htt
 	}
 }
 
-func _Industries_Search4_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
+func _Industries_Search6_HTTP_Handler(srv IndustriesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndustrySearchRequest
 		if err := ctx.BindQuery(&in); err != nil {

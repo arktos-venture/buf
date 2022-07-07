@@ -211,6 +211,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "open": {
+          "type": "boolean"
         }
       }
     },

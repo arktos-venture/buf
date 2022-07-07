@@ -10,7 +10,7 @@ import "proto/quotes/v1/quotes.proto";
 import "proto/stats/v1/stats.proto";
 import "proto/strategies/v1/strategies.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/companies/v1;companies_v1";
+option go_package = "github.com/arktos-venture/buf/proto/companies/v1;v1Companies";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.companies.v1";
 option java_outer_classname = "APICompanyProtoV1";

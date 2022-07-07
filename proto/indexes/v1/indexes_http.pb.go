@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package indexes_v1
+package v1Indexes
 
 import (
 	context "context"
@@ -27,14 +27,14 @@ type IndexesHTTPServer interface {
 
 func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indexes/{ticker}", _Indexes_Get9_HTTP_Handler(srv))
+	r.GET("/v1/indexes/{ticker}", _Indexes_Get8_HTTP_Handler(srv))
 	r.GET("/v1/indexes", _Indexes_Search12_HTTP_Handler(srv))
-	r.POST("/v1/indexes", _Indexes_Create8_HTTP_Handler(srv))
-	r.PUT("/v1/indexes", _Indexes_Update6_HTTP_Handler(srv))
-	r.DELETE("/v1/indexes", _Indexes_Delete14_HTTP_Handler(srv))
+	r.POST("/v1/indexes", _Indexes_Create9_HTTP_Handler(srv))
+	r.PUT("/v1/indexes", _Indexes_Update7_HTTP_Handler(srv))
+	r.DELETE("/v1/indexes", _Indexes_Delete12_HTTP_Handler(srv))
 }
 
-func _Indexes_Get9_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Get8_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -75,7 +75,7 @@ func _Indexes_Search12_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Indexes_Create8_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Create9_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -94,7 +94,7 @@ func _Indexes_Create8_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Update6_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Update7_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -113,7 +113,7 @@ func _Indexes_Update6_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indexes_Delete14_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
+func _Indexes_Delete12_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndexDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

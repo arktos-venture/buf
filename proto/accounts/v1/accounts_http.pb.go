@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package accounts_v1
+package v1Accounts
 
 import (
 	context "context"
@@ -19,42 +19,16 @@ const _ = http.SupportPackageIsVersion1
 
 type AccountsHTTPServer interface {
 	Create(context.Context, *AccountModifyRequest) (*AccountReply, error)
-	Delete(context.Context, *AccountRequest) (*AccountDelete, error)
-	Get(context.Context, *AccountRequest) (*AccountReply, error)
 	Update(context.Context, *AccountModifyRequest) (*AccountReply, error)
 }
 
 func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/account/{account}", _Accounts_Get6_HTTP_Handler(srv))
-	r.POST("/v1/accounts", _Accounts_Create5_HTTP_Handler(srv))
-	r.PUT("/v1/account/{account}", _Accounts_Update3_HTTP_Handler(srv))
-	r.DELETE("/v1/account/{account}", _Accounts_Delete9_HTTP_Handler(srv))
+	r.POST("/v1/accounts", _Accounts_Create6_HTTP_Handler(srv))
+	r.PUT("/v1/account/{account}", _Accounts_Update4_HTTP_Handler(srv))
 }
 
-func _Accounts_Get6_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in AccountRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/accounts.v1.Accounts/Get")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*AccountRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*AccountReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Accounts_Create5_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Create6_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountModifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -73,7 +47,7 @@ func _Accounts_Create5_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Update3_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Update4_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountModifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -95,32 +69,8 @@ func _Accounts_Update3_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Delete9_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in AccountRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/accounts.v1.Accounts/Delete")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Delete(ctx, req.(*AccountRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*AccountDelete)
-		return ctx.Result(200, reply)
-	}
-}
-
 type AccountsHTTPClient interface {
 	Create(ctx context.Context, req *AccountModifyRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
-	Delete(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountDelete, err error)
-	Get(ctx context.Context, req *AccountRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 	Update(ctx context.Context, req *AccountModifyRequest, opts ...http.CallOption) (rsp *AccountReply, err error)
 }
 
@@ -139,32 +89,6 @@ func (c *AccountsHTTPClientImpl) Create(ctx context.Context, in *AccountModifyRe
 	opts = append(opts, http.Operation("/accounts.v1.Accounts/Create"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *AccountsHTTPClientImpl) Delete(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountDelete, error) {
-	var out AccountDelete
-	pattern := "/v1/account/{account}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/accounts.v1.Accounts/Delete"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *AccountsHTTPClientImpl) Get(ctx context.Context, in *AccountRequest, opts ...http.CallOption) (*AccountReply, error) {
-	var out AccountReply
-	pattern := "/v1/account/{account}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/accounts.v1.Accounts/Get"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

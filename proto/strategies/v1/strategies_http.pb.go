@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package strategies_v1
+package v1Strategies
 
 import (
 	context "context"

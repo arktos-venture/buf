@@ -50,49 +50,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "request.companies",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "request.holidays",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "tags": [
-          "Exchanges"
-        ]
-      }
-    },
-    "/v1/exchange/{ticker}/isopen": {
-      "get": {
-        "summary": "Public API\nGet Exchange if is Open",
-        "operationId": "Exchanges_IsOpen",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ExchangeIsOpenReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -130,6 +87,12 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "open",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -172,28 +135,6 @@
     }
   },
   "definitions": {
-    "ExchangeReplyCompany": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "activity": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "ExchangeReplyHoliday": {
       "type": "object",
       "properties": {
@@ -207,17 +148,6 @@
           "type": "string"
         },
         "official": {
-          "type": "boolean"
-        }
-      }
-    },
-    "ExchangeRequestRequest": {
-      "type": "object",
-      "properties": {
-        "companies": {
-          "type": "boolean"
-        },
-        "holidays": {
           "type": "boolean"
         }
       }
@@ -275,29 +205,6 @@
         }
       }
     },
-    "v1ExchangeIsOpenReply": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
-        },
-        "timezone": {
-          "type": "string"
-        },
-        "tradingHours": {
-          "type": "string"
-        },
-        "open": {
-          "type": "boolean"
-        }
-      }
-    },
     "v1ExchangeReplies": {
       "type": "object",
       "properties": {
@@ -324,6 +231,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "open": {
+          "type": "boolean"
         }
       }
     },
@@ -369,11 +279,8 @@
         "tradingHours": {
           "type": "string"
         },
-        "companies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ExchangeReplyCompany"
-          }
+        "open": {
+          "type": "boolean"
         },
         "created_at": {
           "type": "string",

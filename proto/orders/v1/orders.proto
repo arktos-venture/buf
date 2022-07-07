@@ -8,7 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/orders/v1;orders_v1";
+option go_package = "github.com/arktos-venture/buf/proto/orders/v1;v1Orders";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.orders.v1";
 option java_outer_classname = "APIOrdersProtoV1";
@@ -45,38 +45,49 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Orders {
-	// Public API
-	// Search Orders open or executed
+  // Public API : Search Positions opened
+  rpc Positions (PositionRequest) returns (PositionReplies)  {
+    option (google.api.http) = {
+      post: "/v1/positions/{account}/{portfolioUUID}"
+      body: "*"
+    };
+  }
+  
+	// Public API: Status Order
+  rpc Status (OrderStatusRequest) returns (OrderReply)  {
+    option (google.api.http) = {
+      get: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
+    };
+  }
+
+	// Public API: Search Orders
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/orders/{account}/search"
+      post: "/v1/orders/{account}/{portfolioUUID}/search"
       body: "*"
     };
   }
 
-	// Public API
-	// Create Orders
-  rpc Create (OrderModifyRequest) returns (OrderReply)  {
+	// Public API: Create Order
+  rpc Create (OrderCreateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
-      post: "/v1/order/{account}"
+      post: "/v1/orders/{account}/{portfolioUUID}"
       body: "*"
     };
   }
 
-	// Public API
-	// Update existing Orders
-  rpc Update (OrderModifyRequest) returns (OrderReply)  {
+	// Public API: Update existing Orders
+  rpc Update (OrderUpdateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
-      put: "/v1/order/{account}"
+      patch: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
       body: "*"
     };
   }
-
-	// Private API
-	// Delete/cancel existing Orders
-  rpc Delete (OrderDeleteRequest) returns (OrderDelete)  {
+ 
+	// Private API: Cancel existing Orders
+  rpc Cancel (OrderCancelRequest) returns (OrderCancel)  {
     option (google.api.http) = {
-      delete: "/v1/orders/{account}"
+      delete: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}/cancel"
     };
   }
 }
@@ -86,23 +97,31 @@ service Orders {
 // Request
 // 
 
-message OrderRequest {
+message OrderStatusRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+	string orderUUID = 3 [(validate.rules).string.uuid = true];
 }
 
 message OrderSearchRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-	repeated screener.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
-	screener.v1.ScreenerRequest.Sort sort = 3 [(validate.rules).message.required = true];
-  int32 limit = 4 [(validate.rules).int32 = {gt: 0, lte: 10000}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  repeated screener.v1.Asset assets = 3;
+	screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
 }
 
-message OrderModifyRequest {  
+message PositionRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  repeated screener.v1.Asset assets = 3;
+  screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
+}
+
+message OrderCreateRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string ticker = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
+  string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
   screener.v1.OrderAction action = 5 [(validate.rules).enum = {defined_only: true}];
   screener.v1.OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
   float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
@@ -110,16 +129,52 @@ message OrderModifyRequest {
   float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
 }
 
-message OrderDeleteRequest {  
+message OrderUpdateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  repeated string tickers = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-  repeated string exchanges = 3 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string orderUUID = 3 [(validate.rules).string.uuid = true];
+  screener.v1.OrderAction action = 4 [(validate.rules).enum = {defined_only: true}];
+  screener.v1.OrderType orderType = 5 [(validate.rules).enum = {defined_only: true}];
+  float size = 6 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
+  screener.v1.OrderDuration duration = 7 [(validate.rules).enum = {defined_only: true}];
+  float price = 8 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
+}
+
+message OrderCancelRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string orderUUID = 3 [(validate.rules).string.uuid = true];
 }
 
 
 // 
 // Reply
 // 
+
+message PositionReplies {
+  message Result {
+    message Performance {
+      float percent = 1;
+      float money = 2;
+    }
+  
+    message Cost {
+      float unit = 1;
+      float total = 2;
+    }
+  
+    string ticker = 1;
+    string exchange = 2;
+    float size = 3;
+    Cost cost = 4;
+    Performance performance = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+  }
+
+  repeated Result results = 1;
+  int64 total = 2;
+}
 
 message OrderReply {
   message Size {
@@ -133,17 +188,30 @@ message OrderReply {
     float commission = 3;
   }
 
+  string id = 1;
+  string ticker = 2;
+  string exchange = 3;
+  screener.v1.OrderAction action = 4;
+  screener.v1.OrderType orderType = 5;
+  string routing = 6;
+  screener.v1.OrderDuration duration = 7;
+  Size size = 8;
+  Price price = 9;
+  screener.v1.OrderStatus status = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+message OrderModifyReply {  
   string ticker = 1;
   string exchange = 2;
   screener.v1.OrderAction action = 3;
   screener.v1.OrderType orderType = 4;
   string routing = 5;
   screener.v1.OrderDuration duration = 6;
-  Size size = 7;
-  Price price = 8;
+  float size = 7;
+  float price = 8;
   screener.v1.OrderStatus status = 9;
-  google.protobuf.Timestamp created_at = 10;
-  google.protobuf.Timestamp updated_at = 11;
 }
 
 message OrderReplies {
@@ -151,6 +219,6 @@ message OrderReplies {
   int64 total = 2;
 }
 
-message OrderDelete {
-  int64 total = 1;
+message OrderCancel {
+  string id = 1;
 }

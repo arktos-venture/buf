@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.1
 
-package splits_v1
+package v1Splits
 
 import (
 	context "context"

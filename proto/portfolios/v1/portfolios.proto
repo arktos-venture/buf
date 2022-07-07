@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package portfolios.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+import "proto/screener/v1/screener.proto";
+import "proto/orders/v1/orders.proto";
+
+option go_package = "github.com/arktos-venture/buf/proto/portfolios/v1;v1Portfolios";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.portfolio.v1";
+option java_outer_classname = "APIPortfoliosProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+    title: "Portfolio APIs";
+		description: "Portfolio APIs accounts";
+    version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  };
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  security: {
+		  key: "bearer"
+		  value: {
+		    type: TYPE_API_KEY
+		    in: IN_HEADER
+		    name: "Authorization"
+		    description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  }
+	  }
+  }
+	security: {
+	  security_requirement: {
+			key: "bearer"
+	  }
+	}
+};
+
+service Portfolios {
+	// Public API: Status Portfolio
+  rpc Status (PortfolioStatusRequest) returns (PortfolioReply)  {
+    option (google.api.http) = {
+      get: "/v1/portfolios/{account}/{portfolioUUID}"
+    };
+  }
+
+	// Public API: Search portfolios by Account
+  rpc Search (PortfolioSearchRequest) returns (PortfolioReplies)  {
+    option (google.api.http) = {
+      get: "/v1/portfolios/{account}"
+    };
+  }
+
+	// Public API: Create Portfolio
+  rpc Create (PortfolioCreateRequest) returns (PortfolioReply)  {
+    option (google.api.http) = {
+      post: "/v1/portfolios/{account}"
+      body: "*"
+    };
+  }
+
+	// Public API: Update existing Portfolios
+  rpc Update (PortfolioUpdateRequest) returns (PortfolioReply)  {
+    option (google.api.http) = {
+      put: "/v1/portfolios/{account}/{portfolioUUID}"
+      body: "*"
+    };
+  }
+ 
+	// Private API: Cancel existing Portfolios
+  rpc Delete (PortfolioDeleteRequest) returns (PortfolioDelete)  {
+    option (google.api.http) = {
+      delete: "/v1/portfolios/{account}/{portfolioUUID}"
+    };
+  }
+}
+
+
+// 
+// Request
+// 
+
+message PortfolioStatusRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+	string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+}
+
+message PortfolioSearchRequest {
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  repeated string currencies = 2;
+}
+
+message PortfolioCreateRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string name = 2 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  string currency = 3 [(validate.rules).string.len = 3];
+  float cash_allocation_max = 4;
+  repeated screener.v1.Asset allowed_assets = 5;
+}
+
+message PortfolioUpdateRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string name = 3 [(validate.rules).string = {min_len: 3, max_len: 32}];
+  string currency = 4 [(validate.rules).string.len = 3];
+  float cash_allocation_max = 5;
+  repeated screener.v1.Asset allowed_assets = 6;
+}
+
+message PortfolioDeleteRequest {  
+  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+}
+
+
+// 
+// Reply
+// 
+
+message PortfolioReply {
+  string id = 1;
+  string name = 2;
+  float cash_allocation_max = 3;
+  repeated screener.v1.Asset allowed_assets = 4;
+  repeated orders.v1.PositionReplies.Result positions = 5;
+  repeated orders.v1.OrderReply orders = 6;
+  google.protobuf.Timestamp created_at = 7; 
+  google.protobuf.Timestamp updated_at = 8; 
+}
+
+message PortfolioReplies {
+  message Result {
+    string id = 1;
+    string name = 2;
+    float cash_allocation_max = 3;
+    repeated screener.v1.Asset allowed_assets = 4;
+    google.protobuf.Timestamp created_at = 5; 
+    google.protobuf.Timestamp updated_at = 6; 
+  }
+
+  repeated Result results = 1;
+  int64 total = 2;
+}
+
+message PortfolioDelete {
+  string id = 1;
+}

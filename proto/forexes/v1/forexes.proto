@@ -9,7 +9,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/quotes/v1/quotes.proto";
 import "proto/currencies/v1/currencies.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;forexes_v1";
+option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;v1Forexes";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.forexes.v1";
 option java_outer_classname = "APIForexesProtoV1";

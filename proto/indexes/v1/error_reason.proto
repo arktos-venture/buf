@@ -3,7 +3,7 @@ syntax = "proto3";
 package indexes.v1;
 import "errors/errors.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/indexes/v1;indexes_v1";
+option go_package = "github.com/arktos-venture/buf/proto/indexes/v1;v1Indexes";
 option java_multiple_files = true;
 option java_package = "indexes.v1.errors";
 option objc_class_prefix = "APIIndexesErrors";
