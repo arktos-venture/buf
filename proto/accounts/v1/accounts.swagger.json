@@ -189,15 +189,8 @@
     "v1PortfolioRepliesResult": {
       "type": "object",
       "properties": {
-        "id": {
+        "currency": {
           "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "cash_allocation_max": {
-          "type": "number",
-          "format": "float"
         },
         "allowed_assets": {
           "type": "array",

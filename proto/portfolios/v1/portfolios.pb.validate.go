@@ -39,9 +39,6 @@ var (
 	_ = v1Screener.Asset(0)
 )
 
-// define the regex for a UUID once up-front
-var _portfolios_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on PortfolioStatusRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -75,28 +72,20 @@ func (m *PortfolioStatusRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = PortfolioStatusRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := PortfolioStatusRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if len(errors) > 0 {
 		return PortfolioStatusRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *PortfolioStatusRequest) _validateUuid(uuid string) error {
-	if matched := _portfolios_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -206,6 +195,27 @@ func (m *PortfolioSearchRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	_PortfolioSearchRequest_Currencies_Unique := make(map[string]struct{}, len(m.GetCurrencies()))
+
+	for idx, item := range m.GetCurrencies() {
+		_, _ = idx, item
+
+		if _, exists := _PortfolioSearchRequest_Currencies_Unique[item]; exists {
+			err := PortfolioSearchRequestValidationError{
+				field:  fmt.Sprintf("Currencies[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_PortfolioSearchRequest_Currencies_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Currencies[idx]
 	}
 
 	if len(errors) > 0 {
@@ -321,17 +331,6 @@ func (m *PortfolioCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 32 {
-		err := PortfolioCreateRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
 		err := PortfolioCreateRequestValidationError{
 			field:  "Currency",
@@ -344,7 +343,37 @@ func (m *PortfolioCreateRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for CashAllocationMax
+	if len(m.GetAllowedAssets()) < 1 {
+		err := PortfolioCreateRequestValidationError{
+			field:  "AllowedAssets",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_PortfolioCreateRequest_AllowedAssets_Unique := make(map[v1Screener.Asset]struct{}, len(m.GetAllowedAssets()))
+
+	for idx, item := range m.GetAllowedAssets() {
+		_, _ = idx, item
+
+		if _, exists := _PortfolioCreateRequest_AllowedAssets_Unique[item]; exists {
+			err := PortfolioCreateRequestValidationError{
+				field:  fmt.Sprintf("AllowedAssets[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_PortfolioCreateRequest_AllowedAssets_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for AllowedAssets[idx]
+	}
 
 	if len(errors) > 0 {
 		return PortfolioCreateRequestMultiError(errors)
@@ -459,29 +488,6 @@ func (m *PortfolioUpdateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = PortfolioUpdateRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetName()); l < 3 || l > 32 {
-		err := PortfolioUpdateRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 3 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
 		err := PortfolioUpdateRequestValidationError{
 			field:  "Currency",
@@ -494,18 +500,40 @@ func (m *PortfolioUpdateRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for CashAllocationMax
+	if len(m.GetAllowedAssets()) < 1 {
+		err := PortfolioUpdateRequestValidationError{
+			field:  "AllowedAssets",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_PortfolioUpdateRequest_AllowedAssets_Unique := make(map[v1Screener.Asset]struct{}, len(m.GetAllowedAssets()))
+
+	for idx, item := range m.GetAllowedAssets() {
+		_, _ = idx, item
+
+		if _, exists := _PortfolioUpdateRequest_AllowedAssets_Unique[item]; exists {
+			err := PortfolioUpdateRequestValidationError{
+				field:  fmt.Sprintf("AllowedAssets[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_PortfolioUpdateRequest_AllowedAssets_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for AllowedAssets[idx]
+	}
 
 	if len(errors) > 0 {
 		return PortfolioUpdateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *PortfolioUpdateRequest) _validateUuid(uuid string) error {
-	if matched := _portfolios_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -617,28 +645,20 @@ func (m *PortfolioDeleteRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetPortfolioUUID()); err != nil {
-		err = PortfolioDeleteRequestValidationError{
-			field:  "PortfolioUUID",
-			reason: "value must be a valid UUID",
-			cause:  err,
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := PortfolioDeleteRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+
 	}
 
 	if len(errors) > 0 {
 		return PortfolioDeleteRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *PortfolioDeleteRequest) _validateUuid(uuid string) error {
-	if matched := _portfolios_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -739,11 +759,41 @@ func (m *PortfolioReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for Currency
 
-	// no validation rules for Name
+	for idx, item := range m.GetExchanges() {
+		_, _ = idx, item
 
-	// no validation rules for CashAllocationMax
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PortfolioReplyValidationError{
+						field:  fmt.Sprintf("Exchanges[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PortfolioReplyValidationError{
+						field:  fmt.Sprintf("Exchanges[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PortfolioReplyValidationError{
+					field:  fmt.Sprintf("Exchanges[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	for idx, item := range m.GetPositions() {
 		_, _ = idx, item
@@ -1107,7 +1157,7 @@ func (m *PortfolioDelete) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for Currency
 
 	if len(errors) > 0 {
 		return PortfolioDeleteMultiError(errors)
@@ -1209,11 +1259,7 @@ func (m *PortfolioReplies_Result) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for Name
-
-	// no validation rules for CashAllocationMax
+	// no validation rules for Currency
 
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {

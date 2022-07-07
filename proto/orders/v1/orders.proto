@@ -48,7 +48,7 @@ service Orders {
   // Public API : Search Positions opened
   rpc Positions (PositionRequest) returns (PositionReplies)  {
     option (google.api.http) = {
-      post: "/v1/positions/{account}/{portfolioUUID}"
+      post: "/v1/positions/{account}/{currency}"
       body: "*"
     };
   }
@@ -56,14 +56,14 @@ service Orders {
 	// Public API: Status Order
   rpc Status (OrderStatusRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      get: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
+      get: "/v1/orders/{account}/{currency}/{orderUUID}"
     };
   }
 
 	// Public API: Search Orders
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/orders/{account}/{portfolioUUID}/search"
+      post: "/v1/orders/{account}/{currency}/search"
       body: "*"
     };
   }
@@ -71,7 +71,7 @@ service Orders {
 	// Public API: Create Order
   rpc Create (OrderCreateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
-      post: "/v1/orders/{account}/{portfolioUUID}"
+      post: "/v1/orders/{account}/{currency}"
       body: "*"
     };
   }
@@ -79,7 +79,7 @@ service Orders {
 	// Public API: Update existing Orders
   rpc Update (OrderUpdateRequest) returns (OrderModifyReply)  {
     option (google.api.http) = {
-      patch: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}"
+      patch: "/v1/orders/{account}/{currency}/{orderUUID}"
       body: "*"
     };
   }
@@ -87,7 +87,7 @@ service Orders {
 	// Private API: Cancel existing Orders
   rpc Cancel (OrderCancelRequest) returns (OrderCancel)  {
     option (google.api.http) = {
-      delete: "/v1/orders/{account}/{portfolioUUID}/{orderUUID}/cancel"
+      delete: "/v1/orders/{account}/{currency}/{orderUUID}/cancel"
     };
   }
 }
@@ -99,27 +99,27 @@ service Orders {
 
 message OrderStatusRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
 	string orderUUID = 3 [(validate.rules).string.uuid = true];
 }
 
 message OrderSearchRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
   repeated screener.v1.Asset assets = 3;
 	screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
 }
 
 message PositionRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
   repeated screener.v1.Asset assets = 3;
   screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
 }
 
 message OrderCreateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
   string ticker = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
   string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
   screener.v1.OrderAction action = 5 [(validate.rules).enum = {defined_only: true}];
@@ -131,7 +131,7 @@ message OrderCreateRequest {
 
 message OrderUpdateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
   string orderUUID = 3 [(validate.rules).string.uuid = true];
   screener.v1.OrderAction action = 4 [(validate.rules).enum = {defined_only: true}];
   screener.v1.OrderType orderType = 5 [(validate.rules).enum = {defined_only: true}];
@@ -142,7 +142,7 @@ message OrderUpdateRequest {
 
 message OrderCancelRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string portfolioUUID = 2 [(validate.rules).string.uuid = true];
+  string currency = 2 [(validate.rules).string.len = 3];
   string orderUUID = 3 [(validate.rules).string.uuid = true];
 }
 
