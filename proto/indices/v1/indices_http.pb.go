@@ -27,14 +27,14 @@ type IndicesHTTPServer interface {
 
 func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/indice/{ticker}", _Indices_Get1_HTTP_Handler(srv))
-	r.GET("/v1/indices", _Indices_Search1_HTTP_Handler(srv))
-	r.POST("/v1/indices", _Indices_Create0_HTTP_Handler(srv))
-	r.PUT("/v1/indice/{ticker}", _Indices_Update0_HTTP_Handler(srv))
-	r.DELETE("/v1/indices", _Indices_Delete1_HTTP_Handler(srv))
+	r.GET("/v1/indice/{ticker}", _Indices_Get3_HTTP_Handler(srv))
+	r.GET("/v1/indices", _Indices_Search2_HTTP_Handler(srv))
+	r.POST("/v1/indices", _Indices_Create2_HTTP_Handler(srv))
+	r.PUT("/v1/indice/{ticker}", _Indices_Update3_HTTP_Handler(srv))
+	r.DELETE("/v1/indices", _Indices_Delete4_HTTP_Handler(srv))
 }
 
-func _Indices_Get1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Get3_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -56,7 +56,7 @@ func _Indices_Get1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Indices_Search1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Search2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -75,7 +75,7 @@ func _Indices_Search1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indices_Create0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Create2_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceModifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -94,7 +94,7 @@ func _Indices_Create0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indices_Update0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Update3_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceModifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -116,7 +116,7 @@ func _Indices_Update0_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Indices_Delete1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Delete4_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

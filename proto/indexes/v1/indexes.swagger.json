@@ -27,41 +27,6 @@
   ],
   "paths": {
     "/v1/indexes": {
-      "get": {
-        "summary": "Public API\nSearch Index companies",
-        "operationId": "Indexes_Search",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndexSearchReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Indexes"
-        ]
-      },
       "delete": {
         "summary": "Public API\nDelete Index companies",
         "operationId": "Indexes_Delete",
@@ -125,15 +90,17 @@
         "tags": [
           "Indexes"
         ]
-      },
-      "put": {
-        "summary": "Public API\nUpdate Index companies",
-        "operationId": "Indexes_Update",
+      }
+    },
+    "/v1/indexes/{account}/search": {
+      "get": {
+        "summary": "Public API\nSearch Index companies",
+        "operationId": "Indexes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexReply"
+              "$ref": "#/definitions/v1IndexSearchReplies"
             }
           },
           "default": {
@@ -145,12 +112,10 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "account",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1IndexCreateRequest"
-            }
+            "type": "string"
           }
         ],
         "tags": [
@@ -188,6 +153,54 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Indexes"
+        ]
+      },
+      "put": {
+        "summary": "Public API\nUpdate Index companies",
+        "operationId": "Indexes_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndexReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "account": {
+                  "type": "string"
+                },
+                "request": {
+                  "$ref": "#/definitions/v1IndexSearch"
+                },
+                "public": {
+                  "type": "boolean"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -351,6 +364,17 @@
       "properties": {
         "ticker": {
           "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

@@ -25,12 +25,12 @@ type ExchangesHTTPServer interface {
 
 func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/exchange/{ticker}", _Exchanges_Get2_HTTP_Handler(srv))
-	r.GET("/v1/exchanges", _Exchanges_Search2_HTTP_Handler(srv))
-	r.DELETE("/v1/exchanges", _Exchanges_Delete2_HTTP_Handler(srv))
+	r.GET("/v1/exchange/{ticker}", _Exchanges_Get4_HTTP_Handler(srv))
+	r.GET("/v1/exchanges", _Exchanges_Search3_HTTP_Handler(srv))
+	r.DELETE("/v1/exchanges", _Exchanges_Delete5_HTTP_Handler(srv))
 }
 
-func _Exchanges_Get2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Get4_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -52,7 +52,7 @@ func _Exchanges_Get2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Exchanges_Search2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Search3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -71,7 +71,7 @@ func _Exchanges_Search2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Exchanges_Delete2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Delete5_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

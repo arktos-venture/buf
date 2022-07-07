@@ -26,12 +26,12 @@ type StatsHTTPServer interface {
 
 func RegisterStatsHTTPServer(s *http.Server, srv StatsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/stats/{exchange}/{ticker}", _Stats_Last2_HTTP_Handler(srv))
-	r.PUT("/v1/stats/{exchange}/{ticker}", _Stats_Update5_HTTP_Handler(srv))
-	r.DELETE("/v1/stats", _Stats_Delete10_HTTP_Handler(srv))
+	r.GET("/v1/stats/{exchange}/{ticker}", _Stats_Last1_HTTP_Handler(srv))
+	r.PUT("/v1/stats/{exchange}/{ticker}", _Stats_Update0_HTTP_Handler(srv))
+	r.DELETE("/v1/stats", _Stats_Delete1_HTTP_Handler(srv))
 }
 
-func _Stats_Last2_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Last1_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in v1.QuoteLastRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -53,7 +53,7 @@ func _Stats_Last2_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error
 	}
 }
 
-func _Stats_Update5_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Update0_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StatUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -75,7 +75,7 @@ func _Stats_Update5_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Stats_Delete10_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
+func _Stats_Delete1_HTTP_Handler(srv StatsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in v1.QuoteDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

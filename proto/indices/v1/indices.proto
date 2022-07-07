@@ -8,6 +8,7 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/quotes/v1/quotes.proto";
+import "proto/companies/v1/companies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indices/v1;v1Indices";
 option java_multiple_files = true;
@@ -126,7 +127,7 @@ message IndiceReply {
 	string exchange = 3;
 	screener.v1.Asset asset = 4;
 	quotes.v1.QuoteLastReply quote = 5;
-	repeated screener.v1.ScreenerReply companies = 6;
+	repeated companies.v1.CompanyReplies.Result companies = 6;
 	google.protobuf.Timestamp created_at = 7;
 	google.protobuf.Timestamp updated_at = 8;
 }
