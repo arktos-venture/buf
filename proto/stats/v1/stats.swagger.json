@@ -196,7 +196,7 @@
           "$ref": "#/definitions/statsv1Price"
         },
         "volume": {
-          "$ref": "#/definitions/statsv1Volume"
+          "$ref": "#/definitions/v1Volume"
         }
       }
     },
@@ -259,23 +259,6 @@
         }
       }
     },
-    "statsv1Volume": {
-      "type": "object",
-      "properties": {
-        "volumeAvg10d": {
-          "type": "string",
-          "format": "int64"
-        },
-        "volumeAvg30d": {
-          "type": "string",
-          "format": "int64"
-        },
-        "volumeAvg90d": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "v1StatDelete": {
       "type": "object",
       "properties": {
@@ -298,7 +281,7 @@
           "$ref": "#/definitions/statsv1Price"
         },
         "volume": {
-          "$ref": "#/definitions/statsv1Volume"
+          "$ref": "#/definitions/v1Volume"
         },
         "created_at": {
           "type": "string",
@@ -320,6 +303,23 @@
         "Accounts"
       ],
       "default": "Companies"
+    },
+    "v1Volume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     }
   },
   "securityDefinitions": {

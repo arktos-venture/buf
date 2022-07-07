@@ -28,9 +28,9 @@ type IndexesHTTPServer interface {
 func RegisterIndexesHTTPServer(s *http.Server, srv IndexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/indexes/{ticker}", _Indexes_Get8_HTTP_Handler(srv))
-	r.GET("/v1/indexes", _Indexes_Search12_HTTP_Handler(srv))
+	r.GET("/v1/indexes/{account}/search", _Indexes_Search12_HTTP_Handler(srv))
 	r.POST("/v1/indexes", _Indexes_Create9_HTTP_Handler(srv))
-	r.PUT("/v1/indexes", _Indexes_Update7_HTTP_Handler(srv))
+	r.PUT("/v1/indexes/{ticker}", _Indexes_Update7_HTTP_Handler(srv))
 	r.DELETE("/v1/indexes", _Indexes_Delete12_HTTP_Handler(srv))
 }
 
@@ -60,6 +60,9 @@ func _Indexes_Search12_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context
 	return func(ctx http.Context) error {
 		var in IndexSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/indexes.v1.Indexes/Search")
@@ -98,6 +101,9 @@ func _Indexes_Update7_HTTP_Handler(srv IndexesHTTPServer) func(ctx http.Context)
 	return func(ctx http.Context) error {
 		var in IndexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/indexes.v1.Indexes/Update")
@@ -189,7 +195,7 @@ func (c *IndexesHTTPClientImpl) Get(ctx context.Context, in *IndexRequest, opts 
 
 func (c *IndexesHTTPClientImpl) Search(ctx context.Context, in *IndexSearchRequest, opts ...http.CallOption) (*IndexSearchReplies, error) {
 	var out IndexSearchReplies
-	pattern := "/v1/indexes"
+	pattern := "/v1/indexes/{account}/search"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indexes.v1.Indexes/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -202,7 +208,7 @@ func (c *IndexesHTTPClientImpl) Search(ctx context.Context, in *IndexSearchReque
 
 func (c *IndexesHTTPClientImpl) Update(ctx context.Context, in *IndexCreateRequest, opts ...http.CallOption) (*IndexReply, error) {
 	var out IndexReply
-	pattern := "/v1/indexes"
+	pattern := "/v1/indexes/{ticker}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/indexes.v1.Indexes/Update"))
 	opts = append(opts, http.PathTemplate(pattern))

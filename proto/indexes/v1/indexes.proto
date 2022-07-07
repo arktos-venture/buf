@@ -58,7 +58,7 @@ service Indexes {
 	// Search Index companies
   rpc Search (IndexSearchRequest) returns (IndexSearchReplies)  {
     option (google.api.http) = {
-      get: "/v1/indexes"
+      get: "/v1/indexes/{account}/search"
     };
   }
 
@@ -75,7 +75,7 @@ service Indexes {
 	// Update Index companies
   rpc Update (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
-      put: "/v1/indexes"
+      put: "/v1/indexes/{ticker}"
       body: "*"
     };
   }
@@ -111,7 +111,6 @@ message IndexRequest {
 
 message IndexSearchRequest { 
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
 }
 
 message IndexCreateRequest {
@@ -145,6 +144,9 @@ message IndexReplies {
 
 message IndexSearchReply {
   string ticker = 1;
+  bool public = 2;
+  google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4;
 }
 
 message IndexSearchReplies {

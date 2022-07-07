@@ -320,7 +320,25 @@
         }
       }
     },
-    "CompanyReplyStatsShares": {
+    "CompanyReplyStats": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/statsv1Price"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1Volume"
+        },
+        "shares": {
+          "$ref": "#/definitions/StatsShares"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "StatsShares": {
       "type": "object",
       "properties": {
         "outstanding": {
@@ -393,23 +411,6 @@
         "start": {
           "type": "number",
           "format": "float"
-        }
-      }
-    },
-    "statsv1Volume": {
-      "type": "object",
-      "properties": {
-        "volumeAvg10d": {
-          "type": "string",
-          "format": "int64"
-        },
-        "volumeAvg30d": {
-          "type": "string",
-          "format": "int64"
-        },
-        "volumeAvg90d": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -619,7 +620,7 @@
           "$ref": "#/definitions/CompanyReplyDividend"
         },
         "stats": {
-          "$ref": "#/definitions/v1CompanyReplyStats"
+          "$ref": "#/definitions/CompanyReplyStats"
         },
         "strategies": {
           "type": "object",
@@ -647,24 +648,6 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1CompanyReplyStats": {
-      "type": "object",
-      "properties": {
-        "price": {
-          "$ref": "#/definitions/statsv1Price"
-        },
-        "volume": {
-          "$ref": "#/definitions/statsv1Volume"
-        },
-        "shares": {
-          "$ref": "#/definitions/CompanyReplyStatsShares"
         },
         "updated_at": {
           "type": "string",
@@ -763,6 +746,23 @@
             "type": "string",
             "format": "date-time"
           }
+        }
+      }
+    },
+    "v1Volume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

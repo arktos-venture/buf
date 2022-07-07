@@ -26,13 +26,13 @@ type ForexesHTTPServer interface {
 
 func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/forexes/{ticker}", _Forexes_Get5_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List3_HTTP_Handler(srv))
-	r.POST("/v1/forexes", _Forexes_Create5_HTTP_Handler(srv))
-	r.DELETE("/v1/forexes", _Forexes_Delete6_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}", _Forexes_Get6_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List4_HTTP_Handler(srv))
+	r.POST("/v1/forexes", _Forexes_Create6_HTTP_Handler(srv))
+	r.DELETE("/v1/forexes", _Forexes_Delete8_HTTP_Handler(srv))
 }
 
-func _Forexes_Get5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Get6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -54,7 +54,7 @@ func _Forexes_Get5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Forexes_List3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_List4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -76,7 +76,7 @@ func _Forexes_List3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Forexes_Create5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Create6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -95,7 +95,7 @@ func _Forexes_Create5_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Forexes_Delete6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Delete8_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

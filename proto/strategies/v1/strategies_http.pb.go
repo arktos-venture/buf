@@ -28,15 +28,15 @@ type StrategiesHTTPServer interface {
 
 func RegisterStrategiesHTTPServer(s *http.Server, srv StrategiesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/strategy/{ticker}", _Strategies_Get4_HTTP_Handler(srv))
-	r.GET("/v1/strategies", _Strategies_List1_HTTP_Handler(srv))
-	r.POST("/v1/strategies/search", _Strategies_Search3_HTTP_Handler(srv))
-	r.POST("/v1/strategies", _Strategies_Create2_HTTP_Handler(srv))
+	r.GET("/v1/strategy/{ticker}", _Strategies_Get1_HTTP_Handler(srv))
+	r.GET("/v1/strategies", _Strategies_List0_HTTP_Handler(srv))
+	r.POST("/v1/strategies/search", _Strategies_Search1_HTTP_Handler(srv))
+	r.POST("/v1/strategies", _Strategies_Create0_HTTP_Handler(srv))
 	r.PUT("/v1/strategy/{ticker}", _Strategies_Update1_HTTP_Handler(srv))
-	r.DELETE("/v1/strategies", _Strategies_Delete4_HTTP_Handler(srv))
+	r.DELETE("/v1/strategies", _Strategies_Delete2_HTTP_Handler(srv))
 }
 
-func _Strategies_Get4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Get1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -58,7 +58,7 @@ func _Strategies_Get4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Strategies_List1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_List0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -77,7 +77,7 @@ func _Strategies_List1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Strategies_Search3_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Search1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategySearchRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -96,7 +96,7 @@ func _Strategies_Search3_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Strategies_Create2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Create0_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyModifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -137,7 +137,7 @@ func _Strategies_Update1_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Strategies_Delete4_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
+func _Strategies_Delete2_HTTP_Handler(srv StrategiesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in StrategyDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
