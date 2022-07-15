@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Companies APIs",
-    "description": "Companies APIs available for trades",
+    "title": "Instruments APIs",
+    "description": "Instruments APIs available for trades",
     "version": "1.0",
     "contact": {
       "name": "Arktos Venture project",
@@ -12,7 +12,7 @@
   },
   "tags": [
     {
-      "name": "Companies"
+      "name": "instruments"
     }
   ],
   "schemes": [
@@ -26,91 +26,15 @@
     "application/json"
   ],
   "paths": {
-    "/v1/companies": {
-      "delete": {
-        "summary": "Private API\nDelete Company",
-        "operationId": "Companies_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "exchanges",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Companies"
-        ]
-      },
-      "post": {
-        "summary": "Private API\nCreate a new Company",
-        "operationId": "Companies_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompanyCreateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Companies"
-        ]
-      }
-    },
-    "/v1/companies/{exchange}": {
+    "/v1/instrument/{id}": {
       "get": {
-        "summary": "Private API\nList Companies, only for start imports",
-        "operationId": "Companies_List",
+        "summary": "Public API\nGet Instrument properties",
+        "operationId": "instruments_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CompanyReplies"
+              "$ref": "#/definitions/v1InstrumentReply"
             }
           },
           "default": {
@@ -122,61 +46,25 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
-          "Companies"
-        ]
-      }
-    },
-    "/v1/company/{exchange}/{ticker}": {
-      "get": {
-        "summary": "Public API\nGet Company properties",
-        "operationId": "Companies_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompanyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "exchange",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Companies"
+          "instruments"
         ]
       },
       "put": {
-        "summary": "Private API\nUpdate properties of Company",
-        "operationId": "Companies_Update",
+        "summary": "Private API\nUpdate properties of Instrument",
+        "operationId": "instruments_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CompanyReply"
+              "$ref": "#/definitions/v1InstrumentReply"
             }
           },
           "default": {
@@ -188,16 +76,11 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "int64"
           },
           {
             "name": "body",
@@ -206,7 +89,13 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ticker": {
+                  "type": "string"
+                },
                 "tickerIBKR": {
+                  "type": "string"
+                },
+                "exchange": {
                   "type": "string"
                 },
                 "name": {
@@ -274,13 +163,123 @@
           }
         ],
         "tags": [
-          "Companies"
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instruments": {
+      "delete": {
+        "summary": "Private API\nDelete Instrument",
+        "operationId": "instruments_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentDelete"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      },
+      "post": {
+        "summary": "Private API\nCreate a new Instrument",
+        "operationId": "instruments_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instruments/search": {
+      "post": {
+        "summary": "Private API\nSearch instruments, only for start imports",
+        "operationId": "instruments_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentSearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
         ]
       }
     }
   },
   "definitions": {
-    "CompanyReplyDividend": {
+    "InstrumentReplyDividend": {
       "type": "object",
       "properties": {
         "values": {
@@ -306,7 +305,7 @@
         }
       }
     },
-    "CompanyReplyExchange": {
+    "InstrumentReplyExchange": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -315,12 +314,15 @@
         "routing": {
           "type": "string"
         },
+        "currency": {
+          "type": "string"
+        },
         "open": {
           "type": "boolean"
         }
       }
     },
-    "CompanyReplyStats": {
+    "InstrumentReplyStats": {
       "type": "object",
       "properties": {
         "price": {
@@ -337,6 +339,25 @@
           "format": "date-time"
         }
       }
+    },
+    "ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
+        }
+      }
+    },
+    "SortOrientation": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC"
     },
     "StatsShares": {
       "type": "object",
@@ -414,7 +435,76 @@
         }
       }
     },
-    "v1CompanyAddress": {
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status",
+        "Assets"
+      ],
+      "default": "Ticker"
+    },
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF",
+        "FUTURE"
+      ],
+      "default": "INDEX"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1InstrumentAddress": {
       "type": "object",
       "properties": {
         "street": {
@@ -431,7 +521,7 @@
         }
       }
     },
-    "v1CompanyContact": {
+    "v1InstrumentContact": {
       "type": "object",
       "properties": {
         "phone": {
@@ -445,7 +535,7 @@
         }
       }
     },
-    "v1CompanyCreateRequest": {
+    "v1InstrumentCreateRequest": {
       "type": "object",
       "properties": {
         "id": {
@@ -463,6 +553,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
         },
         "isin": {
           "type": "string"
@@ -523,7 +616,7 @@
         }
       }
     },
-    "v1CompanyDelete": {
+    "v1InstrumentDelete": {
       "type": "object",
       "properties": {
         "total": {
@@ -532,13 +625,13 @@
         }
       }
     },
-    "v1CompanyReplies": {
+    "v1InstrumentReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CompanyRepliesResult"
+            "$ref": "#/definitions/v1InstrumentRepliesResult"
           }
         },
         "total": {
@@ -547,7 +640,7 @@
         }
       }
     },
-    "v1CompanyRepliesResult": {
+    "v1InstrumentRepliesResult": {
       "type": "object",
       "properties": {
         "id": {
@@ -569,6 +662,9 @@
         "isin": {
           "type": "string"
         },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        },
         "created_at": {
           "type": "string",
           "format": "date-time"
@@ -579,7 +675,7 @@
         }
       }
     },
-    "v1CompanyReply": {
+    "v1InstrumentReply": {
       "type": "object",
       "properties": {
         "id": {
@@ -599,7 +695,10 @@
           "type": "string"
         },
         "exchange": {
-          "$ref": "#/definitions/CompanyReplyExchange"
+          "$ref": "#/definitions/InstrumentReplyExchange"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
         },
         "isin": {
           "type": "string"
@@ -617,16 +716,10 @@
           "$ref": "#/definitions/v1QuoteLastReply"
         },
         "dividends": {
-          "$ref": "#/definitions/CompanyReplyDividend"
+          "$ref": "#/definitions/InstrumentReplyDividend"
         },
         "stats": {
-          "$ref": "#/definitions/CompanyReplyStats"
-        },
-        "strategies": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/v1StrategySearchRepliesResult"
-          }
+          "$ref": "#/definitions/InstrumentReplyStats"
         },
         "employees": {
           "type": "integer",
@@ -640,10 +733,10 @@
           "format": "int32"
         },
         "contact": {
-          "$ref": "#/definitions/v1CompanyContact"
+          "$ref": "#/definitions/v1InstrumentContact"
         },
         "address": {
-          "$ref": "#/definitions/v1CompanyAddress"
+          "$ref": "#/definitions/v1InstrumentAddress"
         },
         "created_at": {
           "type": "string",
@@ -655,25 +748,34 @@
         }
       }
     },
-    "v1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "q",
-        "y"
-      ],
-      "default": "d"
+    "v1InstrumentSearchRequest": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Filter"
+          }
+        },
+        "sort": {
+          "$ref": "#/definitions/ScreenerRequestSort"
+        }
+      }
     },
-    "v1OrderAction": {
+    "v1Operator": {
       "type": "string",
       "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
       ],
-      "default": "BUY"
+      "default": "Equal"
     },
     "v1QuoteLastReply": {
       "type": "object",
@@ -701,51 +803,6 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1StrategySearchRepliesResult": {
-      "type": "object",
-      "properties": {
-        "period": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1Interval"
-          }
-        },
-        "status": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1OrderAction"
-          }
-        },
-        "breakout": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "status_ago": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "updated_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
         }
       }
     },

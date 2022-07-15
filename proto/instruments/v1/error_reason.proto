@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package companies.v1;
+package instruments.v1;
 import "errors/errors.proto";
 
-option go_package = "github.com/arktos-venture/buf/proto/companies/v1;v1Companies";
+option go_package = "github.com/arktos-venture/buf/proto/instruments/v1;v1Instruments";
 option java_multiple_files = true;
-option java_package = "companies.v1.errors";
-option objc_class_prefix = "APICompaniesErrors";
+option java_package = "instruments.v1.errors";
+option objc_class_prefix = "APInstrumentsErrors";
 
 enum ErrorReason {
   option (errors.default_code) = 500;
