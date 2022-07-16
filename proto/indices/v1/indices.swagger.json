@@ -26,6 +26,39 @@
     "application/json"
   ],
   "paths": {
+    "/v1/indice/quotes": {
+      "post": {
+        "summary": "Public API\nGet Quotes Indice",
+        "operationId": "Indices_Quotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuoteReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IndiceQuotesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
+    },
     "/v1/indice/{ticker}": {
       "get": {
         "summary": "Public API\nGet Indice properties",
@@ -108,9 +141,40 @@
         ]
       }
     },
+    "/v1/indice/{ticker}/quotes/last": {
+      "get": {
+        "summary": "Public API\nGet Quotes Indice",
+        "operationId": "Indices_LastQuotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuoteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
+    },
     "/v1/indice/{ticker}/stats": {
       "get": {
-        "summary": "Private API\nGet Stats Instrument",
+        "summary": "Private API\nGet Stats Indice",
         "operationId": "Indices_Stats",
         "responses": {
           "200": {
@@ -141,7 +205,7 @@
     },
     "/v1/indice/{ticker}/strategies": {
       "get": {
-        "summary": "Public API\nGet Strategies Results Instrument",
+        "summary": "Public API\nGet Strategies Results Indice",
         "operationId": "Indices_Strategies",
         "responses": {
           "200": {
@@ -290,17 +354,20 @@
     "StrategiesRepliesPeriod": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "result": {
-          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+          }
         }
       }
     },
     "StrategiesRepliesPeriodResult": {
       "type": "object",
       "properties": {
+        "period": {
+          "$ref": "#/definitions/v1Interval"
+        },
         "status": {
           "$ref": "#/definitions/v1OrderAction"
         },
@@ -352,6 +419,43 @@
         }
       }
     },
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status",
+        "Assets"
+      ],
+      "default": "Ticker"
+    },
     "v1Asset": {
       "type": "string",
       "enum": [
@@ -366,6 +470,23 @@
         "FUTURE"
       ],
       "default": "INDEX"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1IndiceDelete": {
       "type": "object",
@@ -393,6 +514,20 @@
         },
         "asset": {
           "$ref": "#/definitions/v1Asset"
+        }
+      }
+    },
+    "v1IndiceQuotesRequest": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Filter"
+          }
         }
       }
     },
@@ -570,6 +705,21 @@
       ],
       "default": "d"
     },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
+    },
     "v1OrderAction": {
       "type": "string",
       "enum": [
@@ -578,6 +728,21 @@
         "HOLD"
       ],
       "default": "BUY"
+    },
+    "v1QuoteReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1QuoteReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     },
     "v1QuoteReply": {
       "type": "object",

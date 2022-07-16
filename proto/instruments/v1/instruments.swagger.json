@@ -26,6 +26,39 @@
     "application/json"
   ],
   "paths": {
+    "/v1/forexes/quotes": {
+      "post": {
+        "summary": "Public API\nGet Quotes Instrument",
+        "operationId": "instruments_Quotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuoteReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentQuotesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
     "/v1/instrument/{id}": {
       "get": {
         "summary": "Public API\nGet Instrument properties",
@@ -160,6 +193,38 @@
                 }
               }
             }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instrument/{id}/quotes/last": {
+      "get": {
+        "summary": "Public API\nGet last Quotes Instrument",
+        "operationId": "instruments_LastQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1QuoteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -466,17 +531,20 @@
     "StrategiesRepliesPeriod": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "result": {
-          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+          }
         }
       }
     },
     "StrategiesRepliesPeriodResult": {
       "type": "object",
       "properties": {
+        "period": {
+          "$ref": "#/definitions/v1Interval"
+        },
         "status": {
           "$ref": "#/definitions/v1OrderAction"
         },
@@ -684,6 +752,20 @@
         "total": {
           "type": "string",
           "format": "int64"
+        }
+      }
+    },
+    "v1InstrumentQuotesRequest": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Filter"
+          }
         }
       }
     },
@@ -937,6 +1019,21 @@
         "HOLD"
       ],
       "default": "BUY"
+    },
+    "v1QuoteReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1QuoteReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     },
     "v1QuoteReply": {
       "type": "object",

@@ -4,7 +4,8 @@ package v1Indices
 
 import (
 	context "context"
-	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
+	v1 "github.com/arktos-venture/buf/proto/quotes/v1"
+	v11 "github.com/arktos-venture/buf/proto/strategies/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,11 +24,17 @@ type IndicesClient interface {
 	// Get Indice properties
 	Get(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceReply, error)
 	// Private API
-	// Get Stats Instrument
+	// Get Stats Indice
 	Stats(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceStatsReply, error)
 	// Public API
-	// Get Strategies Results Instrument
-	Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
+	// Get Quotes Indice
+	LastQuotes(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
+	// Public API
+	// Get Quotes Indice
+	Quotes(ctx context.Context, in *IndiceQuotesRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error)
+	// Public API
+	// Get Strategies Results Indice
+	Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...grpc.CallOption) (*v11.StrategiesReplies, error)
 	// Public API
 	// Search Indices available
 	Search(ctx context.Context, in *IndiceSearchRequest, opts ...grpc.CallOption) (*IndiceReplies, error)
@@ -68,8 +75,26 @@ func (c *indicesClient) Stats(ctx context.Context, in *IndiceRequest, opts ...gr
 	return out, nil
 }
 
-func (c *indicesClient) Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error) {
-	out := new(v1.StrategiesReplies)
+func (c *indicesClient) LastQuotes(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
+	out := new(v1.QuoteReply)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/LastQuotes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *indicesClient) Quotes(ctx context.Context, in *IndiceQuotesRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error) {
+	out := new(v1.QuoteReplies)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Quotes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *indicesClient) Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...grpc.CallOption) (*v11.StrategiesReplies, error) {
+	out := new(v11.StrategiesReplies)
 	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Strategies", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -121,11 +146,17 @@ type IndicesServer interface {
 	// Get Indice properties
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
 	// Private API
-	// Get Stats Instrument
+	// Get Stats Indice
 	Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error)
 	// Public API
-	// Get Strategies Results Instrument
-	Strategies(context.Context, *IndiceStrategiesRequest) (*v1.StrategiesReplies, error)
+	// Get Quotes Indice
+	LastQuotes(context.Context, *IndiceRequest) (*v1.QuoteReply, error)
+	// Public API
+	// Get Quotes Indice
+	Quotes(context.Context, *IndiceQuotesRequest) (*v1.QuoteReplies, error)
+	// Public API
+	// Get Strategies Results Indice
+	Strategies(context.Context, *IndiceStrategiesRequest) (*v11.StrategiesReplies, error)
 	// Public API
 	// Search Indices available
 	Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error)
@@ -151,7 +182,13 @@ func (UnimplementedIndicesServer) Get(context.Context, *IndiceRequest) (*IndiceR
 func (UnimplementedIndicesServer) Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
 }
-func (UnimplementedIndicesServer) Strategies(context.Context, *IndiceStrategiesRequest) (*v1.StrategiesReplies, error) {
+func (UnimplementedIndicesServer) LastQuotes(context.Context, *IndiceRequest) (*v1.QuoteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LastQuotes not implemented")
+}
+func (UnimplementedIndicesServer) Quotes(context.Context, *IndiceQuotesRequest) (*v1.QuoteReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Quotes not implemented")
+}
+func (UnimplementedIndicesServer) Strategies(context.Context, *IndiceStrategiesRequest) (*v11.StrategiesReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Strategies not implemented")
 }
 func (UnimplementedIndicesServer) Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error) {
@@ -211,6 +248,42 @@ func _Indices_Stats_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IndicesServer).Stats(ctx, req.(*IndiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Indices_LastQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndicesServer).LastQuotes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indices.v1.Indices/LastQuotes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndicesServer).LastQuotes(ctx, req.(*IndiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Indices_Quotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndiceQuotesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IndicesServer).Quotes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indices.v1.Indices/Quotes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IndicesServer).Quotes(ctx, req.(*IndiceQuotesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -319,6 +392,14 @@ var Indices_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Stats",
 			Handler:    _Indices_Stats_Handler,
+		},
+		{
+			MethodName: "LastQuotes",
+			Handler:    _Indices_LastQuotes_Handler,
+		},
+		{
+			MethodName: "Quotes",
+			Handler:    _Indices_Quotes_Handler,
 		},
 		{
 			MethodName: "Strategies",

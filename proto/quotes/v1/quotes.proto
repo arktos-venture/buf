@@ -2,95 +2,12 @@ syntax = "proto3";
 
 package quotes.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "validate/validate.proto";
-import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/quotes/v1;v1Quotes";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.quotes.v1";
 option java_outer_classname = "APIQuotesProtoV1";
-option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-	info: {
-		title: "Quotes APIs";
-		description: "Quotes APIs";
-		version: "1.0";
-		contact: {
-			name: "Arktos Venture project";
-			url: "https://github.com/arktos-venture/buf";
-			email: "oss@arktos-consulting.cloud";
-		};
-  	};
-	schemes: [HTTP, HTTPS];
-	consumes: "application/json";
-	produces: "application/json";
-	security_definitions: {
-	  	security: {
-			key: "bearer"
-			value: {
-		  		type: TYPE_API_KEY
-		  		in: IN_HEADER
-		  		name: "Authorization"
-		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
-			}
-	  	}
-	}
-	security: {
-	  	security_requirement: {
-			key: "bearer"
-	  	}
-	}
-};
-
-service Quotes {
-	// Public API
-	// Get Last Quotes for one ticker
-	rpc Last (QuoteLastRequest) returns (QuoteReply)  {
-		option (google.api.http) = {
-			get: "/v1/quotes/{instrument_id}"
-		};
-	}
-
-	// Public API
-	// Search Quotes by dates
-	rpc Search (QuoteRequest) returns (QuoteReplies)  {
-		option (google.api.http) = {
-			post: "/v1/quotes"
-			body: "*"
-		};
-	}
-
-	// Private API
-	// Delete Quotes
-	rpc Delete (QuoteDeleteRequest) returns (QuoteDelete)  {
-		option (google.api.http) = {
-			delete: "/v1/quotes"
-		};
-	}
-}
-
-// 
-// Request
-// 
-
-message QuoteRequest {
-	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	screener.v1.Interval interval = 2 [(validate.rules).enum = {defined_only: true}];
-	repeated screener.v1.Filter filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
-}
-
-message QuoteLastRequest {
-	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	int64 instrument_id = 2 [(validate.rules).int64 = {lt: 0}];
-}
-
-message QuoteDeleteRequest {
-	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated int64 instrument_id = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-}
-
 
 // 
 // Reply
@@ -106,10 +23,6 @@ message QuoteReply {
 }
 
 message QuoteReplies {
-	repeated QuoteReply quotes = 1;
+	repeated QuoteReply results = 1;
 	int64 total = 2;
-}
-
-message QuoteDelete {
-	int64 total = 1;
 }
