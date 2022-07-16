@@ -26,7 +26,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/dividend/{exchange}/{ticker}": {
+    "/v1/dividend/{instrument_id}": {
       "get": {
         "summary": "Public API\nGet Last dividend result",
         "operationId": "Dividends_Last",
@@ -46,16 +46,11 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "instrument_id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -83,22 +78,13 @@
         },
         "parameters": [
           {
-            "name": "tickers",
+            "name": "instrument_id",
             "in": "query",
             "required": false,
             "type": "array",
             "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "exchanges",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
+              "type": "string",
+              "format": "int64"
             },
             "collectionFormat": "multi"
           }
@@ -203,7 +189,8 @@
         "Action",
         "Duration",
         "Type",
-        "Status"
+        "Status",
+        "Assets"
       ],
       "default": "Ticker"
     },

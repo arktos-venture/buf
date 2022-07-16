@@ -48,23 +48,21 @@ service Orders {
   // Public API : Search Positions opened
   rpc Positions (PositionRequest) returns (PositionReplies)  {
     option (google.api.http) = {
-      post: "/v1/positions/{account}/{currency}"
-      body: "*"
+      get: "/v1/positions/{account}/{currency}"
     };
   }
   
 	// Public API: Status Order
   rpc Status (OrderStatusRequest) returns (OrderReply)  {
     option (google.api.http) = {
-      get: "/v1/orders/{account}/{currency}/{orderUUID}"
+      get: "/v1/orders/{account}/{orderUUID}"
     };
   }
 
 	// Public API: Search Orders
   rpc Search (OrderSearchRequest) returns (OrderReplies)  {
     option (google.api.http) = {
-      post: "/v1/orders/{account}/{currency}/search"
-      body: "*"
+      get: "/v1/orders/{account}/{currency}/search"
     };
   }
 
@@ -94,39 +92,45 @@ service Orders {
 
 
 // 
+// Transverse
+// 
+
+message Instrument {
+  int64 id = 1;
+  string ticker = 2;
+  string exchange = 3;
+  screener.v1.Asset asset = 4;
+}
+
+
+// 
 // Request
 // 
 
 message OrderStatusRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
-	string orderUUID = 3 [(validate.rules).string.uuid = true];
+	string orderUUID = 2 [(validate.rules).string.uuid = true];
 }
 
 message OrderSearchRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string currency = 2 [(validate.rules).string.len = 3];
-  repeated screener.v1.Asset assets = 3;
-	screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
 }
 
 message PositionRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string currency = 2 [(validate.rules).string.len = 3];
-  repeated screener.v1.Asset assets = 3;
-  screener.v1.ScreenerRequest.Sort sort = 4 [(validate.rules).message.required = true];
 }
 
 message OrderCreateRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string currency = 2 [(validate.rules).string.len = 3];
-  string ticker = 3 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
-  screener.v1.OrderAction action = 5 [(validate.rules).enum = {defined_only: true}];
-  screener.v1.OrderType orderType = 6 [(validate.rules).enum = {defined_only: true}];
-  float size = 7 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
-  screener.v1.OrderDuration duration = 8 [(validate.rules).enum = {defined_only: true}];
-  float price = 9 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
+  int64 instrument_id = 3 [(validate.rules).int64 = {gt: 1}];
+  screener.v1.OrderAction action = 4 [(validate.rules).enum = {defined_only: true}];
+  screener.v1.OrderType orderType = 5 [(validate.rules).enum = {defined_only: true}];
+  float size = 6 [(validate.rules).float = {gt: 0.01, lt: 99999999}];
+  screener.v1.OrderDuration duration = 7 [(validate.rules).enum = {defined_only: true}];
+  float price = 8 [(validate.rules).float = {gt: 0.000001, lt: 99999999}];
 }
 
 message OrderUpdateRequest {  
@@ -142,7 +146,7 @@ message OrderUpdateRequest {
 
 message OrderCancelRequest {  
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
+  string currency = 2 [(validate.rules).string.uuid = true];
   string orderUUID = 3 [(validate.rules).string.uuid = true];
 }
 
@@ -163,13 +167,12 @@ message PositionReplies {
       float total = 2;
     }
   
-    string ticker = 1;
-    string exchange = 2;
-    float size = 3;
-    Cost cost = 4;
-    Performance performance = 5;
-    google.protobuf.Timestamp created_at = 6;
-    google.protobuf.Timestamp updated_at = 7;
+    Instrument instrument = 1;
+    float size = 2;
+    Cost cost = 3;
+    Performance performance = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
   }
 
   repeated Result results = 1;
@@ -189,22 +192,21 @@ message OrderReply {
   }
 
   string id = 1;
-  string ticker = 2;
-  string exchange = 3;
-  screener.v1.OrderAction action = 4;
-  screener.v1.OrderType orderType = 5;
-  string routing = 6;
-  screener.v1.OrderDuration duration = 7;
-  Size size = 8;
-  Price price = 9;
-  screener.v1.OrderStatus status = 10;
-  google.protobuf.Timestamp created_at = 11;
-  google.protobuf.Timestamp updated_at = 12;
+  Instrument instrument = 2;
+  screener.v1.OrderAction action = 3;
+  screener.v1.OrderType orderType = 4;
+  string routing = 5;
+  screener.v1.OrderDuration duration = 6;
+  Size size = 7;
+  Price price = 8;
+  screener.v1.OrderStatus status = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
-message OrderModifyReply {  
-  string ticker = 1;
-  string exchange = 2;
+message OrderModifyReply {
+  string id = 1;
+  Instrument instrument = 2;
   screener.v1.OrderAction action = 3;
   screener.v1.OrderType orderType = 4;
   string routing = 5;
@@ -212,6 +214,8 @@ message OrderModifyReply {
   float size = 7;
   float price = 8;
   screener.v1.OrderStatus status = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 message OrderReplies {

@@ -108,6 +108,74 @@
         ]
       }
     },
+    "/v1/indice/{ticker}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Instrument",
+        "operationId": "Indices_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IndiceStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
+    },
+    "/v1/indice/{ticker}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "Indices_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Indices"
+        ]
+      }
+    },
     "/v1/indices": {
       "get": {
         "summary": "Public API\nSearch Indices available",
@@ -219,6 +287,41 @@
     }
   },
   "definitions": {
+    "StrategiesRepliesPeriod": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "breakout": {
+          "type": "number",
+          "format": "float"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -259,41 +362,10 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
-    },
-    "v1CompanyRepliesResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
     },
     "v1IndiceDelete": {
       "type": "object",
@@ -369,12 +441,12 @@
           "$ref": "#/definitions/v1Asset"
         },
         "quote": {
-          "$ref": "#/definitions/v1QuoteLastReply"
+          "$ref": "#/definitions/v1QuoteReply"
         },
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CompanyRepliesResult"
+            "$ref": "#/definitions/v1InstrumentRepliesResult"
           }
         },
         "created_at": {
@@ -387,7 +459,127 @@
         }
       }
     },
-    "v1QuoteLastReply": {
+    "v1IndiceStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1IndiceStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1IndiceStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1IndiceStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1IndiceStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1InstrumentRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -413,6 +605,21 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1StrategiesReplies": {
+      "type": "object",
+      "properties": {
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

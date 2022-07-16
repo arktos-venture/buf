@@ -4,6 +4,7 @@ package v1Forexes
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,6 +22,12 @@ type ForexesClient interface {
 	// Public API
 	// Get Forexes properties
 	Get(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexReply, error)
+	// Private API
+	// Get Stats Forex
+	Stats(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(ctx context.Context, in *ForexStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
 	// Public API
 	// List Forexes available
 	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexList, error)
@@ -43,6 +50,24 @@ func NewForexesClient(cc grpc.ClientConnInterface) ForexesClient {
 func (c *forexesClient) Get(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexReply, error) {
 	out := new(ForexReply)
 	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *forexesClient) Stats(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexStatsReply, error) {
+	out := new(ForexStatsReply)
+	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Stats", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *forexesClient) Strategies(ctx context.Context, in *ForexStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error) {
+	out := new(v1.StrategiesReplies)
+	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Strategies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,6 +108,12 @@ type ForexesServer interface {
 	// Public API
 	// Get Forexes properties
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
+	// Private API
+	// Get Stats Forex
+	Stats(context.Context, *ForexRequest) (*ForexStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(context.Context, *ForexStrategiesRequest) (*v1.StrategiesReplies, error)
 	// Public API
 	// List Forexes available
 	List(context.Context, *ForexListRequest) (*ForexList, error)
@@ -101,6 +132,12 @@ type UnimplementedForexesServer struct {
 
 func (UnimplementedForexesServer) Get(context.Context, *ForexRequest) (*ForexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedForexesServer) Stats(context.Context, *ForexRequest) (*ForexStatsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
+}
+func (UnimplementedForexesServer) Strategies(context.Context, *ForexStrategiesRequest) (*v1.StrategiesReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Strategies not implemented")
 }
 func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
@@ -138,6 +175,42 @@ func _Forexes_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ForexesServer).Get(ctx, req.(*ForexRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Forexes_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForexRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ForexesServer).Stats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/forexes.v1.Forexes/Stats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ForexesServer).Stats(ctx, req.(*ForexRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Forexes_Strategies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForexStrategiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ForexesServer).Strategies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/forexes.v1.Forexes/Strategies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ForexesServer).Strategies(ctx, req.(*ForexStrategiesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,6 +279,14 @@ var Forexes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Forexes_Get_Handler,
+		},
+		{
+			MethodName: "Stats",
+			Handler:    _Forexes_Stats_Handler,
+		},
+		{
+			MethodName: "Strategies",
+			Handler:    _Forexes_Strategies_Handler,
 		},
 		{
 			MethodName: "List",

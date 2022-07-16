@@ -240,37 +240,20 @@
         }
       }
     },
-    "v1CompanyRepliesResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF",
+        "FUTURE"
+      ],
+      "default": "INDEX"
     },
     "v1IndexCreateRequest": {
       "type": "object",
@@ -310,7 +293,7 @@
         "companies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CompanyRepliesResult"
+            "$ref": "#/definitions/v1InstrumentRepliesResult"
           }
         },
         "created_at": {
@@ -367,6 +350,41 @@
         },
         "public": {
           "type": "boolean"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
         },
         "created_at": {
           "type": "string",

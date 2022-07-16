@@ -6,7 +6,9 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 import "proto/indices/v1/indices.proto";
+import "proto/strategies/v1/strategies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;v1Exchanges";
 option java_multiple_files = true;
@@ -53,11 +55,46 @@ service Exchanges {
         };
     }
 
+	// Private API
+	// Get Stats Exchange
+	rpc Stats (ExchangeRequest) returns (ExchangeStatsReply) {
+		option (google.api.http) = {
+			get: "/v1/exchange/{ticker}/stats"
+	  	};
+	}
+
+	// Public API
+	// Get Strategies Results Instrument
+	rpc Strategies (ExchangeStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
+		option (google.api.http) = {
+			get: "/v1/exchange/{ticker}/strategies"
+	  	};
+	}
+
 	// Public API
 	// Search Exchanges available
 	rpc Search (ExchangeSearchRequest) returns (ExchangeReplies)  {
         option (google.api.http) = {
-            get: "/v1/exchanges"
+            post: "/v1/exchanges"
+			body: "*"
+        };
+    }
+
+	// Private API
+	// Create Exchange
+	rpc Create (ExchangeCreateRequest) returns (ExchangeSimpleReply)  {
+        option (google.api.http) = {
+            post: "/v1/exchanges"
+			body: "*"
+        };
+    }
+
+	// Private API
+	// Update Exchange
+	rpc Update (ExchangeUpdateRequest) returns (ExchangeSimpleReply)  {
+        option (google.api.http) = {
+            patch: "/v1/exchange/{ticker}"
+			body: "*"
         };
     }
 
@@ -72,17 +109,57 @@ service Exchanges {
 
 
 // 
+// Transverse 
+// 
+
+message Holiday {
+	string name = 1;
+	string description = 2;
+	string date = 3;
+	bool official = 4;
+}
+
+
+// 
 // Request
 // 
 
 message ExchangeRequest {
-	string ticker = 1 [(validate.rules).string = {in: ["NASDAQ", "NYSE", "LSE", "TO", "V", "NEO", "BE", "HM", "XETRA", "DU", "F", "HA", "MU", "STU", "LU", "VI", "MI", "PA", "BR", "LS", "VX", "AS", "SW", "MC", "IR", "IC", "NFN", "RG", "VS", "NB", "HE", "OL", "ST", "TL", "CO", "TA", "HK", "KO", "KQ", "PSE", "BUD", "WAR", "SG", "BSE", "SHE", "SN", "AT", "JK", "JSE", "BK", "SR", "NSE", "KAR", "AU", "SHG", "CM", "VN", "KLSE", "RO", "SA", "BA", "MX", "IL", "ZSE", "TW", "LIM", "CC", "TWO", "IS", "CN", "INDX", "GBOND", "MONEY", "COMM", "FOREX"]}];
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+}
+
+message ExchangeStrategiesRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
 
 message ExchangeSearchRequest {
 	string country = 1 [(validate.rules).string.len = 2];
 	string currency = 2 [(validate.rules).string.len = 3];
 	bool open = 3;
+}
+
+message ExchangeCreateRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 64}];
+	string description = 3 [(validate.rules).string = {min_len: 0, max_len: 256}];
+	string currency = 4 [(validate.rules).string.len = 3];
+	string routing = 5 [(validate.rules).string = {min_len: 3, max_len: 16}];
+	string trading_hours = 6 [(validate.rules).string = {min_len: 3, max_len: 16}];
+	string country = 7 [(validate.rules).string.len = 2];
+	string timezone = 8 [(validate.rules).string = {min_len: 5, max_len: 32}];
+	string primary_indice = 9;
+	repeated Holiday holidays = 10;
+}
+
+message ExchangeUpdateRequest {
+	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 64}];
+	string description = 3 [(validate.rules).string = {min_len: 0, max_len: 256}];
+	string routing = 4 [(validate.rules).string = {min_len: 3, max_len: 16}];
+	string trading_hours = 5 [(validate.rules).string = {min_len: 3, max_len: 16}];
+	string primary_indice = 6;
+	repeated Holiday holidays = 7;
 }
 
 message ExchangeDeleteRequest {
@@ -95,13 +172,6 @@ message ExchangeDeleteRequest {
 // 
   
 message ExchangeReply {
-	message Holiday {
-		string name = 1;
-		string description = 2;
-		string date = 3;
-		bool official = 4;
-	}
-  
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
@@ -118,6 +188,28 @@ message ExchangeReply {
 	google.protobuf.Timestamp updated_at = 14;
 }
 
+message ExchangeStatsReply {
+	message Price {
+		float max_annual = 1;
+		float min_annual = 2;
+		float return_year = 3;
+		int64 market_cap_usd = 4;
+		float beta5y = 5;
+		float start = 6;
+	}
+		
+	message Volume {
+		int64 volumeAvg10d = 1;
+		int64 volumeAvg30d = 2;
+		int64 volumeAvg90d = 3;
+	}
+
+	Price price = 1;
+	Volume volume = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4; 
+}
+
 message ExchangeReplies {
 	message Result {
 		string ticker = 1;
@@ -128,6 +220,10 @@ message ExchangeReplies {
 
 	repeated Result results = 1;
 	int64 total = 2;
+}
+
+message ExchangeSimpleReply {
+	bool success = 1;
 }
 
 message ExchangeDelete {

@@ -42,6 +42,113 @@ var (
 // define the regex for a UUID once up-front
 var _orders_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on Instrument with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Instrument) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Instrument with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in InstrumentMultiError, or
+// nil if none found.
+func (m *Instrument) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Instrument) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Ticker
+
+	// no validation rules for Exchange
+
+	// no validation rules for Asset
+
+	if len(errors) > 0 {
+		return InstrumentMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentMultiError is an error wrapping multiple validation errors
+// returned by Instrument.ValidateAll() if the designated constraints aren't met.
+type InstrumentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentMultiError) AllErrors() []error { return m }
+
+// InstrumentValidationError is the validation error returned by
+// Instrument.Validate if the designated constraints aren't met.
+type InstrumentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentValidationError) ErrorName() string { return "InstrumentValidationError" }
+
+// Error satisfies the builtin error interface
+func (e InstrumentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrument.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentValidationError{}
+
 // Validate checks the field values on OrderStatusRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -73,18 +180,6 @@ func (m *OrderStatusRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-	}
-
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := OrderStatusRequestValidationError{
-			field:  "Currency",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
 	}
 
 	if err := m._validateUuid(m.GetOrderUUID()); err != nil {
@@ -232,46 +327,6 @@ func (m *OrderSearchRequest) validate(all bool) error {
 
 	}
 
-	if m.GetSort() == nil {
-		err := OrderSearchRequestValidationError{
-			field:  "Sort",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetSort()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, OrderSearchRequestValidationError{
-					field:  "Sort",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, OrderSearchRequestValidationError{
-					field:  "Sort",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OrderSearchRequestValidationError{
-				field:  "Sort",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
 		return OrderSearchRequestMultiError(errors)
 	}
@@ -397,46 +452,6 @@ func (m *PositionRequest) validate(all bool) error {
 
 	}
 
-	if m.GetSort() == nil {
-		err := PositionRequestValidationError{
-			field:  "Sort",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetSort()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, PositionRequestValidationError{
-					field:  "Sort",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, PositionRequestValidationError{
-					field:  "Sort",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return PositionRequestValidationError{
-				field:  "Sort",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
 		return PositionRequestMultiError(errors)
 	}
@@ -560,21 +575,10 @@ func (m *OrderCreateRequest) validate(all bool) error {
 
 	}
 
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
+	if m.GetInstrumentId() <= 1 {
 		err := OrderCreateRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 8 {
-		err := OrderCreateRequestValidationError{
-			field:  "Exchange",
-			reason: "value length must be between 1 and 8 runes, inclusive",
+			field:  "InstrumentId",
+			reason: "value must be greater than 1",
 		}
 		if !all {
 			return err
@@ -950,16 +954,16 @@ func (m *OrderCancelRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := OrderCancelRequestValidationError{
+	if err := m._validateUuid(m.GetCurrency()); err != nil {
+		err = OrderCancelRequestValidationError{
 			field:  "Currency",
-			reason: "value length must be 3 runes",
+			reason: "value must be a valid UUID",
+			cause:  err,
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if err := m._validateUuid(m.GetOrderUUID()); err != nil {
@@ -1222,9 +1226,34 @@ func (m *OrderReply) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Ticker
-
-	// no validation rules for Exchange
+	if all {
+		switch v := interface{}(m.GetInstrument()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderReplyValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstrument()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderReplyValidationError{
+				field:  "Instrument",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Action
 
@@ -1451,9 +1480,36 @@ func (m *OrderModifyReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ticker
+	// no validation rules for Id
 
-	// no validation rules for Exchange
+	if all {
+		switch v := interface{}(m.GetInstrument()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstrument()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderModifyReplyValidationError{
+				field:  "Instrument",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Action
 
@@ -1468,6 +1524,64 @@ func (m *OrderModifyReply) validate(all bool) error {
 	// no validation rules for Price
 
 	// no validation rules for Status
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderModifyReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderModifyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderModifyReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return OrderModifyReplyMultiError(errors)
@@ -1805,9 +1919,34 @@ func (m *PositionReplies_Result) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ticker
-
-	// no validation rules for Exchange
+	if all {
+		switch v := interface{}(m.GetInstrument()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PositionReplies_ResultValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PositionReplies_ResultValidationError{
+					field:  "Instrument",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstrument()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PositionReplies_ResultValidationError{
+				field:  "Instrument",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Size
 

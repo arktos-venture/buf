@@ -20,10 +20,10 @@ const _ = grpc.SupportPackageIsVersion7
 type QuotesClient interface {
 	// Public API
 	// Get Last Quotes for one ticker
-	Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteLastReply, error)
+	Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteReply, error)
 	// Public API
 	// Search Quotes by dates
-	Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error)
+	Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReplies, error)
 	// Private API
 	// Delete Quotes
 	Delete(ctx context.Context, in *QuoteDeleteRequest, opts ...grpc.CallOption) (*QuoteDelete, error)
@@ -37,8 +37,8 @@ func NewQuotesClient(cc grpc.ClientConnInterface) QuotesClient {
 	return &quotesClient{cc}
 }
 
-func (c *quotesClient) Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteLastReply, error) {
-	out := new(QuoteLastReply)
+func (c *quotesClient) Last(ctx context.Context, in *QuoteLastRequest, opts ...grpc.CallOption) (*QuoteReply, error) {
+	out := new(QuoteReply)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Last", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,8 +46,8 @@ func (c *quotesClient) Last(ctx context.Context, in *QuoteLastRequest, opts ...g
 	return out, nil
 }
 
-func (c *quotesClient) Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error) {
-	out := new(QuoteReply)
+func (c *quotesClient) Search(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReplies, error) {
+	out := new(QuoteReplies)
 	err := c.cc.Invoke(ctx, "/quotes.v1.Quotes/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -70,10 +70,10 @@ func (c *quotesClient) Delete(ctx context.Context, in *QuoteDeleteRequest, opts 
 type QuotesServer interface {
 	// Public API
 	// Get Last Quotes for one ticker
-	Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error)
+	Last(context.Context, *QuoteLastRequest) (*QuoteReply, error)
 	// Public API
 	// Search Quotes by dates
-	Search(context.Context, *QuoteRequest) (*QuoteReply, error)
+	Search(context.Context, *QuoteRequest) (*QuoteReplies, error)
 	// Private API
 	// Delete Quotes
 	Delete(context.Context, *QuoteDeleteRequest) (*QuoteDelete, error)
@@ -84,10 +84,10 @@ type QuotesServer interface {
 type UnimplementedQuotesServer struct {
 }
 
-func (UnimplementedQuotesServer) Last(context.Context, *QuoteLastRequest) (*QuoteLastReply, error) {
+func (UnimplementedQuotesServer) Last(context.Context, *QuoteLastRequest) (*QuoteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedQuotesServer) Search(context.Context, *QuoteRequest) (*QuoteReply, error) {
+func (UnimplementedQuotesServer) Search(context.Context, *QuoteRequest) (*QuoteReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedQuotesServer) Delete(context.Context, *QuoteDeleteRequest) (*QuoteDelete, error) {

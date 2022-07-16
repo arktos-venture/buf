@@ -62,15 +62,6 @@ service Strategies {
 	}
 
 	// Public API
-	// Search Strategies
-	rpc Search (StrategySearchRequest) returns (StrategySearchReplies)  {
-		option (google.api.http) = {
-		  	post: "/v1/strategies/search"
-			body: "*"
-		};
-	}
-
-	// Public API
 	// Create Strategy
 	rpc Create (StrategyModifyRequest) returns (StrategyReply)  {
 		option (google.api.http) = {
@@ -118,12 +109,6 @@ message StrategyListRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
-message StrategySearchRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-	screener.v1.TSDB tsdb = 2 [(validate.rules).enum = {defined_only: true}];
-  	repeated screener.v1.FilterSimple filters = 3 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
-}
-
 message StrategyModifyRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 16}];
@@ -163,17 +148,22 @@ message StrategyReplies {
 	int64 total = 2; 
 }
 
-message StrategySearchReplies {
-	message Result {
-		repeated screener.v1.Interval period = 1;
-		repeated screener.v1.OrderAction status = 2; 
-		repeated float breakout = 3;
-		repeated google.protobuf.Timestamp status_ago = 4;
-		repeated google.protobuf.Timestamp created_at = 5;
-		repeated google.protobuf.Timestamp updated_at = 6; 
+message StrategiesReplies {
+	message Period {
+		message Result {
+			screener.v1.OrderAction status = 2; 
+			float breakout = 3;
+			google.protobuf.Timestamp status_ago = 4;
+			google.protobuf.Timestamp created_at = 5;
+			google.protobuf.Timestamp updated_at = 6; 
+		}
+
+		screener.v1.Interval ticker = 1;
+		Result result = 2;
 	}
 	
-	map<string, Result> Results = 1;
+
+	map<string, Period> strategies = 1;
 	int64 total = 2; 
 }
 

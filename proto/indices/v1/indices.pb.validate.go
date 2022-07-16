@@ -150,6 +150,130 @@ var _ interface {
 	ErrorName() string
 } = IndiceRequestValidationError{}
 
+// Validate checks the field values on IndiceStrategiesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndiceStrategiesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndiceStrategiesRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndiceStrategiesRequestMultiError, or nil if none found.
+func (m *IndiceStrategiesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndiceStrategiesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := IndiceStrategiesRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
+		err := IndiceStrategiesRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 16 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return IndiceStrategiesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndiceStrategiesRequestMultiError is an error wrapping multiple validation
+// errors returned by IndiceStrategiesRequest.ValidateAll() if the designated
+// constraints aren't met.
+type IndiceStrategiesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndiceStrategiesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndiceStrategiesRequestMultiError) AllErrors() []error { return m }
+
+// IndiceStrategiesRequestValidationError is the validation error returned by
+// IndiceStrategiesRequest.Validate if the designated constraints aren't met.
+type IndiceStrategiesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndiceStrategiesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndiceStrategiesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndiceStrategiesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndiceStrategiesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndiceStrategiesRequestValidationError) ErrorName() string {
+	return "IndiceStrategiesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndiceStrategiesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndiceStrategiesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndiceStrategiesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndiceStrategiesRequestValidationError{}
+
 // Validate checks the field values on IndiceSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -804,6 +928,222 @@ var _ interface {
 	ErrorName() string
 } = IndiceReplyValidationError{}
 
+// Validate checks the field values on IndiceStatsReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *IndiceStatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndiceStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndiceStatsReplyMultiError, or nil if none found.
+func (m *IndiceStatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndiceStatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndiceStatsReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndiceStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndiceStatsReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndiceStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndiceStatsReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return IndiceStatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndiceStatsReplyMultiError is an error wrapping multiple validation errors
+// returned by IndiceStatsReply.ValidateAll() if the designated constraints
+// aren't met.
+type IndiceStatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndiceStatsReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndiceStatsReplyMultiError) AllErrors() []error { return m }
+
+// IndiceStatsReplyValidationError is the validation error returned by
+// IndiceStatsReply.Validate if the designated constraints aren't met.
+type IndiceStatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndiceStatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndiceStatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndiceStatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndiceStatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndiceStatsReplyValidationError) ErrorName() string { return "IndiceStatsReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e IndiceStatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndiceStatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndiceStatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndiceStatsReplyValidationError{}
+
 // Validate checks the field values on IndiceReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1040,6 +1380,228 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndiceDeleteValidationError{}
+
+// Validate checks the field values on IndiceStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndiceStatsReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndiceStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndiceStatsReply_PriceMultiError, or nil if none found.
+func (m *IndiceStatsReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndiceStatsReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MaxAnnual
+
+	// no validation rules for MinAnnual
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for MarketCapUsd
+
+	// no validation rules for Beta5Y
+
+	// no validation rules for Start
+
+	if len(errors) > 0 {
+		return IndiceStatsReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndiceStatsReply_PriceMultiError is an error wrapping multiple validation
+// errors returned by IndiceStatsReply_Price.ValidateAll() if the designated
+// constraints aren't met.
+type IndiceStatsReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndiceStatsReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndiceStatsReply_PriceMultiError) AllErrors() []error { return m }
+
+// IndiceStatsReply_PriceValidationError is the validation error returned by
+// IndiceStatsReply_Price.Validate if the designated constraints aren't met.
+type IndiceStatsReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndiceStatsReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndiceStatsReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndiceStatsReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndiceStatsReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndiceStatsReply_PriceValidationError) ErrorName() string {
+	return "IndiceStatsReply_PriceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndiceStatsReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndiceStatsReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndiceStatsReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndiceStatsReply_PriceValidationError{}
+
+// Validate checks the field values on IndiceStatsReply_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndiceStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndiceStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndiceStatsReply_VolumeMultiError, or nil if none found.
+func (m *IndiceStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndiceStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VolumeAvg10D
+
+	// no validation rules for VolumeAvg30D
+
+	// no validation rules for VolumeAvg90D
+
+	if len(errors) > 0 {
+		return IndiceStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndiceStatsReply_VolumeMultiError is an error wrapping multiple validation
+// errors returned by IndiceStatsReply_Volume.ValidateAll() if the designated
+// constraints aren't met.
+type IndiceStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndiceStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndiceStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// IndiceStatsReply_VolumeValidationError is the validation error returned by
+// IndiceStatsReply_Volume.Validate if the designated constraints aren't met.
+type IndiceStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndiceStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndiceStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndiceStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndiceStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndiceStatsReply_VolumeValidationError) ErrorName() string {
+	return "IndiceStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndiceStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndiceStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndiceStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndiceStatsReply_VolumeValidationError{}
 
 // Validate checks the field values on IndiceReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

@@ -55,17 +55,15 @@
         "tags": [
           "Exchanges"
         ]
-      }
-    },
-    "/v1/exchanges": {
-      "get": {
-        "summary": "Public API\nSearch Exchanges available",
-        "operationId": "Exchanges_Search",
+      },
+      "patch": {
+        "summary": "Private API\nUpdate Exchange",
+        "operationId": "Exchanges_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExchangeReplies"
+              "$ref": "#/definitions/v1ExchangeSimpleReply"
             }
           },
           "default": {
@@ -77,28 +75,117 @@
         },
         "parameters": [
           {
-            "name": "country",
-            "in": "query",
-            "required": false,
+            "name": "ticker",
+            "in": "path",
+            "required": true,
             "type": "string"
           },
           {
-            "name": "currency",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "open",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "routing": {
+                  "type": "string"
+                },
+                "trading_hours": {
+                  "type": "string"
+                },
+                "primary_indice": {
+                  "type": "string"
+                },
+                "holidays": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1Holiday"
+                  }
+                }
+              }
+            }
           }
         ],
         "tags": [
           "Exchanges"
         ]
-      },
+      }
+    },
+    "/v1/exchange/{ticker}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Exchange",
+        "operationId": "Exchanges_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
+      }
+    },
+    "/v1/exchange/{ticker}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "Exchanges_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
+      }
+    },
+    "/v1/exchanges": {
       "delete": {
         "summary": "Private API\nDelete Exchange",
         "operationId": "Exchanges_Delete",
@@ -131,24 +218,73 @@
         "tags": [
           "Exchanges"
         ]
+      },
+      "post": {
+        "summary": "Private API\nCreate Exchange",
+        "operationId": "Exchanges_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeSimpleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
       }
     }
   },
   "definitions": {
-    "ExchangeReplyHoliday": {
+    "StrategiesRepliesPeriod": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
         },
-        "description": {
-          "type": "string"
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
         },
-        "date": {
-          "type": "string"
+        "breakout": {
+          "type": "number",
+          "format": "float"
         },
-        "official": {
-          "type": "boolean"
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -192,9 +328,48 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
+    },
+    "v1ExchangeCreateRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "trading_hours": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "primary_indice": {
+          "type": "string"
+        },
+        "holidays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Holiday"
+          }
+        }
+      }
     },
     "v1ExchangeDelete": {
       "type": "object",
@@ -273,7 +448,7 @@
         "holidays": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ExchangeReplyHoliday"
+            "$ref": "#/definitions/v1Holiday"
           }
         },
         "tradingHours": {
@@ -292,6 +467,110 @@
         }
       }
     },
+    "v1ExchangeSearchRequest": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "open": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1ExchangeSimpleReply": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1ExchangeStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1ExchangeStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1ExchangeStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ExchangeStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1ExchangeStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1Holiday": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "official": {
+          "type": "boolean"
+        }
+      }
+    },
     "v1IndiceRepliesResult": {
       "type": "object",
       "properties": {
@@ -303,6 +582,41 @@
         },
         "asset": {
           "$ref": "#/definitions/v1Asset"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1StrategiesReplies": {
+      "type": "object",
+      "properties": {
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

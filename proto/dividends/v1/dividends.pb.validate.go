@@ -217,9 +217,16 @@ func (m *DividendLastRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Exchange
-
-	// no validation rules for Ticker
+	if m.GetInstrumentId() >= 0 {
+		err := DividendLastRequestValidationError{
+			field:  "InstrumentId",
+			reason: "value must be less than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return DividendLastRequestMultiError(errors)
@@ -323,14 +330,14 @@ func (m *DividendDeleteRequest) validate(all bool) error {
 
 	var errors []error
 
-	_DividendDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
+	_DividendDeleteRequest_InstrumentId_Unique := make(map[int64]struct{}, len(m.GetInstrumentId()))
 
-	for idx, item := range m.GetTickers() {
+	for idx, item := range m.GetInstrumentId() {
 		_, _ = idx, item
 
-		if _, exists := _DividendDeleteRequest_Tickers_Unique[item]; exists {
+		if _, exists := _DividendDeleteRequest_InstrumentId_Unique[item]; exists {
 			err := DividendDeleteRequestValidationError{
-				field:  fmt.Sprintf("Tickers[%v]", idx),
+				field:  fmt.Sprintf("InstrumentId[%v]", idx),
 				reason: "repeated value must contain unique items",
 			}
 			if !all {
@@ -338,31 +345,10 @@ func (m *DividendDeleteRequest) validate(all bool) error {
 			}
 			errors = append(errors, err)
 		} else {
-			_DividendDeleteRequest_Tickers_Unique[item] = struct{}{}
+			_DividendDeleteRequest_InstrumentId_Unique[item] = struct{}{}
 		}
 
-		// no validation rules for Tickers[idx]
-	}
-
-	_DividendDeleteRequest_Exchanges_Unique := make(map[string]struct{}, len(m.GetExchanges()))
-
-	for idx, item := range m.GetExchanges() {
-		_, _ = idx, item
-
-		if _, exists := _DividendDeleteRequest_Exchanges_Unique[item]; exists {
-			err := DividendDeleteRequestValidationError{
-				field:  fmt.Sprintf("Exchanges[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_DividendDeleteRequest_Exchanges_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Exchanges[idx]
+		// no validation rules for InstrumentId[idx]
 	}
 
 	if len(errors) > 0 {

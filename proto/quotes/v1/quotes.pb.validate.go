@@ -238,9 +238,16 @@ func (m *QuoteLastRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Exchange
-
-	// no validation rules for Ticker
+	if m.GetInstrumentId() >= 0 {
+		err := QuoteLastRequestValidationError{
+			field:  "InstrumentId",
+			reason: "value must be less than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return QuoteLastRequestMultiError(errors)
@@ -353,6 +360,27 @@ func (m *QuoteDeleteRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	_QuoteDeleteRequest_InstrumentId_Unique := make(map[int64]struct{}, len(m.GetInstrumentId()))
+
+	for idx, item := range m.GetInstrumentId() {
+		_, _ = idx, item
+
+		if _, exists := _QuoteDeleteRequest_InstrumentId_Unique[item]; exists {
+			err := QuoteDeleteRequestValidationError{
+				field:  fmt.Sprintf("InstrumentId[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_QuoteDeleteRequest_InstrumentId_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for InstrumentId[idx]
+	}
+
 	if len(errors) > 0 {
 		return QuoteDeleteRequestMultiError(errors)
 	}
@@ -455,38 +483,43 @@ func (m *QuoteReply) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetCreatedAt() {
-		_, _ = idx, item
+	// no validation rules for Open
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, QuoteReplyValidationError{
-						field:  fmt.Sprintf("CreatedAt[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, QuoteReplyValidationError{
-						field:  fmt.Sprintf("CreatedAt[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return QuoteReplyValidationError{
-					field:  fmt.Sprintf("CreatedAt[%v]", idx),
+	// no validation rules for Close
+
+	// no validation rules for Low
+
+	// no validation rules for High
+
+	// no validation rules for Volume
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QuoteReplyValidationError{
+					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QuoteReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QuoteReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -566,81 +599,77 @@ var _ interface {
 	ErrorName() string
 } = QuoteReplyValidationError{}
 
-// Validate checks the field values on QuoteLastReply with the rules defined in
+// Validate checks the field values on QuoteReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *QuoteLastReply) Validate() error {
+func (m *QuoteReplies) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on QuoteLastReply with the rules defined
+// ValidateAll checks the field values on QuoteReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in QuoteLastReplyMultiError,
-// or nil if none found.
-func (m *QuoteLastReply) ValidateAll() error {
+// result is a list of violation errors wrapped in QuoteRepliesMultiError, or
+// nil if none found.
+func (m *QuoteReplies) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *QuoteLastReply) validate(all bool) error {
+func (m *QuoteReplies) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Open
+	for idx, item := range m.GetQuotes() {
+		_, _ = idx, item
 
-	// no validation rules for Close
-
-	// no validation rules for Low
-
-	// no validation rules for High
-
-	// no validation rules for Volume
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, QuoteLastReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, QuoteRepliesValidationError{
+						field:  fmt.Sprintf("Quotes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, QuoteRepliesValidationError{
+						field:  fmt.Sprintf("Quotes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, QuoteLastReplyValidationError{
-					field:  "CreatedAt",
+				return QuoteRepliesValidationError{
+					field:  fmt.Sprintf("Quotes[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuoteLastReplyValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
+	// no validation rules for Total
+
 	if len(errors) > 0 {
-		return QuoteLastReplyMultiError(errors)
+		return QuoteRepliesMultiError(errors)
 	}
 
 	return nil
 }
 
-// QuoteLastReplyMultiError is an error wrapping multiple validation errors
-// returned by QuoteLastReply.ValidateAll() if the designated constraints
-// aren't met.
-type QuoteLastReplyMultiError []error
+// QuoteRepliesMultiError is an error wrapping multiple validation errors
+// returned by QuoteReplies.ValidateAll() if the designated constraints aren't met.
+type QuoteRepliesMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m QuoteLastReplyMultiError) Error() string {
+func (m QuoteRepliesMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -649,11 +678,11 @@ func (m QuoteLastReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m QuoteLastReplyMultiError) AllErrors() []error { return m }
+func (m QuoteRepliesMultiError) AllErrors() []error { return m }
 
-// QuoteLastReplyValidationError is the validation error returned by
-// QuoteLastReply.Validate if the designated constraints aren't met.
-type QuoteLastReplyValidationError struct {
+// QuoteRepliesValidationError is the validation error returned by
+// QuoteReplies.Validate if the designated constraints aren't met.
+type QuoteRepliesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -661,22 +690,22 @@ type QuoteLastReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e QuoteLastReplyValidationError) Field() string { return e.field }
+func (e QuoteRepliesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e QuoteLastReplyValidationError) Reason() string { return e.reason }
+func (e QuoteRepliesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e QuoteLastReplyValidationError) Cause() error { return e.cause }
+func (e QuoteRepliesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e QuoteLastReplyValidationError) Key() bool { return e.key }
+func (e QuoteRepliesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e QuoteLastReplyValidationError) ErrorName() string { return "QuoteLastReplyValidationError" }
+func (e QuoteRepliesValidationError) ErrorName() string { return "QuoteRepliesValidationError" }
 
 // Error satisfies the builtin error interface
-func (e QuoteLastReplyValidationError) Error() string {
+func (e QuoteRepliesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -688,14 +717,14 @@ func (e QuoteLastReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sQuoteLastReply.%s: %s%s",
+		"invalid %sQuoteReplies.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = QuoteLastReplyValidationError{}
+var _ error = QuoteRepliesValidationError{}
 
 var _ interface {
 	Field() string
@@ -703,7 +732,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = QuoteLastReplyValidationError{}
+} = QuoteRepliesValidationError{}
 
 // Validate checks the field values on QuoteDelete with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

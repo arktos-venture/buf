@@ -1,0 +1,999 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Instruments APIs",
+    "description": "Instruments APIs available for trades",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
+  },
+  "tags": [
+    {
+      "name": "instruments"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/instrument/{id}": {
+      "get": {
+        "summary": "Public API\nGet Instrument properties",
+        "operationId": "instruments_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      },
+      "put": {
+        "summary": "Private API\nUpdate properties of Instrument",
+        "operationId": "instruments_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ticker": {
+                  "type": "string"
+                },
+                "tickerIBKR": {
+                  "type": "string"
+                },
+                "exchange": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "isin": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "activity": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "adr": {
+                  "type": "boolean"
+                },
+                "fiscalMonthEnd": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "currencyReport": {
+                  "type": "string"
+                },
+                "employees": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sharesPerListing": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "sharesOut": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "sharesFloat": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "website": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instrument/{id}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Instrument",
+        "operationId": "instruments_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instrument/{id}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "instruments_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instruments": {
+      "delete": {
+        "summary": "Private API\nDelete Instrument",
+        "operationId": "instruments_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentDelete"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tickers",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "exchanges",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      },
+      "post": {
+        "summary": "Private API\nCreate a new Instrument",
+        "operationId": "instruments_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instruments/search": {
+      "post": {
+        "summary": "Private API\nSearch instruments, only for start imports",
+        "operationId": "instruments_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentSearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "InstrumentReplyAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "InstrumentReplyDividend": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "yields": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "created_at": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "InstrumentReplyExchange": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "open": {
+          "type": "boolean"
+        }
+      }
+    },
+    "InstrumentReplyStats": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyVolume"
+        },
+        "shares": {
+          "$ref": "#/definitions/StatsShares"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ScreenerRequestSort": {
+      "type": "object",
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "orientation": {
+          "$ref": "#/definitions/SortOrientation"
+        }
+      }
+    },
+    "SortOrientation": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC"
+    },
+    "StatsShares": {
+      "type": "object",
+      "properties": {
+        "outstanding": {
+          "type": "string",
+          "format": "int64"
+        },
+        "float": {
+          "type": "string",
+          "format": "int64"
+        },
+        "div": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "StrategiesRepliesPeriod": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "breakout": {
+          "type": "number",
+          "format": "float"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status",
+        "Assets"
+      ],
+      "default": "Ticker"
+    },
+    "v1Asset": {
+      "type": "string",
+      "enum": [
+        "INDEX",
+        "BOND",
+        "INDICATOR",
+        "COMMODITY",
+        "STOCK",
+        "OPTION",
+        "CASH",
+        "ETF",
+        "FUTURE"
+      ],
+      "default": "INDEX"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1InstrumentCreateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "tickerIBKR": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "activity": {
+          "type": "string",
+          "format": "int64"
+        },
+        "adr": {
+          "type": "boolean"
+        },
+        "fiscalMonthEnd": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currencyReport": {
+          "type": "string"
+        },
+        "employees": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sharesPerListing": {
+          "type": "number",
+          "format": "float"
+        },
+        "sharesOut": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sharesFloat": {
+          "type": "string",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InstrumentDelete": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1InstrumentReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1InstrumentRepliesResult"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1InstrumentRepliesResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "ticker_alternative": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "exchange": {
+          "$ref": "#/definitions/InstrumentReplyExchange"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "adr": {
+          "type": "boolean"
+        },
+        "activity": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "quote": {
+          "$ref": "#/definitions/v1QuoteReply"
+        },
+        "dividends": {
+          "$ref": "#/definitions/InstrumentReplyDividend"
+        },
+        "stats": {
+          "$ref": "#/definitions/InstrumentReplyStats"
+        },
+        "employees": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currencyReport": {
+          "type": "string"
+        },
+        "fiscalYearEnd": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "contact": {
+          "$ref": "#/definitions/v1InstrumentReplyContact"
+        },
+        "address": {
+          "$ref": "#/definitions/InstrumentReplyAddress"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentReplyContact": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InstrumentSearchRequest": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Filter"
+          }
+        },
+        "sort": {
+          "$ref": "#/definitions/ScreenerRequestSort"
+        }
+      }
+    },
+    "v1InstrumentStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1InstrumentStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
+    },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "number",
+          "format": "float"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1StrategiesReplies": {
+      "type": "object",
+      "properties": {
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

@@ -25,7 +25,7 @@ type NewsHTTPServer interface {
 func RegisterNewsHTTPServer(s *http.Server, srv NewsHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/news", _News_Search7_HTTP_Handler(srv))
-	r.DELETE("/v1/news", _News_Delete9_HTTP_Handler(srv))
+	r.DELETE("/v1/news", _News_Delete8_HTTP_Handler(srv))
 }
 
 func _News_Search7_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
@@ -47,7 +47,7 @@ func _News_Search7_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error
 	}
 }
 
-func _News_Delete9_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _News_Delete8_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NewsDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

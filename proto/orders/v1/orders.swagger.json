@@ -64,11 +64,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ticker": {
-                  "type": "string"
-                },
-                "exchange": {
-                  "type": "string"
+                "instrument_id": {
+                  "type": "string",
+                  "format": "int64"
                 },
                 "action": {
                   "$ref": "#/definitions/v1OrderAction"
@@ -97,7 +95,7 @@
       }
     },
     "/v1/orders/{account}/{currency}/search": {
-      "post": {
+      "get": {
         "summary": "Public API: Search Orders",
         "operationId": "Orders_Search",
         "responses": {
@@ -126,25 +124,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "assets": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/v1Asset"
-                  }
-                },
-                "sort": {
-                  "$ref": "#/definitions/ScreenerRequestSort"
-                }
-              }
-            }
           }
         ],
         "tags": [
@@ -153,47 +132,6 @@
       }
     },
     "/v1/orders/{account}/{currency}/{orderUUID}": {
-      "get": {
-        "summary": "Public API: Status Order",
-        "operationId": "Orders_Status",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1OrderReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "currency",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orderUUID",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Orders"
-        ]
-      },
       "patch": {
         "summary": "Public API: Update existing Orders",
         "operationId": "Orders_Update",
@@ -306,8 +244,45 @@
         ]
       }
     },
+    "/v1/orders/{account}/{orderUUID}": {
+      "get": {
+        "summary": "Public API: Status Order",
+        "operationId": "Orders_Status",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OrderReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderUUID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
     "/v1/positions/{account}/{currency}": {
-      "post": {
+      "get": {
         "summary": "Public API : Search Positions opened",
         "operationId": "Orders_Positions",
         "responses": {
@@ -336,25 +311,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "assets": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/v1Asset"
-                  }
-                },
-                "sort": {
-                  "$ref": "#/definitions/ScreenerRequestSort"
-                }
-              }
-            }
           }
         ],
         "tags": [
@@ -403,25 +359,6 @@
         }
       }
     },
-    "ScreenerRequestSort": {
-      "type": "object",
-      "properties": {
-        "argument": {
-          "$ref": "#/definitions/v1Argument"
-        },
-        "orientation": {
-          "$ref": "#/definitions/SortOrientation"
-        }
-      }
-    },
-    "SortOrientation": {
-      "type": "string",
-      "enum": [
-        "ASC",
-        "DESC"
-      ],
-      "default": "ASC"
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -452,42 +389,6 @@
         }
       }
     },
-    "v1Argument": {
-      "type": "string",
-      "enum": [
-        "Ticker",
-        "Exchange",
-        "Industry",
-        "Index",
-        "Currency",
-        "MarketCap",
-        "ReturnYear",
-        "Beta5Y",
-        "ShareVolumeRatio",
-        "DividendYield",
-        "Price",
-        "PriceLastChange",
-        "Strategy",
-        "StrategyPeriod",
-        "StrategyDecision",
-        "StrategyDecisionAgo",
-        "SharesFloatRatio",
-        "Volume",
-        "VolumeAvg10d",
-        "VolumeAvg30d",
-        "VolumeAvg90d",
-        "Isin",
-        "Adr",
-        "Id",
-        "Country",
-        "Time",
-        "Action",
-        "Duration",
-        "Type",
-        "Status"
-      ],
-      "default": "Ticker"
-    },
     "v1Asset": {
       "type": "string",
       "enum": [
@@ -498,9 +399,28 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
+    },
+    "v1Instrument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        }
+      }
     },
     "v1OrderAction": {
       "type": "string",
@@ -530,11 +450,11 @@
     "v1OrderModifyReply": {
       "type": "object",
       "properties": {
-        "ticker": {
+        "id": {
           "type": "string"
         },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "action": {
           "$ref": "#/definitions/v1OrderAction"
@@ -558,6 +478,14 @@
         },
         "status": {
           "$ref": "#/definitions/v1OrderStatus"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -582,11 +510,8 @@
         "id": {
           "type": "string"
         },
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "action": {
           "$ref": "#/definitions/v1OrderAction"
@@ -675,11 +600,8 @@
     "v1PositionRepliesResult": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "size": {
           "type": "number",

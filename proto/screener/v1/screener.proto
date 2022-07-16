@@ -15,7 +15,7 @@ option java_outer_classname = "APIScreenerProtoV1";
 // 
 
 enum TSDB {
-	Companies = 0;
+	Instruments = 0;
 	Forexes = 1;
 	Indices = 2;
 	Indexes = 3;
@@ -31,6 +31,7 @@ enum Asset {
 	OPTION = 5;
 	CASH = 6;
 	ETF = 7;
+	FUTURE = 8;
 }
 
 enum Interval {
@@ -110,6 +111,7 @@ enum Argument {
 	Duration = 27;
 	Type = 28;
 	Status = 29;
+	Assets = 30;
 }
 
 enum CountryIndicator {

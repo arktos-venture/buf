@@ -4,6 +4,7 @@ package v1Exchanges
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,9 +22,21 @@ type ExchangesClient interface {
 	// Public API
 	// Get Exchange properties
 	Get(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeReply, error)
+	// Private API
+	// Get Stats Exchange
+	Stats(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(ctx context.Context, in *ExchangeStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
 	// Public API
 	// Search Exchanges available
 	Search(ctx context.Context, in *ExchangeSearchRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
+	// Private API
+	// Create Exchange
+	Create(ctx context.Context, in *ExchangeCreateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error)
+	// Private API
+	// Update Exchange
+	Update(ctx context.Context, in *ExchangeUpdateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error)
 	// Private API
 	// Delete Exchange
 	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error)
@@ -46,9 +59,45 @@ func (c *exchangesClient) Get(ctx context.Context, in *ExchangeRequest, opts ...
 	return out, nil
 }
 
+func (c *exchangesClient) Stats(ctx context.Context, in *ExchangeRequest, opts ...grpc.CallOption) (*ExchangeStatsReply, error) {
+	out := new(ExchangeStatsReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Stats", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exchangesClient) Strategies(ctx context.Context, in *ExchangeStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error) {
+	out := new(v1.StrategiesReplies)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Strategies", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *exchangesClient) Search(ctx context.Context, in *ExchangeSearchRequest, opts ...grpc.CallOption) (*ExchangeReplies, error) {
 	out := new(ExchangeReplies)
 	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Search", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exchangesClient) Create(ctx context.Context, in *ExchangeCreateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error) {
+	out := new(ExchangeSimpleReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exchangesClient) Update(ctx context.Context, in *ExchangeUpdateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error) {
+	out := new(ExchangeSimpleReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,9 +120,21 @@ type ExchangesServer interface {
 	// Public API
 	// Get Exchange properties
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
+	// Private API
+	// Get Stats Exchange
+	Stats(context.Context, *ExchangeRequest) (*ExchangeStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(context.Context, *ExchangeStrategiesRequest) (*v1.StrategiesReplies, error)
 	// Public API
 	// Search Exchanges available
 	Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error)
+	// Private API
+	// Create Exchange
+	Create(context.Context, *ExchangeCreateRequest) (*ExchangeSimpleReply, error)
+	// Private API
+	// Update Exchange
+	Update(context.Context, *ExchangeUpdateRequest) (*ExchangeSimpleReply, error)
 	// Private API
 	// Delete Exchange
 	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
@@ -87,8 +148,20 @@ type UnimplementedExchangesServer struct {
 func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*ExchangeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
+func (UnimplementedExchangesServer) Stats(context.Context, *ExchangeRequest) (*ExchangeStatsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
+}
+func (UnimplementedExchangesServer) Strategies(context.Context, *ExchangeStrategiesRequest) (*v1.StrategiesReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Strategies not implemented")
+}
 func (UnimplementedExchangesServer) Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedExchangesServer) Create(context.Context, *ExchangeCreateRequest) (*ExchangeSimpleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedExchangesServer) Update(context.Context, *ExchangeUpdateRequest) (*ExchangeSimpleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -124,6 +197,42 @@ func _Exchanges_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Exchanges_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Stats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Stats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Stats(ctx, req.(*ExchangeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Exchanges_Strategies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeStrategiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Strategies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Strategies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Strategies(ctx, req.(*ExchangeStrategiesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Exchanges_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExchangeSearchRequest)
 	if err := dec(in); err != nil {
@@ -138,6 +247,42 @@ func _Exchanges_Search_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ExchangesServer).Search(ctx, req.(*ExchangeSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Exchanges_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Create(ctx, req.(*ExchangeCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Exchanges_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Update(ctx, req.(*ExchangeUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -172,8 +317,24 @@ var Exchanges_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Exchanges_Get_Handler,
 		},
 		{
+			MethodName: "Stats",
+			Handler:    _Exchanges_Stats_Handler,
+		},
+		{
+			MethodName: "Strategies",
+			Handler:    _Exchanges_Strategies_Handler,
+		},
+		{
 			MethodName: "Search",
 			Handler:    _Exchanges_Search_Handler,
+		},
+		{
+			MethodName: "Create",
+			Handler:    _Exchanges_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Exchanges_Update_Handler,
 		},
 		{
 			MethodName: "Delete",

@@ -1,0 +1,294 @@
+syntax = "proto3";
+
+package instruments.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+import "proto/quotes/v1/quotes.proto";
+import "proto/screener/v1/screener.proto";
+import "proto/strategies/v1/strategies.proto";
+
+option go_package = "github.com/arktos-venture/buf/proto/instruments/v1;v1Instruments";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.instruments.v1";
+option java_outer_classname = "APInstrumentProtoV1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+        title: "Instruments APIs";
+		description: "Instruments APIs available for trades";
+        version: "1.0";
+		contact: {
+			name: "Arktos Venture project";
+			url: "https://github.com/arktos-venture/buf";
+			email: "oss@arktos-consulting.cloud";
+		};
+  	};
+	schemes: [HTTP, HTTPS];
+	consumes: "application/json";
+	produces: "application/json";
+	security_definitions: {
+	  	security: {
+			key: "bearer"
+			value: {
+		  		type: TYPE_API_KEY
+		  		in: IN_HEADER
+		  		name: "Authorization"
+		  		description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+	  	}
+	}
+	security: {
+	  	security_requirement: {
+			key: "bearer"
+	  	}
+	}
+};
+
+service instruments {
+	// Public API
+	// Get Instrument properties
+	rpc Get (InstrumentRequest) returns (InstrumentReply)  {
+		option (google.api.http) = {
+		  	get: "/v1/instrument/{id}"
+		};
+	}
+
+	// Private API
+	// Get Stats Instrument
+	rpc Stats (InstrumentRequest) returns (InstrumentStatsReply) {
+		option (google.api.http) = {
+			get: "/v1/instrument/{id}/stats"
+	  	};
+	}
+
+	// Public API
+	// Get Strategies Results Instrument
+	rpc Strategies (InstrumentStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
+		option (google.api.http) = {
+			get: "/v1/instrument/{id}/strategies"
+	  	};
+	}
+
+	// Private API
+	// Search instruments, only for start imports
+	rpc Search (InstrumentSearchRequest) returns (InstrumentReplies)  {
+		option (google.api.http) = {
+		  	post: "/v1/instruments/search"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Create a new Instrument
+	rpc Create (InstrumentCreateRequest) returns (InstrumentReply)  {
+		option (google.api.http) = {
+		  	post: "/v1/instruments"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Update properties of Instrument
+	rpc Update (InstrumentUpdateRequest) returns (InstrumentReply)  {
+		option (google.api.http) = {
+			put: "/v1/instrument/{id}"
+			body: "*"
+		};
+	}
+
+	// Private API
+	// Delete Instrument
+	rpc Delete (InstrumentDeleteRequest) returns (InstrumentDelete)  {
+		option (google.api.http) = {
+		  	delete: "/v1/instruments"
+		};
+	}
+}
+
+
+// 
+// Request
+// 
+
+message InstrumentRequest {
+	int64 id = 1 [(validate.rules).int64 = {lt: 0}];
+}
+
+message InstrumentStrategiesRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+	int64 id = 2 [(validate.rules).int64 = {lt: 0}];
+}
+
+message InstrumentSearchRequest {
+	repeated screener.v1.Filter filters = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
+	screener.v1.ScreenerRequest.Sort sort = 2 [(validate.rules).message.required = true];
+}
+
+message InstrumentCreateRequest {
+	int64 id = 1 [(validate.rules).int64 = {lt: 0}];
+	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 16}];
+	string tickerIBKR = 3 [(validate.rules).string = {min_len: 0, max_len: 16}];
+	string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 5 [(validate.rules).string = {min_len: 1, max_len: 64}];
+	screener.v1.Asset asset = 6;
+	string isin = 7 [(validate.rules).string.len = 16];
+	string description = 8 [(validate.rules).string = {min_len: 1, max_len: 8164}];
+	int64 activity = 9 [(validate.rules).int64 = {lte: 50}];
+	bool adr = 10;
+	int32 fiscalMonthEnd = 11 [(validate.rules).int32 = {lt: 1}];
+	string currencyReport = 12 [(validate.rules).string.len = 3];
+	int32 employees = 13 [(validate.rules).int32.ignore_empty = true];
+	float sharesPerListing = 14 [(validate.rules).float.ignore_empty = true];
+	int64 sharesOut = 15 [(validate.rules).int64.ignore_empty = true];
+	int64 sharesFloat = 16 [(validate.rules).int64.ignore_empty = true];
+	string email = 17 [(validate.rules).string.ignore_empty = true];
+	string website = 18 [(validate.rules).string.ignore_empty = true];
+	string phone = 19 [(validate.rules).string.ignore_empty = true];
+	string street = 20 [(validate.rules).string.ignore_empty = true];
+	string city = 21 [(validate.rules).string.ignore_empty = true];
+	string state = 22 [(validate.rules).string.ignore_empty = true];
+	string country = 23 [(validate.rules).string.len = 2];
+}
+
+message InstrumentUpdateRequest {
+	int64 id = 1 [(validate.rules).int64 = {lt: 1}];
+	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 16}];
+	string tickerIBKR = 3 [(validate.rules).string = {min_len: 0, max_len: 16}];
+	string exchange = 4 [(validate.rules).string = {min_len: 1, max_len: 8}];
+	string name = 5 [(validate.rules).string = {min_len: 1, max_len: 64}];
+	string isin = 6 [(validate.rules).string.len = 16];
+	string description = 7 [(validate.rules).string = {min_len: 1, max_len: 8164}];
+	int64 activity = 8 [(validate.rules).int64 = {lte: 50}];
+	bool adr = 9;
+	int32 fiscalMonthEnd = 10 [(validate.rules).int32 = {lt: 1}];
+	string currencyReport = 11 [(validate.rules).string.len = 3];
+	int32 employees = 12 [(validate.rules).int32.ignore_empty = true];
+	float sharesPerListing = 13 [(validate.rules).float.ignore_empty = true];
+	int64 sharesOut = 14 [(validate.rules).int64 = {lte: 1}];
+	int64 sharesFloat = 15 [(validate.rules).int64 = {lte: 1}];
+	string email = 16 [(validate.rules).string.ignore_empty = true];
+	string website = 17 [(validate.rules).string.ignore_empty = true];
+	string phone = 18 [(validate.rules).string.ignore_empty = true];
+	string street = 19 [(validate.rules).string.ignore_empty = true];
+	string city = 20 [(validate.rules).string.ignore_empty = true];
+	string state = 21 [(validate.rules).string.ignore_empty = true];
+	string country = 22 [(validate.rules).string.len = 2];
+}
+
+message InstrumentDeleteRequest {
+	repeated int64 tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+}
+
+
+// 
+// Reply
+// 
+
+message InstrumentReply {
+	message Address {
+		string street = 1;
+		string city = 2;
+		string state = 3;
+		string country = 4;
+	}
+	
+	message Contact {
+		string phone = 1;
+		string website = 2;
+		string email = 3;
+	}
+
+	message Exchange {
+		string ticker = 1;
+		string routing = 2;
+		string currency = 3;
+		bool open = 4;
+	}
+
+	message Dividend {
+		repeated float values = 1;
+		repeated float yields = 2;
+		repeated google.protobuf.Timestamp created_at = 3;
+	}
+
+	message Stats {
+		message Shares {
+			int64 outstanding = 1;
+			int64 float = 2;
+			float div = 3;
+		}
+
+		InstrumentStatsReply.Price price = 1;
+		InstrumentStatsReply.Volume volume = 2;
+		Shares shares = 3;
+		google.protobuf.Timestamp updated_at = 4; 
+	}
+
+	int64 id = 1;
+	string ticker = 2;
+	string ticker_alternative = 3;
+	string name = 4;
+	string description = 5;
+	Exchange exchange = 6;
+	screener.v1.Asset asset = 7;
+	string isin = 8;
+	bool adr = 9;
+	map<int64, string> activity = 10;
+	quotes.v1.QuoteReply quote = 11;
+	Dividend dividends = 12;
+	Stats stats = 13;
+	int32 employees = 14;
+	string currencyReport = 15;
+	int32 fiscalYearEnd = 16;
+	Contact contact = 17;
+	Address address = 18;
+	google.protobuf.Timestamp created_at = 19;
+	google.protobuf.Timestamp updated_at = 20; 
+}
+
+message InstrumentStatsReply {
+	message Price {
+		float max_annual = 1;
+		float min_annual = 2;
+		float return_year = 3;
+		int64 market_cap_usd = 4;
+		float beta5y = 5;
+		float start = 6;
+	}
+		
+	message Volume {
+		int64 volumeAvg10d = 1;
+		int64 volumeAvg30d = 2;
+		int64 volumeAvg90d = 3;
+	}
+
+	Price price = 1;
+	Volume volume = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4; 
+}
+
+message InstrumentReplies {
+	message Result {
+		int64 id = 1;
+		string ticker = 2;
+		string ticker_alternative = 3;
+		string name = 4;
+		string exchange = 5;
+		string isin = 6;
+		screener.v1.Asset asset = 7;
+		google.protobuf.Timestamp created_at = 8;
+		google.protobuf.Timestamp updated_at = 9; 
+	}
+
+	repeated Result results = 1;
+	int64 total = 2;
+}
+
+message InstrumentDelete {
+	int64 total = 1;
+}

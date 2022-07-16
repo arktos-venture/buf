@@ -47,15 +47,15 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service Quotes {
 	// Public API
 	// Get Last Quotes for one ticker
-	rpc Last (QuoteLastRequest) returns (QuoteLastReply)  {
+	rpc Last (QuoteLastRequest) returns (QuoteReply)  {
 		option (google.api.http) = {
-			get: "/v1/quotes/{exchange}/{ticker}"
+			get: "/v1/quotes/{instrument_id}"
 		};
 	}
 
 	// Public API
 	// Search Quotes by dates
-	rpc Search (QuoteRequest) returns (QuoteReply)  {
+	rpc Search (QuoteRequest) returns (QuoteReplies)  {
 		option (google.api.http) = {
 			post: "/v1/quotes"
 			body: "*"
@@ -83,14 +83,12 @@ message QuoteRequest {
 
 message QuoteLastRequest {
 	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	string exchange = 2;
-	string ticker = 3;
+	int64 instrument_id = 2 [(validate.rules).int64 = {lt: 0}];
 }
 
 message QuoteDeleteRequest {
 	screener.v1.TSDB tsdb = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated string exchanges = 2;
-	repeated string tickers = 3;
+	repeated int64 instrument_id = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -99,21 +97,17 @@ message QuoteDeleteRequest {
 // 
 
 message QuoteReply {
-	repeated float open = 1;
-	repeated float close = 2;
-	repeated float low = 3;
-	repeated float high = 4;
-	repeated float volume = 5;
-	repeated google.protobuf.Timestamp created_at = 7;
-}
-
-message QuoteLastReply {
 	float open = 1;
 	float close = 2;
 	float low = 3;
 	float high = 4;
 	float volume = 5;
-	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp created_at = 6;
+}
+
+message QuoteReplies {
+	repeated QuoteReply quotes = 1;
+	int64 total = 2;
 }
 
 message QuoteDelete {

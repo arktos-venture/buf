@@ -153,9 +153,112 @@
           "Forexes"
         ]
       }
+    },
+    "/v1/forexes/{ticker}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Forex",
+        "operationId": "Forexes_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForexStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      }
+    },
+    "/v1/forexes/{ticker}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "Forexes_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Forexes"
+        ]
+      }
     }
   },
   "definitions": {
+    "StrategiesRepliesPeriod": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "breakout": {
+          "type": "number",
+          "format": "float"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -258,7 +361,10 @@
           "type": "string"
         },
         "quote": {
-          "$ref": "#/definitions/v1QuoteLastReply"
+          "$ref": "#/definitions/v1QuoteReply"
+        },
+        "stats": {
+          "$ref": "#/definitions/v1ForexStatsReply"
         },
         "from": {
           "$ref": "#/definitions/v1CurrencyReply"
@@ -276,7 +382,88 @@
         }
       }
     },
-    "v1QuoteLastReply": {
+    "v1ForexStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1ForexStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1ForexStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ForexStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1ForexStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -302,6 +489,21 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1StrategiesReplies": {
+      "type": "object",
+      "properties": {
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

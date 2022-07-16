@@ -6,6 +6,7 @@ package v1Forexes
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -22,17 +23,21 @@ type ForexesHTTPServer interface {
 	Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error)
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
 	List(context.Context, *ForexListRequest) (*ForexList, error)
+	Stats(context.Context, *ForexRequest) (*ForexStatsReply, error)
+	Strategies(context.Context, *ForexStrategiesRequest) (*v1.StrategiesReplies, error)
 }
 
 func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/forexes/{ticker}", _Forexes_Get6_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List4_HTTP_Handler(srv))
-	r.POST("/v1/forexes", _Forexes_Create6_HTTP_Handler(srv))
-	r.DELETE("/v1/forexes", _Forexes_Delete8_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}", _Forexes_Get7_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/stats", _Forexes_Stats4_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies4_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List3_HTTP_Handler(srv))
+	r.POST("/v1/forexes", _Forexes_Create7_HTTP_Handler(srv))
+	r.DELETE("/v1/forexes", _Forexes_Delete7_HTTP_Handler(srv))
 }
 
-func _Forexes_Get6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Get7_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -54,7 +59,51 @@ func _Forexes_Get6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Forexes_List4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Stats4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ForexRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/forexes.v1.Forexes/Stats")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Stats(ctx, req.(*ForexRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ForexStatsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Forexes_Strategies4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ForexStrategiesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/forexes.v1.Forexes/Strategies")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Strategies(ctx, req.(*ForexStrategiesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.StrategiesReplies)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Forexes_List3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -76,7 +125,7 @@ func _Forexes_List4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Forexes_Create6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Create7_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -95,7 +144,7 @@ func _Forexes_Create6_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Forexes_Delete8_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Delete7_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -119,6 +168,8 @@ type ForexesHTTPClient interface {
 	Delete(ctx context.Context, req *ForexDeleteRequest, opts ...http.CallOption) (rsp *ForexDelete, err error)
 	Get(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
 	List(ctx context.Context, req *ForexListRequest, opts ...http.CallOption) (rsp *ForexList, err error)
+	Stats(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexStatsReply, err error)
+	Strategies(ctx context.Context, req *ForexStrategiesRequest, opts ...http.CallOption) (rsp *v1.StrategiesReplies, err error)
 }
 
 type ForexesHTTPClientImpl struct {
@@ -173,6 +224,32 @@ func (c *ForexesHTTPClientImpl) List(ctx context.Context, in *ForexListRequest, 
 	pattern := "/v1/forexes/{currency}/pairs"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/forexes.v1.Forexes/List"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ForexesHTTPClientImpl) Stats(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*ForexStatsReply, error) {
+	var out ForexStatsReply
+	pattern := "/v1/forexes/{ticker}/stats"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/forexes.v1.Forexes/Stats"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ForexesHTTPClientImpl) Strategies(ctx context.Context, in *ForexStrategiesRequest, opts ...http.CallOption) (*v1.StrategiesReplies, error) {
+	var out v1.StrategiesReplies
+	pattern := "/v1/forexes/{ticker}/strategies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/forexes.v1.Forexes/Strategies"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

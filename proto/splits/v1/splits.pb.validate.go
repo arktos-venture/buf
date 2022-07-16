@@ -217,9 +217,27 @@ func (m *SplitsLastRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Exchange
+	if l := utf8.RuneCountInString(m.GetExchange()); l < 1 || l > 16 {
+		err := SplitsLastRequestValidationError{
+			field:  "Exchange",
+			reason: "value length must be between 1 and 16 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Ticker
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 16 {
+		err := SplitsLastRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 16 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return SplitsLastRequestMultiError(errors)

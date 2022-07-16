@@ -118,7 +118,7 @@
     "/v1/portfolios/{account}/{currency}": {
       "get": {
         "summary": "Public API: Status Portfolio",
-        "operationId": "Portfolios_Status",
+        "operationId": "Portfolios_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -237,6 +237,80 @@
           "Portfolios"
         ]
       }
+    },
+    "/v1/portfolios/{account}/{currency}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Instrument",
+        "operationId": "Portfolios_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PortfolioStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currency",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Portfolios"
+        ]
+      }
+    },
+    "/v1/portfolios/{account}/{currency}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "Portfolios_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currency",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Portfolios"
+        ]
+      }
     }
   },
   "definitions": {
@@ -276,6 +350,41 @@
         "money": {
           "type": "number",
           "format": "float"
+        }
+      }
+    },
+    "StrategiesRepliesPeriod": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "breakout": {
+          "type": "number",
+          "format": "float"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -319,7 +428,8 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
     },
@@ -339,6 +449,35 @@
           "type": "boolean"
         }
       }
+    },
+    "v1Instrument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
     },
     "v1OrderAction": {
       "type": "string",
@@ -363,11 +502,8 @@
         "id": {
           "type": "string"
         },
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "action": {
           "$ref": "#/definitions/v1OrderAction"
@@ -523,14 +659,76 @@
         }
       }
     },
+    "v1PortfolioStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1PortfolioStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1PortfolioStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1PortfolioStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1PortfolioStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1PositionRepliesResult": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "size": {
           "type": "number",
@@ -549,6 +747,21 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1StrategiesReplies": {
+      "type": "object",
+      "properties": {
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

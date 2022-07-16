@@ -768,46 +768,28 @@
       "type": "object",
       "properties": {
         "open": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "close": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "low": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "high": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "volume": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

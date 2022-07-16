@@ -28,10 +28,10 @@ type OrdersHTTPServer interface {
 
 func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/positions/{account}/{currency}", _Orders_Positions0_HTTP_Handler(srv))
-	r.GET("/v1/orders/{account}/{currency}/{orderUUID}", _Orders_Status0_HTTP_Handler(srv))
-	r.POST("/v1/orders/{account}/{currency}/search", _Orders_Search4_HTTP_Handler(srv))
-	r.POST("/v1/orders/{account}/{currency}", _Orders_Create4_HTTP_Handler(srv))
+	r.GET("/v1/positions/{account}/{currency}", _Orders_Positions0_HTTP_Handler(srv))
+	r.GET("/v1/orders/{account}/{orderUUID}", _Orders_Status0_HTTP_Handler(srv))
+	r.GET("/v1/orders/{account}/{currency}/search", _Orders_Search4_HTTP_Handler(srv))
+	r.POST("/v1/orders/{account}/{currency}", _Orders_Create5_HTTP_Handler(srv))
 	r.PATCH("/v1/orders/{account}/{currency}/{orderUUID}", _Orders_Update4_HTTP_Handler(srv))
 	r.DELETE("/v1/orders/{account}/{currency}/{orderUUID}/cancel", _Orders_Cancel0_HTTP_Handler(srv))
 }
@@ -39,7 +39,7 @@ func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 func _Orders_Positions0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PositionRequest
-		if err := ctx.Bind(&in); err != nil {
+		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
@@ -83,7 +83,7 @@ func _Orders_Status0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderSearchRequest
-		if err := ctx.Bind(&in); err != nil {
+		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
@@ -102,7 +102,7 @@ func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Create4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Create5_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -214,10 +214,10 @@ func (c *OrdersHTTPClientImpl) Create(ctx context.Context, in *OrderCreateReques
 func (c *OrdersHTTPClientImpl) Positions(ctx context.Context, in *PositionRequest, opts ...http.CallOption) (*PositionReplies, error) {
 	var out PositionReplies
 	pattern := "/v1/positions/{account}/{currency}"
-	path := binding.EncodeURL(pattern, in, false)
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Positions"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -227,10 +227,10 @@ func (c *OrdersHTTPClientImpl) Positions(ctx context.Context, in *PositionReques
 func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchRequest, opts ...http.CallOption) (*OrderReplies, error) {
 	var out OrderReplies
 	pattern := "/v1/orders/{account}/{currency}/search"
-	path := binding.EncodeURL(pattern, in, false)
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +239,7 @@ func (c *OrdersHTTPClientImpl) Search(ctx context.Context, in *OrderSearchReques
 
 func (c *OrdersHTTPClientImpl) Status(ctx context.Context, in *OrderStatusRequest, opts ...http.CallOption) (*OrderReply, error) {
 	var out OrderReply
-	pattern := "/v1/orders/{account}/{currency}/{orderUUID}"
+	pattern := "/v1/orders/{account}/{orderUUID}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/orders.v1.Orders/Status"))
 	opts = append(opts, http.PathTemplate(pattern))

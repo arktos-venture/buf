@@ -121,6 +121,12 @@ message Data {
     google.protobuf.Duration timeout = 3;
   }
 
+  message Nats {
+    string hostname = 1;
+    string credentials = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+
   message Service {
     string hostname = 1;
     int32 port = 2;
@@ -129,8 +135,9 @@ message Data {
 
   Postgres postgres = 1;
   Redis redis = 2;
-  Keycloak keycloak = 3;
-  MeiliSearch meilisearch = 4;
-  map<string, Service> services = 5;
+  Nats nats = 3;
+  Keycloak keycloak = 4;
+  MeiliSearch meilisearch = 5;
+  map<string, Service> services = 6;
 }
 

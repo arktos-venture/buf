@@ -69,8 +69,8 @@ message SplitsRequest {
 }
 
 message SplitsLastRequest {
-	string exchange = 1;
-	string ticker = 2;
+	string exchange = 1 [(validate.rules).string = {min_len: 1, max_len: 16}];
+	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 16}];
 }
 
 // 
