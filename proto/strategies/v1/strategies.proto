@@ -151,6 +151,7 @@ message StrategyReplies {
 message StrategiesReplies {
 	message Period {
 		message Result {
+			screener.v1.Interval period = 1;
 			screener.v1.OrderAction status = 2; 
 			float breakout = 3;
 			google.protobuf.Timestamp status_ago = 4;
@@ -158,8 +159,8 @@ message StrategiesReplies {
 			google.protobuf.Timestamp updated_at = 6; 
 		}
 
-		screener.v1.Interval ticker = 1;
-		Result result = 2;
+		
+		repeated Result results = 2;
 	}
 	
 

@@ -1493,35 +1493,38 @@ func (m *StrategiesReplies_Period) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Ticker
+	for idx, item := range m.GetResults() {
+		_, _ = idx, item
 
-	if all {
-		switch v := interface{}(m.GetResult()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StrategiesReplies_PeriodValidationError{
-					field:  "Result",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StrategiesReplies_PeriodValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StrategiesReplies_PeriodValidationError{
+						field:  fmt.Sprintf("Results[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, StrategiesReplies_PeriodValidationError{
-					field:  "Result",
+				return StrategiesReplies_PeriodValidationError{
+					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetResult()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StrategiesReplies_PeriodValidationError{
-				field:  "Result",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -1625,6 +1628,8 @@ func (m *StrategiesReplies_Period_Result) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Period
 
 	// no validation rules for Status
 

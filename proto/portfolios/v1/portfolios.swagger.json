@@ -356,17 +356,20 @@
     "StrategiesRepliesPeriod": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "result": {
-          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+          }
         }
       }
     },
     "StrategiesRepliesPeriodResult": {
       "type": "object",
       "properties": {
+        "period": {
+          "$ref": "#/definitions/v1Interval"
+        },
         "status": {
           "$ref": "#/definitions/v1OrderAction"
         },
