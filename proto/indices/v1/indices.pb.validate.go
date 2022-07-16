@@ -36,7 +36,7 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 
-	_ = v1Screener.Asset(0)
+	_ = v1Screener.Interval(0)
 )
 
 // Validate checks the field values on IndiceRequest with the rules defined in
@@ -149,6 +149,164 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndiceRequestValidationError{}
+
+// Validate checks the field values on IndiceQuotesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndiceQuotesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndiceQuotesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndiceQuotesRequestMultiError, or nil if none found.
+func (m *IndiceQuotesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndiceQuotesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := v1Screener.Interval_name[int32(m.GetInterval())]; !ok {
+		err := IndiceQuotesRequestValidationError{
+			field:  "Interval",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := len(m.GetFilters()); l < 1 || l > 20 {
+		err := IndiceQuotesRequestValidationError{
+			field:  "Filters",
+			reason: "value must contain between 1 and 20 items, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetFilters() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, IndiceQuotesRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, IndiceQuotesRequestValidationError{
+						field:  fmt.Sprintf("Filters[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return IndiceQuotesRequestValidationError{
+					field:  fmt.Sprintf("Filters[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return IndiceQuotesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndiceQuotesRequestMultiError is an error wrapping multiple validation
+// errors returned by IndiceQuotesRequest.ValidateAll() if the designated
+// constraints aren't met.
+type IndiceQuotesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndiceQuotesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndiceQuotesRequestMultiError) AllErrors() []error { return m }
+
+// IndiceQuotesRequestValidationError is the validation error returned by
+// IndiceQuotesRequest.Validate if the designated constraints aren't met.
+type IndiceQuotesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndiceQuotesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndiceQuotesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndiceQuotesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndiceQuotesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndiceQuotesRequestValidationError) ErrorName() string {
+	return "IndiceQuotesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndiceQuotesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndiceQuotesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndiceQuotesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndiceQuotesRequestValidationError{}
 
 // Validate checks the field values on IndiceStrategiesRequest with the rules
 // defined in the proto definition for this message. If any rules are

@@ -30,7 +30,7 @@ func RegisterOrdersHTTPServer(s *http.Server, srv OrdersHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/positions/{account}/{currency}", _Orders_Positions0_HTTP_Handler(srv))
 	r.GET("/v1/orders/{account}/{orderUUID}", _Orders_Status0_HTTP_Handler(srv))
-	r.GET("/v1/orders/{account}/{currency}/search", _Orders_Search4_HTTP_Handler(srv))
+	r.GET("/v1/orders/{account}/{currency}/search", _Orders_Search3_HTTP_Handler(srv))
 	r.POST("/v1/orders/{account}/{currency}", _Orders_Create5_HTTP_Handler(srv))
 	r.PATCH("/v1/orders/{account}/{currency}/{orderUUID}", _Orders_Update4_HTTP_Handler(srv))
 	r.DELETE("/v1/orders/{account}/{currency}/{orderUUID}/cancel", _Orders_Cancel0_HTTP_Handler(srv))
@@ -80,7 +80,7 @@ func _Orders_Status0_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _Orders_Search4_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
+func _Orders_Search3_HTTP_Handler(srv OrdersHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in OrderSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {

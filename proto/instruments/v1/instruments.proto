@@ -64,6 +64,24 @@ service instruments {
 	  	};
 	}
 
+
+	// Public API
+	// Get last Quotes Instrument
+	rpc LastQuote (InstrumentRequest) returns (quotes.v1.QuoteReply) {
+		option (google.api.http) = {
+			get: "/v1/instrument/{id}/quotes/last"
+	  	};
+	}
+
+	// Public API
+	// Get Quotes Instrument
+	rpc Quotes (InstrumentQuotesRequest) returns (quotes.v1.QuoteReplies) {
+		option (google.api.http) = {
+			post: "/v1/forexes/quotes"
+			body: "*"
+	  	};
+	}
+
 	// Public API
 	// Get Strategies Results Instrument
 	rpc Strategies (InstrumentStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
@@ -115,6 +133,11 @@ service instruments {
 
 message InstrumentRequest {
 	int64 id = 1 [(validate.rules).int64 = {lt: 0}];
+}
+
+message InstrumentQuotesRequest {
+	screener.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
+	repeated screener.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message InstrumentStrategiesRequest {

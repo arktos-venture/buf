@@ -25,12 +25,12 @@ type DividendsHTTPServer interface {
 
 func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/dividend/{instrument_id}", _Dividends_Last1_HTTP_Handler(srv))
-	r.POST("/v1/dividends", _Dividends_Search9_HTTP_Handler(srv))
-	r.DELETE("/v1/dividends", _Dividends_Delete9_HTTP_Handler(srv))
+	r.GET("/v1/dividend/{instrument_id}", _Dividends_Last0_HTTP_Handler(srv))
+	r.POST("/v1/dividends", _Dividends_Search8_HTTP_Handler(srv))
+	r.DELETE("/v1/dividends", _Dividends_Delete8_HTTP_Handler(srv))
 }
 
-func _Dividends_Last1_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Last0_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DividendLastRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -52,7 +52,7 @@ func _Dividends_Last1_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Dividends_Search9_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Search8_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DividendRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -71,7 +71,7 @@ func _Dividends_Search9_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Dividends_Delete9_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Delete8_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DividendDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
