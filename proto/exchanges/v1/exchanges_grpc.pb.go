@@ -25,6 +25,12 @@ type ExchangesClient interface {
 	// Search Exchanges available
 	Search(ctx context.Context, in *ExchangeSearchRequest, opts ...grpc.CallOption) (*ExchangeReplies, error)
 	// Private API
+	// Create Exchange
+	Create(ctx context.Context, in *ExchangeCreateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error)
+	// Private API
+	// Update Exchange
+	Update(ctx context.Context, in *ExchangeUpdateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error)
+	// Private API
 	// Delete Exchange
 	Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error)
 }
@@ -55,6 +61,24 @@ func (c *exchangesClient) Search(ctx context.Context, in *ExchangeSearchRequest,
 	return out, nil
 }
 
+func (c *exchangesClient) Create(ctx context.Context, in *ExchangeCreateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error) {
+	out := new(ExchangeSimpleReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exchangesClient) Update(ctx context.Context, in *ExchangeUpdateRequest, opts ...grpc.CallOption) (*ExchangeSimpleReply, error) {
+	out := new(ExchangeSimpleReply)
+	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *exchangesClient) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...grpc.CallOption) (*ExchangeDelete, error) {
 	out := new(ExchangeDelete)
 	err := c.cc.Invoke(ctx, "/exchanges.v1.Exchanges/Delete", in, out, opts...)
@@ -75,6 +99,12 @@ type ExchangesServer interface {
 	// Search Exchanges available
 	Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error)
 	// Private API
+	// Create Exchange
+	Create(context.Context, *ExchangeCreateRequest) (*ExchangeSimpleReply, error)
+	// Private API
+	// Update Exchange
+	Update(context.Context, *ExchangeUpdateRequest) (*ExchangeSimpleReply, error)
+	// Private API
 	// Delete Exchange
 	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
 	mustEmbedUnimplementedExchangesServer()
@@ -89,6 +119,12 @@ func (UnimplementedExchangesServer) Get(context.Context, *ExchangeRequest) (*Exc
 }
 func (UnimplementedExchangesServer) Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedExchangesServer) Create(context.Context, *ExchangeCreateRequest) (*ExchangeSimpleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedExchangesServer) Update(context.Context, *ExchangeUpdateRequest) (*ExchangeSimpleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedExchangesServer) Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -142,6 +178,42 @@ func _Exchanges_Search_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Exchanges_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Create(ctx, req.(*ExchangeCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Exchanges_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExchangesServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/exchanges.v1.Exchanges/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExchangesServer).Update(ctx, req.(*ExchangeUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Exchanges_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExchangeDeleteRequest)
 	if err := dec(in); err != nil {
@@ -174,6 +246,14 @@ var Exchanges_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Exchanges_Search_Handler,
+		},
+		{
+			MethodName: "Create",
+			Handler:    _Exchanges_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Exchanges_Update_Handler,
 		},
 		{
 			MethodName: "Delete",

@@ -319,7 +319,8 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
     },
@@ -337,6 +338,24 @@
         },
         "open": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1Instrument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "exchange": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/definitions/v1Asset"
         }
       }
     },
@@ -363,11 +382,8 @@
         "id": {
           "type": "string"
         },
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "action": {
           "$ref": "#/definitions/v1OrderAction"
@@ -526,11 +542,8 @@
     "v1PositionRepliesResult": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
+        "instrument": {
+          "$ref": "#/definitions/v1Instrument"
         },
         "size": {
           "type": "number",

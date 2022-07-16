@@ -55,6 +55,66 @@
         "tags": [
           "Exchanges"
         ]
+      },
+      "patch": {
+        "summary": "Private API\nUpdate Exchange",
+        "operationId": "Exchanges_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeSimpleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "routing": {
+                  "type": "string"
+                },
+                "trading_hours": {
+                  "type": "string"
+                },
+                "primary_indice": {
+                  "type": "string"
+                },
+                "holidays": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1Holiday"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
       }
     },
     "/v1/exchanges": {
@@ -131,27 +191,41 @@
         "tags": [
           "Exchanges"
         ]
+      },
+      "post": {
+        "summary": "Private API\nCreate Exchange",
+        "operationId": "Exchanges_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeSimpleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Exchanges"
+        ]
       }
     }
   },
   "definitions": {
-    "ExchangeReplyHoliday": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string"
-        },
-        "official": {
-          "type": "boolean"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -192,9 +266,48 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
+    },
+    "v1ExchangeCreateRequest": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "routing": {
+          "type": "string"
+        },
+        "trading_hours": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "primary_indice": {
+          "type": "string"
+        },
+        "holidays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Holiday"
+          }
+        }
+      }
     },
     "v1ExchangeDelete": {
       "type": "object",
@@ -273,7 +386,7 @@
         "holidays": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ExchangeReplyHoliday"
+            "$ref": "#/definitions/v1Holiday"
           }
         },
         "tradingHours": {
@@ -289,6 +402,31 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1ExchangeSimpleReply": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1Holiday": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "official": {
+          "type": "boolean"
         }
       }
     },

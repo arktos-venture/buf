@@ -312,7 +312,8 @@
         "Action",
         "Duration",
         "Type",
-        "Status"
+        "Status",
+        "Assets"
       ],
       "default": "Ticker"
     },
@@ -553,13 +554,13 @@
     "v1TSDB": {
       "type": "string",
       "enum": [
-        "Companies",
+        "Instruments",
         "Forexes",
         "Indices",
         "Indexes",
         "Accounts"
       ],
-      "default": "Companies"
+      "default": "Instruments"
     }
   },
   "securityDefinitions": {

@@ -158,7 +158,8 @@
         "Action",
         "Duration",
         "Type",
-        "Status"
+        "Status",
+        "Assets"
       ],
       "default": "Ticker"
     },

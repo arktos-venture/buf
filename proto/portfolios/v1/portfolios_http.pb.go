@@ -28,9 +28,9 @@ type PortfoliosHTTPServer interface {
 func RegisterPortfoliosHTTPServer(s *http.Server, srv PortfoliosHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Status1_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}", _Portfolios_Search5_HTTP_Handler(srv))
-	r.POST("/v1/portfolios/{account}", _Portfolios_Create5_HTTP_Handler(srv))
-	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update5_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}", _Portfolios_Search6_HTTP_Handler(srv))
+	r.POST("/v1/portfolios/{account}", _Portfolios_Create6_HTTP_Handler(srv))
+	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update6_HTTP_Handler(srv))
 	r.DELETE("/v1/portfolios/{account}/{currency}", _Portfolios_Delete7_HTTP_Handler(srv))
 }
 
@@ -56,7 +56,7 @@ func _Portfolios_Status1_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Search5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Search6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,7 +78,7 @@ func _Portfolios_Search5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Create5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Create6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioCreateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -100,7 +100,7 @@ func _Portfolios_Create5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Update5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Update6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioUpdateRequest
 		if err := ctx.Bind(&in); err != nil {

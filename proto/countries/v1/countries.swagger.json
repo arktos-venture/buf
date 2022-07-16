@@ -268,7 +268,8 @@
         "STOCK",
         "OPTION",
         "CASH",
-        "ETF"
+        "ETF",
+        "FUTURE"
       ],
       "default": "INDEX"
     },

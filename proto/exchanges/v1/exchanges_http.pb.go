@@ -18,19 +18,23 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type ExchangesHTTPServer interface {
+	Create(context.Context, *ExchangeCreateRequest) (*ExchangeSimpleReply, error)
 	Delete(context.Context, *ExchangeDeleteRequest) (*ExchangeDelete, error)
 	Get(context.Context, *ExchangeRequest) (*ExchangeReply, error)
 	Search(context.Context, *ExchangeSearchRequest) (*ExchangeReplies, error)
+	Update(context.Context, *ExchangeUpdateRequest) (*ExchangeSimpleReply, error)
 }
 
 func RegisterExchangesHTTPServer(s *http.Server, srv ExchangesHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/exchange/{ticker}", _Exchanges_Get4_HTTP_Handler(srv))
+	r.GET("/v1/exchange/{ticker}", _Exchanges_Get3_HTTP_Handler(srv))
 	r.GET("/v1/exchanges", _Exchanges_Search3_HTTP_Handler(srv))
-	r.DELETE("/v1/exchanges", _Exchanges_Delete5_HTTP_Handler(srv))
+	r.POST("/v1/exchanges", _Exchanges_Create2_HTTP_Handler(srv))
+	r.PATCH("/v1/exchange/{ticker}", _Exchanges_Update3_HTTP_Handler(srv))
+	r.DELETE("/v1/exchanges", _Exchanges_Delete4_HTTP_Handler(srv))
 }
 
-func _Exchanges_Get4_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Get3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -71,7 +75,48 @@ func _Exchanges_Search3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Exchanges_Delete5_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+func _Exchanges_Create2_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ExchangeCreateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/exchanges.v1.Exchanges/Create")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Create(ctx, req.(*ExchangeCreateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ExchangeSimpleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Exchanges_Update3_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ExchangeUpdateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/exchanges.v1.Exchanges/Update")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Update(ctx, req.(*ExchangeUpdateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ExchangeSimpleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Exchanges_Delete4_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExchangeDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -91,9 +136,11 @@ func _Exchanges_Delete5_HTTP_Handler(srv ExchangesHTTPServer) func(ctx http.Cont
 }
 
 type ExchangesHTTPClient interface {
+	Create(ctx context.Context, req *ExchangeCreateRequest, opts ...http.CallOption) (rsp *ExchangeSimpleReply, err error)
 	Delete(ctx context.Context, req *ExchangeDeleteRequest, opts ...http.CallOption) (rsp *ExchangeDelete, err error)
 	Get(ctx context.Context, req *ExchangeRequest, opts ...http.CallOption) (rsp *ExchangeReply, err error)
 	Search(ctx context.Context, req *ExchangeSearchRequest, opts ...http.CallOption) (rsp *ExchangeReplies, err error)
+	Update(ctx context.Context, req *ExchangeUpdateRequest, opts ...http.CallOption) (rsp *ExchangeSimpleReply, err error)
 }
 
 type ExchangesHTTPClientImpl struct {
@@ -102,6 +149,19 @@ type ExchangesHTTPClientImpl struct {
 
 func NewExchangesHTTPClient(client *http.Client) ExchangesHTTPClient {
 	return &ExchangesHTTPClientImpl{client}
+}
+
+func (c *ExchangesHTTPClientImpl) Create(ctx context.Context, in *ExchangeCreateRequest, opts ...http.CallOption) (*ExchangeSimpleReply, error) {
+	var out ExchangeSimpleReply
+	pattern := "/v1/exchanges"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Create"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *ExchangesHTTPClientImpl) Delete(ctx context.Context, in *ExchangeDeleteRequest, opts ...http.CallOption) (*ExchangeDelete, error) {
@@ -137,6 +197,19 @@ func (c *ExchangesHTTPClientImpl) Search(ctx context.Context, in *ExchangeSearch
 	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Search"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ExchangesHTTPClientImpl) Update(ctx context.Context, in *ExchangeUpdateRequest, opts ...http.CallOption) (*ExchangeSimpleReply, error) {
+	var out ExchangeSimpleReply
+	pattern := "/v1/exchange/{ticker}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/exchanges.v1.Exchanges/Update"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PATCH", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

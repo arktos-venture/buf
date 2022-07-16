@@ -26,7 +26,7 @@ type DividendsHTTPServer interface {
 func RegisterDividendsHTTPServer(s *http.Server, srv DividendsHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/dividend/{exchange}/{ticker}", _Dividends_Last2_HTTP_Handler(srv))
-	r.POST("/v1/dividends", _Dividends_Search9_HTTP_Handler(srv))
+	r.POST("/v1/dividends", _Dividends_Search10_HTTP_Handler(srv))
 	r.DELETE("/v1/dividends", _Dividends_Delete10_HTTP_Handler(srv))
 }
 
@@ -52,7 +52,7 @@ func _Dividends_Last2_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Dividends_Search9_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
+func _Dividends_Search10_HTTP_Handler(srv DividendsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DividendRequest
 		if err := ctx.Bind(&in); err != nil {
