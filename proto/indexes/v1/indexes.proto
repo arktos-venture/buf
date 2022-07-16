@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/companies/v1/companies.proto";
+import "proto/instruments/v1/instruments.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indexes/v1;v1Indexes";
 option java_multiple_files = true;
@@ -132,7 +132,7 @@ message IndexDeleteRequest {
 message IndexReply {
   string ticker = 1;
   bool public = 2;
-  repeated companies.v1.CompanyReplies.Result companies = 3;
+  repeated instruments.v1.InstrumentReplies.Result companies = 3;
 	google.protobuf.Timestamp created_at = 4;
 	google.protobuf.Timestamp updated_at = 5;
 }
