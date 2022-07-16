@@ -49,7 +49,7 @@ service Dividends {
 	// Get Last dividend result
 	rpc Last (DividendLastRequest) returns (DividendLastReply)  {
         option (google.api.http) = {
-            get: "/v1/dividend/{exchange}/{ticker}"
+            get: "/v1/dividend/{instrument_id}"
         };
     }
 
@@ -82,13 +82,11 @@ message DividendRequest {
 }
 
 message DividendLastRequest {
-	string exchange = 1;
-	string ticker = 2;
+	int64 instrument_id = 1 [(validate.rules).int64 = {lt: 0}];
 }
 
 message DividendDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
+	repeated int64 instrument_id = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
