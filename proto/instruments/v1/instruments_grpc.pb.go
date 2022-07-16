@@ -4,6 +4,7 @@ package v1Instruments
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,6 +22,12 @@ type InstrumentsClient interface {
 	// Public API
 	// Get Instrument properties
 	Get(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentReply, error)
+	// Private API
+	// Get Stats Instrument
+	Stats(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(ctx context.Context, in *InstrumentStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
 	// Private API
 	// Search instruments, only for start imports
 	Search(ctx context.Context, in *InstrumentSearchRequest, opts ...grpc.CallOption) (*InstrumentReplies, error)
@@ -46,6 +53,24 @@ func NewInstrumentsClient(cc grpc.ClientConnInterface) InstrumentsClient {
 func (c *instrumentsClient) Get(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentReply, error) {
 	out := new(InstrumentReply)
 	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instrumentsClient) Stats(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentStatsReply, error) {
+	out := new(InstrumentStatsReply)
+	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Stats", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instrumentsClient) Strategies(ctx context.Context, in *InstrumentStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error) {
+	out := new(v1.StrategiesReplies)
+	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Strategies", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,6 +121,12 @@ type InstrumentsServer interface {
 	// Get Instrument properties
 	Get(context.Context, *InstrumentRequest) (*InstrumentReply, error)
 	// Private API
+	// Get Stats Instrument
+	Stats(context.Context, *InstrumentRequest) (*InstrumentStatsReply, error)
+	// Public API
+	// Get Strategies Results Instrument
+	Strategies(context.Context, *InstrumentStrategiesRequest) (*v1.StrategiesReplies, error)
+	// Private API
 	// Search instruments, only for start imports
 	Search(context.Context, *InstrumentSearchRequest) (*InstrumentReplies, error)
 	// Private API
@@ -116,6 +147,12 @@ type UnimplementedInstrumentsServer struct {
 
 func (UnimplementedInstrumentsServer) Get(context.Context, *InstrumentRequest) (*InstrumentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedInstrumentsServer) Stats(context.Context, *InstrumentRequest) (*InstrumentStatsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
+}
+func (UnimplementedInstrumentsServer) Strategies(context.Context, *InstrumentStrategiesRequest) (*v1.StrategiesReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Strategies not implemented")
 }
 func (UnimplementedInstrumentsServer) Search(context.Context, *InstrumentSearchRequest) (*InstrumentReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
@@ -156,6 +193,42 @@ func _Instruments_Get_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstrumentsServer).Get(ctx, req.(*InstrumentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instruments_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstrumentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstrumentsServer).Stats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/instruments.v1.instruments/Stats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstrumentsServer).Stats(ctx, req.(*InstrumentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Instruments_Strategies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstrumentStrategiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstrumentsServer).Strategies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/instruments.v1.instruments/Strategies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstrumentsServer).Strategies(ctx, req.(*InstrumentStrategiesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -242,6 +315,14 @@ var Instruments_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Instruments_Get_Handler,
+		},
+		{
+			MethodName: "Stats",
+			Handler:    _Instruments_Stats_Handler,
+		},
+		{
+			MethodName: "Strategies",
+			Handler:    _Instruments_Strategies_Handler,
 		},
 		{
 			MethodName: "Search",

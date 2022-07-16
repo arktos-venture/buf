@@ -146,6 +146,131 @@ var _ interface {
 	ErrorName() string
 } = ForexRequestValidationError{}
 
+// Validate checks the field values on ForexStrategiesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ForexStrategiesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ForexStrategiesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ForexStrategiesRequestMultiError, or nil if none found.
+func (m *ForexStrategiesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ForexStrategiesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := ForexStrategiesRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetTicker()) != 6 {
+		err := ForexStrategiesRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be 6 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(errors) > 0 {
+		return ForexStrategiesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ForexStrategiesRequestMultiError is an error wrapping multiple validation
+// errors returned by ForexStrategiesRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ForexStrategiesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ForexStrategiesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ForexStrategiesRequestMultiError) AllErrors() []error { return m }
+
+// ForexStrategiesRequestValidationError is the validation error returned by
+// ForexStrategiesRequest.Validate if the designated constraints aren't met.
+type ForexStrategiesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ForexStrategiesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ForexStrategiesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ForexStrategiesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ForexStrategiesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ForexStrategiesRequestValidationError) ErrorName() string {
+	return "ForexStrategiesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ForexStrategiesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sForexStrategiesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ForexStrategiesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ForexStrategiesRequestValidationError{}
+
 // Validate checks the field values on ForexListRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -572,6 +697,35 @@ func (m *ForexReply) validate(all bool) error {
 	}
 
 	if all {
+		switch v := interface{}(m.GetStats()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ForexReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ForexReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStats()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ForexReplyValidationError{
+				field:  "Stats",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
 		switch v := interface{}(m.GetFrom()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
@@ -763,6 +917,222 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ForexReplyValidationError{}
+
+// Validate checks the field values on ForexStatsReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ForexStatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ForexStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ForexStatsReplyMultiError, or nil if none found.
+func (m *ForexStatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ForexStatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ForexStatsReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ForexStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ForexStatsReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ForexStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ForexStatsReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ForexStatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// ForexStatsReplyMultiError is an error wrapping multiple validation errors
+// returned by ForexStatsReply.ValidateAll() if the designated constraints
+// aren't met.
+type ForexStatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ForexStatsReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ForexStatsReplyMultiError) AllErrors() []error { return m }
+
+// ForexStatsReplyValidationError is the validation error returned by
+// ForexStatsReply.Validate if the designated constraints aren't met.
+type ForexStatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ForexStatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ForexStatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ForexStatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ForexStatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ForexStatsReplyValidationError) ErrorName() string { return "ForexStatsReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ForexStatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sForexStatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ForexStatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ForexStatsReplyValidationError{}
 
 // Validate checks the field values on ForexList with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -965,3 +1335,223 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ForexDeleteValidationError{}
+
+// Validate checks the field values on ForexStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ForexStatsReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ForexStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ForexStatsReply_PriceMultiError, or nil if none found.
+func (m *ForexStatsReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ForexStatsReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MaxAnnual
+
+	// no validation rules for MinAnnual
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for Beta5Y
+
+	// no validation rules for Start
+
+	if len(errors) > 0 {
+		return ForexStatsReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// ForexStatsReply_PriceMultiError is an error wrapping multiple validation
+// errors returned by ForexStatsReply_Price.ValidateAll() if the designated
+// constraints aren't met.
+type ForexStatsReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ForexStatsReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ForexStatsReply_PriceMultiError) AllErrors() []error { return m }
+
+// ForexStatsReply_PriceValidationError is the validation error returned by
+// ForexStatsReply_Price.Validate if the designated constraints aren't met.
+type ForexStatsReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ForexStatsReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ForexStatsReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ForexStatsReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ForexStatsReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ForexStatsReply_PriceValidationError) ErrorName() string {
+	return "ForexStatsReply_PriceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ForexStatsReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sForexStatsReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ForexStatsReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ForexStatsReply_PriceValidationError{}
+
+// Validate checks the field values on ForexStatsReply_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ForexStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ForexStatsReply_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ForexStatsReply_VolumeMultiError, or nil if none found.
+func (m *ForexStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ForexStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VolumeAvg10D
+
+	// no validation rules for VolumeAvg30D
+
+	// no validation rules for VolumeAvg90D
+
+	if len(errors) > 0 {
+		return ForexStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// ForexStatsReply_VolumeMultiError is an error wrapping multiple validation
+// errors returned by ForexStatsReply_Volume.ValidateAll() if the designated
+// constraints aren't met.
+type ForexStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ForexStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ForexStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// ForexStatsReply_VolumeValidationError is the validation error returned by
+// ForexStatsReply_Volume.Validate if the designated constraints aren't met.
+type ForexStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ForexStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ForexStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ForexStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ForexStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ForexStatsReply_VolumeValidationError) ErrorName() string {
+	return "ForexStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ForexStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sForexStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ForexStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ForexStatsReply_VolumeValidationError{}

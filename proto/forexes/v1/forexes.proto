@@ -6,8 +6,10 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 import "proto/quotes/v1/quotes.proto";
 import "proto/currencies/v1/currencies.proto";
+import "proto/strategies/v1/strategies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;v1Forexes";
 option java_multiple_files = true;
@@ -54,6 +56,22 @@ service Forexes {
 		};
 	}
 
+	// Private API
+	// Get Stats Forex
+	rpc Stats (ForexRequest) returns (ForexStatsReply) {
+		option (google.api.http) = {
+			get: "/v1/forexes/{ticker}/stats"
+	  	};
+	}
+
+	// Public API
+	// Get Strategies Results Instrument
+	rpc Strategies (ForexStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
+		option (google.api.http) = {
+			get: "/v1/forexes/{ticker}/strategies"
+	  	};
+	}
+
 	// Public API
 	// List Forexes available
 	rpc List (ForexListRequest) returns (ForexList)  {
@@ -89,6 +107,11 @@ message ForexRequest {
 	string ticker = 1 [(validate.rules).string.len = 6];
 }
 
+message ForexStrategiesRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+	string ticker = 2 [(validate.rules).string.len = 6];
+}
+
 message ForexListRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
 }
@@ -109,11 +132,33 @@ message ForexDeleteRequest {
 
 message ForexReply {
 	string ticker = 1;
-	quotes.v1.QuoteLastReply quote = 2;
-	currencies.v1.CurrencyReply from = 3;
-	currencies.v1.CurrencyReply to = 4;
-	google.protobuf.Timestamp created_at = 5;
-	google.protobuf.Timestamp updated_at = 6; 
+	quotes.v1.QuoteReply quote = 2;
+	ForexStatsReply stats = 3;
+	currencies.v1.CurrencyReply from = 4;
+	currencies.v1.CurrencyReply to = 5;
+	google.protobuf.Timestamp created_at = 6;
+	google.protobuf.Timestamp updated_at = 7; 
+}
+
+message ForexStatsReply {
+	message Price {
+		float max_annual = 1;
+		float min_annual = 2;
+		float return_year = 3;
+		float beta5y = 4;
+		float start = 5;
+	}
+		
+	message Volume {
+		int64 volumeAvg10d = 1;
+		int64 volumeAvg30d = 2;
+		int64 volumeAvg90d = 3;
+	}
+
+	Price price = 1;
+	Volume volume = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4; 
 }
 
 message ForexList {

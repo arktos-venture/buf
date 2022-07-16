@@ -252,6 +252,130 @@ var _ interface {
 	ErrorName() string
 } = ExchangeRequestValidationError{}
 
+// Validate checks the field values on ExchangeStrategiesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeStrategiesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeStrategiesRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeStrategiesRequestMultiError, or nil if none found.
+func (m *ExchangeStrategiesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeStrategiesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := ExchangeStrategiesRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
+		err := ExchangeStrategiesRequestValidationError{
+			field:  "Ticker",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ExchangeStrategiesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeStrategiesRequestMultiError is an error wrapping multiple validation
+// errors returned by ExchangeStrategiesRequest.ValidateAll() if the
+// designated constraints aren't met.
+type ExchangeStrategiesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeStrategiesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeStrategiesRequestMultiError) AllErrors() []error { return m }
+
+// ExchangeStrategiesRequestValidationError is the validation error returned by
+// ExchangeStrategiesRequest.Validate if the designated constraints aren't met.
+type ExchangeStrategiesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeStrategiesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeStrategiesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeStrategiesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeStrategiesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeStrategiesRequestValidationError) ErrorName() string {
+	return "ExchangeStrategiesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeStrategiesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeStrategiesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeStrategiesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeStrategiesRequestValidationError{}
+
 // Validate checks the field values on ExchangeSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1181,6 +1305,224 @@ var _ interface {
 	ErrorName() string
 } = ExchangeReplyValidationError{}
 
+// Validate checks the field values on ExchangeStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeStatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeStatsReplyMultiError, or nil if none found.
+func (m *ExchangeStatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeStatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeStatsReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeStatsReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeStatsReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ExchangeStatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeStatsReplyMultiError is an error wrapping multiple validation errors
+// returned by ExchangeStatsReply.ValidateAll() if the designated constraints
+// aren't met.
+type ExchangeStatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeStatsReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeStatsReplyMultiError) AllErrors() []error { return m }
+
+// ExchangeStatsReplyValidationError is the validation error returned by
+// ExchangeStatsReply.Validate if the designated constraints aren't met.
+type ExchangeStatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeStatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeStatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeStatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeStatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeStatsReplyValidationError) ErrorName() string {
+	return "ExchangeStatsReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeStatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeStatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeStatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeStatsReplyValidationError{}
+
 // Validate checks the field values on ExchangeReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1522,6 +1864,228 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ExchangeDeleteValidationError{}
+
+// Validate checks the field values on ExchangeStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeStatsReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeStatsReply_Price with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeStatsReply_PriceMultiError, or nil if none found.
+func (m *ExchangeStatsReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeStatsReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MaxAnnual
+
+	// no validation rules for MinAnnual
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for MarketCapUsd
+
+	// no validation rules for Beta5Y
+
+	// no validation rules for Start
+
+	if len(errors) > 0 {
+		return ExchangeStatsReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeStatsReply_PriceMultiError is an error wrapping multiple validation
+// errors returned by ExchangeStatsReply_Price.ValidateAll() if the designated
+// constraints aren't met.
+type ExchangeStatsReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeStatsReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeStatsReply_PriceMultiError) AllErrors() []error { return m }
+
+// ExchangeStatsReply_PriceValidationError is the validation error returned by
+// ExchangeStatsReply_Price.Validate if the designated constraints aren't met.
+type ExchangeStatsReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeStatsReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeStatsReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeStatsReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeStatsReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeStatsReply_PriceValidationError) ErrorName() string {
+	return "ExchangeStatsReply_PriceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeStatsReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeStatsReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeStatsReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeStatsReply_PriceValidationError{}
+
+// Validate checks the field values on ExchangeStatsReply_Volume with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ExchangeStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExchangeStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExchangeStatsReply_VolumeMultiError, or nil if none found.
+func (m *ExchangeStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExchangeStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VolumeAvg10D
+
+	// no validation rules for VolumeAvg30D
+
+	// no validation rules for VolumeAvg90D
+
+	if len(errors) > 0 {
+		return ExchangeStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExchangeStatsReply_VolumeMultiError is an error wrapping multiple validation
+// errors returned by ExchangeStatsReply_Volume.ValidateAll() if the
+// designated constraints aren't met.
+type ExchangeStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExchangeStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExchangeStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// ExchangeStatsReply_VolumeValidationError is the validation error returned by
+// ExchangeStatsReply_Volume.Validate if the designated constraints aren't met.
+type ExchangeStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExchangeStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExchangeStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExchangeStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExchangeStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExchangeStatsReply_VolumeValidationError) ErrorName() string {
+	return "ExchangeStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExchangeStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExchangeStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExchangeStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExchangeStatsReply_VolumeValidationError{}
 
 // Validate checks the field values on ExchangeReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

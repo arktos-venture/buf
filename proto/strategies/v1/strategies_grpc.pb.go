@@ -25,9 +25,6 @@ type StrategiesClient interface {
 	// List Strategies
 	List(ctx context.Context, in *StrategyListRequest, opts ...grpc.CallOption) (*StrategyReplies, error)
 	// Public API
-	// Search Strategies
-	Search(ctx context.Context, in *StrategySearchRequest, opts ...grpc.CallOption) (*StrategySearchReplies, error)
-	// Public API
 	// Create Strategy
 	Create(ctx context.Context, in *StrategyModifyRequest, opts ...grpc.CallOption) (*StrategyReply, error)
 	// Public API
@@ -58,15 +55,6 @@ func (c *strategiesClient) Get(ctx context.Context, in *StrategyRequest, opts ..
 func (c *strategiesClient) List(ctx context.Context, in *StrategyListRequest, opts ...grpc.CallOption) (*StrategyReplies, error) {
 	out := new(StrategyReplies)
 	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/List", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *strategiesClient) Search(ctx context.Context, in *StrategySearchRequest, opts ...grpc.CallOption) (*StrategySearchReplies, error) {
-	out := new(StrategySearchReplies)
-	err := c.cc.Invoke(ctx, "/strategies.v1.Strategies/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,9 +99,6 @@ type StrategiesServer interface {
 	// List Strategies
 	List(context.Context, *StrategyListRequest) (*StrategyReplies, error)
 	// Public API
-	// Search Strategies
-	Search(context.Context, *StrategySearchRequest) (*StrategySearchReplies, error)
-	// Public API
 	// Create Strategy
 	Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error)
 	// Public API
@@ -134,9 +119,6 @@ func (UnimplementedStrategiesServer) Get(context.Context, *StrategyRequest) (*St
 }
 func (UnimplementedStrategiesServer) List(context.Context, *StrategyListRequest) (*StrategyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedStrategiesServer) Search(context.Context, *StrategySearchRequest) (*StrategySearchReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedStrategiesServer) Create(context.Context, *StrategyModifyRequest) (*StrategyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
@@ -192,24 +174,6 @@ func _Strategies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StrategiesServer).List(ctx, req.(*StrategyListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Strategies_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StrategySearchRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StrategiesServer).Search(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/strategies.v1.Strategies/Search",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StrategiesServer).Search(ctx, req.(*StrategySearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -282,10 +246,6 @@ var Strategies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Strategies_List_Handler,
-		},
-		{
-			MethodName: "Search",
-			Handler:    _Strategies_Search_Handler,
 		},
 		{
 			MethodName: "Create",

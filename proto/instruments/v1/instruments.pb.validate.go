@@ -152,6 +152,131 @@ var _ interface {
 	ErrorName() string
 } = InstrumentRequestValidationError{}
 
+// Validate checks the field values on InstrumentStrategiesRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentStrategiesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentStrategiesRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentStrategiesRequestMultiError, or nil if none found.
+func (m *InstrumentStrategiesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentStrategiesRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
+		err := InstrumentStrategiesRequestValidationError{
+			field:  "Account",
+			reason: "value length must be between 3 and 36 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetId() >= 0 {
+		err := InstrumentStrategiesRequestValidationError{
+			field:  "Id",
+			reason: "value must be less than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return InstrumentStrategiesRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentStrategiesRequestMultiError is an error wrapping multiple
+// validation errors returned by InstrumentStrategiesRequest.ValidateAll() if
+// the designated constraints aren't met.
+type InstrumentStrategiesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentStrategiesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentStrategiesRequestMultiError) AllErrors() []error { return m }
+
+// InstrumentStrategiesRequestValidationError is the validation error returned
+// by InstrumentStrategiesRequest.Validate if the designated constraints
+// aren't met.
+type InstrumentStrategiesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentStrategiesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentStrategiesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentStrategiesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentStrategiesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentStrategiesRequestValidationError) ErrorName() string {
+	return "InstrumentStrategiesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentStrategiesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentStrategiesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentStrategiesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentStrategiesRequestValidationError{}
+
 // Validate checks the field values on InstrumentSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1035,224 +1160,6 @@ var _ interface {
 	ErrorName() string
 } = InstrumentDeleteRequestValidationError{}
 
-// Validate checks the field values on InstrumentAddress with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *InstrumentAddress) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on InstrumentAddress with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// InstrumentAddressMultiError, or nil if none found.
-func (m *InstrumentAddress) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *InstrumentAddress) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Street
-
-	// no validation rules for City
-
-	// no validation rules for State
-
-	// no validation rules for Country
-
-	if len(errors) > 0 {
-		return InstrumentAddressMultiError(errors)
-	}
-
-	return nil
-}
-
-// InstrumentAddressMultiError is an error wrapping multiple validation errors
-// returned by InstrumentAddress.ValidateAll() if the designated constraints
-// aren't met.
-type InstrumentAddressMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m InstrumentAddressMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m InstrumentAddressMultiError) AllErrors() []error { return m }
-
-// InstrumentAddressValidationError is the validation error returned by
-// InstrumentAddress.Validate if the designated constraints aren't met.
-type InstrumentAddressValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e InstrumentAddressValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e InstrumentAddressValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e InstrumentAddressValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e InstrumentAddressValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e InstrumentAddressValidationError) ErrorName() string {
-	return "InstrumentAddressValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e InstrumentAddressValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sInstrumentAddress.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = InstrumentAddressValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = InstrumentAddressValidationError{}
-
-// Validate checks the field values on InstrumentContact with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *InstrumentContact) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on InstrumentContact with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// InstrumentContactMultiError, or nil if none found.
-func (m *InstrumentContact) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *InstrumentContact) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Phone
-
-	// no validation rules for Website
-
-	// no validation rules for Email
-
-	if len(errors) > 0 {
-		return InstrumentContactMultiError(errors)
-	}
-
-	return nil
-}
-
-// InstrumentContactMultiError is an error wrapping multiple validation errors
-// returned by InstrumentContact.ValidateAll() if the designated constraints
-// aren't met.
-type InstrumentContactMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m InstrumentContactMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m InstrumentContactMultiError) AllErrors() []error { return m }
-
-// InstrumentContactValidationError is the validation error returned by
-// InstrumentContact.Validate if the designated constraints aren't met.
-type InstrumentContactValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e InstrumentContactValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e InstrumentContactValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e InstrumentContactValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e InstrumentContactValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e InstrumentContactValidationError) ErrorName() string {
-	return "InstrumentContactValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e InstrumentContactValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sInstrumentContact.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = InstrumentContactValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = InstrumentContactValidationError{}
-
 // Validate checks the field values on InstrumentReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1609,6 +1516,224 @@ var _ interface {
 	ErrorName() string
 } = InstrumentReplyValidationError{}
 
+// Validate checks the field values on InstrumentStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentStatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentStatsReplyMultiError, or nil if none found.
+func (m *InstrumentStatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentStatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return InstrumentStatsReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return InstrumentStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return InstrumentStatsReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, InstrumentStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return InstrumentStatsReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return InstrumentStatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentStatsReplyMultiError is an error wrapping multiple validation
+// errors returned by InstrumentStatsReply.ValidateAll() if the designated
+// constraints aren't met.
+type InstrumentStatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentStatsReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentStatsReplyMultiError) AllErrors() []error { return m }
+
+// InstrumentStatsReplyValidationError is the validation error returned by
+// InstrumentStatsReply.Validate if the designated constraints aren't met.
+type InstrumentStatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentStatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentStatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentStatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentStatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentStatsReplyValidationError) ErrorName() string {
+	return "InstrumentStatsReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentStatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentStatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentStatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentStatsReplyValidationError{}
+
 // Validate checks the field values on InstrumentReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1848,6 +1973,224 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = InstrumentDeleteValidationError{}
+
+// Validate checks the field values on InstrumentReply_Address with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentReply_Address) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentReply_Address with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentReply_AddressMultiError, or nil if none found.
+func (m *InstrumentReply_Address) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentReply_Address) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Street
+
+	// no validation rules for City
+
+	// no validation rules for State
+
+	// no validation rules for Country
+
+	if len(errors) > 0 {
+		return InstrumentReply_AddressMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentReply_AddressMultiError is an error wrapping multiple validation
+// errors returned by InstrumentReply_Address.ValidateAll() if the designated
+// constraints aren't met.
+type InstrumentReply_AddressMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentReply_AddressMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentReply_AddressMultiError) AllErrors() []error { return m }
+
+// InstrumentReply_AddressValidationError is the validation error returned by
+// InstrumentReply_Address.Validate if the designated constraints aren't met.
+type InstrumentReply_AddressValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentReply_AddressValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentReply_AddressValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentReply_AddressValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentReply_AddressValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentReply_AddressValidationError) ErrorName() string {
+	return "InstrumentReply_AddressValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentReply_AddressValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentReply_Address.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentReply_AddressValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentReply_AddressValidationError{}
+
+// Validate checks the field values on InstrumentReply_Contact with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentReply_Contact) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentReply_Contact with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentReply_ContactMultiError, or nil if none found.
+func (m *InstrumentReply_Contact) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentReply_Contact) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Phone
+
+	// no validation rules for Website
+
+	// no validation rules for Email
+
+	if len(errors) > 0 {
+		return InstrumentReply_ContactMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentReply_ContactMultiError is an error wrapping multiple validation
+// errors returned by InstrumentReply_Contact.ValidateAll() if the designated
+// constraints aren't met.
+type InstrumentReply_ContactMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentReply_ContactMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentReply_ContactMultiError) AllErrors() []error { return m }
+
+// InstrumentReply_ContactValidationError is the validation error returned by
+// InstrumentReply_Contact.Validate if the designated constraints aren't met.
+type InstrumentReply_ContactValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentReply_ContactValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentReply_ContactValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentReply_ContactValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentReply_ContactValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentReply_ContactValidationError) ErrorName() string {
+	return "InstrumentReply_ContactValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentReply_ContactValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentReply_Contact.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentReply_ContactValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentReply_ContactValidationError{}
 
 // Validate checks the field values on InstrumentReply_Exchange with the rules
 // defined in the proto definition for this message. If any rules are
@@ -2421,6 +2764,229 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = InstrumentReply_Stats_SharesValidationError{}
+
+// Validate checks the field values on InstrumentStatsReply_Price with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentStatsReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentStatsReply_Price with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentStatsReply_PriceMultiError, or nil if none found.
+func (m *InstrumentStatsReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentStatsReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MaxAnnual
+
+	// no validation rules for MinAnnual
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for MarketCapUsd
+
+	// no validation rules for Beta5Y
+
+	// no validation rules for Start
+
+	if len(errors) > 0 {
+		return InstrumentStatsReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentStatsReply_PriceMultiError is an error wrapping multiple
+// validation errors returned by InstrumentStatsReply_Price.ValidateAll() if
+// the designated constraints aren't met.
+type InstrumentStatsReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentStatsReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentStatsReply_PriceMultiError) AllErrors() []error { return m }
+
+// InstrumentStatsReply_PriceValidationError is the validation error returned
+// by InstrumentStatsReply_Price.Validate if the designated constraints aren't met.
+type InstrumentStatsReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentStatsReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentStatsReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentStatsReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentStatsReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentStatsReply_PriceValidationError) ErrorName() string {
+	return "InstrumentStatsReply_PriceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentStatsReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentStatsReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentStatsReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentStatsReply_PriceValidationError{}
+
+// Validate checks the field values on InstrumentStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *InstrumentStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstrumentStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InstrumentStatsReply_VolumeMultiError, or nil if none found.
+func (m *InstrumentStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstrumentStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VolumeAvg10D
+
+	// no validation rules for VolumeAvg30D
+
+	// no validation rules for VolumeAvg90D
+
+	if len(errors) > 0 {
+		return InstrumentStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// InstrumentStatsReply_VolumeMultiError is an error wrapping multiple
+// validation errors returned by InstrumentStatsReply_Volume.ValidateAll() if
+// the designated constraints aren't met.
+type InstrumentStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstrumentStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstrumentStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// InstrumentStatsReply_VolumeValidationError is the validation error returned
+// by InstrumentStatsReply_Volume.Validate if the designated constraints
+// aren't met.
+type InstrumentStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstrumentStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstrumentStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstrumentStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstrumentStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstrumentStatsReply_VolumeValidationError) ErrorName() string {
+	return "InstrumentStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstrumentStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstrumentStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstrumentStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstrumentStatsReply_VolumeValidationError{}
 
 // Validate checks the field values on InstrumentReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are

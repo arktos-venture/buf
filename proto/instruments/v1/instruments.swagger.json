@@ -167,6 +167,76 @@
         ]
       }
     },
+    "/v1/instrument/{id}/stats": {
+      "get": {
+        "summary": "Private API\nGet Stats Instrument",
+        "operationId": "instruments_Stats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InstrumentStatsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
+    "/v1/instrument/{id}/strategies": {
+      "get": {
+        "summary": "Public API\nGet Strategies Results Instrument",
+        "operationId": "instruments_Strategies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StrategiesReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "account",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "instruments"
+        ]
+      }
+    },
     "/v1/instruments": {
       "delete": {
         "summary": "Private API\nDelete Instrument",
@@ -279,6 +349,23 @@
     }
   },
   "definitions": {
+    "InstrumentReplyAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
     "InstrumentReplyDividend": {
       "type": "object",
       "properties": {
@@ -326,10 +413,10 @@
       "type": "object",
       "properties": {
         "price": {
-          "$ref": "#/definitions/statsv1Price"
+          "$ref": "#/definitions/v1InstrumentStatsReplyPrice"
         },
         "volume": {
-          "$ref": "#/definitions/v1Volume"
+          "$ref": "#/definitions/v1InstrumentStatsReplyVolume"
         },
         "shares": {
           "$ref": "#/definitions/StatsShares"
@@ -376,6 +463,41 @@
         }
       }
     },
+    "StrategiesRepliesPeriod": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "result": {
+          "$ref": "#/definitions/StrategiesRepliesPeriodResult"
+        }
+      }
+    },
+    "StrategiesRepliesPeriodResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1OrderAction"
+        },
+        "breakout": {
+          "type": "number",
+          "format": "float"
+        },
+        "status_ago": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -403,35 +525,6 @@
         "value": {
           "type": "string",
           "format": "byte"
-        }
-      }
-    },
-    "statsv1Price": {
-      "type": "object",
-      "properties": {
-        "max_annual": {
-          "type": "number",
-          "format": "float"
-        },
-        "min_annual": {
-          "type": "number",
-          "format": "float"
-        },
-        "return_year": {
-          "type": "number",
-          "format": "float"
-        },
-        "market_cap_usd": {
-          "type": "string",
-          "format": "int64"
-        },
-        "beta5y": {
-          "type": "number",
-          "format": "float"
-        },
-        "start": {
-          "type": "number",
-          "format": "float"
         }
       }
     },
@@ -501,37 +594,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "v1InstrumentAddress": {
-      "type": "object",
-      "properties": {
-        "street": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        }
-      }
-    },
-    "v1InstrumentContact": {
-      "type": "object",
-      "properties": {
-        "phone": {
-          "type": "string"
-        },
-        "website": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
         }
       }
     },
@@ -713,7 +775,7 @@
           }
         },
         "quote": {
-          "$ref": "#/definitions/v1QuoteLastReply"
+          "$ref": "#/definitions/v1QuoteReply"
         },
         "dividends": {
           "$ref": "#/definitions/InstrumentReplyDividend"
@@ -733,10 +795,10 @@
           "format": "int32"
         },
         "contact": {
-          "$ref": "#/definitions/v1InstrumentContact"
+          "$ref": "#/definitions/v1InstrumentReplyContact"
         },
         "address": {
-          "$ref": "#/definitions/v1InstrumentAddress"
+          "$ref": "#/definitions/InstrumentReplyAddress"
         },
         "created_at": {
           "type": "string",
@@ -745,6 +807,20 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentReplyContact": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
         }
       }
     },
@@ -762,6 +838,82 @@
         }
       }
     },
+    "v1InstrumentStatsReply": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyPrice"
+        },
+        "volume": {
+          "$ref": "#/definitions/v1InstrumentStatsReplyVolume"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1InstrumentStatsReplyPrice": {
+      "type": "object",
+      "properties": {
+        "max_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "min_annual": {
+          "type": "number",
+          "format": "float"
+        },
+        "return_year": {
+          "type": "number",
+          "format": "float"
+        },
+        "market_cap_usd": {
+          "type": "string",
+          "format": "int64"
+        },
+        "beta5y": {
+          "type": "number",
+          "format": "float"
+        },
+        "start": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "v1InstrumentStatsReplyVolume": {
+      "type": "object",
+      "properties": {
+        "volumeAvg10d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg30d": {
+          "type": "string",
+          "format": "int64"
+        },
+        "volumeAvg90d": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
     "v1Operator": {
       "type": "string",
       "enum": [
@@ -777,7 +929,16 @@
       ],
       "default": "Equal"
     },
-    "v1QuoteLastReply": {
+    "v1OrderAction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "default": "BUY"
+    },
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -806,18 +967,16 @@
         }
       }
     },
-    "v1Volume": {
+    "v1StrategiesReplies": {
       "type": "object",
       "properties": {
-        "volumeAvg10d": {
-          "type": "string",
-          "format": "int64"
+        "strategies": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/StrategiesRepliesPeriod"
+          }
         },
-        "volumeAvg30d": {
-          "type": "string",
-          "format": "int64"
-        },
-        "volumeAvg90d": {
+        "total": {
           "type": "string",
           "format": "int64"
         }

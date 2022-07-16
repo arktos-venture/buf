@@ -6,9 +6,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 import "proto/quotes/v1/quotes.proto";
-import "proto/stats/v1/stats.proto";
 import "proto/screener/v1/screener.proto";
+import "proto/strategies/v1/strategies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/instruments/v1;v1Instruments";
 option java_multiple_files = true;
@@ -56,6 +57,22 @@ service instruments {
 	}
 
 	// Private API
+	// Get Stats Instrument
+	rpc Stats (InstrumentRequest) returns (InstrumentStatsReply) {
+		option (google.api.http) = {
+			get: "/v1/instrument/{id}/stats"
+	  	};
+	}
+
+	// Public API
+	// Get Strategies Results Instrument
+	rpc Strategies (InstrumentStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
+		option (google.api.http) = {
+			get: "/v1/instrument/{id}/strategies"
+	  	};
+	}
+
+	// Private API
 	// Search instruments, only for start imports
 	rpc Search (InstrumentSearchRequest) returns (InstrumentReplies)  {
 		option (google.api.http) = {
@@ -98,6 +115,11 @@ service instruments {
 
 message InstrumentRequest {
 	int64 id = 1 [(validate.rules).int64 = {lt: 0}];
+}
+
+message InstrumentStrategiesRequest {
+	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+	int64 id = 2 [(validate.rules).int64 = {lt: 0}];
 }
 
 message InstrumentSearchRequest {
@@ -166,20 +188,20 @@ message InstrumentDeleteRequest {
 // Reply
 // 
 
-message InstrumentAddress {
-	string street = 1;
-	string city = 2;
-	string state = 3;
-	string country = 4;
-}
-
-message InstrumentContact {
-	string phone = 1;
-	string website = 2;
-	string email = 3;
-}
-
 message InstrumentReply {
+	message Address {
+		string street = 1;
+		string city = 2;
+		string state = 3;
+		string country = 4;
+	}
+	
+	message Contact {
+		string phone = 1;
+		string website = 2;
+		string email = 3;
+	}
+
 	message Exchange {
 		string ticker = 1;
 		string routing = 2;
@@ -200,8 +222,8 @@ message InstrumentReply {
 			float div = 3;
 		}
 
-		stats.v1.Price price = 1;
-		stats.v1.Volume volume = 2;
+		InstrumentStatsReply.Price price = 1;
+		InstrumentStatsReply.Volume volume = 2;
 		Shares shares = 3;
 		google.protobuf.Timestamp updated_at = 4; 
 	}
@@ -216,16 +238,38 @@ message InstrumentReply {
 	string isin = 8;
 	bool adr = 9;
 	map<int64, string> activity = 10;
-	quotes.v1.QuoteLastReply quote = 11;
+	quotes.v1.QuoteReply quote = 11;
 	Dividend dividends = 12;
 	Stats stats = 13;
 	int32 employees = 14;
 	string currencyReport = 15;
 	int32 fiscalYearEnd = 16;
-	InstrumentContact contact = 17;
-	InstrumentAddress address = 18;
+	Contact contact = 17;
+	Address address = 18;
 	google.protobuf.Timestamp created_at = 19;
 	google.protobuf.Timestamp updated_at = 20; 
+}
+
+message InstrumentStatsReply {
+	message Price {
+		float max_annual = 1;
+		float min_annual = 2;
+		float return_year = 3;
+		int64 market_cap_usd = 4;
+		float beta5y = 5;
+		float start = 6;
+	}
+		
+	message Volume {
+		int64 volumeAvg10d = 1;
+		int64 volumeAvg30d = 2;
+		int64 volumeAvg90d = 3;
+	}
+
+	Price price = 1;
+	Volume volume = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4; 
 }
 
 message InstrumentReplies {

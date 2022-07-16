@@ -6,6 +6,7 @@ package v1Portfolios
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -20,32 +21,36 @@ const _ = http.SupportPackageIsVersion1
 type PortfoliosHTTPServer interface {
 	Create(context.Context, *PortfolioCreateRequest) (*PortfolioReply, error)
 	Delete(context.Context, *PortfolioDeleteRequest) (*PortfolioDelete, error)
+	Get(context.Context, *PortfolioRequest) (*PortfolioReply, error)
 	Search(context.Context, *PortfolioSearchRequest) (*PortfolioReplies, error)
-	Status(context.Context, *PortfolioStatusRequest) (*PortfolioReply, error)
+	Stats(context.Context, *PortfolioRequest) (*PortfolioStatsReply, error)
+	Strategies(context.Context, *PortfolioRequest) (*v1.StrategiesReplies, error)
 	Update(context.Context, *PortfolioUpdateRequest) (*PortfolioReply, error)
 }
 
 func RegisterPortfoliosHTTPServer(s *http.Server, srv PortfoliosHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Status1_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}", _Portfolios_Search6_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Get6_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}/stats", _Portfolios_Stats3_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}/strategies", _Portfolios_Strategies3_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}", _Portfolios_Search5_HTTP_Handler(srv))
 	r.POST("/v1/portfolios/{account}", _Portfolios_Create6_HTTP_Handler(srv))
-	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update6_HTTP_Handler(srv))
-	r.DELETE("/v1/portfolios/{account}/{currency}", _Portfolios_Delete7_HTTP_Handler(srv))
+	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update5_HTTP_Handler(srv))
+	r.DELETE("/v1/portfolios/{account}/{currency}", _Portfolios_Delete6_HTTP_Handler(srv))
 }
 
-func _Portfolios_Status1_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Get6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PortfolioStatusRequest
+		var in PortfolioRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/portfolios.v1.Portfolios/Status")
+		http.SetOperation(ctx, "/portfolios.v1.Portfolios/Get")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Status(ctx, req.(*PortfolioStatusRequest))
+			return srv.Get(ctx, req.(*PortfolioRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -56,7 +61,51 @@ func _Portfolios_Status1_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Search6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Stats3_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PortfolioRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/portfolios.v1.Portfolios/Stats")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Stats(ctx, req.(*PortfolioRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PortfolioStatsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Portfolios_Strategies3_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PortfolioRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/portfolios.v1.Portfolios/Strategies")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Strategies(ctx, req.(*PortfolioRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.StrategiesReplies)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Portfolios_Search5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -100,7 +149,7 @@ func _Portfolios_Create6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Update6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Update5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioUpdateRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -122,7 +171,7 @@ func _Portfolios_Update6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 	}
 }
 
-func _Portfolios_Delete7_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Delete6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioDeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -147,8 +196,10 @@ func _Portfolios_Delete7_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Co
 type PortfoliosHTTPClient interface {
 	Create(ctx context.Context, req *PortfolioCreateRequest, opts ...http.CallOption) (rsp *PortfolioReply, err error)
 	Delete(ctx context.Context, req *PortfolioDeleteRequest, opts ...http.CallOption) (rsp *PortfolioDelete, err error)
+	Get(ctx context.Context, req *PortfolioRequest, opts ...http.CallOption) (rsp *PortfolioReply, err error)
 	Search(ctx context.Context, req *PortfolioSearchRequest, opts ...http.CallOption) (rsp *PortfolioReplies, err error)
-	Status(ctx context.Context, req *PortfolioStatusRequest, opts ...http.CallOption) (rsp *PortfolioReply, err error)
+	Stats(ctx context.Context, req *PortfolioRequest, opts ...http.CallOption) (rsp *PortfolioStatsReply, err error)
+	Strategies(ctx context.Context, req *PortfolioRequest, opts ...http.CallOption) (rsp *v1.StrategiesReplies, err error)
 	Update(ctx context.Context, req *PortfolioUpdateRequest, opts ...http.CallOption) (rsp *PortfolioReply, err error)
 }
 
@@ -186,6 +237,19 @@ func (c *PortfoliosHTTPClientImpl) Delete(ctx context.Context, in *PortfolioDele
 	return &out, err
 }
 
+func (c *PortfoliosHTTPClientImpl) Get(ctx context.Context, in *PortfolioRequest, opts ...http.CallOption) (*PortfolioReply, error) {
+	var out PortfolioReply
+	pattern := "/v1/portfolios/{account}/{currency}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Get"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *PortfoliosHTTPClientImpl) Search(ctx context.Context, in *PortfolioSearchRequest, opts ...http.CallOption) (*PortfolioReplies, error) {
 	var out PortfolioReplies
 	pattern := "/v1/portfolios/{account}"
@@ -199,11 +263,24 @@ func (c *PortfoliosHTTPClientImpl) Search(ctx context.Context, in *PortfolioSear
 	return &out, err
 }
 
-func (c *PortfoliosHTTPClientImpl) Status(ctx context.Context, in *PortfolioStatusRequest, opts ...http.CallOption) (*PortfolioReply, error) {
-	var out PortfolioReply
-	pattern := "/v1/portfolios/{account}/{currency}"
+func (c *PortfoliosHTTPClientImpl) Stats(ctx context.Context, in *PortfolioRequest, opts ...http.CallOption) (*PortfolioStatsReply, error) {
+	var out PortfolioStatsReply
+	pattern := "/v1/portfolios/{account}/{currency}/stats"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Status"))
+	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Stats"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *PortfoliosHTTPClientImpl) Strategies(ctx context.Context, in *PortfolioRequest, opts ...http.CallOption) (*v1.StrategiesReplies, error) {
+	var out v1.StrategiesReplies
+	pattern := "/v1/portfolios/{account}/{currency}/strategies"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/portfolios.v1.Portfolios/Strategies"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

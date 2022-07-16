@@ -39,22 +39,22 @@ var (
 	_ = v1Screener.Asset(0)
 )
 
-// Validate checks the field values on PortfolioStatusRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *PortfolioStatusRequest) Validate() error {
+// Validate checks the field values on PortfolioRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *PortfolioRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PortfolioStatusRequest with the rules
+// ValidateAll checks the field values on PortfolioRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// PortfolioStatusRequestMultiError, or nil if none found.
-func (m *PortfolioStatusRequest) ValidateAll() error {
+// PortfolioRequestMultiError, or nil if none found.
+func (m *PortfolioRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PortfolioStatusRequest) validate(all bool) error {
+func (m *PortfolioRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -62,7 +62,7 @@ func (m *PortfolioStatusRequest) validate(all bool) error {
 	var errors []error
 
 	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
-		err := PortfolioStatusRequestValidationError{
+		err := PortfolioRequestValidationError{
 			field:  "Account",
 			reason: "value length must be between 3 and 36 runes, inclusive",
 		}
@@ -73,7 +73,7 @@ func (m *PortfolioStatusRequest) validate(all bool) error {
 	}
 
 	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
-		err := PortfolioStatusRequestValidationError{
+		err := PortfolioRequestValidationError{
 			field:  "Currency",
 			reason: "value length must be 3 runes",
 		}
@@ -85,19 +85,19 @@ func (m *PortfolioStatusRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return PortfolioStatusRequestMultiError(errors)
+		return PortfolioRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// PortfolioStatusRequestMultiError is an error wrapping multiple validation
-// errors returned by PortfolioStatusRequest.ValidateAll() if the designated
-// constraints aren't met.
-type PortfolioStatusRequestMultiError []error
+// PortfolioRequestMultiError is an error wrapping multiple validation errors
+// returned by PortfolioRequest.ValidateAll() if the designated constraints
+// aren't met.
+type PortfolioRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PortfolioStatusRequestMultiError) Error() string {
+func (m PortfolioRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -106,11 +106,11 @@ func (m PortfolioStatusRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PortfolioStatusRequestMultiError) AllErrors() []error { return m }
+func (m PortfolioRequestMultiError) AllErrors() []error { return m }
 
-// PortfolioStatusRequestValidationError is the validation error returned by
-// PortfolioStatusRequest.Validate if the designated constraints aren't met.
-type PortfolioStatusRequestValidationError struct {
+// PortfolioRequestValidationError is the validation error returned by
+// PortfolioRequest.Validate if the designated constraints aren't met.
+type PortfolioRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -118,24 +118,22 @@ type PortfolioStatusRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e PortfolioStatusRequestValidationError) Field() string { return e.field }
+func (e PortfolioRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PortfolioStatusRequestValidationError) Reason() string { return e.reason }
+func (e PortfolioRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PortfolioStatusRequestValidationError) Cause() error { return e.cause }
+func (e PortfolioRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PortfolioStatusRequestValidationError) Key() bool { return e.key }
+func (e PortfolioRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PortfolioStatusRequestValidationError) ErrorName() string {
-	return "PortfolioStatusRequestValidationError"
-}
+func (e PortfolioRequestValidationError) ErrorName() string { return "PortfolioRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PortfolioStatusRequestValidationError) Error() string {
+func (e PortfolioRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -147,14 +145,14 @@ func (e PortfolioStatusRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPortfolioStatusRequest.%s: %s%s",
+		"invalid %sPortfolioRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PortfolioStatusRequestValidationError{}
+var _ error = PortfolioRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -162,7 +160,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PortfolioStatusRequestValidationError{}
+} = PortfolioRequestValidationError{}
 
 // Validate checks the field values on PortfolioSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -999,6 +997,224 @@ var _ interface {
 	ErrorName() string
 } = PortfolioReplyValidationError{}
 
+// Validate checks the field values on PortfolioStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PortfolioStatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PortfolioStatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PortfolioStatsReplyMultiError, or nil if none found.
+func (m *PortfolioStatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PortfolioStatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PortfolioStatsReplyValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetVolume()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "Volume",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVolume()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PortfolioStatsReplyValidationError{
+				field:  "Volume",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PortfolioStatsReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PortfolioStatsReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PortfolioStatsReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return PortfolioStatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// PortfolioStatsReplyMultiError is an error wrapping multiple validation
+// errors returned by PortfolioStatsReply.ValidateAll() if the designated
+// constraints aren't met.
+type PortfolioStatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PortfolioStatsReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PortfolioStatsReplyMultiError) AllErrors() []error { return m }
+
+// PortfolioStatsReplyValidationError is the validation error returned by
+// PortfolioStatsReply.Validate if the designated constraints aren't met.
+type PortfolioStatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PortfolioStatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PortfolioStatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PortfolioStatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PortfolioStatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PortfolioStatsReplyValidationError) ErrorName() string {
+	return "PortfolioStatsReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PortfolioStatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPortfolioStatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PortfolioStatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PortfolioStatsReplyValidationError{}
+
 // Validate checks the field values on PortfolioReplies with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1236,6 +1452,228 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PortfolioDeleteValidationError{}
+
+// Validate checks the field values on PortfolioStatsReply_Price with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PortfolioStatsReply_Price) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PortfolioStatsReply_Price with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PortfolioStatsReply_PriceMultiError, or nil if none found.
+func (m *PortfolioStatsReply_Price) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PortfolioStatsReply_Price) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MaxAnnual
+
+	// no validation rules for MinAnnual
+
+	// no validation rules for ReturnYear
+
+	// no validation rules for MarketCap
+
+	// no validation rules for Beta5Y
+
+	// no validation rules for Start
+
+	if len(errors) > 0 {
+		return PortfolioStatsReply_PriceMultiError(errors)
+	}
+
+	return nil
+}
+
+// PortfolioStatsReply_PriceMultiError is an error wrapping multiple validation
+// errors returned by PortfolioStatsReply_Price.ValidateAll() if the
+// designated constraints aren't met.
+type PortfolioStatsReply_PriceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PortfolioStatsReply_PriceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PortfolioStatsReply_PriceMultiError) AllErrors() []error { return m }
+
+// PortfolioStatsReply_PriceValidationError is the validation error returned by
+// PortfolioStatsReply_Price.Validate if the designated constraints aren't met.
+type PortfolioStatsReply_PriceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PortfolioStatsReply_PriceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PortfolioStatsReply_PriceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PortfolioStatsReply_PriceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PortfolioStatsReply_PriceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PortfolioStatsReply_PriceValidationError) ErrorName() string {
+	return "PortfolioStatsReply_PriceValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PortfolioStatsReply_PriceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPortfolioStatsReply_Price.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PortfolioStatsReply_PriceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PortfolioStatsReply_PriceValidationError{}
+
+// Validate checks the field values on PortfolioStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PortfolioStatsReply_Volume) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PortfolioStatsReply_Volume with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PortfolioStatsReply_VolumeMultiError, or nil if none found.
+func (m *PortfolioStatsReply_Volume) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PortfolioStatsReply_Volume) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for VolumeAvg10D
+
+	// no validation rules for VolumeAvg30D
+
+	// no validation rules for VolumeAvg90D
+
+	if len(errors) > 0 {
+		return PortfolioStatsReply_VolumeMultiError(errors)
+	}
+
+	return nil
+}
+
+// PortfolioStatsReply_VolumeMultiError is an error wrapping multiple
+// validation errors returned by PortfolioStatsReply_Volume.ValidateAll() if
+// the designated constraints aren't met.
+type PortfolioStatsReply_VolumeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PortfolioStatsReply_VolumeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PortfolioStatsReply_VolumeMultiError) AllErrors() []error { return m }
+
+// PortfolioStatsReply_VolumeValidationError is the validation error returned
+// by PortfolioStatsReply_Volume.Validate if the designated constraints aren't met.
+type PortfolioStatsReply_VolumeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PortfolioStatsReply_VolumeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PortfolioStatsReply_VolumeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PortfolioStatsReply_VolumeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PortfolioStatsReply_VolumeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PortfolioStatsReply_VolumeValidationError) ErrorName() string {
+	return "PortfolioStatsReply_VolumeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PortfolioStatsReply_VolumeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPortfolioStatsReply_Volume.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PortfolioStatsReply_VolumeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PortfolioStatsReply_VolumeValidationError{}
 
 // Validate checks the field values on PortfolioReplies_Result with the rules
 // defined in the proto definition for this message. If any rules are
