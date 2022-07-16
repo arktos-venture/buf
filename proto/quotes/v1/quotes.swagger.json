@@ -60,22 +60,13 @@
             "default": "Instruments"
           },
           {
-            "name": "exchanges",
+            "name": "instrument_id",
             "in": "query",
             "required": false,
             "type": "array",
             "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
+              "type": "string",
+              "format": "int64"
             },
             "collectionFormat": "multi"
           }
@@ -91,7 +82,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1QuoteReply"
+              "$ref": "#/definitions/v1QuoteReplies"
             }
           },
           "default": {
@@ -116,7 +107,7 @@
         ]
       }
     },
-    "/v1/quotes/{exchange}/{ticker}": {
+    "/v1/quotes/{instrument_id}": {
       "get": {
         "summary": "Public API\nGet Last Quotes for one ticker",
         "operationId": "Quotes_Last",
@@ -124,7 +115,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1QuoteLastReply"
+              "$ref": "#/definitions/v1QuoteReply"
             }
           },
           "default": {
@@ -136,16 +127,11 @@
         },
         "parameters": [
           {
-            "name": "exchange",
+            "name": "instrument_id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "int64"
           },
           {
             "name": "tsdb",
@@ -288,7 +274,22 @@
         }
       }
     },
-    "v1QuoteLastReply": {
+    "v1QuoteReplies": {
+      "type": "object",
+      "properties": {
+        "quotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1QuoteReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1QuoteReply": {
       "type": "object",
       "properties": {
         "open": {
@@ -314,53 +315,6 @@
         "created_at": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1QuoteReply": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "close": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "low": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "high": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "volume": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
-        },
-        "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
         }
       }
     },

@@ -25,7 +25,7 @@ type AccountsHTTPServer interface {
 func RegisterAccountsHTTPServer(s *http.Server, srv AccountsHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/accounts", _Accounts_Create8_HTTP_Handler(srv))
-	r.PUT("/v1/account/{account}", _Accounts_Update7_HTTP_Handler(srv))
+	r.PUT("/v1/account/{account}", _Accounts_Update6_HTTP_Handler(srv))
 }
 
 func _Accounts_Create8_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
@@ -47,7 +47,7 @@ func _Accounts_Create8_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Accounts_Update7_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
+func _Accounts_Update6_HTTP_Handler(srv AccountsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AccountModifyRequest
 		if err := ctx.Bind(&in); err != nil {
