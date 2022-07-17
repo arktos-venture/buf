@@ -252,130 +252,6 @@ var _ interface {
 	ErrorName() string
 } = ExchangeRequestValidationError{}
 
-// Validate checks the field values on ExchangeStrategiesRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ExchangeStrategiesRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ExchangeStrategiesRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ExchangeStrategiesRequestMultiError, or nil if none found.
-func (m *ExchangeStrategiesRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ExchangeStrategiesRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if l := utf8.RuneCountInString(m.GetAccount()); l < 3 || l > 36 {
-		err := ExchangeStrategiesRequestValidationError{
-			field:  "Account",
-			reason: "value length must be between 3 and 36 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetTicker()); l < 1 || l > 8 {
-		err := ExchangeStrategiesRequestValidationError{
-			field:  "Ticker",
-			reason: "value length must be between 1 and 8 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return ExchangeStrategiesRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// ExchangeStrategiesRequestMultiError is an error wrapping multiple validation
-// errors returned by ExchangeStrategiesRequest.ValidateAll() if the
-// designated constraints aren't met.
-type ExchangeStrategiesRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ExchangeStrategiesRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ExchangeStrategiesRequestMultiError) AllErrors() []error { return m }
-
-// ExchangeStrategiesRequestValidationError is the validation error returned by
-// ExchangeStrategiesRequest.Validate if the designated constraints aren't met.
-type ExchangeStrategiesRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ExchangeStrategiesRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ExchangeStrategiesRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ExchangeStrategiesRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ExchangeStrategiesRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ExchangeStrategiesRequestValidationError) ErrorName() string {
-	return "ExchangeStrategiesRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ExchangeStrategiesRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sExchangeStrategiesRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ExchangeStrategiesRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ExchangeStrategiesRequestValidationError{}
-
 // Validate checks the field values on ExchangeSearchRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1121,6 +997,35 @@ func (m *ExchangeReply) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if all {
+		switch v := interface{}(m.GetStats()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExchangeReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExchangeReplyValidationError{
+					field:  "Stats",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStats()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeReplyValidationError{
+				field:  "Stats",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	// no validation rules for Routing

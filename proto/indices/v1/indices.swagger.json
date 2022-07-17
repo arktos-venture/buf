@@ -578,6 +578,9 @@
         "quote": {
           "$ref": "#/definitions/v1QuoteReply"
         },
+        "stats": {
+          "$ref": "#/definitions/v1IndiceStatsReply"
+        },
         "companies": {
           "type": "array",
           "items": {

@@ -172,9 +172,10 @@ message IndiceReply {
 	string exchange = 3;
 	screener.v1.Asset asset = 4;
 	quotes.v1.QuoteReply quote = 5;
-	repeated instruments.v1.InstrumentReplies.Result companies = 6;
-	google.protobuf.Timestamp created_at = 7;
-	google.protobuf.Timestamp updated_at = 8;
+	IndiceStatsReply stats = 6;
+	repeated instruments.v1.InstrumentReplies.Result companies = 7;
+	google.protobuf.Timestamp created_at = 8;
+	google.protobuf.Timestamp updated_at = 9;
 }
 
 message IndiceStatsReply {
