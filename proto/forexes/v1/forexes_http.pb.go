@@ -23,7 +23,7 @@ type ForexesHTTPServer interface {
 	Create(context.Context, *ForexCreateRequest) (*ForexReply, error)
 	Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error)
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
-	LastQuotes(context.Context, *ForexRequest) (*v1.QuoteReply, error)
+	LastQuote(context.Context, *ForexRequest) (*v1.QuoteReply, error)
 	List(context.Context, *ForexListRequest) (*ForexList, error)
 	Quotes(context.Context, *ForexQuotesRequest) (*v1.QuoteReplies, error)
 	Stats(context.Context, *ForexRequest) (*ForexStatsReply, error)
@@ -34,7 +34,7 @@ func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/forexes/{ticker}", _Forexes_Get7_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{ticker}/stats", _Forexes_Stats4_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{ticker}/quotes/last", _Forexes_LastQuotes1_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/quotes/last", _Forexes_LastQuote2_HTTP_Handler(srv))
 	r.POST("/v1/forexes/quotes", _Forexes_Quotes2_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies4_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List3_HTTP_Handler(srv))
@@ -86,7 +86,7 @@ func _Forexes_Stats4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Forexes_LastQuotes1_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_LastQuote2_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -95,9 +95,9 @@ func _Forexes_LastQuotes1_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Cont
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/forexes.v1.Forexes/LastQuotes")
+		http.SetOperation(ctx, "/forexes.v1.Forexes/LastQuote")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.LastQuotes(ctx, req.(*ForexRequest))
+			return srv.LastQuote(ctx, req.(*ForexRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -213,7 +213,7 @@ type ForexesHTTPClient interface {
 	Create(ctx context.Context, req *ForexCreateRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
 	Delete(ctx context.Context, req *ForexDeleteRequest, opts ...http.CallOption) (rsp *ForexDelete, err error)
 	Get(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexReply, err error)
-	LastQuotes(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *v1.QuoteReply, err error)
+	LastQuote(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *v1.QuoteReply, err error)
 	List(ctx context.Context, req *ForexListRequest, opts ...http.CallOption) (rsp *ForexList, err error)
 	Quotes(ctx context.Context, req *ForexQuotesRequest, opts ...http.CallOption) (rsp *v1.QuoteReplies, err error)
 	Stats(ctx context.Context, req *ForexRequest, opts ...http.CallOption) (rsp *ForexStatsReply, err error)
@@ -267,11 +267,11 @@ func (c *ForexesHTTPClientImpl) Get(ctx context.Context, in *ForexRequest, opts 
 	return &out, err
 }
 
-func (c *ForexesHTTPClientImpl) LastQuotes(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*v1.QuoteReply, error) {
+func (c *ForexesHTTPClientImpl) LastQuote(ctx context.Context, in *ForexRequest, opts ...http.CallOption) (*v1.QuoteReply, error) {
 	var out v1.QuoteReply
 	pattern := "/v1/forexes/{ticker}/quotes/last"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/forexes.v1.Forexes/LastQuotes"))
+	opts = append(opts, http.Operation("/forexes.v1.Forexes/LastQuote"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

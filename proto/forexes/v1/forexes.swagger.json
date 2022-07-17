@@ -190,7 +190,7 @@
     "/v1/forexes/{ticker}/quotes/last": {
       "get": {
         "summary": "Public API\nGet Quotes Forex",
-        "operationId": "Forexes_LastQuotes",
+        "operationId": "Forexes_LastQuote",
         "responses": {
           "200": {
             "description": "A successful response.",

@@ -28,7 +28,7 @@ type IndicesClient interface {
 	Stats(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceStatsReply, error)
 	// Public API
 	// Get Quotes Indice
-	LastQuotes(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
+	LastQuote(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Indice
 	Quotes(ctx context.Context, in *IndiceQuotesRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error)
@@ -75,9 +75,9 @@ func (c *indicesClient) Stats(ctx context.Context, in *IndiceRequest, opts ...gr
 	return out, nil
 }
 
-func (c *indicesClient) LastQuotes(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
+func (c *indicesClient) LastQuote(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
 	out := new(v1.QuoteReply)
-	err := c.cc.Invoke(ctx, "/indices.v1.Indices/LastQuotes", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/indices.v1.Indices/LastQuote", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ type IndicesServer interface {
 	Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error)
 	// Public API
 	// Get Quotes Indice
-	LastQuotes(context.Context, *IndiceRequest) (*v1.QuoteReply, error)
+	LastQuote(context.Context, *IndiceRequest) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Indice
 	Quotes(context.Context, *IndiceQuotesRequest) (*v1.QuoteReplies, error)
@@ -182,8 +182,8 @@ func (UnimplementedIndicesServer) Get(context.Context, *IndiceRequest) (*IndiceR
 func (UnimplementedIndicesServer) Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
 }
-func (UnimplementedIndicesServer) LastQuotes(context.Context, *IndiceRequest) (*v1.QuoteReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LastQuotes not implemented")
+func (UnimplementedIndicesServer) LastQuote(context.Context, *IndiceRequest) (*v1.QuoteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LastQuote not implemented")
 }
 func (UnimplementedIndicesServer) Quotes(context.Context, *IndiceQuotesRequest) (*v1.QuoteReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Quotes not implemented")
@@ -252,20 +252,20 @@ func _Indices_Stats_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Indices_LastQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Indices_LastQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IndiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(IndicesServer).LastQuotes(ctx, in)
+		return srv.(IndicesServer).LastQuote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/indices.v1.Indices/LastQuotes",
+		FullMethod: "/indices.v1.Indices/LastQuote",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).LastQuotes(ctx, req.(*IndiceRequest))
+		return srv.(IndicesServer).LastQuote(ctx, req.(*IndiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -394,8 +394,8 @@ var Indices_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Indices_Stats_Handler,
 		},
 		{
-			MethodName: "LastQuotes",
-			Handler:    _Indices_LastQuotes_Handler,
+			MethodName: "LastQuote",
+			Handler:    _Indices_LastQuote_Handler,
 		},
 		{
 			MethodName: "Quotes",

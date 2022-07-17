@@ -28,7 +28,7 @@ type ForexesClient interface {
 	Stats(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexStatsReply, error)
 	// Public API
 	// Get Quotes Forex
-	LastQuotes(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
+	LastQuote(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Forex
 	Quotes(ctx context.Context, in *ForexQuotesRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error)
@@ -72,9 +72,9 @@ func (c *forexesClient) Stats(ctx context.Context, in *ForexRequest, opts ...grp
 	return out, nil
 }
 
-func (c *forexesClient) LastQuotes(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
+func (c *forexesClient) LastQuote(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
 	out := new(v1.QuoteReply)
-	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/LastQuotes", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/LastQuote", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ type ForexesServer interface {
 	Stats(context.Context, *ForexRequest) (*ForexStatsReply, error)
 	// Public API
 	// Get Quotes Forex
-	LastQuotes(context.Context, *ForexRequest) (*v1.QuoteReply, error)
+	LastQuote(context.Context, *ForexRequest) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Forex
 	Quotes(context.Context, *ForexQuotesRequest) (*v1.QuoteReplies, error)
@@ -167,8 +167,8 @@ func (UnimplementedForexesServer) Get(context.Context, *ForexRequest) (*ForexRep
 func (UnimplementedForexesServer) Stats(context.Context, *ForexRequest) (*ForexStatsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
 }
-func (UnimplementedForexesServer) LastQuotes(context.Context, *ForexRequest) (*v1.QuoteReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LastQuotes not implemented")
+func (UnimplementedForexesServer) LastQuote(context.Context, *ForexRequest) (*v1.QuoteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LastQuote not implemented")
 }
 func (UnimplementedForexesServer) Quotes(context.Context, *ForexQuotesRequest) (*v1.QuoteReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Quotes not implemented")
@@ -234,20 +234,20 @@ func _Forexes_Stats_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Forexes_LastQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Forexes_LastQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ForexRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ForexesServer).LastQuotes(ctx, in)
+		return srv.(ForexesServer).LastQuote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/forexes.v1.Forexes/LastQuotes",
+		FullMethod: "/forexes.v1.Forexes/LastQuote",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ForexesServer).LastQuotes(ctx, req.(*ForexRequest))
+		return srv.(ForexesServer).LastQuote(ctx, req.(*ForexRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -358,8 +358,8 @@ var Forexes_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Forexes_Stats_Handler,
 		},
 		{
-			MethodName: "LastQuotes",
-			Handler:    _Forexes_LastQuotes_Handler,
+			MethodName: "LastQuote",
+			Handler:    _Forexes_LastQuote_Handler,
 		},
 		{
 			MethodName: "Quotes",

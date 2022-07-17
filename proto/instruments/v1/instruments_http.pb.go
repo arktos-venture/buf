@@ -36,7 +36,7 @@ func RegisterInstrumentsHTTPServer(s *http.Server, srv InstrumentsHTTPServer) {
 	r.GET("/v1/instrument/{id}", _Instruments_Get2_HTTP_Handler(srv))
 	r.GET("/v1/instrument/{id}/stats", _Instruments_Stats0_HTTP_Handler(srv))
 	r.GET("/v1/instrument/{id}/quotes/last", _Instruments_LastQuote0_HTTP_Handler(srv))
-	r.POST("/v1/forexes/quotes", _Instruments_Quotes0_HTTP_Handler(srv))
+	r.POST("/v1/instrument/quotes", _Instruments_Quotes0_HTTP_Handler(srv))
 	r.GET("/v1/instrument/{id}/strategies", _Instruments_Strategies0_HTTP_Handler(srv))
 	r.POST("/v1/instruments/search", _Instruments_Search0_HTTP_Handler(srv))
 	r.POST("/v1/instruments", _Instruments_Create1_HTTP_Handler(srv))
@@ -304,7 +304,7 @@ func (c *InstrumentsHTTPClientImpl) LastQuote(ctx context.Context, in *Instrumen
 
 func (c *InstrumentsHTTPClientImpl) Quotes(ctx context.Context, in *InstrumentQuotesRequest, opts ...http.CallOption) (*v1.QuoteReplies, error) {
 	var out v1.QuoteReplies
-	pattern := "/v1/forexes/quotes"
+	pattern := "/v1/instrument/quotes"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/instruments.v1.instruments/Quotes"))
 	opts = append(opts, http.PathTemplate(pattern))

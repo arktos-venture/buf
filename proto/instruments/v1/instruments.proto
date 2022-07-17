@@ -77,7 +77,7 @@ service instruments {
 	// Get Quotes Instrument
 	rpc Quotes (InstrumentQuotesRequest) returns (quotes.v1.QuoteReplies) {
 		option (google.api.http) = {
-			post: "/v1/forexes/quotes"
+			post: "/v1/instrument/quotes"
 			body: "*"
 	  	};
 	}

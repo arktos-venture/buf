@@ -144,7 +144,7 @@
     "/v1/indice/{ticker}/quotes/last": {
       "get": {
         "summary": "Public API\nGet Quotes Indice",
-        "operationId": "Indices_LastQuotes",
+        "operationId": "Indices_LastQuote",
         "responses": {
           "200": {
             "description": "A successful response.",

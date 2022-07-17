@@ -26,7 +26,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/forexes/quotes": {
+    "/v1/instrument/quotes": {
       "post": {
         "summary": "Public API\nGet Quotes Instrument",
         "operationId": "instruments_Quotes",
