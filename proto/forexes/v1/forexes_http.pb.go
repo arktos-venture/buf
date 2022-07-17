@@ -36,7 +36,7 @@ func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r.GET("/v1/forexes/{ticker}/stats", _Forexes_Stats4_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{ticker}/quotes/last", _Forexes_LastQuote2_HTTP_Handler(srv))
 	r.POST("/v1/forexes/quotes", _Forexes_Quotes2_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies4_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies3_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List3_HTTP_Handler(srv))
 	r.POST("/v1/forexes", _Forexes_Create7_HTTP_Handler(srv))
 	r.DELETE("/v1/forexes", _Forexes_Delete6_HTTP_Handler(srv))
@@ -127,7 +127,7 @@ func _Forexes_Quotes2_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context)
 	}
 }
 
-func _Forexes_Strategies4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Strategies3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexStrategiesRequest
 		if err := ctx.BindQuery(&in); err != nil {
