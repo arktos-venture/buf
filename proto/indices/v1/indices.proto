@@ -67,7 +67,7 @@ service Indices {
 
 	// Public API
 	// Get Quotes Indice
-	rpc LastQuotes (IndiceRequest) returns (quotes.v1.QuoteReply) {
+	rpc LastQuote (IndiceRequest) returns (quotes.v1.QuoteReply) {
 		option (google.api.http) = {
 			get: "/v1/indice/{ticker}/quotes/last"
 	  	};

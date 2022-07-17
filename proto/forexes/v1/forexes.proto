@@ -67,7 +67,7 @@ service Forexes {
 
 	// Public API
 	// Get Quotes Forex
-	rpc LastQuotes (ForexRequest) returns (quotes.v1.QuoteReply) {
+	rpc LastQuote (ForexRequest) returns (quotes.v1.QuoteReply) {
 		option (google.api.http) = {
 			get: "/v1/forexes/{ticker}/quotes/last"
 	  	};
