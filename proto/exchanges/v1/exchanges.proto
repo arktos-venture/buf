@@ -8,7 +8,6 @@ import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 import "proto/indices/v1/indices.proto";
-import "proto/strategies/v1/strategies.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/exchanges/v1;v1Exchanges";
 option java_multiple_files = true;
@@ -60,14 +59,6 @@ service Exchanges {
 	rpc Stats (ExchangeRequest) returns (ExchangeStatsReply) {
 		option (google.api.http) = {
 			get: "/v1/exchange/{ticker}/stats"
-	  	};
-	}
-
-	// Public API
-	// Get Strategies Results Instrument
-	rpc Strategies (ExchangeStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
-		option (google.api.http) = {
-			get: "/v1/exchange/{ticker}/strategies"
 	  	};
 	}
 
@@ -128,11 +119,6 @@ message ExchangeRequest {
 	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
 }
 
-message ExchangeStrategiesRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-	string ticker = 2 [(validate.rules).string = {min_len: 1, max_len: 8}];
-}
-
 message ExchangeSearchRequest {
 	string country = 1 [(validate.rules).string.len = 2];
 	string currency = 2 [(validate.rules).string.len = 3];
@@ -177,15 +163,16 @@ message ExchangeReply {
 	string description = 3;
 	string primaryIndice = 4;
 	repeated indices.v1.IndiceReplies.Result indices = 5;
-	string routing = 6;
-	string country = 7;
-	string currency = 8;
-	string timezone = 9;
-	repeated Holiday holidays = 10;
-	string tradingHours = 11;
-	bool open = 12;
-	google.protobuf.Timestamp created_at = 13;
-	google.protobuf.Timestamp updated_at = 14;
+	ExchangeStatsReply stats = 6;
+	string routing = 7;
+	string country = 8;
+	string currency = 9;
+	string timezone = 10;
+	repeated Holiday holidays = 11;
+	string tradingHours = 12;
+	bool open = 13;
+	google.protobuf.Timestamp created_at = 14;
+	google.protobuf.Timestamp updated_at = 15;
 }
 
 message ExchangeStatsReply {

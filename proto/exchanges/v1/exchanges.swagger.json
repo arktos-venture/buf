@@ -148,43 +148,6 @@
         ]
       }
     },
-    "/v1/exchange/{ticker}/strategies": {
-      "get": {
-        "summary": "Public API\nGet Strategies Results Instrument",
-        "operationId": "Exchanges_Strategies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1StrategiesReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "account",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Exchanges"
-        ]
-      }
-    },
     "/v1/exchanges": {
       "delete": {
         "summary": "Private API\nDelete Exchange",
@@ -253,44 +216,6 @@
     }
   },
   "definitions": {
-    "StrategiesRepliesPeriod": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/StrategiesRepliesPeriodResult"
-          }
-        }
-      }
-    },
-    "StrategiesRepliesPeriodResult": {
-      "type": "object",
-      "properties": {
-        "period": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "status": {
-          "$ref": "#/definitions/v1OrderAction"
-        },
-        "breakout": {
-          "type": "number",
-          "format": "float"
-        },
-        "status_ago": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -435,6 +360,9 @@
           "items": {
             "$ref": "#/definitions/v1IndiceRepliesResult"
           }
+        },
+        "stats": {
+          "$ref": "#/definitions/v1ExchangeStatsReply"
         },
         "routing": {
           "type": "string"
@@ -585,41 +513,6 @@
         },
         "asset": {
           "$ref": "#/definitions/v1Asset"
-        }
-      }
-    },
-    "v1Interval": {
-      "type": "string",
-      "enum": [
-        "d",
-        "w",
-        "m",
-        "q",
-        "y"
-      ],
-      "default": "d"
-    },
-    "v1OrderAction": {
-      "type": "string",
-      "enum": [
-        "BUY",
-        "SELL",
-        "HOLD"
-      ],
-      "default": "BUY"
-    },
-    "v1StrategiesReplies": {
-      "type": "object",
-      "properties": {
-        "strategies": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/StrategiesRepliesPeriod"
-          }
-        },
-        "total": {
-          "type": "string",
-          "format": "int64"
         }
       }
     }
