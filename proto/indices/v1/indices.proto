@@ -66,23 +66,6 @@ service Indices {
 	}
 
 	// Public API
-	// Get Quotes Indice
-	rpc LastQuote (IndiceRequest) returns (quotes.v1.QuoteReply) {
-		option (google.api.http) = {
-			get: "/v1/indice/{ticker}/quotes/last"
-	  	};
-	}
-
-	// Public API
-	// Get Quotes Indice
-	rpc Quotes (IndiceQuotesRequest) returns (quotes.v1.QuoteReplies) {
-		option (google.api.http) = {
-			post: "/v1/indice/quotes"
-			body: "*"
-	  	};
-	}
-
-	// Public API
 	// Get Strategies Results Indice
 	rpc Strategies (IndiceStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
 		option (google.api.http) = {
@@ -132,11 +115,6 @@ service Indices {
 
 message IndiceRequest {
   	string ticker = 1 [(validate.rules).string = {min_len: 2, max_len: 16}];
-}
-
-message IndiceQuotesRequest {
-	screener.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated screener.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message IndiceStrategiesRequest {

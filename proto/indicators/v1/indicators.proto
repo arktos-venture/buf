@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indicators/v1;v1Indicators";

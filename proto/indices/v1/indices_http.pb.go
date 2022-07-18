@@ -6,8 +6,7 @@ package v1Indices
 
 import (
 	context "context"
-	v1 "github.com/arktos-venture/buf/proto/quotes/v1"
-	v11 "github.com/arktos-venture/buf/proto/strategies/v1"
+	v1 "github.com/arktos-venture/buf/proto/strategies/v1"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -23,11 +22,9 @@ type IndicesHTTPServer interface {
 	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
 	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error)
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
-	LastQuote(context.Context, *IndiceRequest) (*v1.QuoteReply, error)
-	Quotes(context.Context, *IndiceQuotesRequest) (*v1.QuoteReplies, error)
 	Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error)
 	Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error)
-	Strategies(context.Context, *IndiceStrategiesRequest) (*v11.StrategiesReplies, error)
+	Strategies(context.Context, *IndiceStrategiesRequest) (*v1.StrategiesReplies, error)
 	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
 }
 
@@ -35,10 +32,8 @@ func RegisterIndicesHTTPServer(s *http.Server, srv IndicesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/indice/{ticker}", _Indices_Get3_HTTP_Handler(srv))
 	r.GET("/v1/indice/{ticker}/stats", _Indices_Stats1_HTTP_Handler(srv))
-	r.GET("/v1/indice/{ticker}/quotes/last", _Indices_LastQuote1_HTTP_Handler(srv))
-	r.POST("/v1/indice/quotes", _Indices_Quotes1_HTTP_Handler(srv))
 	r.GET("/v1/indice/{ticker}/strategies", _Indices_Strategies1_HTTP_Handler(srv))
-	r.GET("/v1/indices", _Indices_Search1_HTTP_Handler(srv))
+	r.GET("/v1/indices", _Indices_Search3_HTTP_Handler(srv))
 	r.POST("/v1/indices", _Indices_Create2_HTTP_Handler(srv))
 	r.PUT("/v1/indice/{ticker}", _Indices_Update2_HTTP_Handler(srv))
 	r.DELETE("/v1/indices", _Indices_Delete2_HTTP_Handler(srv))
@@ -88,47 +83,6 @@ func _Indices_Stats1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Indices_LastQuote1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in IndiceRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/indices.v1.Indices/LastQuote")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.LastQuote(ctx, req.(*IndiceRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*v1.QuoteReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Indices_Quotes1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in IndiceQuotesRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/indices.v1.Indices/Quotes")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Quotes(ctx, req.(*IndiceQuotesRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*v1.QuoteReplies)
-		return ctx.Result(200, reply)
-	}
-}
-
 func _Indices_Strategies1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceStrategiesRequest
@@ -146,12 +100,12 @@ func _Indices_Strategies1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Cont
 		if err != nil {
 			return err
 		}
-		reply := out.(*v11.StrategiesReplies)
+		reply := out.(*v1.StrategiesReplies)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Indices_Search1_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
+func _Indices_Search3_HTTP_Handler(srv IndicesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IndiceSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -234,11 +188,9 @@ type IndicesHTTPClient interface {
 	Create(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
 	Delete(ctx context.Context, req *IndiceDeleteRequest, opts ...http.CallOption) (rsp *IndiceDelete, err error)
 	Get(ctx context.Context, req *IndiceRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
-	LastQuote(ctx context.Context, req *IndiceRequest, opts ...http.CallOption) (rsp *v1.QuoteReply, err error)
-	Quotes(ctx context.Context, req *IndiceQuotesRequest, opts ...http.CallOption) (rsp *v1.QuoteReplies, err error)
 	Search(ctx context.Context, req *IndiceSearchRequest, opts ...http.CallOption) (rsp *IndiceReplies, err error)
 	Stats(ctx context.Context, req *IndiceRequest, opts ...http.CallOption) (rsp *IndiceStatsReply, err error)
-	Strategies(ctx context.Context, req *IndiceStrategiesRequest, opts ...http.CallOption) (rsp *v11.StrategiesReplies, err error)
+	Strategies(ctx context.Context, req *IndiceStrategiesRequest, opts ...http.CallOption) (rsp *v1.StrategiesReplies, err error)
 	Update(ctx context.Context, req *IndiceModifyRequest, opts ...http.CallOption) (rsp *IndiceReply, err error)
 }
 
@@ -289,32 +241,6 @@ func (c *IndicesHTTPClientImpl) Get(ctx context.Context, in *IndiceRequest, opts
 	return &out, err
 }
 
-func (c *IndicesHTTPClientImpl) LastQuote(ctx context.Context, in *IndiceRequest, opts ...http.CallOption) (*v1.QuoteReply, error) {
-	var out v1.QuoteReply
-	pattern := "/v1/indice/{ticker}/quotes/last"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/indices.v1.Indices/LastQuote"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *IndicesHTTPClientImpl) Quotes(ctx context.Context, in *IndiceQuotesRequest, opts ...http.CallOption) (*v1.QuoteReplies, error) {
-	var out v1.QuoteReplies
-	pattern := "/v1/indice/quotes"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/indices.v1.Indices/Quotes"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
 func (c *IndicesHTTPClientImpl) Search(ctx context.Context, in *IndiceSearchRequest, opts ...http.CallOption) (*IndiceReplies, error) {
 	var out IndiceReplies
 	pattern := "/v1/indices"
@@ -341,8 +267,8 @@ func (c *IndicesHTTPClientImpl) Stats(ctx context.Context, in *IndiceRequest, op
 	return &out, err
 }
 
-func (c *IndicesHTTPClientImpl) Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...http.CallOption) (*v11.StrategiesReplies, error) {
-	var out v11.StrategiesReplies
+func (c *IndicesHTTPClientImpl) Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...http.CallOption) (*v1.StrategiesReplies, error) {
+	var out v1.StrategiesReplies
 	pattern := "/v1/indice/{ticker}/strategies"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/indices.v1.Indices/Strategies"))
