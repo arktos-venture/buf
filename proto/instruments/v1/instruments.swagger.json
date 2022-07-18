@@ -26,39 +26,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/instrument/quotes": {
-      "post": {
-        "summary": "Public API\nGet Quotes Instrument",
-        "operationId": "instruments_Quotes",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuoteReplies"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1InstrumentQuotesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "instruments"
-        ]
-      }
-    },
     "/v1/instrument/{id}": {
       "get": {
         "summary": "Public API\nGet Instrument properties",
@@ -193,38 +160,6 @@
                 }
               }
             }
-          }
-        ],
-        "tags": [
-          "instruments"
-        ]
-      }
-    },
-    "/v1/instrument/{id}/quotes/last": {
-      "get": {
-        "summary": "Public API\nGet last Quotes Instrument",
-        "operationId": "instruments_LastQuote",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1QuoteReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
           }
         ],
         "tags": [
@@ -584,6 +519,35 @@
         }
       }
     },
+    "instruments_quotesv1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -755,20 +719,6 @@
         }
       }
     },
-    "v1InstrumentQuotesRequest": {
-      "type": "object",
-      "properties": {
-        "interval": {
-          "$ref": "#/definitions/v1Interval"
-        },
-        "filters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1Filter"
-          }
-        }
-      }
-    },
     "v1InstrumentReplies": {
       "type": "object",
       "properties": {
@@ -857,7 +807,7 @@
           }
         },
         "quote": {
-          "$ref": "#/definitions/v1QuoteReply"
+          "$ref": "#/definitions/instruments_quotesv1QuoteReply"
         },
         "dividends": {
           "$ref": "#/definitions/InstrumentReplyDividend"
@@ -1019,50 +969,6 @@
         "HOLD"
       ],
       "default": "BUY"
-    },
-    "v1QuoteReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1QuoteReply"
-          }
-        },
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1QuoteReply": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "number",
-          "format": "float"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
     },
     "v1StrategiesReplies": {
       "type": "object",

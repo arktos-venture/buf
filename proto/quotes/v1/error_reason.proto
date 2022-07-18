@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package quotes.v1;
+import "errors/errors.proto";
+
+option go_package = "github.com/arktos-venture/buf/proto/quotes/v1;v1Quotes";
+option java_multiple_files = true;
+option java_package = "quotes.v1.errors";
+option objc_class_prefix = "APIQuotesErrors";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  CONTENT_MISSING = 0 [(errors.code) = 400];
+  UNAUTHORIZED = 1 [(errors.code) = 401];
+  FORBIDDEN = 2 [(errors.code) = 403];
+  NOT_FOUND = 3 [(errors.code) = 404];
+  REQUEST_TIMEOUT = 4 [(errors.code) = 408];
+  CONFLICT = 5 [(errors.code) = 409];
+  NOT_IMPLEMENTED = 6 [(errors.code) = 501];
+  UNAVAILABLE = 7 [(errors.code) = 503];
+}

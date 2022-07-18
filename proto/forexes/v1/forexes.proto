@@ -10,7 +10,6 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 import "proto/quotes/v1/quotes.proto";
 import "proto/currencies/v1/currencies.proto";
 import "proto/strategies/v1/strategies.proto";
-import "proto/screener/v1/screener.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/forexes/v1;v1Forexes";
 option java_multiple_files = true;
@@ -66,23 +65,6 @@ service Forexes {
 	}
 
 	// Public API
-	// Get Quotes Forex
-	rpc LastQuote (ForexRequest) returns (quotes.v1.QuoteReply) {
-		option (google.api.http) = {
-			get: "/v1/forexes/{ticker}/quotes/last"
-	  	};
-	}
-
-	// Public API
-	// Get Quotes Forex
-	rpc Quotes (ForexQuotesRequest) returns (quotes.v1.QuoteReplies) {
-		option (google.api.http) = {
-			post: "/v1/forexes/quotes"
-			body: "*"
-	  	};
-	}
-
-	// Public API
 	// Get Strategies Results Forex
 	rpc Strategies (ForexStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
 		option (google.api.http) = {
@@ -123,11 +105,6 @@ service Forexes {
 
 message ForexRequest {
 	string ticker = 1 [(validate.rules).string.len = 6];
-}
-
-message ForexQuotesRequest {
-	screener.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
-	repeated screener.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
 }
 
 message ForexStrategiesRequest {

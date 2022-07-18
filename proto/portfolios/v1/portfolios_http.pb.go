@@ -33,7 +33,7 @@ func RegisterPortfoliosHTTPServer(s *http.Server, srv PortfoliosHTTPServer) {
 	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Get6_HTTP_Handler(srv))
 	r.GET("/v1/portfolios/{account}/{currency}/stats", _Portfolios_Stats3_HTTP_Handler(srv))
 	r.GET("/v1/portfolios/{account}/{currency}/strategies", _Portfolios_Strategies2_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}", _Portfolios_Search4_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}", _Portfolios_Search6_HTTP_Handler(srv))
 	r.POST("/v1/portfolios/{account}", _Portfolios_Create6_HTTP_Handler(srv))
 	r.PUT("/v1/portfolios/{account}/{currency}", _Portfolios_Update5_HTTP_Handler(srv))
 	r.DELETE("/v1/portfolios/{account}/{currency}", _Portfolios_Delete5_HTTP_Handler(srv))
@@ -105,7 +105,7 @@ func _Portfolios_Strategies2_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx htt
 	}
 }
 
-func _Portfolios_Search4_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Search6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {

@@ -1,16 +1,102 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/quotes/v1/quotes.proto",
-    "version": "version not set"
+    "title": "Quotes APIs",
+    "description": "Quotes APIs for all instruments",
+    "version": "1.0",
+    "contact": {
+      "name": "Arktos Venture project",
+      "url": "https://github.com/arktos-venture/buf",
+      "email": "oss@arktos-consulting.cloud"
+    }
   },
+  "tags": [
+    {
+      "name": "quotes"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
   "consumes": [
     "application/json"
   ],
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/v1/quote/{exchange}/{ticker}/last": {
+      "get": {
+        "summary": "Public API\nGet last Quotes Instrument",
+        "operationId": "quotes_Last",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/quotesv1QuoteReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "exchange",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "quotes"
+        ]
+      }
+    },
+    "/v1/quotes": {
+      "post": {
+        "summary": "Public API\nGet Quotes Instrument",
+        "operationId": "quotes_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/quotesv1QuoteReplies"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/quotesv1QuoteSearchRequest"
+            }
+          }
+        ],
+        "tags": [
+          "quotes"
+        ]
+      }
+    }
+  },
   "definitions": {
     "googlerpcStatus": {
       "type": "object",
@@ -41,6 +127,157 @@
           "format": "byte"
         }
       }
+    },
+    "quotesv1QuoteReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/quotesv1QuoteReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "quotesv1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "quotesv1QuoteSearchRequest": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "$ref": "#/definitions/v1Interval"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Filter"
+          }
+        }
+      }
+    },
+    "v1Argument": {
+      "type": "string",
+      "enum": [
+        "Ticker",
+        "Exchange",
+        "Industry",
+        "Index",
+        "Currency",
+        "MarketCap",
+        "ReturnYear",
+        "Beta5Y",
+        "ShareVolumeRatio",
+        "DividendYield",
+        "Price",
+        "PriceLastChange",
+        "Strategy",
+        "StrategyPeriod",
+        "StrategyDecision",
+        "StrategyDecisionAgo",
+        "SharesFloatRatio",
+        "Volume",
+        "VolumeAvg10d",
+        "VolumeAvg30d",
+        "VolumeAvg90d",
+        "Isin",
+        "Adr",
+        "Id",
+        "Country",
+        "Time",
+        "Action",
+        "Duration",
+        "Type",
+        "Status",
+        "Assets"
+      ],
+      "default": "Ticker"
+    },
+    "v1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Interval": {
+      "type": "string",
+      "enum": [
+        "d",
+        "w",
+        "m",
+        "q",
+        "y"
+      ],
+      "default": "d"
+    },
+    "v1Operator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "NotEqual",
+        "Greater",
+        "GreaterEqual",
+        "Less",
+        "LessEqual",
+        "In",
+        "NotIn",
+        "Between"
+      ],
+      "default": "Equal"
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }
