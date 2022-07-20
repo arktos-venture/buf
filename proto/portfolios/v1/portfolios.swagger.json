@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Portfolio APIs",
-    "description": "Portfolio APIs accounts",
+    "title": "Portfolios APIs",
+    "description": "Portfolios APIs accounts",
     "version": "1.0",
     "contact": {
       "name": "Arktos Venture project",
@@ -65,54 +65,6 @@
         "tags": [
           "Portfolios"
         ]
-      },
-      "post": {
-        "summary": "Public API: Create Portfolio",
-        "operationId": "Portfolios_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1PortfolioReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "currency": {
-                  "type": "string"
-                },
-                "allowed_assets": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/v1Asset"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Portfolios"
-        ]
       }
     },
     "/v1/portfolios/{account}/{currency}": {
@@ -150,97 +102,11 @@
         "tags": [
           "Portfolios"
         ]
-      },
-      "delete": {
-        "summary": "Private API: Cancel existing Portfolios",
-        "operationId": "Portfolios_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1PortfolioDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "currency",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Portfolios"
-        ]
-      },
-      "put": {
-        "summary": "Public API: Update existing Portfolios",
-        "operationId": "Portfolios_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1PortfolioReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "account",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "currency",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "allowed_assets": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/v1Asset"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Portfolios"
-        ]
       }
     },
     "/v1/portfolios/{account}/{currency}/stats": {
       "get": {
-        "summary": "Private API\nGet Stats Instrument",
+        "summary": "Private API: Get Stats Instrument",
         "operationId": "Portfolios_Stats",
         "responses": {
           "200": {
@@ -277,7 +143,7 @@
     },
     "/v1/portfolios/{account}/{currency}/strategies": {
       "get": {
-        "summary": "Public API\nGet Strategies Results Instrument",
+        "summary": "Public API: Get Strategies Results Instrument",
         "operationId": "Portfolios_Strategies",
         "responses": {
           "200": {
@@ -577,14 +443,6 @@
       ],
       "default": "LMT"
     },
-    "v1PortfolioDelete": {
-      "type": "object",
-      "properties": {
-        "currency": {
-          "type": "string"
-        }
-      }
-    },
     "v1PortfolioReplies": {
       "type": "object",
       "properties": {
@@ -713,15 +571,15 @@
     "v1PortfolioStatsReplyVolume": {
       "type": "object",
       "properties": {
-        "volumeAvg10d": {
+        "avg_10d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg30d": {
+        "avg_30d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg90d": {
+        "avg_90d": {
           "type": "string",
           "format": "int64"
         }

@@ -21,20 +21,12 @@ const _ = grpc.SupportPackageIsVersion7
 type PortfoliosClient interface {
 	// Public API: Status Portfolio
 	Get(ctx context.Context, in *PortfolioRequest, opts ...grpc.CallOption) (*PortfolioReply, error)
-	// Private API
-	// Get Stats Instrument
+	// Private API: Get Stats Instrument
 	Stats(ctx context.Context, in *PortfolioRequest, opts ...grpc.CallOption) (*PortfolioStatsReply, error)
-	// Public API
-	// Get Strategies Results Instrument
+	// Public API: Get Strategies Results Instrument
 	Strategies(ctx context.Context, in *PortfolioRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
 	// Public API: Search portfolios by Account
 	Search(ctx context.Context, in *PortfolioSearchRequest, opts ...grpc.CallOption) (*PortfolioReplies, error)
-	// Public API: Create Portfolio
-	Create(ctx context.Context, in *PortfolioCreateRequest, opts ...grpc.CallOption) (*PortfolioReply, error)
-	// Public API: Update existing Portfolios
-	Update(ctx context.Context, in *PortfolioUpdateRequest, opts ...grpc.CallOption) (*PortfolioReply, error)
-	// Private API: Cancel existing Portfolios
-	Delete(ctx context.Context, in *PortfolioDeleteRequest, opts ...grpc.CallOption) (*PortfolioDelete, error)
 }
 
 type portfoliosClient struct {
@@ -81,53 +73,18 @@ func (c *portfoliosClient) Search(ctx context.Context, in *PortfolioSearchReques
 	return out, nil
 }
 
-func (c *portfoliosClient) Create(ctx context.Context, in *PortfolioCreateRequest, opts ...grpc.CallOption) (*PortfolioReply, error) {
-	out := new(PortfolioReply)
-	err := c.cc.Invoke(ctx, "/portfolios.v1.Portfolios/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *portfoliosClient) Update(ctx context.Context, in *PortfolioUpdateRequest, opts ...grpc.CallOption) (*PortfolioReply, error) {
-	out := new(PortfolioReply)
-	err := c.cc.Invoke(ctx, "/portfolios.v1.Portfolios/Update", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *portfoliosClient) Delete(ctx context.Context, in *PortfolioDeleteRequest, opts ...grpc.CallOption) (*PortfolioDelete, error) {
-	out := new(PortfolioDelete)
-	err := c.cc.Invoke(ctx, "/portfolios.v1.Portfolios/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PortfoliosServer is the server API for Portfolios service.
 // All implementations must embed UnimplementedPortfoliosServer
 // for forward compatibility
 type PortfoliosServer interface {
 	// Public API: Status Portfolio
 	Get(context.Context, *PortfolioRequest) (*PortfolioReply, error)
-	// Private API
-	// Get Stats Instrument
+	// Private API: Get Stats Instrument
 	Stats(context.Context, *PortfolioRequest) (*PortfolioStatsReply, error)
-	// Public API
-	// Get Strategies Results Instrument
+	// Public API: Get Strategies Results Instrument
 	Strategies(context.Context, *PortfolioRequest) (*v1.StrategiesReplies, error)
 	// Public API: Search portfolios by Account
 	Search(context.Context, *PortfolioSearchRequest) (*PortfolioReplies, error)
-	// Public API: Create Portfolio
-	Create(context.Context, *PortfolioCreateRequest) (*PortfolioReply, error)
-	// Public API: Update existing Portfolios
-	Update(context.Context, *PortfolioUpdateRequest) (*PortfolioReply, error)
-	// Private API: Cancel existing Portfolios
-	Delete(context.Context, *PortfolioDeleteRequest) (*PortfolioDelete, error)
 	mustEmbedUnimplementedPortfoliosServer()
 }
 
@@ -146,15 +103,6 @@ func (UnimplementedPortfoliosServer) Strategies(context.Context, *PortfolioReque
 }
 func (UnimplementedPortfoliosServer) Search(context.Context, *PortfolioSearchRequest) (*PortfolioReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedPortfoliosServer) Create(context.Context, *PortfolioCreateRequest) (*PortfolioReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedPortfoliosServer) Update(context.Context, *PortfolioUpdateRequest) (*PortfolioReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
-func (UnimplementedPortfoliosServer) Delete(context.Context, *PortfolioDeleteRequest) (*PortfolioDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedPortfoliosServer) mustEmbedUnimplementedPortfoliosServer() {}
 
@@ -241,60 +189,6 @@ func _Portfolios_Search_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Portfolios_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PortfolioCreateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PortfoliosServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/portfolios.v1.Portfolios/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PortfoliosServer).Create(ctx, req.(*PortfolioCreateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Portfolios_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PortfolioUpdateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PortfoliosServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/portfolios.v1.Portfolios/Update",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PortfoliosServer).Update(ctx, req.(*PortfolioUpdateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Portfolios_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PortfolioDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PortfoliosServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/portfolios.v1.Portfolios/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PortfoliosServer).Delete(ctx, req.(*PortfolioDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Portfolios_ServiceDesc is the grpc.ServiceDesc for Portfolios service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -317,18 +211,6 @@ var Portfolios_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Portfolios_Search_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Portfolios_Create_Handler,
-		},
-		{
-			MethodName: "Update",
-			Handler:    _Portfolios_Update_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Portfolios_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
