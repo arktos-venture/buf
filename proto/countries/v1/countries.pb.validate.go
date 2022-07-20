@@ -151,106 +151,54 @@ var _ interface {
 	ErrorName() string
 } = CountryRequestValidationError{}
 
-// Validate checks the field values on CountrySearchRequest with the rules
+// Validate checks the field values on CountryCurrencyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CountrySearchRequest) Validate() error {
+func (m *CountryCurrencyRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CountrySearchRequest with the rules
+// ValidateAll checks the field values on CountryCurrencyRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CountrySearchRequestMultiError, or nil if none found.
-func (m *CountrySearchRequest) ValidateAll() error {
+// CountryCurrencyRequestMultiError, or nil if none found.
+func (m *CountryCurrencyRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CountrySearchRequest) validate(all bool) error {
+func (m *CountryCurrencyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if len(m.GetCountry()) < 1 {
-		err := CountrySearchRequestValidationError{
-			field:  "Country",
-			reason: "value must contain at least 1 item(s)",
+	if utf8.RuneCountInString(m.GetCurrency()) != 3 {
+		err := CountryCurrencyRequestValidationError{
+			field:  "Currency",
+			reason: "value length must be 3 runes",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
-	}
 
-	_CountrySearchRequest_Country_Unique := make(map[string]struct{}, len(m.GetCountry()))
-
-	for idx, item := range m.GetCountry() {
-		_, _ = idx, item
-
-		if _, exists := _CountrySearchRequest_Country_Unique[item]; exists {
-			err := CountrySearchRequestValidationError{
-				field:  fmt.Sprintf("Country[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_CountrySearchRequest_Country_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Country[idx]
-	}
-
-	if len(m.GetContinent()) < 1 {
-		err := CountrySearchRequestValidationError{
-			field:  "Continent",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_CountrySearchRequest_Continent_Unique := make(map[string]struct{}, len(m.GetContinent()))
-
-	for idx, item := range m.GetContinent() {
-		_, _ = idx, item
-
-		if _, exists := _CountrySearchRequest_Continent_Unique[item]; exists {
-			err := CountrySearchRequestValidationError{
-				field:  fmt.Sprintf("Continent[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_CountrySearchRequest_Continent_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Continent[idx]
 	}
 
 	if len(errors) > 0 {
-		return CountrySearchRequestMultiError(errors)
+		return CountryCurrencyRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// CountrySearchRequestMultiError is an error wrapping multiple validation
-// errors returned by CountrySearchRequest.ValidateAll() if the designated
+// CountryCurrencyRequestMultiError is an error wrapping multiple validation
+// errors returned by CountryCurrencyRequest.ValidateAll() if the designated
 // constraints aren't met.
-type CountrySearchRequestMultiError []error
+type CountryCurrencyRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CountrySearchRequestMultiError) Error() string {
+func (m CountryCurrencyRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -259,11 +207,11 @@ func (m CountrySearchRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CountrySearchRequestMultiError) AllErrors() []error { return m }
+func (m CountryCurrencyRequestMultiError) AllErrors() []error { return m }
 
-// CountrySearchRequestValidationError is the validation error returned by
-// CountrySearchRequest.Validate if the designated constraints aren't met.
-type CountrySearchRequestValidationError struct {
+// CountryCurrencyRequestValidationError is the validation error returned by
+// CountryCurrencyRequest.Validate if the designated constraints aren't met.
+type CountryCurrencyRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -271,24 +219,24 @@ type CountrySearchRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e CountrySearchRequestValidationError) Field() string { return e.field }
+func (e CountryCurrencyRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CountrySearchRequestValidationError) Reason() string { return e.reason }
+func (e CountryCurrencyRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CountrySearchRequestValidationError) Cause() error { return e.cause }
+func (e CountryCurrencyRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CountrySearchRequestValidationError) Key() bool { return e.key }
+func (e CountryCurrencyRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CountrySearchRequestValidationError) ErrorName() string {
-	return "CountrySearchRequestValidationError"
+func (e CountryCurrencyRequestValidationError) ErrorName() string {
+	return "CountryCurrencyRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CountrySearchRequestValidationError) Error() string {
+func (e CountryCurrencyRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -300,14 +248,14 @@ func (e CountrySearchRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCountrySearchRequest.%s: %s%s",
+		"invalid %sCountryCurrencyRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CountrySearchRequestValidationError{}
+var _ error = CountryCurrencyRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -315,7 +263,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CountrySearchRequestValidationError{}
+} = CountryCurrencyRequestValidationError{}
 
 // Validate checks the field values on CountryIndicatorRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1443,6 +1391,116 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CountryReply_Division_CoordinateValidationError{}
+
+// Validate checks the field values on CountryReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CountryReplies_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CountryReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CountryReplies_ResultMultiError, or nil if none found.
+func (m *CountryReplies_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CountryReplies_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Region
+
+	// no validation rules for Continent
+
+	// no validation rules for Alpha2
+
+	if len(errors) > 0 {
+		return CountryReplies_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// CountryReplies_ResultMultiError is an error wrapping multiple validation
+// errors returned by CountryReplies_Result.ValidateAll() if the designated
+// constraints aren't met.
+type CountryReplies_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CountryReplies_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CountryReplies_ResultMultiError) AllErrors() []error { return m }
+
+// CountryReplies_ResultValidationError is the validation error returned by
+// CountryReplies_Result.Validate if the designated constraints aren't met.
+type CountryReplies_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CountryReplies_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CountryReplies_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CountryReplies_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CountryReplies_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CountryReplies_ResultValidationError) ErrorName() string {
+	return "CountryReplies_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CountryReplies_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCountryReplies_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CountryReplies_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CountryReplies_ResultValidationError{}
 
 // Validate checks the field values on CountryIndicatorReply_Result with the
 // rules defined in the proto definition for this message. If any rules are
