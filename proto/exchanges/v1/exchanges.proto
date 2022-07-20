@@ -46,56 +46,27 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Exchanges {
-	// Public API
-	// Get Exchange properties
+	// Public API: Get Exchange properties
   	rpc Get (ExchangeRequest) returns (ExchangeReply)  {
         option (google.api.http) = {
             get: "/v1/exchange/{ticker}"
         };
     }
 
-	// Private API
-	// Get Stats Exchange
+	// Private API: Get Stats Exchange
 	rpc Stats (ExchangeRequest) returns (ExchangeStatsReply) {
 		option (google.api.http) = {
 			get: "/v1/exchange/{ticker}/stats"
 	  	};
 	}
 
-	// Public API
-	// Search Exchanges available
+	// Public API: Search Exchanges available
 	rpc Search (ExchangeSearchRequest) returns (ExchangeReplies)  {
         option (google.api.http) = {
             post: "/v1/exchanges"
 			body: "*"
         };
     }
-
-	// Private API
-	// Create Exchange
-	rpc Create (ExchangeCreateRequest) returns (ExchangeSimpleReply)  {
-        option (google.api.http) = {
-            post: "/v1/exchanges"
-			body: "*"
-        };
-    }
-
-	// Private API
-	// Update Exchange
-	rpc Update (ExchangeUpdateRequest) returns (ExchangeSimpleReply)  {
-        option (google.api.http) = {
-            patch: "/v1/exchange/{ticker}"
-			body: "*"
-        };
-    }
-
-	// Private API
-	// Delete Exchange
-	rpc Delete(ExchangeDeleteRequest) returns (ExchangeDelete) {
-		option (google.api.http) = {
-            delete: "/v1/exchanges"
-        };
-	}
 }
 
 
@@ -125,33 +96,6 @@ message ExchangeSearchRequest {
 	bool open = 3;
 }
 
-message ExchangeCreateRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 64}];
-	string description = 3 [(validate.rules).string = {min_len: 0, max_len: 256}];
-	string currency = 4 [(validate.rules).string.len = 3];
-	string routing = 5 [(validate.rules).string = {min_len: 3, max_len: 16}];
-	string trading_hours = 6 [(validate.rules).string = {min_len: 3, max_len: 16}];
-	string country = 7 [(validate.rules).string.len = 2];
-	string timezone = 8 [(validate.rules).string = {min_len: 5, max_len: 32}];
-	string primary_indice = 9;
-	repeated Holiday holidays = 10;
-}
-
-message ExchangeUpdateRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 8}];
-	string name = 2 [(validate.rules).string = {min_len: 3, max_len: 64}];
-	string description = 3 [(validate.rules).string = {min_len: 0, max_len: 256}];
-	string routing = 4 [(validate.rules).string = {min_len: 3, max_len: 16}];
-	string trading_hours = 5 [(validate.rules).string = {min_len: 3, max_len: 16}];
-	string primary_indice = 6;
-	repeated Holiday holidays = 7;
-}
-
-message ExchangeDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
-}
-
 
 // 
 // Reply
@@ -161,7 +105,7 @@ message ExchangeReply {
 	string ticker = 1;
 	string name = 2;
 	string description = 3;
-	string primaryIndice = 4;
+	string primary_indice = 4;
 	repeated indices.v1.IndiceReplies.Result indices = 5;
 	ExchangeStatsReply stats = 6;
 	string routing = 7;
@@ -169,7 +113,7 @@ message ExchangeReply {
 	string currency = 9;
 	string timezone = 10;
 	repeated Holiday holidays = 11;
-	string tradingHours = 12;
+	string trading_hours = 12;
 	bool open = 13;
 	google.protobuf.Timestamp created_at = 14;
 	google.protobuf.Timestamp updated_at = 15;
@@ -186,9 +130,9 @@ message ExchangeStatsReply {
 	}
 		
 	message Volume {
-		int64 volumeAvg10d = 1;
-		int64 volumeAvg30d = 2;
-		int64 volumeAvg90d = 3;
+		int64 avg_10d = 1;
+		int64 avg_30d = 2;
+		int64 avg_90d = 3;
 	}
 
 	Price price = 1;
@@ -207,12 +151,4 @@ message ExchangeReplies {
 
 	repeated Result results = 1;
 	int64 total = 2;
-}
-
-message ExchangeSimpleReply {
-	bool success = 1;
-}
-
-message ExchangeDelete {
-	int64 total = 1;
 }

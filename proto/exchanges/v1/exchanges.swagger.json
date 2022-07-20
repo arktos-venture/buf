@@ -28,7 +28,7 @@
   "paths": {
     "/v1/exchange/{ticker}": {
       "get": {
-        "summary": "Public API\nGet Exchange properties",
+        "summary": "Public API: Get Exchange properties",
         "operationId": "Exchanges_Get",
         "responses": {
           "200": {
@@ -55,71 +55,11 @@
         "tags": [
           "Exchanges"
         ]
-      },
-      "patch": {
-        "summary": "Private API\nUpdate Exchange",
-        "operationId": "Exchanges_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ExchangeSimpleReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "routing": {
-                  "type": "string"
-                },
-                "trading_hours": {
-                  "type": "string"
-                },
-                "primary_indice": {
-                  "type": "string"
-                },
-                "holidays": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/v1Holiday"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Exchanges"
-        ]
       }
     },
     "/v1/exchange/{ticker}/stats": {
       "get": {
-        "summary": "Private API\nGet Stats Exchange",
+        "summary": "Private API: Get Stats Exchange",
         "operationId": "Exchanges_Stats",
         "responses": {
           "200": {
@@ -149,47 +89,14 @@
       }
     },
     "/v1/exchanges": {
-      "delete": {
-        "summary": "Private API\nDelete Exchange",
-        "operationId": "Exchanges_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ExchangeDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Exchanges"
-        ]
-      },
       "post": {
-        "summary": "Private API\nCreate Exchange",
-        "operationId": "Exchanges_Create",
+        "summary": "Public API: Search Exchanges available",
+        "operationId": "Exchanges_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExchangeSimpleReply"
+              "$ref": "#/definitions/v1ExchangeReplies"
             }
           },
           "default": {
@@ -205,7 +112,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ExchangeCreateRequest"
+              "$ref": "#/definitions/v1ExchangeSearchRequest"
             }
           }
         ],
@@ -261,53 +168,6 @@
       ],
       "default": "INDEX"
     },
-    "v1ExchangeCreateRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "routing": {
-          "type": "string"
-        },
-        "trading_hours": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "timezone": {
-          "type": "string"
-        },
-        "primary_indice": {
-          "type": "string"
-        },
-        "holidays": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1Holiday"
-          }
-        }
-      }
-    },
-    "v1ExchangeDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "v1ExchangeReplies": {
       "type": "object",
       "properties": {
@@ -352,7 +212,7 @@
         "description": {
           "type": "string"
         },
-        "primaryIndice": {
+        "primary_indice": {
           "type": "string"
         },
         "indices": {
@@ -382,7 +242,7 @@
             "$ref": "#/definitions/v1Holiday"
           }
         },
-        "tradingHours": {
+        "trading_hours": {
           "type": "string"
         },
         "open": {
@@ -408,14 +268,6 @@
           "type": "string"
         },
         "open": {
-          "type": "boolean"
-        }
-      }
-    },
-    "v1ExchangeSimpleReply": {
-      "type": "object",
-      "properties": {
-        "success": {
           "type": "boolean"
         }
       }
@@ -471,15 +323,15 @@
     "v1ExchangeStatsReplyVolume": {
       "type": "object",
       "properties": {
-        "volumeAvg10d": {
+        "avg_10d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg30d": {
+        "avg_30d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg90d": {
+        "avg_90d": {
           "type": "string",
           "format": "int64"
         }
