@@ -18,15 +18,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DividendsClient interface {
-	// Public API
-	// Get Last dividend result
+	// Public API: Get Last dividend result
 	Last(ctx context.Context, in *DividendLastRequest, opts ...grpc.CallOption) (*DividendLastReply, error)
-	// Public API
-	// Search dividends by date
+	// Public API: Search dividends by date
 	Search(ctx context.Context, in *DividendRequest, opts ...grpc.CallOption) (*DividendReply, error)
-	// Private API
-	// Delete dividends by exchanges or tickers
-	Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDelete, error)
 }
 
 type dividendsClient struct {
@@ -55,28 +50,14 @@ func (c *dividendsClient) Search(ctx context.Context, in *DividendRequest, opts 
 	return out, nil
 }
 
-func (c *dividendsClient) Delete(ctx context.Context, in *DividendDeleteRequest, opts ...grpc.CallOption) (*DividendDelete, error) {
-	out := new(DividendDelete)
-	err := c.cc.Invoke(ctx, "/dividends.v1.Dividends/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // DividendsServer is the server API for Dividends service.
 // All implementations must embed UnimplementedDividendsServer
 // for forward compatibility
 type DividendsServer interface {
-	// Public API
-	// Get Last dividend result
+	// Public API: Get Last dividend result
 	Last(context.Context, *DividendLastRequest) (*DividendLastReply, error)
-	// Public API
-	// Search dividends by date
+	// Public API: Search dividends by date
 	Search(context.Context, *DividendRequest) (*DividendReply, error)
-	// Private API
-	// Delete dividends by exchanges or tickers
-	Delete(context.Context, *DividendDeleteRequest) (*DividendDelete, error)
 	mustEmbedUnimplementedDividendsServer()
 }
 
@@ -89,9 +70,6 @@ func (UnimplementedDividendsServer) Last(context.Context, *DividendLastRequest) 
 }
 func (UnimplementedDividendsServer) Search(context.Context, *DividendRequest) (*DividendReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedDividendsServer) Delete(context.Context, *DividendDeleteRequest) (*DividendDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedDividendsServer) mustEmbedUnimplementedDividendsServer() {}
 
@@ -142,24 +120,6 @@ func _Dividends_Search_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Dividends_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DividendDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DividendsServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/dividends.v1.Dividends/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DividendsServer).Delete(ctx, req.(*DividendDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Dividends_ServiceDesc is the grpc.ServiceDesc for Dividends service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -174,10 +134,6 @@ var Dividends_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Dividends_Search_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Dividends_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

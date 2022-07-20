@@ -19,11 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CurrenciesClient interface {
-	// Public API
-	// Get Currency properties
+	// Public API: Get Currency properties
 	Get(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error)
-	// Public API
-	// List Currencies available
+	// Public API: List Currencies available
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CurrencyReplies, error)
 }
 
@@ -57,11 +55,9 @@ func (c *currenciesClient) List(ctx context.Context, in *emptypb.Empty, opts ...
 // All implementations must embed UnimplementedCurrenciesServer
 // for forward compatibility
 type CurrenciesServer interface {
-	// Public API
-	// Get Currency properties
+	// Public API: Get Currency properties
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
-	// Public API
-	// List Currencies available
+	// Public API: List Currencies available
 	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
 	mustEmbedUnimplementedCurrenciesServer()
 }

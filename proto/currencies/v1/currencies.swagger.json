@@ -28,7 +28,7 @@
   "paths": {
     "/v1/currencies": {
       "get": {
-        "summary": "Public API\nList Currencies available",
+        "summary": "Public API: List Currencies available",
         "operationId": "Currencies_List",
         "responses": {
           "200": {
@@ -51,7 +51,7 @@
     },
     "/v1/currency/{ticker}": {
       "get": {
-        "summary": "Public API\nGet Currency properties",
+        "summary": "Public API: Get Currency properties",
         "operationId": "Currencies_Get",
         "responses": {
           "200": {

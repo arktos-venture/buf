@@ -45,32 +45,21 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Dividends {
-	// Public API
-	// Get Last dividend result
+	// Public API: Get Last dividend result
 	rpc Last (DividendLastRequest) returns (DividendLastReply)  {
         option (google.api.http) = {
             get: "/v1/dividend/{instrument_id}"
         };
     }
 
-	// Public API
-	// Search dividends by date
+	// Public API: Search dividends by date
   	rpc Search (DividendRequest) returns (DividendReply)  {
         option (google.api.http) = {
             post: "/v1/dividends"
 			body: "*"
         };
     }
-
-	// Private API
-	// Delete dividends by exchanges or tickers
-	rpc Delete (DividendDeleteRequest) returns (DividendDelete)  {
-		option (google.api.http) = {
-			delete: "/v1/dividends"
-		};
-	}
 }
-
 
 // 
 // Request
@@ -84,11 +73,6 @@ message DividendRequest {
 message DividendLastRequest {
 	int64 instrument_id = 1 [(validate.rules).int64 = {lt: 0}];
 }
-
-message DividendDeleteRequest {
-	repeated int64 instrument_id = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-}
-
 
 // 
 // Reply
@@ -110,8 +94,4 @@ message DividendReply {
 	repeated google.protobuf.Timestamp record_date = 4;
 	repeated google.protobuf.Timestamp payment_date = 5;
 	repeated google.protobuf.Timestamp created_at = 6;
-}
-
-message DividendDelete {
-	int64 total = 1;
 }
