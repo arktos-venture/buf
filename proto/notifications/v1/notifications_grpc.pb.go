@@ -18,15 +18,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NotificationsClient interface {
-	// Private API
-	// Create Notifications
+	// Private API: Create Notifications
 	Create(ctx context.Context, in *NotificationCreateRequest, opts ...grpc.CallOption) (*NotificationReply, error)
-	// Public API
-	// Search Notifications
+	// Public API: Search Notifications
 	Search(ctx context.Context, in *NotificationSearchRequest, opts ...grpc.CallOption) (*NotificationReplies, error)
-	// Private API
-	// Delete Notifications by exchanges or tickers
-	Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDelete, error)
 }
 
 type notificationsClient struct {
@@ -55,28 +50,14 @@ func (c *notificationsClient) Search(ctx context.Context, in *NotificationSearch
 	return out, nil
 }
 
-func (c *notificationsClient) Delete(ctx context.Context, in *NotificationDeleteRequest, opts ...grpc.CallOption) (*NotificationDelete, error) {
-	out := new(NotificationDelete)
-	err := c.cc.Invoke(ctx, "/notifications.v1.Notifications/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // NotificationsServer is the server API for Notifications service.
 // All implementations must embed UnimplementedNotificationsServer
 // for forward compatibility
 type NotificationsServer interface {
-	// Private API
-	// Create Notifications
+	// Private API: Create Notifications
 	Create(context.Context, *NotificationCreateRequest) (*NotificationReply, error)
-	// Public API
-	// Search Notifications
+	// Public API: Search Notifications
 	Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error)
-	// Private API
-	// Delete Notifications by exchanges or tickers
-	Delete(context.Context, *NotificationDeleteRequest) (*NotificationDelete, error)
 	mustEmbedUnimplementedNotificationsServer()
 }
 
@@ -89,9 +70,6 @@ func (UnimplementedNotificationsServer) Create(context.Context, *NotificationCre
 }
 func (UnimplementedNotificationsServer) Search(context.Context, *NotificationSearchRequest) (*NotificationReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedNotificationsServer) Delete(context.Context, *NotificationDeleteRequest) (*NotificationDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedNotificationsServer) mustEmbedUnimplementedNotificationsServer() {}
 
@@ -142,24 +120,6 @@ func _Notifications_Search_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Notifications_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NotificationDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NotificationsServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/notifications.v1.Notifications/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationsServer).Delete(ctx, req.(*NotificationDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Notifications_ServiceDesc is the grpc.ServiceDesc for Notifications service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -174,10 +134,6 @@ var Notifications_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Notifications_Search_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Notifications_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

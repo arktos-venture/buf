@@ -44,8 +44,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Notifications {
-	// Private API
-	// Create Notifications
+	// Private API: Create Notifications
 	rpc Create (NotificationCreateRequest) returns (NotificationReply)  {
 		option (google.api.http) = {
 		  	post: "/v1/notifications/{account}"
@@ -53,26 +52,17 @@ service Notifications {
 		};
 	}
 
-	// Public API
-	// Search Notifications
+	// Public API: Search Notifications
 	rpc Search (NotificationSearchRequest) returns (NotificationReplies)  {
 		option (google.api.http) = {
 		  	get: "/v1/notifications/{account}"
-		};
-	}
-
-	// Private API
-	// Delete Notifications by exchanges or tickers
-	rpc Delete (NotificationDeleteRequest) returns (NotificationDelete)  {
-		option (google.api.http) = {
-		  	delete: "/v1/notifications"
 		};
 	}
 }
 
 
 // 
-// Request
+// Transverse
 // 
 
 enum Level {
@@ -96,6 +86,11 @@ enum Subject {
 	SELL_ORDER_SENT = 9;
 }
 
+
+// 
+// Request
+// 
+
 message NotificationCreateRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
@@ -108,10 +103,6 @@ message NotificationSearchRequest {
 	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	Level level = 2 [(validate.rules).enum = {defined_only: true}];
 	string period = 3 [(validate.rules).string = {in: ["last", "3d", "1w", "2w", "1m"]}];
-}
-
-message NotificationDeleteRequest {
-	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 }
 
 
@@ -128,10 +119,13 @@ message NotificationReply {
 }
 
 message NotificationReplies {
-	repeated NotificationReply results = 1;
-	int64 total = 2;
-}
+	message Result {
+		Subject subject = 1;
+		Level level = 2; 
+		string title = 3;
+		google.protobuf.Timestamp created_at = 4;
+	}
 
-message NotificationDelete {
-	int64 total = 1;
+	repeated Result results = 1;
+	int64 total = 2;
 }
