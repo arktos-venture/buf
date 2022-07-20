@@ -5,8 +5,11 @@ package currencies.v1;
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 import "proto/exchanges/v1/exchanges.proto";
+import "proto/countries/v1/countries.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/currencies/v1;v1Currencies";
 option java_multiple_files = true;
@@ -45,36 +48,17 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Currencies {
-	// Public API
-  	// Get Currency properties
-	rpc Get (CurrencyRequest) returns (CurrencyReply)  {
+	// Public API: Get Currency properties
+	rpc Get (CurrencyRequest) returns (CurrencyReply) {
 		option (google.api.http) = {
 			get: "/v1/currency/{ticker}"
 		};
 	}
 
-	// Public API
-  	// List Currencies available
-	rpc List (google.protobuf.Empty) returns (CurrencyReplies)  {
+	// Public API: List Currencies available
+	rpc List (google.protobuf.Empty) returns (CurrencyReplies) {
 		option (google.api.http) = {
 			get: "/v1/currencies"
-		};
-	}
-
-	// Private API
-  	// Create Currency
-	  rpc Create (CurrencyRequest) returns (CurrencyReply)  {
-		option (google.api.http) = {
-			post: "/v1/currency"
-			body: "*"
-		};
-	}
-
-	// Private API
-  	// Delete Currency & deps
-	rpc Delete (CurrencyDeleteRequest) returns (CurrencyDelete)  {
-		option (google.api.http) = {
-			delete: "/v1/currencies"
 		};
 	}
 }
@@ -88,25 +72,34 @@ message CurrencyRequest {
 	string ticker = 1 [(validate.rules).string.len = 3];
 }
 
-message CurrencyDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
-}
-
 
 // 
 // Reply
 // 
 
 message CurrencyReply {
+	message CentralBank {
+		message BorrowingRate {
+			float rate = 1;
+			google.protobuf.Timestamp since = 2;
+		}
+
+		string ticker = 1;
+		string name = 2;
+		string description = 3;
+		BorrowingRate borrowing_rate = 4;
+	}
+
 	string ticker = 1;
-	repeated exchanges.v1.ExchangeReplies.Result exchanges = 2;
+	CentralBank central_bank = 2;
+	repeated string forexes = 3;
+	repeated exchanges.v1.ExchangeReplies.Result exchanges = 4;
+	repeated countries.v1.CountryReplies.Result countries = 5;
+	google.protobuf.Timestamp created_at = 6;
+	google.protobuf.Timestamp updated_at = 7;
 }
 
 message CurrencyReplies {
 	repeated string results = 1;
 	int64 total = 2;
-}
-
-message CurrencyDelete {
-	int64 total = 1;
 }

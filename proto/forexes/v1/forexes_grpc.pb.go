@@ -19,24 +19,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ForexesClient interface {
-	// Public API
-	// Get Forexes properties
+	// Public API: Get Forexes properties
 	Get(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexReply, error)
-	// Private API
-	// Get Stats Forex
+	// Private API: Get Stats Forex
 	Stats(ctx context.Context, in *ForexRequest, opts ...grpc.CallOption) (*ForexStatsReply, error)
-	// Public API
-	// Get Strategies Results Forex
+	// Public API: Get Strategies Results Forex
 	Strategies(ctx context.Context, in *ForexStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
-	// Public API
-	// List Forexes available
-	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexList, error)
-	// Private API
-	// Create new Forexes
-	Create(ctx context.Context, in *ForexCreateRequest, opts ...grpc.CallOption) (*ForexReply, error)
-	// Private API
-	// Delete Forexes
-	Delete(ctx context.Context, in *ForexDeleteRequest, opts ...grpc.CallOption) (*ForexDelete, error)
+	// Private API: List Forexes available
+	List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexReplies, error)
 }
 
 type forexesClient struct {
@@ -74,27 +64,9 @@ func (c *forexesClient) Strategies(ctx context.Context, in *ForexStrategiesReque
 	return out, nil
 }
 
-func (c *forexesClient) List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexList, error) {
-	out := new(ForexList)
+func (c *forexesClient) List(ctx context.Context, in *ForexListRequest, opts ...grpc.CallOption) (*ForexReplies, error) {
+	out := new(ForexReplies)
 	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/List", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *forexesClient) Create(ctx context.Context, in *ForexCreateRequest, opts ...grpc.CallOption) (*ForexReply, error) {
-	out := new(ForexReply)
-	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *forexesClient) Delete(ctx context.Context, in *ForexDeleteRequest, opts ...grpc.CallOption) (*ForexDelete, error) {
-	out := new(ForexDelete)
-	err := c.cc.Invoke(ctx, "/forexes.v1.Forexes/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,24 +77,14 @@ func (c *forexesClient) Delete(ctx context.Context, in *ForexDeleteRequest, opts
 // All implementations must embed UnimplementedForexesServer
 // for forward compatibility
 type ForexesServer interface {
-	// Public API
-	// Get Forexes properties
+	// Public API: Get Forexes properties
 	Get(context.Context, *ForexRequest) (*ForexReply, error)
-	// Private API
-	// Get Stats Forex
+	// Private API: Get Stats Forex
 	Stats(context.Context, *ForexRequest) (*ForexStatsReply, error)
-	// Public API
-	// Get Strategies Results Forex
+	// Public API: Get Strategies Results Forex
 	Strategies(context.Context, *ForexStrategiesRequest) (*v1.StrategiesReplies, error)
-	// Public API
-	// List Forexes available
-	List(context.Context, *ForexListRequest) (*ForexList, error)
-	// Private API
-	// Create new Forexes
-	Create(context.Context, *ForexCreateRequest) (*ForexReply, error)
-	// Private API
-	// Delete Forexes
-	Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error)
+	// Private API: List Forexes available
+	List(context.Context, *ForexListRequest) (*ForexReplies, error)
 	mustEmbedUnimplementedForexesServer()
 }
 
@@ -139,14 +101,8 @@ func (UnimplementedForexesServer) Stats(context.Context, *ForexRequest) (*ForexS
 func (UnimplementedForexesServer) Strategies(context.Context, *ForexStrategiesRequest) (*v1.StrategiesReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Strategies not implemented")
 }
-func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexList, error) {
+func (UnimplementedForexesServer) List(context.Context, *ForexListRequest) (*ForexReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedForexesServer) Create(context.Context, *ForexCreateRequest) (*ForexReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedForexesServer) Delete(context.Context, *ForexDeleteRequest) (*ForexDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedForexesServer) mustEmbedUnimplementedForexesServer() {}
 
@@ -233,42 +189,6 @@ func _Forexes_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Forexes_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ForexCreateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ForexesServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/forexes.v1.Forexes/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ForexesServer).Create(ctx, req.(*ForexCreateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Forexes_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ForexDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ForexesServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/forexes.v1.Forexes/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ForexesServer).Delete(ctx, req.(*ForexDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Forexes_ServiceDesc is the grpc.ServiceDesc for Forexes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -291,14 +211,6 @@ var Forexes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Forexes_List_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Forexes_Create_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Forexes_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

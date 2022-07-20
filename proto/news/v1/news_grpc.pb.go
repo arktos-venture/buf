@@ -18,12 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NewsClient interface {
-	// Public API
-	// Search news results
+	// Public API: Search news results
 	Search(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (*NewsReplies, error)
-	// Private API
-	// Delete news by exchanges or tickers
-	Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDelete, error)
 }
 
 type newsClient struct {
@@ -43,25 +39,12 @@ func (c *newsClient) Search(ctx context.Context, in *NewsRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *newsClient) Delete(ctx context.Context, in *NewsDeleteRequest, opts ...grpc.CallOption) (*NewsDelete, error) {
-	out := new(NewsDelete)
-	err := c.cc.Invoke(ctx, "/news.v1.News/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // NewsServer is the server API for News service.
 // All implementations must embed UnimplementedNewsServer
 // for forward compatibility
 type NewsServer interface {
-	// Public API
-	// Search news results
+	// Public API: Search news results
 	Search(context.Context, *NewsRequest) (*NewsReplies, error)
-	// Private API
-	// Delete news by exchanges or tickers
-	Delete(context.Context, *NewsDeleteRequest) (*NewsDelete, error)
 	mustEmbedUnimplementedNewsServer()
 }
 
@@ -71,9 +54,6 @@ type UnimplementedNewsServer struct {
 
 func (UnimplementedNewsServer) Search(context.Context, *NewsRequest) (*NewsReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedNewsServer) Delete(context.Context, *NewsDeleteRequest) (*NewsDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedNewsServer) mustEmbedUnimplementedNewsServer() {}
 
@@ -106,24 +86,6 @@ func _News_Search_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _News_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NewsDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/news.v1.News/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).Delete(ctx, req.(*NewsDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // News_ServiceDesc is the grpc.ServiceDesc for News service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,10 +96,6 @@ var News_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _News_Search_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _News_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

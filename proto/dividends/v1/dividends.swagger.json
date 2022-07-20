@@ -28,7 +28,7 @@
   "paths": {
     "/v1/dividend/{instrument_id}": {
       "get": {
-        "summary": "Public API\nGet Last dividend result",
+        "summary": "Public API: Get Last dividend result",
         "operationId": "Dividends_Last",
         "responses": {
           "200": {
@@ -59,42 +59,8 @@
       }
     },
     "/v1/dividends": {
-      "delete": {
-        "summary": "Private API\nDelete dividends by exchanges or tickers",
-        "operationId": "Dividends_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DividendDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "instrument_id",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "int64"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Dividends"
-        ]
-      },
       "post": {
-        "summary": "Public API\nSearch dividends by date",
+        "summary": "Public API: Search dividends by date",
         "operationId": "Dividends_Search",
         "responses": {
           "200": {
@@ -193,15 +159,6 @@
         "Assets"
       ],
       "default": "Ticker"
-    },
-    "v1DividendDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
     },
     "v1DividendLastReply": {
       "type": "object",

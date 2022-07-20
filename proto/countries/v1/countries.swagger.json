@@ -26,10 +26,10 @@
     "application/json"
   ],
   "paths": {
-    "/v1/countries": {
-      "post": {
-        "summary": "Public API\nSearch Country results",
-        "operationId": "Countries_Search",
+    "/v1/countries/currency/{currency}": {
+      "get": {
+        "summary": "Public API: Search Country results by currency",
+        "operationId": "Countries_Currency",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -46,12 +46,10 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "currency",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CountrySearchRequest"
-            }
+            "type": "string"
           }
         ],
         "tags": [
@@ -61,7 +59,7 @@
     },
     "/v1/country/{country}": {
       "get": {
-        "summary": "Public API\nGet Country properties",
+        "summary": "Public API: Get Country properties",
         "operationId": "Countries_Get",
         "responses": {
           "200": {
@@ -92,7 +90,7 @@
     },
     "/v1/country/{country}/{indicator}": {
       "get": {
-        "summary": "Private API\nGet Indicator Country",
+        "summary": "Private API: Get Indicator Country",
         "operationId": "Countries_Indicator",
         "responses": {
           "200": {
@@ -153,13 +151,13 @@
         "ccn3": {
           "type": "string"
         },
-        "callingCodes": {
+        "calling_codes": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "internationalPrefix": {
+        "international_prefix": {
           "type": "string"
         }
       }
@@ -184,7 +182,7 @@
         "region": {
           "type": "string"
         },
-        "subRegion": {
+        "sub_region": {
           "type": "string"
         },
         "continent": {
@@ -193,7 +191,7 @@
         "capital": {
           "type": "string"
         },
-        "Area": {
+        "area": {
           "type": "number",
           "format": "float"
         }
@@ -202,19 +200,19 @@
     "DivisionCoordinate": {
       "type": "object",
       "properties": {
-        "minLongitude": {
+        "min_longitude": {
           "type": "number",
           "format": "float"
         },
-        "minLatitude": {
+        "min_latitude": {
           "type": "number",
           "format": "float"
         },
-        "maxLongitude": {
+        "max_longitude": {
           "type": "number",
           "format": "float"
         },
-        "maxLatitude": {
+        "max_latitude": {
           "type": "number",
           "format": "float"
         },
@@ -336,12 +334,29 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1CountryReply"
+            "$ref": "#/definitions/v1CountryRepliesResult"
           }
         },
         "total": {
           "type": "string",
           "format": "int64"
+        }
+      }
+    },
+    "v1CountryRepliesResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "continent": {
+          "type": "string"
+        },
+        "alpha2": {
+          "type": "string"
         }
       }
     },
@@ -357,7 +372,7 @@
         "code": {
           "$ref": "#/definitions/CountryReplyCode"
         },
-        "euMember": {
+        "eu_member": {
           "type": "boolean"
         },
         "tlds": {
@@ -390,30 +405,13 @@
             "$ref": "#/definitions/v1IndiceRepliesResult"
           }
         },
-        "subDivision": {
+        "sub_division": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/CountryReplyDivision"
           }
         },
         "borders": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "v1CountrySearchRequest": {
-      "type": "object",
-      "properties": {
-        "country": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "continent": {
           "type": "array",
           "items": {
             "type": "string"

@@ -47,25 +47,21 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Countries {
-  // Public API
-  // Get Country properties
+  // Public API: Get Country properties
   rpc Get (CountryRequest) returns (CountryReply)  {
     option (google.api.http) = {
       get: "/v1/country/{country}"
     };
   }
 
-  // Public API
-  // Search Country results
-  rpc Search (CountrySearchRequest) returns (CountryReplies)  {
+  // Public API: Search Country results by currency
+  rpc Currency (CountryCurrencyRequest) returns (CountryReplies)  {
     option (google.api.http) = {
-      post: "/v1/countries"
-      body: "*"
+      get: "/v1/countries/currency/{currency}"
     };
   }
 
-  // Private API
-  // Get Indicator Country
+  // Private API: Get Indicator Country
   rpc Indicator (CountryIndicatorRequest) returns (CountryIndicatorReply)  {
     option (google.api.http) = {
       get: "/v1/country/{country}/{indicator}"
@@ -81,9 +77,8 @@ message CountryRequest {
   string country = 1 [(validate.rules).string.len = 2];
 }
 
-message CountrySearchRequest {
-  repeated string country = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
-  repeated string continent = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
+message CountryCurrencyRequest {
+  string currency = 1 [(validate.rules).string.len = 3];
 }
 
 message CountryIndicatorRequest {
@@ -98,10 +93,10 @@ message CountryIndicatorRequest {
 message CountryReply {
   message Geo {
     string region = 1;
-    string subRegion = 2;
+    string sub_region = 2;
     string continent = 3;
     string capital = 4;
-    float Area = 5; 
+    float area = 5; 
   }
 
   message Code {
@@ -109,16 +104,16 @@ message CountryReply {
     string alpha3 = 2;
     string cioc = 3;
     string ccn3 = 4;
-    repeated string callingCodes = 5;
-    string internationalPrefix = 6;
+    repeated string calling_codes = 5;
+    string international_prefix = 6;
   }
 
   message Division {
     message Coordinate {
-      float minLongitude = 1;
-      float minLatitude = 2;
-      float maxLongitude = 3;
-      float maxLatitude = 4;
+      float min_longitude = 1;
+      float min_latitude = 2;
+      float max_longitude = 3;
+      float max_latitude = 4;
       float latitude = 5;
       float longitude = 6;
     }
@@ -131,18 +126,25 @@ message CountryReply {
   string name = 1;
   Geo geo = 2;
   Code code = 3;
-  bool euMember = 4;
+  bool eu_member = 4;
   repeated string tlds = 5;
   map<string, string> languages = 6;
   repeated string currencies = 7;
   repeated exchanges.v1.ExchangeReplies.Result exchanges = 8;
   repeated indices.v1.IndiceReplies.Result indices = 9;
-  repeated Division subDivision = 10;
+  repeated Division sub_division = 10;
   repeated string borders = 11;
 }
 
 message CountryReplies {
-  repeated CountryReply results = 1;
+  message Result {
+    string name = 1;
+    string region = 2;
+    string continent = 3;
+    string alpha2 = 4;
+  }
+
+  repeated Result results = 1;
   int64 total = 2;
 }
 

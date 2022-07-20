@@ -19,18 +19,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CurrenciesClient interface {
-	// Public API
-	// Get Currency properties
+	// Public API: Get Currency properties
 	Get(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error)
-	// Public API
-	// List Currencies available
+	// Public API: List Currencies available
 	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CurrencyReplies, error)
-	// Private API
-	// Create Currency
-	Create(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error)
-	// Private API
-	// Delete Currency & deps
-	Delete(ctx context.Context, in *CurrencyDeleteRequest, opts ...grpc.CallOption) (*CurrencyDelete, error)
 }
 
 type currenciesClient struct {
@@ -59,40 +51,14 @@ func (c *currenciesClient) List(ctx context.Context, in *emptypb.Empty, opts ...
 	return out, nil
 }
 
-func (c *currenciesClient) Create(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyReply, error) {
-	out := new(CurrencyReply)
-	err := c.cc.Invoke(ctx, "/currencies.v1.Currencies/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *currenciesClient) Delete(ctx context.Context, in *CurrencyDeleteRequest, opts ...grpc.CallOption) (*CurrencyDelete, error) {
-	out := new(CurrencyDelete)
-	err := c.cc.Invoke(ctx, "/currencies.v1.Currencies/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // CurrenciesServer is the server API for Currencies service.
 // All implementations must embed UnimplementedCurrenciesServer
 // for forward compatibility
 type CurrenciesServer interface {
-	// Public API
-	// Get Currency properties
+	// Public API: Get Currency properties
 	Get(context.Context, *CurrencyRequest) (*CurrencyReply, error)
-	// Public API
-	// List Currencies available
+	// Public API: List Currencies available
 	List(context.Context, *emptypb.Empty) (*CurrencyReplies, error)
-	// Private API
-	// Create Currency
-	Create(context.Context, *CurrencyRequest) (*CurrencyReply, error)
-	// Private API
-	// Delete Currency & deps
-	Delete(context.Context, *CurrencyDeleteRequest) (*CurrencyDelete, error)
 	mustEmbedUnimplementedCurrenciesServer()
 }
 
@@ -105,12 +71,6 @@ func (UnimplementedCurrenciesServer) Get(context.Context, *CurrencyRequest) (*Cu
 }
 func (UnimplementedCurrenciesServer) List(context.Context, *emptypb.Empty) (*CurrencyReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedCurrenciesServer) Create(context.Context, *CurrencyRequest) (*CurrencyReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedCurrenciesServer) Delete(context.Context, *CurrencyDeleteRequest) (*CurrencyDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedCurrenciesServer) mustEmbedUnimplementedCurrenciesServer() {}
 
@@ -161,42 +121,6 @@ func _Currencies_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Currencies_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CurrencyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CurrenciesServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/currencies.v1.Currencies/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CurrenciesServer).Create(ctx, req.(*CurrencyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Currencies_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CurrencyDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CurrenciesServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/currencies.v1.Currencies/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CurrenciesServer).Delete(ctx, req.(*CurrencyDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Currencies_ServiceDesc is the grpc.ServiceDesc for Currencies service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -211,14 +135,6 @@ var Currencies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Currencies_List_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Currencies_Create_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Currencies_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

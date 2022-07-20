@@ -26,81 +26,15 @@
     "application/json"
   ],
   "paths": {
-    "/v1/forexes": {
-      "delete": {
-        "summary": "Private API\nDelete Forexes",
-        "operationId": "Forexes_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ForexDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Forexes"
-        ]
-      },
-      "post": {
-        "summary": "Private API\nCreate new Forexes",
-        "operationId": "Forexes_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ForexReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ForexCreateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Forexes"
-        ]
-      }
-    },
     "/v1/forexes/{currency}/pairs": {
       "get": {
-        "summary": "Public API\nList Forexes available",
+        "summary": "Private API: List Forexes available",
         "operationId": "Forexes_List",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ForexList"
+              "$ref": "#/definitions/v1ForexReplies"
             }
           },
           "default": {
@@ -125,7 +59,7 @@
     },
     "/v1/forexes/{ticker}": {
       "get": {
-        "summary": "Public API\nGet Forexes properties",
+        "summary": "Public API: Get Forexes properties",
         "operationId": "Forexes_Get",
         "responses": {
           "200": {
@@ -156,7 +90,7 @@
     },
     "/v1/forexes/{ticker}/stats": {
       "get": {
-        "summary": "Private API\nGet Stats Forex",
+        "summary": "Private API: Get Stats Forex",
         "operationId": "Forexes_Stats",
         "responses": {
           "200": {
@@ -187,7 +121,7 @@
     },
     "/v1/forexes/{ticker}/strategies": {
       "get": {
-        "summary": "Public API\nGet Strategies Results Forex",
+        "summary": "Public API: Get Strategies Results Forex",
         "operationId": "Forexes_Strategies",
         "responses": {
           "200": {
@@ -224,6 +158,36 @@
     }
   },
   "definitions": {
+    "CentralBankBorrowingRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number",
+          "format": "float"
+        },
+        "since": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "CurrencyReplyCentralBank": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "borrowing_rate": {
+          "$ref": "#/definitions/CentralBankBorrowingRate"
+        }
+      }
+    },
     "StrategiesRepliesPeriod": {
       "type": "object",
       "properties": {
@@ -321,17 +285,57 @@
         }
       }
     },
+    "v1CountryRepliesResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "continent": {
+          "type": "string"
+        },
+        "alpha2": {
+          "type": "string"
+        }
+      }
+    },
     "v1CurrencyReply": {
       "type": "object",
       "properties": {
         "ticker": {
           "type": "string"
         },
+        "central_bank": {
+          "$ref": "#/definitions/CurrencyReplyCentralBank"
+        },
+        "forexes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "exchanges": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1ExchangeRepliesResult"
           }
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CountryRepliesResult"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -352,37 +356,18 @@
         }
       }
     },
-    "v1ForexCreateRequest": {
+    "v1ForexReplies": {
       "type": "object",
       "properties": {
-        "from": {
-          "type": "string"
-        },
-        "to": {
-          "type": "string"
-        }
-      }
-    },
-    "v1ForexDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ForexList": {
-      "type": "object",
-      "properties": {
-        "currency": {
-          "type": "string"
-        },
-        "forexes": {
+        "results": {
           "type": "array",
           "items": {
             "type": "string"
           }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -461,15 +446,15 @@
     "v1ForexStatsReplyVolume": {
       "type": "object",
       "properties": {
-        "volumeAvg10d": {
+        "avg_10d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg30d": {
+        "avg_30d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg90d": {
+        "avg_90d": {
           "type": "string",
           "format": "int64"
         }

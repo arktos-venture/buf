@@ -18,54 +18,52 @@ option java_package = "dev.kratos.api.portfolio.v1";
 option java_outer_classname = "APIPortfoliosProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
-    title: "Portfolio APIs";
-		description: "Portfolio APIs accounts";
-    version: "1.0";
+    	title: "Portfolios APIs";
+		description: "Portfolios APIs accounts";
+    	version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
 			url: "https://github.com/arktos-venture/buf";
 			email: "oss@arktos-consulting.cloud";
 		};
-  };
+  	};
 	schemes: [HTTP, HTTPS];
 	consumes: "application/json";
 	produces: "application/json";
 	security_definitions: {
-	  security: {
-		  key: "bearer"
-		  value: {
-		    type: TYPE_API_KEY
-		    in: IN_HEADER
-		    name: "Authorization"
-		    description: "Authentication token, prefixed by Bearer: Bearer <token>"
-		  }
-	  }
-  }
+	  	security: {
+		  	key: "bearer"
+		  	value: {
+		    	type: TYPE_API_KEY
+		    	in: IN_HEADER
+		    	name: "Authorization"
+		    	description: "Authentication token, prefixed by Bearer: Bearer <token>"
+		  	}
+	  	}
+  	}
 	security: {
-	  security_requirement: {
+	  	security_requirement: {
 			key: "bearer"
-	  }
+	  	}
 	}
 };
 
 service Portfolios {
 	// Public API: Status Portfolio
-  rpc Get (PortfolioRequest) returns (PortfolioReply)  {
-    option (google.api.http) = {
-      get: "/v1/portfolios/{account}/{currency}"
-    };
-  }
+  	rpc Get (PortfolioRequest) returns (PortfolioReply)  {
+    	option (google.api.http) = {
+      		get: "/v1/portfolios/{account}/{currency}"
+    	};
+  	}
 
-  // Private API
-	// Get Stats Instrument
+  	// Private API: Get Stats Instrument
 	rpc Stats (PortfolioRequest) returns (PortfolioStatsReply) {
 		option (google.api.http) = {
 			get: "/v1/portfolios/{account}/{currency}/stats"
-	  };
+	  	};
 	}
 
-	// Public API
-	// Get Strategies Results Instrument
+	// Public API: Get Strategies Results Instrument
 	rpc Strategies (PortfolioRequest) returns (strategies.v1.StrategiesReplies) {
 		option (google.api.http) = {
 			get: "/v1/portfolios/{account}/{currency}/strategies"
@@ -73,34 +71,11 @@ service Portfolios {
 	}
 
 	// Public API: Search portfolios by Account
-  rpc Search (PortfolioSearchRequest) returns (PortfolioReplies)  {
-    option (google.api.http) = {
-      get: "/v1/portfolios/{account}"
-    };
-  }
-
-	// Public API: Create Portfolio
-  rpc Create (PortfolioCreateRequest) returns (PortfolioReply)  {
-    option (google.api.http) = {
-      post: "/v1/portfolios/{account}"
-      body: "*"
-    };
-  }
-
-	// Public API: Update existing Portfolios
-  rpc Update (PortfolioUpdateRequest) returns (PortfolioReply)  {
-    option (google.api.http) = {
-      put: "/v1/portfolios/{account}/{currency}"
-      body: "*"
-    };
-  }
- 
-	// Private API: Cancel existing Portfolios
-  rpc Delete (PortfolioDeleteRequest) returns (PortfolioDelete)  {
-    option (google.api.http) = {
-      delete: "/v1/portfolios/{account}/{currency}"
-    };
-  }
+	rpc Search (PortfolioSearchRequest) returns (PortfolioReplies)  {
+		option (google.api.http) = {
+			get: "/v1/portfolios/{account}"
+		};
+	}
 }
 
 
@@ -109,30 +84,13 @@ service Portfolios {
 // 
 
 message PortfolioRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
 	string currency = 2 [(validate.rules).string.len = 3];
 }
 
 message PortfolioSearchRequest {
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  repeated string currencies = 2 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 0];
-}
-
-message PortfolioCreateRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
-  repeated screener.v1.Asset allowed_assets = 3 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 1];
-}
-
-message PortfolioUpdateRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
-  repeated screener.v1.Asset allowed_assets = 3 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 1];
-}
-
-message PortfolioDeleteRequest {  
-  string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
-  string currency = 2 [(validate.rules).string.len = 3];
+  	string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  	repeated string currencies = 2 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 0];
 }
 
 
@@ -141,13 +99,13 @@ message PortfolioDeleteRequest {
 // 
 
 message PortfolioReply {
-  string currency = 1;
-  repeated screener.v1.Asset allowed_assets = 2;
-  repeated exchanges.v1.ExchangeReplies.Result exchanges = 3;
-  repeated orders.v1.PositionReplies.Result positions = 4;
-  repeated orders.v1.OrderReply orders = 5;
-  google.protobuf.Timestamp created_at = 6; 
-  google.protobuf.Timestamp updated_at = 7; 
+  	string currency = 1;
+  	repeated screener.v1.Asset allowed_assets = 2;
+  	repeated exchanges.v1.ExchangeReplies.Result exchanges = 3;
+  	repeated orders.v1.PositionReplies.Result positions = 4;
+  	repeated orders.v1.OrderReply orders = 5;
+  	google.protobuf.Timestamp created_at = 6; 
+  	google.protobuf.Timestamp updated_at = 7; 
 }
 
 message PortfolioStatsReply {
@@ -161,29 +119,25 @@ message PortfolioStatsReply {
 	}
 		
 	message Volume {
-		int64 volumeAvg10d = 1;
-		int64 volumeAvg30d = 2;
-		int64 volumeAvg90d = 3;
+		int64 avg_10d = 1;
+		int64 avg_30d = 2;
+		int64 avg_90d = 3;
 	}
 
-	Price price = 4;
-	Volume volume = 5;
-	google.protobuf.Timestamp created_at = 7;
-	google.protobuf.Timestamp updated_at = 8; 
+	Price price = 1;
+	Volume volume = 2;
+	google.protobuf.Timestamp created_at = 3;
+	google.protobuf.Timestamp updated_at = 4; 
 }
 
 message PortfolioReplies {
-  message Result {
-    string currency = 1;
-    repeated screener.v1.Asset allowed_assets = 2;
-    google.protobuf.Timestamp created_at = 3;
-    google.protobuf.Timestamp updated_at = 4; 
-  }
+	message Result {
+		string currency = 1;
+		repeated screener.v1.Asset allowed_assets = 2;
+		google.protobuf.Timestamp created_at = 3;
+		google.protobuf.Timestamp updated_at = 4; 
+	}
 
-  repeated Result results = 1;
-  int64 total = 2;
-}
-
-message PortfolioDelete {
-  string currency = 1;
+	repeated Result results = 1;
+	int64 total = 2;
 }

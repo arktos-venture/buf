@@ -18,14 +18,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CountriesClient interface {
-	// Public API
-	// Get Country properties
+	// Public API: Get Country properties
 	Get(ctx context.Context, in *CountryRequest, opts ...grpc.CallOption) (*CountryReply, error)
-	// Public API
-	// Search Country results
-	Search(ctx context.Context, in *CountrySearchRequest, opts ...grpc.CallOption) (*CountryReplies, error)
-	// Private API
-	// Get Indicator Country
+	// Public API: Search Country results by currency
+	Currency(ctx context.Context, in *CountryCurrencyRequest, opts ...grpc.CallOption) (*CountryReplies, error)
+	// Private API: Get Indicator Country
 	Indicator(ctx context.Context, in *CountryIndicatorRequest, opts ...grpc.CallOption) (*CountryIndicatorReply, error)
 }
 
@@ -46,9 +43,9 @@ func (c *countriesClient) Get(ctx context.Context, in *CountryRequest, opts ...g
 	return out, nil
 }
 
-func (c *countriesClient) Search(ctx context.Context, in *CountrySearchRequest, opts ...grpc.CallOption) (*CountryReplies, error) {
+func (c *countriesClient) Currency(ctx context.Context, in *CountryCurrencyRequest, opts ...grpc.CallOption) (*CountryReplies, error) {
 	out := new(CountryReplies)
-	err := c.cc.Invoke(ctx, "/countries.v1.Countries/Search", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/countries.v1.Countries/Currency", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,14 +65,11 @@ func (c *countriesClient) Indicator(ctx context.Context, in *CountryIndicatorReq
 // All implementations must embed UnimplementedCountriesServer
 // for forward compatibility
 type CountriesServer interface {
-	// Public API
-	// Get Country properties
+	// Public API: Get Country properties
 	Get(context.Context, *CountryRequest) (*CountryReply, error)
-	// Public API
-	// Search Country results
-	Search(context.Context, *CountrySearchRequest) (*CountryReplies, error)
-	// Private API
-	// Get Indicator Country
+	// Public API: Search Country results by currency
+	Currency(context.Context, *CountryCurrencyRequest) (*CountryReplies, error)
+	// Private API: Get Indicator Country
 	Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error)
 	mustEmbedUnimplementedCountriesServer()
 }
@@ -87,8 +81,8 @@ type UnimplementedCountriesServer struct {
 func (UnimplementedCountriesServer) Get(context.Context, *CountryRequest) (*CountryReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCountriesServer) Search(context.Context, *CountrySearchRequest) (*CountryReplies, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+func (UnimplementedCountriesServer) Currency(context.Context, *CountryCurrencyRequest) (*CountryReplies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Currency not implemented")
 }
 func (UnimplementedCountriesServer) Indicator(context.Context, *CountryIndicatorRequest) (*CountryIndicatorReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Indicator not implemented")
@@ -124,20 +118,20 @@ func _Countries_Get_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Countries_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CountrySearchRequest)
+func _Countries_Currency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CountryCurrencyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CountriesServer).Search(ctx, in)
+		return srv.(CountriesServer).Currency(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/countries.v1.Countries/Search",
+		FullMethod: "/countries.v1.Countries/Currency",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CountriesServer).Search(ctx, req.(*CountrySearchRequest))
+		return srv.(CountriesServer).Currency(ctx, req.(*CountryCurrencyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -172,8 +166,8 @@ var Countries_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Countries_Get_Handler,
 		},
 		{
-			MethodName: "Search",
-			Handler:    _Countries_Search_Handler,
+			MethodName: "Currency",
+			Handler:    _Countries_Currency_Handler,
 		},
 		{
 			MethodName: "Indicator",

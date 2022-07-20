@@ -49,61 +49,31 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Indices {
-	// Public API
-	// Get Indice properties
+	// Public API: Get Indice properties
 	rpc Get (IndiceRequest) returns (IndiceReply)  {
 		option (google.api.http) = {
 			get: "/v1/indice/{ticker}"
 		};
 	}
 
-	// Private API
-	// Get Stats Indice
+	// Private API: Get Stats Indice
 	rpc Stats (IndiceRequest) returns (IndiceStatsReply) {
 		option (google.api.http) = {
 			get: "/v1/indice/{ticker}/stats"
 	  	};
 	}
 
-	// Public API
-	// Get Strategies Results Indice
+	// Public API: Get Strategies Results Indice
 	rpc Strategies (IndiceStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
 		option (google.api.http) = {
 			get: "/v1/indice/{ticker}/strategies"
 	  	};
 	}
 
-	// Public API
-	// Search Indices available
+	// Public API: Search Indices available
 	rpc Search (IndiceSearchRequest) returns (IndiceReplies)  {
 		option (google.api.http) = {
 			get: "/v1/indices"
-		};
-	}
-
-	// Private API
-	// Create Indice properties
-	rpc Create (IndiceModifyRequest) returns (IndiceReply)  {
-		option (google.api.http) = {
-			post: "/v1/indices"
-			body: "*"
-		};
-	}
-
-	// Private API
-	// Update Indice properties
-	rpc Update (IndiceModifyRequest) returns (IndiceReply)  {
-		option (google.api.http) = {
-			put: "/v1/indice/{ticker}"
-			body: "*"
-		};
-	}
-
-	// Private API
-	// Delete Indices
-	rpc Delete (IndiceDeleteRequest) returns (IndiceDelete)  {
-		option (google.api.http) = {
-			delete: "/v1/indices"
 		};
 	}
 }
@@ -124,19 +94,6 @@ message IndiceStrategiesRequest {
 
 message IndiceSearchRequest {
 	repeated string exchanges = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
-}
-
-message IndiceModifyRequest {
-	string ticker = 1 [(validate.rules).string = {min_len: 1, max_len: 16}];
-	string description = 2 [(validate.rules).string = {min_len: 1, max_len: 512}];
-	string exchange = 3 [(validate.rules).string = {min_len: 1, max_len: 16}];
-	string index = 4;
-	screener.v1.Asset asset = 5 [(validate.rules).enum = {defined_only: true}];
-}
-
-message IndiceDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
-	repeated string exchanges = 2 [(validate.rules).repeated.min_items = 0, (validate.rules).repeated.unique = true];
 }
 
 
@@ -167,9 +124,9 @@ message IndiceStatsReply {
 	}
 		
 	message Volume {
-		int64 volumeAvg10d = 1;
-		int64 volumeAvg30d = 2;
-		int64 volumeAvg90d = 3;
+		int64 avg_10d = 1;
+		int64 avg_30d = 2;
+		int64 avg_90d = 3;
 	}
 
 	Price price = 4;
@@ -187,8 +144,4 @@ message IndiceReplies {
 
 	repeated Result results = 1;
 	int64 total = 2;
-}
-
-message IndiceDelete {
-	int64 total = 1;
 }
