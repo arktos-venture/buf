@@ -48,52 +48,31 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Forexes {
-	// Public API
-	// Get Forexes properties
+	// Public API: Get Forexes properties
 	rpc Get (ForexRequest) returns (ForexReply)  {
 		option (google.api.http) = {
 			get: "/v1/forexes/{ticker}"
 		};
 	}
 
-	// Private API
-	// Get Stats Forex
+	// Private API: Get Stats Forex
 	rpc Stats (ForexRequest) returns (ForexStatsReply) {
 		option (google.api.http) = {
 			get: "/v1/forexes/{ticker}/stats"
 	  	};
 	}
 
-	// Public API
-	// Get Strategies Results Forex
+	// Public API: Get Strategies Results Forex
 	rpc Strategies (ForexStrategiesRequest) returns (strategies.v1.StrategiesReplies) {
 		option (google.api.http) = {
 			get: "/v1/forexes/{ticker}/strategies"
 	  	};
 	}
 
-	// Public API
-	// List Forexes available
-	rpc List (ForexListRequest) returns (ForexList)  {
+	// Private API: List Forexes available
+	rpc List (ForexListRequest) returns (ForexReplies)  {
 		option (google.api.http) = {
 			get: "/v1/forexes/{currency}/pairs"
-		};
-	}
-
-	// Private API
-	// Create new Forexes
-	rpc Create (ForexCreateRequest) returns (ForexReply)  {
-		option (google.api.http) = {
-			post: "/v1/forexes"
-			body: "*"
-		};
-	}
-
-	// Private API
-	// Delete Forexes
-	rpc Delete (ForexDeleteRequest) returns (ForexDelete)  {
-		option (google.api.http) = {
-			delete: "/v1/forexes"
 		};
 	}
 }
@@ -114,15 +93,6 @@ message ForexStrategiesRequest {
 
 message ForexListRequest {
 	string currency = 1 [(validate.rules).string.len = 3];
-}
-
-message ForexCreateRequest {
-	string from = 1 [(validate.rules).string.len = 3];
-	string to = 2 [(validate.rules).string.len = 3];
-}
-
-message ForexDeleteRequest {
-	repeated string tickers = 1 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.unique = true];
 }
 
 
@@ -150,9 +120,9 @@ message ForexStatsReply {
 	}
 		
 	message Volume {
-		int64 volumeAvg10d = 1;
-		int64 volumeAvg30d = 2;
-		int64 volumeAvg90d = 3;
+		int64 avg_10d = 1;
+		int64 avg_30d = 2;
+		int64 avg_90d = 3;
 	}
 
 	Price price = 1;
@@ -161,11 +131,7 @@ message ForexStatsReply {
 	google.protobuf.Timestamp updated_at = 4; 
 }
 
-message ForexList {
-	string currency = 1;
-	repeated string forexes = 2;
-}
-
-message ForexDelete {
-	int64 total = 1;
+message ForexReplies {
+	repeated string results = 1;
+	int64 total = 2;
 }

@@ -383,266 +383,6 @@ var _ interface {
 	ErrorName() string
 } = ForexListRequestValidationError{}
 
-// Validate checks the field values on ForexCreateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ForexCreateRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ForexCreateRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ForexCreateRequestMultiError, or nil if none found.
-func (m *ForexCreateRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ForexCreateRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if utf8.RuneCountInString(m.GetFrom()) != 3 {
-		err := ForexCreateRequestValidationError{
-			field:  "From",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	if utf8.RuneCountInString(m.GetTo()) != 3 {
-		err := ForexCreateRequestValidationError{
-			field:  "To",
-			reason: "value length must be 3 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-
-	}
-
-	if len(errors) > 0 {
-		return ForexCreateRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// ForexCreateRequestMultiError is an error wrapping multiple validation errors
-// returned by ForexCreateRequest.ValidateAll() if the designated constraints
-// aren't met.
-type ForexCreateRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ForexCreateRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ForexCreateRequestMultiError) AllErrors() []error { return m }
-
-// ForexCreateRequestValidationError is the validation error returned by
-// ForexCreateRequest.Validate if the designated constraints aren't met.
-type ForexCreateRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ForexCreateRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ForexCreateRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ForexCreateRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ForexCreateRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ForexCreateRequestValidationError) ErrorName() string {
-	return "ForexCreateRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ForexCreateRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sForexCreateRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ForexCreateRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ForexCreateRequestValidationError{}
-
-// Validate checks the field values on ForexDeleteRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ForexDeleteRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ForexDeleteRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ForexDeleteRequestMultiError, or nil if none found.
-func (m *ForexDeleteRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ForexDeleteRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(m.GetTickers()) < 1 {
-		err := ForexDeleteRequestValidationError{
-			field:  "Tickers",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_ForexDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
-
-	for idx, item := range m.GetTickers() {
-		_, _ = idx, item
-
-		if _, exists := _ForexDeleteRequest_Tickers_Unique[item]; exists {
-			err := ForexDeleteRequestValidationError{
-				field:  fmt.Sprintf("Tickers[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_ForexDeleteRequest_Tickers_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Tickers[idx]
-	}
-
-	if len(errors) > 0 {
-		return ForexDeleteRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// ForexDeleteRequestMultiError is an error wrapping multiple validation errors
-// returned by ForexDeleteRequest.ValidateAll() if the designated constraints
-// aren't met.
-type ForexDeleteRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ForexDeleteRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ForexDeleteRequestMultiError) AllErrors() []error { return m }
-
-// ForexDeleteRequestValidationError is the validation error returned by
-// ForexDeleteRequest.Validate if the designated constraints aren't met.
-type ForexDeleteRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ForexDeleteRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ForexDeleteRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ForexDeleteRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ForexDeleteRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ForexDeleteRequestValidationError) ErrorName() string {
-	return "ForexDeleteRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ForexDeleteRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sForexDeleteRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ForexDeleteRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ForexDeleteRequestValidationError{}
-
 // Validate checks the field values on ForexReply with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1134,123 +874,22 @@ var _ interface {
 	ErrorName() string
 } = ForexStatsReplyValidationError{}
 
-// Validate checks the field values on ForexList with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ForexList) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ForexList with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ForexListMultiError, or nil
-// if none found.
-func (m *ForexList) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ForexList) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Currency
-
-	if len(errors) > 0 {
-		return ForexListMultiError(errors)
-	}
-
-	return nil
-}
-
-// ForexListMultiError is an error wrapping multiple validation errors returned
-// by ForexList.ValidateAll() if the designated constraints aren't met.
-type ForexListMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ForexListMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ForexListMultiError) AllErrors() []error { return m }
-
-// ForexListValidationError is the validation error returned by
-// ForexList.Validate if the designated constraints aren't met.
-type ForexListValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ForexListValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ForexListValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ForexListValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ForexListValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ForexListValidationError) ErrorName() string { return "ForexListValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ForexListValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sForexList.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ForexListValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ForexListValidationError{}
-
-// Validate checks the field values on ForexDelete with the rules defined in
+// Validate checks the field values on ForexReplies with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *ForexDelete) Validate() error {
+func (m *ForexReplies) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ForexDelete with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ForexDeleteMultiError, or
+// ValidateAll checks the field values on ForexReplies with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ForexRepliesMultiError, or
 // nil if none found.
-func (m *ForexDelete) ValidateAll() error {
+func (m *ForexReplies) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ForexDelete) validate(all bool) error {
+func (m *ForexReplies) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1260,18 +899,18 @@ func (m *ForexDelete) validate(all bool) error {
 	// no validation rules for Total
 
 	if len(errors) > 0 {
-		return ForexDeleteMultiError(errors)
+		return ForexRepliesMultiError(errors)
 	}
 
 	return nil
 }
 
-// ForexDeleteMultiError is an error wrapping multiple validation errors
-// returned by ForexDelete.ValidateAll() if the designated constraints aren't met.
-type ForexDeleteMultiError []error
+// ForexRepliesMultiError is an error wrapping multiple validation errors
+// returned by ForexReplies.ValidateAll() if the designated constraints aren't met.
+type ForexRepliesMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ForexDeleteMultiError) Error() string {
+func (m ForexRepliesMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1280,11 +919,11 @@ func (m ForexDeleteMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ForexDeleteMultiError) AllErrors() []error { return m }
+func (m ForexRepliesMultiError) AllErrors() []error { return m }
 
-// ForexDeleteValidationError is the validation error returned by
-// ForexDelete.Validate if the designated constraints aren't met.
-type ForexDeleteValidationError struct {
+// ForexRepliesValidationError is the validation error returned by
+// ForexReplies.Validate if the designated constraints aren't met.
+type ForexRepliesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1292,22 +931,22 @@ type ForexDeleteValidationError struct {
 }
 
 // Field function returns field value.
-func (e ForexDeleteValidationError) Field() string { return e.field }
+func (e ForexRepliesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ForexDeleteValidationError) Reason() string { return e.reason }
+func (e ForexRepliesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ForexDeleteValidationError) Cause() error { return e.cause }
+func (e ForexRepliesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ForexDeleteValidationError) Key() bool { return e.key }
+func (e ForexRepliesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ForexDeleteValidationError) ErrorName() string { return "ForexDeleteValidationError" }
+func (e ForexRepliesValidationError) ErrorName() string { return "ForexRepliesValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ForexDeleteValidationError) Error() string {
+func (e ForexRepliesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1319,14 +958,14 @@ func (e ForexDeleteValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sForexDelete.%s: %s%s",
+		"invalid %sForexReplies.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ForexDeleteValidationError{}
+var _ error = ForexRepliesValidationError{}
 
 var _ interface {
 	Field() string
@@ -1334,7 +973,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ForexDeleteValidationError{}
+} = ForexRepliesValidationError{}
 
 // Validate checks the field values on ForexStatsReply_Price with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1470,11 +1109,11 @@ func (m *ForexStatsReply_Volume) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for VolumeAvg10D
+	// no validation rules for Avg_10D
 
-	// no validation rules for VolumeAvg30D
+	// no validation rules for Avg_30D
 
-	// no validation rules for VolumeAvg90D
+	// no validation rules for Avg_90D
 
 	if len(errors) > 0 {
 		return ForexStatsReply_VolumeMultiError(errors)
