@@ -19,27 +19,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndicesClient interface {
-	// Public API
-	// Get Indice properties
+	// Public API: Get Indice properties
 	Get(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceReply, error)
-	// Private API
-	// Get Stats Indice
+	// Private API: Get Stats Indice
 	Stats(ctx context.Context, in *IndiceRequest, opts ...grpc.CallOption) (*IndiceStatsReply, error)
-	// Public API
-	// Get Strategies Results Indice
+	// Public API: Get Strategies Results Indice
 	Strategies(ctx context.Context, in *IndiceStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
-	// Public API
-	// Search Indices available
+	// Public API: Search Indices available
 	Search(ctx context.Context, in *IndiceSearchRequest, opts ...grpc.CallOption) (*IndiceReplies, error)
-	// Private API
-	// Create Indice properties
-	Create(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
-	// Private API
-	// Update Indice properties
-	Update(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error)
-	// Private API
-	// Delete Indices
-	Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDelete, error)
 }
 
 type indicesClient struct {
@@ -86,58 +73,18 @@ func (c *indicesClient) Search(ctx context.Context, in *IndiceSearchRequest, opt
 	return out, nil
 }
 
-func (c *indicesClient) Create(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error) {
-	out := new(IndiceReply)
-	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *indicesClient) Update(ctx context.Context, in *IndiceModifyRequest, opts ...grpc.CallOption) (*IndiceReply, error) {
-	out := new(IndiceReply)
-	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Update", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *indicesClient) Delete(ctx context.Context, in *IndiceDeleteRequest, opts ...grpc.CallOption) (*IndiceDelete, error) {
-	out := new(IndiceDelete)
-	err := c.cc.Invoke(ctx, "/indices.v1.Indices/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // IndicesServer is the server API for Indices service.
 // All implementations must embed UnimplementedIndicesServer
 // for forward compatibility
 type IndicesServer interface {
-	// Public API
-	// Get Indice properties
+	// Public API: Get Indice properties
 	Get(context.Context, *IndiceRequest) (*IndiceReply, error)
-	// Private API
-	// Get Stats Indice
+	// Private API: Get Stats Indice
 	Stats(context.Context, *IndiceRequest) (*IndiceStatsReply, error)
-	// Public API
-	// Get Strategies Results Indice
+	// Public API: Get Strategies Results Indice
 	Strategies(context.Context, *IndiceStrategiesRequest) (*v1.StrategiesReplies, error)
-	// Public API
-	// Search Indices available
+	// Public API: Search Indices available
 	Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error)
-	// Private API
-	// Create Indice properties
-	Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
-	// Private API
-	// Update Indice properties
-	Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error)
-	// Private API
-	// Delete Indices
-	Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error)
 	mustEmbedUnimplementedIndicesServer()
 }
 
@@ -156,15 +103,6 @@ func (UnimplementedIndicesServer) Strategies(context.Context, *IndiceStrategiesR
 }
 func (UnimplementedIndicesServer) Search(context.Context, *IndiceSearchRequest) (*IndiceReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedIndicesServer) Create(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedIndicesServer) Update(context.Context, *IndiceModifyRequest) (*IndiceReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
-func (UnimplementedIndicesServer) Delete(context.Context, *IndiceDeleteRequest) (*IndiceDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedIndicesServer) mustEmbedUnimplementedIndicesServer() {}
 
@@ -251,60 +189,6 @@ func _Indices_Search_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Indices_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndiceModifyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndicesServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indices.v1.Indices/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).Create(ctx, req.(*IndiceModifyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Indices_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndiceModifyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndicesServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indices.v1.Indices/Update",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).Update(ctx, req.(*IndiceModifyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Indices_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndiceDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IndicesServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indices.v1.Indices/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IndicesServer).Delete(ctx, req.(*IndiceDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Indices_ServiceDesc is the grpc.ServiceDesc for Indices service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -327,18 +211,6 @@ var Indices_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Indices_Search_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Indices_Create_Handler,
-		},
-		{
-			MethodName: "Update",
-			Handler:    _Indices_Update_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Indices_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

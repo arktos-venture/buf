@@ -28,7 +28,7 @@
   "paths": {
     "/v1/indice/{ticker}": {
       "get": {
-        "summary": "Public API\nGet Indice properties",
+        "summary": "Public API: Get Indice properties",
         "operationId": "Indices_Get",
         "responses": {
           "200": {
@@ -55,62 +55,11 @@
         "tags": [
           "Indices"
         ]
-      },
-      "put": {
-        "summary": "Private API\nUpdate Indice properties",
-        "operationId": "Indices_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndiceReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "description": {
-                  "type": "string"
-                },
-                "exchange": {
-                  "type": "string"
-                },
-                "index": {
-                  "type": "string"
-                },
-                "asset": {
-                  "$ref": "#/definitions/v1Asset"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Indices"
-        ]
       }
     },
     "/v1/indice/{ticker}/stats": {
       "get": {
-        "summary": "Private API\nGet Stats Indice",
+        "summary": "Private API: Get Stats Indice",
         "operationId": "Indices_Stats",
         "responses": {
           "200": {
@@ -141,7 +90,7 @@
     },
     "/v1/indice/{ticker}/strategies": {
       "get": {
-        "summary": "Public API\nGet Strategies Results Indice",
+        "summary": "Public API: Get Strategies Results Indice",
         "operationId": "Indices_Strategies",
         "responses": {
           "200": {
@@ -178,7 +127,7 @@
     },
     "/v1/indices": {
       "get": {
-        "summary": "Public API\nSearch Indices available",
+        "summary": "Public API: Search Indices available",
         "operationId": "Indices_Search",
         "responses": {
           "200": {
@@ -204,80 +153,6 @@
               "type": "string"
             },
             "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Indices"
-        ]
-      },
-      "delete": {
-        "summary": "Private API\nDelete Indices",
-        "operationId": "Indices_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndiceDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "exchanges",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Indices"
-        ]
-      },
-      "post": {
-        "summary": "Private API\nCreate Indice properties",
-        "operationId": "Indices_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1IndiceReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1IndiceModifyRequest"
-            }
           }
         ],
         "tags": [
@@ -399,35 +274,6 @@
       ],
       "default": "INDEX"
     },
-    "v1IndiceDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1IndiceModifyRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "index": {
-          "type": "string"
-        },
-        "asset": {
-          "$ref": "#/definitions/v1Asset"
-        }
-      }
-    },
     "v1IndiceReplies": {
       "type": "object",
       "properties": {
@@ -545,15 +391,15 @@
     "v1IndiceStatsReplyVolume": {
       "type": "object",
       "properties": {
-        "volumeAvg10d": {
+        "avg_10d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg30d": {
+        "avg_30d": {
           "type": "string",
           "format": "int64"
         },
-        "volumeAvg90d": {
+        "avg_90d": {
           "type": "string",
           "format": "int64"
         }
