@@ -27,51 +27,8 @@
   ],
   "paths": {
     "/v1/news": {
-      "delete": {
-        "summary": "Private API\nDelete news by exchanges or tickers",
-        "operationId": "News_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1NewsDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "exchanges",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "News"
-        ]
-      },
       "post": {
-        "summary": "Public API\nSearch news results",
+        "summary": "Public API: Search news results",
         "operationId": "News_Search",
         "responses": {
           "200": {
@@ -134,22 +91,13 @@
         }
       }
     },
-    "v1NewsDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "v1NewsReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1NewsReply"
+            "$ref": "#/definitions/v1NewsRepliesResult"
           }
         },
         "total": {
@@ -158,7 +106,7 @@
         }
       }
     },
-    "v1NewsReply": {
+    "v1NewsRepliesResult": {
       "type": "object",
       "properties": {
         "title": {
