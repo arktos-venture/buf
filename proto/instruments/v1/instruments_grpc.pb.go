@@ -19,27 +19,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InstrumentsClient interface {
-	// Public API
-	// Get Instrument properties
+	// Public API: Get Instrument properties
 	Get(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentReply, error)
-	// Private API
-	// Get Stats Instrument
+	// Private API: Get Stats Instrument
 	Stats(ctx context.Context, in *InstrumentRequest, opts ...grpc.CallOption) (*InstrumentStatsReply, error)
-	// Public API
-	// Get Strategies Results Instrument
+	// Public API: Get Strategies Results Instrument
 	Strategies(ctx context.Context, in *InstrumentStrategiesRequest, opts ...grpc.CallOption) (*v1.StrategiesReplies, error)
-	// Private API
-	// Search instruments, only for start imports
+	// Private API: Search instruments, only for start imports
 	Search(ctx context.Context, in *InstrumentSearchRequest, opts ...grpc.CallOption) (*InstrumentReplies, error)
-	// Private API
-	// Create a new Instrument
-	Create(ctx context.Context, in *InstrumentCreateRequest, opts ...grpc.CallOption) (*InstrumentReply, error)
-	// Private API
-	// Update properties of Instrument
-	Update(ctx context.Context, in *InstrumentUpdateRequest, opts ...grpc.CallOption) (*InstrumentReply, error)
-	// Private API
-	// Delete Instrument
-	Delete(ctx context.Context, in *InstrumentDeleteRequest, opts ...grpc.CallOption) (*InstrumentDelete, error)
 }
 
 type instrumentsClient struct {
@@ -86,58 +73,18 @@ func (c *instrumentsClient) Search(ctx context.Context, in *InstrumentSearchRequ
 	return out, nil
 }
 
-func (c *instrumentsClient) Create(ctx context.Context, in *InstrumentCreateRequest, opts ...grpc.CallOption) (*InstrumentReply, error) {
-	out := new(InstrumentReply)
-	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *instrumentsClient) Update(ctx context.Context, in *InstrumentUpdateRequest, opts ...grpc.CallOption) (*InstrumentReply, error) {
-	out := new(InstrumentReply)
-	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Update", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *instrumentsClient) Delete(ctx context.Context, in *InstrumentDeleteRequest, opts ...grpc.CallOption) (*InstrumentDelete, error) {
-	out := new(InstrumentDelete)
-	err := c.cc.Invoke(ctx, "/instruments.v1.instruments/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // InstrumentsServer is the server API for Instruments service.
 // All implementations must embed UnimplementedInstrumentsServer
 // for forward compatibility
 type InstrumentsServer interface {
-	// Public API
-	// Get Instrument properties
+	// Public API: Get Instrument properties
 	Get(context.Context, *InstrumentRequest) (*InstrumentReply, error)
-	// Private API
-	// Get Stats Instrument
+	// Private API: Get Stats Instrument
 	Stats(context.Context, *InstrumentRequest) (*InstrumentStatsReply, error)
-	// Public API
-	// Get Strategies Results Instrument
+	// Public API: Get Strategies Results Instrument
 	Strategies(context.Context, *InstrumentStrategiesRequest) (*v1.StrategiesReplies, error)
-	// Private API
-	// Search instruments, only for start imports
+	// Private API: Search instruments, only for start imports
 	Search(context.Context, *InstrumentSearchRequest) (*InstrumentReplies, error)
-	// Private API
-	// Create a new Instrument
-	Create(context.Context, *InstrumentCreateRequest) (*InstrumentReply, error)
-	// Private API
-	// Update properties of Instrument
-	Update(context.Context, *InstrumentUpdateRequest) (*InstrumentReply, error)
-	// Private API
-	// Delete Instrument
-	Delete(context.Context, *InstrumentDeleteRequest) (*InstrumentDelete, error)
 	mustEmbedUnimplementedInstrumentsServer()
 }
 
@@ -156,15 +103,6 @@ func (UnimplementedInstrumentsServer) Strategies(context.Context, *InstrumentStr
 }
 func (UnimplementedInstrumentsServer) Search(context.Context, *InstrumentSearchRequest) (*InstrumentReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedInstrumentsServer) Create(context.Context, *InstrumentCreateRequest) (*InstrumentReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedInstrumentsServer) Update(context.Context, *InstrumentUpdateRequest) (*InstrumentReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
-func (UnimplementedInstrumentsServer) Delete(context.Context, *InstrumentDeleteRequest) (*InstrumentDelete, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedInstrumentsServer) mustEmbedUnimplementedInstrumentsServer() {}
 
@@ -251,60 +189,6 @@ func _Instruments_Search_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Instruments_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstrumentCreateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InstrumentsServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/instruments.v1.instruments/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstrumentsServer).Create(ctx, req.(*InstrumentCreateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Instruments_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstrumentUpdateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InstrumentsServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/instruments.v1.instruments/Update",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstrumentsServer).Update(ctx, req.(*InstrumentUpdateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Instruments_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstrumentDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InstrumentsServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/instruments.v1.instruments/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InstrumentsServer).Delete(ctx, req.(*InstrumentDeleteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Instruments_ServiceDesc is the grpc.ServiceDesc for Instruments service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -327,18 +211,6 @@ var Instruments_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Instruments_Search_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Instruments_Create_Handler,
-		},
-		{
-			MethodName: "Update",
-			Handler:    _Instruments_Update_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Instruments_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

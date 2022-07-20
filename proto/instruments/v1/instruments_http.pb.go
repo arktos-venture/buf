@@ -19,13 +19,10 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type InstrumentsHTTPServer interface {
-	Create(context.Context, *InstrumentCreateRequest) (*InstrumentReply, error)
-	Delete(context.Context, *InstrumentDeleteRequest) (*InstrumentDelete, error)
 	Get(context.Context, *InstrumentRequest) (*InstrumentReply, error)
 	Search(context.Context, *InstrumentSearchRequest) (*InstrumentReplies, error)
 	Stats(context.Context, *InstrumentRequest) (*InstrumentStatsReply, error)
 	Strategies(context.Context, *InstrumentStrategiesRequest) (*v1.StrategiesReplies, error)
-	Update(context.Context, *InstrumentUpdateRequest) (*InstrumentReply, error)
 }
 
 func RegisterInstrumentsHTTPServer(s *http.Server, srv InstrumentsHTTPServer) {
@@ -34,9 +31,6 @@ func RegisterInstrumentsHTTPServer(s *http.Server, srv InstrumentsHTTPServer) {
 	r.GET("/v1/instrument/{id}/stats", _Instruments_Stats0_HTTP_Handler(srv))
 	r.GET("/v1/instrument/{id}/strategies", _Instruments_Strategies0_HTTP_Handler(srv))
 	r.POST("/v1/instruments/search", _Instruments_Search2_HTTP_Handler(srv))
-	r.POST("/v1/instruments", _Instruments_Create1_HTTP_Handler(srv))
-	r.PUT("/v1/instrument/{id}", _Instruments_Update1_HTTP_Handler(srv))
-	r.DELETE("/v1/instruments", _Instruments_Delete1_HTTP_Handler(srv))
 }
 
 func _Instruments_Get2_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
@@ -124,74 +118,11 @@ func _Instruments_Search2_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.
 	}
 }
 
-func _Instruments_Create1_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in InstrumentCreateRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/instruments.v1.instruments/Create")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Create(ctx, req.(*InstrumentCreateRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*InstrumentReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Instruments_Update1_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in InstrumentUpdateRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/instruments.v1.instruments/Update")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Update(ctx, req.(*InstrumentUpdateRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*InstrumentReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Instruments_Delete1_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in InstrumentDeleteRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/instruments.v1.instruments/Delete")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Delete(ctx, req.(*InstrumentDeleteRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*InstrumentDelete)
-		return ctx.Result(200, reply)
-	}
-}
-
 type InstrumentsHTTPClient interface {
-	Create(ctx context.Context, req *InstrumentCreateRequest, opts ...http.CallOption) (rsp *InstrumentReply, err error)
-	Delete(ctx context.Context, req *InstrumentDeleteRequest, opts ...http.CallOption) (rsp *InstrumentDelete, err error)
 	Get(ctx context.Context, req *InstrumentRequest, opts ...http.CallOption) (rsp *InstrumentReply, err error)
 	Search(ctx context.Context, req *InstrumentSearchRequest, opts ...http.CallOption) (rsp *InstrumentReplies, err error)
 	Stats(ctx context.Context, req *InstrumentRequest, opts ...http.CallOption) (rsp *InstrumentStatsReply, err error)
 	Strategies(ctx context.Context, req *InstrumentStrategiesRequest, opts ...http.CallOption) (rsp *v1.StrategiesReplies, err error)
-	Update(ctx context.Context, req *InstrumentUpdateRequest, opts ...http.CallOption) (rsp *InstrumentReply, err error)
 }
 
 type InstrumentsHTTPClientImpl struct {
@@ -200,32 +131,6 @@ type InstrumentsHTTPClientImpl struct {
 
 func NewInstrumentsHTTPClient(client *http.Client) InstrumentsHTTPClient {
 	return &InstrumentsHTTPClientImpl{client}
-}
-
-func (c *InstrumentsHTTPClientImpl) Create(ctx context.Context, in *InstrumentCreateRequest, opts ...http.CallOption) (*InstrumentReply, error) {
-	var out InstrumentReply
-	pattern := "/v1/instruments"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/instruments.v1.instruments/Create"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *InstrumentsHTTPClientImpl) Delete(ctx context.Context, in *InstrumentDeleteRequest, opts ...http.CallOption) (*InstrumentDelete, error) {
-	var out InstrumentDelete
-	pattern := "/v1/instruments"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/instruments.v1.instruments/Delete"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *InstrumentsHTTPClientImpl) Get(ctx context.Context, in *InstrumentRequest, opts ...http.CallOption) (*InstrumentReply, error) {
@@ -274,19 +179,6 @@ func (c *InstrumentsHTTPClientImpl) Strategies(ctx context.Context, in *Instrume
 	opts = append(opts, http.Operation("/instruments.v1.instruments/Strategies"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *InstrumentsHTTPClientImpl) Update(ctx context.Context, in *InstrumentUpdateRequest, opts ...http.CallOption) (*InstrumentReply, error) {
-	var out InstrumentReply
-	pattern := "/v1/instrument/{id}"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/instruments.v1.instruments/Update"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
