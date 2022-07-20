@@ -47,72 +47,6 @@
         "tags": [
           "Currencies"
         ]
-      },
-      "delete": {
-        "summary": "Private API\nDelete Currency \u0026 deps",
-        "operationId": "Currencies_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CurrencyDelete"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "tickers",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "Currencies"
-        ]
-      }
-    },
-    "/v1/currency": {
-      "post": {
-        "summary": "Private API\nCreate Currency",
-        "operationId": "Currencies_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CurrencyReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CurrencyRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Currencies"
-        ]
       }
     },
     "/v1/currency/{ticker}": {
@@ -148,6 +82,36 @@
     }
   },
   "definitions": {
+    "CentralBankBorrowingRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number",
+          "format": "float"
+        },
+        "since": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "CurrencyReplyCentralBank": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "borrowing_rate": {
+          "$ref": "#/definitions/CentralBankBorrowingRate"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -178,12 +142,20 @@
         }
       }
     },
-    "v1CurrencyDelete": {
+    "v1CountryRepliesResult": {
       "type": "object",
       "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
+        "name": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "continent": {
+          "type": "string"
+        },
+        "alpha2": {
+          "type": "string"
         }
       }
     },
@@ -208,19 +180,34 @@
         "ticker": {
           "type": "string"
         },
+        "central_bank": {
+          "$ref": "#/definitions/CurrencyReplyCentralBank"
+        },
+        "forexes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "exchanges": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1ExchangeRepliesResult"
           }
-        }
-      }
-    },
-    "v1CurrencyRequest": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1CountryRepliesResult"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

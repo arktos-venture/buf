@@ -147,140 +147,6 @@ var _ interface {
 	ErrorName() string
 } = CurrencyRequestValidationError{}
 
-// Validate checks the field values on CurrencyDeleteRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CurrencyDeleteRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CurrencyDeleteRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CurrencyDeleteRequestMultiError, or nil if none found.
-func (m *CurrencyDeleteRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CurrencyDeleteRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(m.GetTickers()) < 1 {
-		err := CurrencyDeleteRequestValidationError{
-			field:  "Tickers",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_CurrencyDeleteRequest_Tickers_Unique := make(map[string]struct{}, len(m.GetTickers()))
-
-	for idx, item := range m.GetTickers() {
-		_, _ = idx, item
-
-		if _, exists := _CurrencyDeleteRequest_Tickers_Unique[item]; exists {
-			err := CurrencyDeleteRequestValidationError{
-				field:  fmt.Sprintf("Tickers[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_CurrencyDeleteRequest_Tickers_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for Tickers[idx]
-	}
-
-	if len(errors) > 0 {
-		return CurrencyDeleteRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// CurrencyDeleteRequestMultiError is an error wrapping multiple validation
-// errors returned by CurrencyDeleteRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CurrencyDeleteRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyDeleteRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CurrencyDeleteRequestMultiError) AllErrors() []error { return m }
-
-// CurrencyDeleteRequestValidationError is the validation error returned by
-// CurrencyDeleteRequest.Validate if the designated constraints aren't met.
-type CurrencyDeleteRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CurrencyDeleteRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CurrencyDeleteRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CurrencyDeleteRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CurrencyDeleteRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CurrencyDeleteRequestValidationError) ErrorName() string {
-	return "CurrencyDeleteRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CurrencyDeleteRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCurrencyDeleteRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CurrencyDeleteRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CurrencyDeleteRequestValidationError{}
-
 // Validate checks the field values on CurrencyReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -304,6 +170,35 @@ func (m *CurrencyReply) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for Ticker
+
+	if all {
+		switch v := interface{}(m.GetCentralBank()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "CentralBank",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "CentralBank",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCentralBank()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CurrencyReplyValidationError{
+				field:  "CentralBank",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	for idx, item := range m.GetExchanges() {
 		_, _ = idx, item
@@ -337,6 +232,98 @@ func (m *CurrencyReply) validate(all bool) error {
 			}
 		}
 
+	}
+
+	for idx, item := range m.GetCountries() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CurrencyReplyValidationError{
+						field:  fmt.Sprintf("Countries[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CurrencyReplyValidationError{
+						field:  fmt.Sprintf("Countries[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CurrencyReplyValidationError{
+					field:  fmt.Sprintf("Countries[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CurrencyReplyValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CurrencyReplyValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CurrencyReplyValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -519,44 +506,77 @@ var _ interface {
 	ErrorName() string
 } = CurrencyRepliesValidationError{}
 
-// Validate checks the field values on CurrencyDelete with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *CurrencyDelete) Validate() error {
+// Validate checks the field values on CurrencyReply_CentralBank with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CurrencyReply_CentralBank) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CurrencyDelete with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in CurrencyDeleteMultiError,
-// or nil if none found.
-func (m *CurrencyDelete) ValidateAll() error {
+// ValidateAll checks the field values on CurrencyReply_CentralBank with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CurrencyReply_CentralBankMultiError, or nil if none found.
+func (m *CurrencyReply_CentralBank) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CurrencyDelete) validate(all bool) error {
+func (m *CurrencyReply_CentralBank) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Total
+	// no validation rules for Ticker
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	if all {
+		switch v := interface{}(m.GetBorrowingRate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CurrencyReply_CentralBankValidationError{
+					field:  "BorrowingRate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CurrencyReply_CentralBankValidationError{
+					field:  "BorrowingRate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBorrowingRate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CurrencyReply_CentralBankValidationError{
+				field:  "BorrowingRate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
-		return CurrencyDeleteMultiError(errors)
+		return CurrencyReply_CentralBankMultiError(errors)
 	}
 
 	return nil
 }
 
-// CurrencyDeleteMultiError is an error wrapping multiple validation errors
-// returned by CurrencyDelete.ValidateAll() if the designated constraints
-// aren't met.
-type CurrencyDeleteMultiError []error
+// CurrencyReply_CentralBankMultiError is an error wrapping multiple validation
+// errors returned by CurrencyReply_CentralBank.ValidateAll() if the
+// designated constraints aren't met.
+type CurrencyReply_CentralBankMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CurrencyDeleteMultiError) Error() string {
+func (m CurrencyReply_CentralBankMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -565,11 +585,11 @@ func (m CurrencyDeleteMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CurrencyDeleteMultiError) AllErrors() []error { return m }
+func (m CurrencyReply_CentralBankMultiError) AllErrors() []error { return m }
 
-// CurrencyDeleteValidationError is the validation error returned by
-// CurrencyDelete.Validate if the designated constraints aren't met.
-type CurrencyDeleteValidationError struct {
+// CurrencyReply_CentralBankValidationError is the validation error returned by
+// CurrencyReply_CentralBank.Validate if the designated constraints aren't met.
+type CurrencyReply_CentralBankValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -577,22 +597,24 @@ type CurrencyDeleteValidationError struct {
 }
 
 // Field function returns field value.
-func (e CurrencyDeleteValidationError) Field() string { return e.field }
+func (e CurrencyReply_CentralBankValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CurrencyDeleteValidationError) Reason() string { return e.reason }
+func (e CurrencyReply_CentralBankValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CurrencyDeleteValidationError) Cause() error { return e.cause }
+func (e CurrencyReply_CentralBankValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CurrencyDeleteValidationError) Key() bool { return e.key }
+func (e CurrencyReply_CentralBankValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CurrencyDeleteValidationError) ErrorName() string { return "CurrencyDeleteValidationError" }
+func (e CurrencyReply_CentralBankValidationError) ErrorName() string {
+	return "CurrencyReply_CentralBankValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e CurrencyDeleteValidationError) Error() string {
+func (e CurrencyReply_CentralBankValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -604,14 +626,14 @@ func (e CurrencyDeleteValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCurrencyDelete.%s: %s%s",
+		"invalid %sCurrencyReply_CentralBank.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CurrencyDeleteValidationError{}
+var _ error = CurrencyReply_CentralBankValidationError{}
 
 var _ interface {
 	Field() string
@@ -619,4 +641,141 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CurrencyDeleteValidationError{}
+} = CurrencyReply_CentralBankValidationError{}
+
+// Validate checks the field values on CurrencyReply_CentralBank_BorrowingRate
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CurrencyReply_CentralBank_BorrowingRate) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CurrencyReply_CentralBank_BorrowingRate with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// CurrencyReply_CentralBank_BorrowingRateMultiError, or nil if none found.
+func (m *CurrencyReply_CentralBank_BorrowingRate) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CurrencyReply_CentralBank_BorrowingRate) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Rate
+
+	if all {
+		switch v := interface{}(m.GetSince()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CurrencyReply_CentralBank_BorrowingRateValidationError{
+					field:  "Since",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CurrencyReply_CentralBank_BorrowingRateValidationError{
+					field:  "Since",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSince()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CurrencyReply_CentralBank_BorrowingRateValidationError{
+				field:  "Since",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CurrencyReply_CentralBank_BorrowingRateMultiError(errors)
+	}
+
+	return nil
+}
+
+// CurrencyReply_CentralBank_BorrowingRateMultiError is an error wrapping
+// multiple validation errors returned by
+// CurrencyReply_CentralBank_BorrowingRate.ValidateAll() if the designated
+// constraints aren't met.
+type CurrencyReply_CentralBank_BorrowingRateMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CurrencyReply_CentralBank_BorrowingRateMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CurrencyReply_CentralBank_BorrowingRateMultiError) AllErrors() []error { return m }
+
+// CurrencyReply_CentralBank_BorrowingRateValidationError is the validation
+// error returned by CurrencyReply_CentralBank_BorrowingRate.Validate if the
+// designated constraints aren't met.
+type CurrencyReply_CentralBank_BorrowingRateValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) ErrorName() string {
+	return "CurrencyReply_CentralBank_BorrowingRateValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CurrencyReply_CentralBank_BorrowingRateValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCurrencyReply_CentralBank_BorrowingRate.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CurrencyReply_CentralBank_BorrowingRateValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CurrencyReply_CentralBank_BorrowingRateValidationError{}
