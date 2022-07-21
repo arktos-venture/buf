@@ -28,9 +28,9 @@ type PortfoliosHTTPServer interface {
 func RegisterPortfoliosHTTPServer(s *http.Server, srv PortfoliosHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/portfolios/{account}/{currency}", _Portfolios_Get7_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}/{currency}/stats", _Portfolios_Stats3_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}/{currency}/strategies", _Portfolios_Strategies2_HTTP_Handler(srv))
-	r.GET("/v1/portfolios/{account}", _Portfolios_Search6_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}/stats", _Portfolios_Stats2_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}/{currency}/strategies", _Portfolios_Strategies1_HTTP_Handler(srv))
+	r.GET("/v1/portfolios/{account}", _Portfolios_Search5_HTTP_Handler(srv))
 }
 
 func _Portfolios_Get7_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
@@ -55,7 +55,7 @@ func _Portfolios_Get7_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _Portfolios_Stats3_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Stats2_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -77,7 +77,7 @@ func _Portfolios_Stats3_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Con
 	}
 }
 
-func _Portfolios_Strategies2_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Strategies1_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -99,7 +99,7 @@ func _Portfolios_Strategies2_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx htt
 	}
 }
 
-func _Portfolios_Search6_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
+func _Portfolios_Search5_HTTP_Handler(srv PortfoliosHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PortfolioSearchRequest
 		if err := ctx.BindQuery(&in); err != nil {

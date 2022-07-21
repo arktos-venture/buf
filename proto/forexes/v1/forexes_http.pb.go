@@ -28,8 +28,8 @@ type ForexesHTTPServer interface {
 func RegisterForexesHTTPServer(s *http.Server, srv ForexesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/forexes/{ticker}", _Forexes_Get8_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{ticker}/stats", _Forexes_Stats4_HTTP_Handler(srv))
-	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies3_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/stats", _Forexes_Stats3_HTTP_Handler(srv))
+	r.GET("/v1/forexes/{ticker}/strategies", _Forexes_Strategies2_HTTP_Handler(srv))
 	r.GET("/v1/forexes/{currency}/pairs", _Forexes_List3_HTTP_Handler(srv))
 }
 
@@ -55,7 +55,7 @@ func _Forexes_Get8_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _Forexes_Stats4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Stats3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -77,7 +77,7 @@ func _Forexes_Stats4_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _Forexes_Strategies3_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
+func _Forexes_Strategies2_HTTP_Handler(srv ForexesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ForexStrategiesRequest
 		if err := ctx.BindQuery(&in); err != nil {

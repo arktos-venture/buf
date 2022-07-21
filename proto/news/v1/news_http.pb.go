@@ -23,10 +23,10 @@ type NewsHTTPServer interface {
 
 func RegisterNewsHTTPServer(s *http.Server, srv NewsHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/news", _News_Search8_HTTP_Handler(srv))
+	r.POST("/v1/news", _News_Search9_HTTP_Handler(srv))
 }
 
-func _News_Search8_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
+func _News_Search9_HTTP_Handler(srv NewsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NewsRequest
 		if err := ctx.Bind(&in); err != nil {
