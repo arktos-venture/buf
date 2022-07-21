@@ -6,7 +6,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "proto/instruments/v1/instruments.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/indexes/v1;v1Indexes";
 option java_multiple_files = true;
@@ -15,7 +14,7 @@ option java_outer_classname = "APIIndexesProtoV1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
     title: "Indexes APIs";
-		description: "Indexes APIs";
+		description: "Indexes APIs to select companies with filters";
     version: "1.0";
 		contact: {
 			name: "Arktos Venture project";
@@ -46,24 +45,21 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 
 service Indexes {
-	// Public API
-	// Get Index properties
+	// Public API: Get Index properties
   rpc Get (IndexRequest) returns (IndexReply)  {
     option (google.api.http) = {
       get: "/v1/indexes/{ticker}"
     };
   }
 
-	// Public API
-	// Search Index companies
-  rpc Search (IndexSearchRequest) returns (IndexSearchReplies)  {
+	// Public API: Search Index companies
+  rpc Search (IndexSearchRequest) returns (IndexReplies)  {
     option (google.api.http) = {
       get: "/v1/indexes/{account}/search"
     };
   }
 
-	// Public API
-	// Create Index companies
+	// Public API: Create Index companies
   rpc Create (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       post: "/v1/indexes"
@@ -71,8 +67,7 @@ service Indexes {
     };
   }
 
-	// Public API
-	// Update Index companies
+	// Public API: Update Index companies
   rpc Update (IndexCreateRequest) returns (IndexReply)  {
     option (google.api.http) = {
       put: "/v1/indexes/{ticker}"
@@ -80,8 +75,7 @@ service Indexes {
     };
   }
 
-	// Public API
-	// Delete Index companies
+	// Public API: Delete Index companies
   rpc Delete (IndexDeleteRequest) returns (IndexDelete)  {
     option (google.api.http) = {
       delete: "/v1/indexes"
@@ -93,9 +87,9 @@ service Indexes {
 // Transverse
 // 
 
-message IndexSearch {
-  repeated string filters = 1;
-  repeated string sort = 2;
+message Filter {
+  repeated string where = 1 [(validate.rules).repeated.unique = true, (validate.rules).repeated.min_items = 1];
+  repeated string sort = 2 [(validate.rules).repeated.unique = true];
   int64 limit = 3;
 }
 
@@ -111,12 +105,13 @@ message IndexRequest {
 
 message IndexSearchRequest { 
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
+  bool public = 2;
 }
 
 message IndexCreateRequest {
   string account = 1 [(validate.rules).string = {min_len: 3, max_len: 36}];
   string ticker = 2 [(validate.rules).string = {min_len: 2, max_len: 36}];
-  IndexSearch request = 3;
+  Filter filters = 3 [(validate.rules).message.required = true];
   bool public = 4;
 }
 
@@ -132,25 +127,20 @@ message IndexDeleteRequest {
 message IndexReply {
   string ticker = 1;
   bool public = 2;
-  repeated instruments.v1.InstrumentReplies.Result companies = 3;
+  Filter filters = 3;
 	google.protobuf.Timestamp created_at = 4;
 	google.protobuf.Timestamp updated_at = 5;
 }
 
 message IndexReplies {
-  repeated IndexReply results = 1;
-  int64 total = 2;
-}
+  message Result {
+    string ticker = 1;
+    bool public = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4;
+  }
 
-message IndexSearchReply {
-  string ticker = 1;
-  bool public = 2;
-  google.protobuf.Timestamp created_at = 3;
-	google.protobuf.Timestamp updated_at = 4;
-}
-
-message IndexSearchReplies {
-  repeated IndexSearchReply results = 1;
+  repeated Result results = 1;
   int64 total = 2;
 }
 

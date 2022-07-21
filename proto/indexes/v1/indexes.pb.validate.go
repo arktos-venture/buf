@@ -35,43 +35,95 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on IndexSearch with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *IndexSearch) Validate() error {
+func (m *Filter) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on IndexSearch with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in IndexSearchMultiError, or
-// nil if none found.
-func (m *IndexSearch) ValidateAll() error {
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *IndexSearch) validate(all bool) error {
+func (m *Filter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	if len(m.GetWhere()) < 1 {
+		err := FilterValidationError{
+			field:  "Where",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	_Filter_Where_Unique := make(map[string]struct{}, len(m.GetWhere()))
+
+	for idx, item := range m.GetWhere() {
+		_, _ = idx, item
+
+		if _, exists := _Filter_Where_Unique[item]; exists {
+			err := FilterValidationError{
+				field:  fmt.Sprintf("Where[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_Filter_Where_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Where[idx]
+	}
+
+	_Filter_Sort_Unique := make(map[string]struct{}, len(m.GetSort()))
+
+	for idx, item := range m.GetSort() {
+		_, _ = idx, item
+
+		if _, exists := _Filter_Sort_Unique[item]; exists {
+			err := FilterValidationError{
+				field:  fmt.Sprintf("Sort[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_Filter_Sort_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Sort[idx]
+	}
+
 	// no validation rules for Limit
 
 	if len(errors) > 0 {
-		return IndexSearchMultiError(errors)
+		return FilterMultiError(errors)
 	}
 
 	return nil
 }
 
-// IndexSearchMultiError is an error wrapping multiple validation errors
-// returned by IndexSearch.ValidateAll() if the designated constraints aren't met.
-type IndexSearchMultiError []error
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m IndexSearchMultiError) Error() string {
+func (m FilterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -80,11 +132,11 @@ func (m IndexSearchMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m IndexSearchMultiError) AllErrors() []error { return m }
+func (m FilterMultiError) AllErrors() []error { return m }
 
-// IndexSearchValidationError is the validation error returned by
-// IndexSearch.Validate if the designated constraints aren't met.
-type IndexSearchValidationError struct {
+// FilterValidationError is the validation error returned by Filter.Validate if
+// the designated constraints aren't met.
+type FilterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -92,22 +144,22 @@ type IndexSearchValidationError struct {
 }
 
 // Field function returns field value.
-func (e IndexSearchValidationError) Field() string { return e.field }
+func (e FilterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IndexSearchValidationError) Reason() string { return e.reason }
+func (e FilterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IndexSearchValidationError) Cause() error { return e.cause }
+func (e FilterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IndexSearchValidationError) Key() bool { return e.key }
+func (e FilterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IndexSearchValidationError) ErrorName() string { return "IndexSearchValidationError" }
+func (e FilterValidationError) ErrorName() string { return "FilterValidationError" }
 
 // Error satisfies the builtin error interface
-func (e IndexSearchValidationError) Error() string {
+func (e FilterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -119,14 +171,14 @@ func (e IndexSearchValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIndexSearch.%s: %s%s",
+		"invalid %sFilter.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IndexSearchValidationError{}
+var _ error = FilterValidationError{}
 
 var _ interface {
 	Field() string
@@ -134,7 +186,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IndexSearchValidationError{}
+} = FilterValidationError{}
 
 // Validate checks the field values on IndexRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -290,6 +342,8 @@ func (m *IndexSearchRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Public
+
 	if len(errors) > 0 {
 		return IndexSearchRequestMultiError(errors)
 	}
@@ -414,12 +468,23 @@ func (m *IndexCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetFilters() == nil {
+		err := IndexCreateRequestValidationError{
+			field:  "Filters",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
-		switch v := interface{}(m.GetRequest()).(type) {
+		switch v := interface{}(m.GetFilters()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, IndexCreateRequestValidationError{
-					field:  "Request",
+					field:  "Filters",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -427,16 +492,16 @@ func (m *IndexCreateRequest) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, IndexCreateRequestValidationError{
-					field:  "Request",
+					field:  "Filters",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IndexCreateRequestValidationError{
-				field:  "Request",
+				field:  "Filters",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -685,38 +750,33 @@ func (m *IndexReply) validate(all bool) error {
 
 	// no validation rules for Public
 
-	for idx, item := range m.GetCompanies() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, IndexReplyValidationError{
-						field:  fmt.Sprintf("Companies[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, IndexReplyValidationError{
-						field:  fmt.Sprintf("Companies[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return IndexReplyValidationError{
-					field:  fmt.Sprintf("Companies[%v]", idx),
+	if all {
+		switch v := interface{}(m.GetFilters()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReplyValidationError{
+					field:  "Filters",
 					reason: "embedded message failed validation",
 					cause:  err,
-				}
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReplyValidationError{
+					field:  "Filters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
 			}
 		}
-
+	} else if v, ok := interface{}(m.GetFilters()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReplyValidationError{
+				field:  "Filters",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if all {
@@ -989,306 +1049,6 @@ var _ interface {
 	ErrorName() string
 } = IndexRepliesValidationError{}
 
-// Validate checks the field values on IndexSearchReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *IndexSearchReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IndexSearchReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IndexSearchReplyMultiError, or nil if none found.
-func (m *IndexSearchReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IndexSearchReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Ticker
-
-	// no validation rules for Public
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, IndexSearchReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, IndexSearchReplyValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return IndexSearchReplyValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetUpdatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, IndexSearchReplyValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, IndexSearchReplyValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return IndexSearchReplyValidationError{
-				field:  "UpdatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return IndexSearchReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// IndexSearchReplyMultiError is an error wrapping multiple validation errors
-// returned by IndexSearchReply.ValidateAll() if the designated constraints
-// aren't met.
-type IndexSearchReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IndexSearchReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IndexSearchReplyMultiError) AllErrors() []error { return m }
-
-// IndexSearchReplyValidationError is the validation error returned by
-// IndexSearchReply.Validate if the designated constraints aren't met.
-type IndexSearchReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e IndexSearchReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e IndexSearchReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e IndexSearchReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e IndexSearchReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e IndexSearchReplyValidationError) ErrorName() string { return "IndexSearchReplyValidationError" }
-
-// Error satisfies the builtin error interface
-func (e IndexSearchReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sIndexSearchReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = IndexSearchReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = IndexSearchReplyValidationError{}
-
-// Validate checks the field values on IndexSearchReplies with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *IndexSearchReplies) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IndexSearchReplies with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IndexSearchRepliesMultiError, or nil if none found.
-func (m *IndexSearchReplies) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IndexSearchReplies) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	for idx, item := range m.GetResults() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, IndexSearchRepliesValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, IndexSearchRepliesValidationError{
-						field:  fmt.Sprintf("Results[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return IndexSearchRepliesValidationError{
-					field:  fmt.Sprintf("Results[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	// no validation rules for Total
-
-	if len(errors) > 0 {
-		return IndexSearchRepliesMultiError(errors)
-	}
-
-	return nil
-}
-
-// IndexSearchRepliesMultiError is an error wrapping multiple validation errors
-// returned by IndexSearchReplies.ValidateAll() if the designated constraints
-// aren't met.
-type IndexSearchRepliesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IndexSearchRepliesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IndexSearchRepliesMultiError) AllErrors() []error { return m }
-
-// IndexSearchRepliesValidationError is the validation error returned by
-// IndexSearchReplies.Validate if the designated constraints aren't met.
-type IndexSearchRepliesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e IndexSearchRepliesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e IndexSearchRepliesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e IndexSearchRepliesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e IndexSearchRepliesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e IndexSearchRepliesValidationError) ErrorName() string {
-	return "IndexSearchRepliesValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e IndexSearchRepliesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sIndexSearchReplies.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = IndexSearchRepliesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = IndexSearchRepliesValidationError{}
-
 // Validate checks the field values on IndexDelete with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1389,3 +1149,167 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IndexDeleteValidationError{}
+
+// Validate checks the field values on IndexReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *IndexReplies_Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexReplies_Result with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexReplies_ResultMultiError, or nil if none found.
+func (m *IndexReplies_Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexReplies_Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticker
+
+	// no validation rules for Public
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReplies_ResultValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReplies_ResultValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexReplies_ResultValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IndexReplies_ResultValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return IndexReplies_ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// IndexReplies_ResultMultiError is an error wrapping multiple validation
+// errors returned by IndexReplies_Result.ValidateAll() if the designated
+// constraints aren't met.
+type IndexReplies_ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexReplies_ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexReplies_ResultMultiError) AllErrors() []error { return m }
+
+// IndexReplies_ResultValidationError is the validation error returned by
+// IndexReplies_Result.Validate if the designated constraints aren't met.
+type IndexReplies_ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IndexReplies_ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IndexReplies_ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IndexReplies_ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IndexReplies_ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IndexReplies_ResultValidationError) ErrorName() string {
+	return "IndexReplies_ResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IndexReplies_ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIndexReplies_Result.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IndexReplies_ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IndexReplies_ResultValidationError{}

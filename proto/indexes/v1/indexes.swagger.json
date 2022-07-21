@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Indexes APIs",
-    "description": "Indexes APIs",
+    "description": "Indexes APIs to select companies with filters",
     "version": "1.0",
     "contact": {
       "name": "Arktos Venture project",
@@ -28,7 +28,7 @@
   "paths": {
     "/v1/indexes": {
       "delete": {
-        "summary": "Public API\nDelete Index companies",
+        "summary": "Public API: Delete Index companies",
         "operationId": "Indexes_Delete",
         "responses": {
           "200": {
@@ -61,7 +61,7 @@
         ]
       },
       "post": {
-        "summary": "Public API\nCreate Index companies",
+        "summary": "Public API: Create Index companies",
         "operationId": "Indexes_Create",
         "responses": {
           "200": {
@@ -94,13 +94,13 @@
     },
     "/v1/indexes/{account}/search": {
       "get": {
-        "summary": "Public API\nSearch Index companies",
+        "summary": "Public API: Search Index companies",
         "operationId": "Indexes_Search",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1IndexSearchReplies"
+              "$ref": "#/definitions/v1IndexReplies"
             }
           },
           "default": {
@@ -116,6 +116,12 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "public",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -125,7 +131,7 @@
     },
     "/v1/indexes/{ticker}": {
       "get": {
-        "summary": "Public API\nGet Index properties",
+        "summary": "Public API: Get Index properties",
         "operationId": "Indexes_Get",
         "responses": {
           "200": {
@@ -160,7 +166,7 @@
         ]
       },
       "put": {
-        "summary": "Public API\nUpdate Index companies",
+        "summary": "Public API: Update Index companies",
         "operationId": "Indexes_Update",
         "responses": {
           "200": {
@@ -193,8 +199,8 @@
                 "account": {
                   "type": "string"
                 },
-                "request": {
-                  "$ref": "#/definitions/v1IndexSearch"
+                "filters": {
+                  "$ref": "#/definitions/indexesv1Filter"
                 },
                 "public": {
                   "type": "boolean"
@@ -228,88 +234,10 @@
         }
       }
     },
-    "protobufAny": {
+    "indexesv1Filter": {
       "type": "object",
       "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "v1Asset": {
-      "type": "string",
-      "enum": [
-        "INDEX",
-        "BOND",
-        "INDICATOR",
-        "COMMODITY",
-        "STOCK",
-        "OPTION",
-        "CASH",
-        "ETF",
-        "FUTURE"
-      ],
-      "default": "INDEX"
-    },
-    "v1IndexCreateRequest": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "request": {
-          "$ref": "#/definitions/v1IndexSearch"
-        },
-        "public": {
-          "type": "boolean"
-        }
-      }
-    },
-    "v1IndexDelete": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1IndexReply": {
-      "type": "object",
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "public": {
-          "type": "boolean"
-        },
-        "companies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1InstrumentRepliesResult"
-          }
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "v1IndexSearch": {
-      "type": "object",
-      "properties": {
-        "filters": {
+        "where": {
           "type": "array",
           "items": {
             "type": "string"
@@ -327,13 +255,51 @@
         }
       }
     },
-    "v1IndexSearchReplies": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "v1IndexCreateRequest": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "ticker": {
+          "type": "string"
+        },
+        "filters": {
+          "$ref": "#/definitions/indexesv1Filter"
+        },
+        "public": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1IndexDelete": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1IndexReplies": {
       "type": "object",
       "properties": {
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1IndexSearchReply"
+            "$ref": "#/definitions/v1IndexRepliesResult"
           }
         },
         "total": {
@@ -342,7 +308,7 @@
         }
       }
     },
-    "v1IndexSearchReply": {
+    "v1IndexRepliesResult": {
       "type": "object",
       "properties": {
         "ticker": {
@@ -361,30 +327,17 @@
         }
       }
     },
-    "v1InstrumentRepliesResult": {
+    "v1IndexReply": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
         "ticker": {
           "type": "string"
         },
-        "ticker_alternative": {
-          "type": "string"
+        "public": {
+          "type": "boolean"
         },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "asset": {
-          "$ref": "#/definitions/v1Asset"
+        "filters": {
+          "$ref": "#/definitions/indexesv1Filter"
         },
         "created_at": {
           "type": "string",

@@ -18,20 +18,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IndexesClient interface {
-	// Public API
-	// Get Index properties
+	// Public API: Get Index properties
 	Get(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexReply, error)
-	// Public API
-	// Search Index companies
-	Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexSearchReplies, error)
-	// Public API
-	// Create Index companies
+	// Public API: Search Index companies
+	Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexReplies, error)
+	// Public API: Create Index companies
 	Create(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
-	// Public API
-	// Update Index companies
+	// Public API: Update Index companies
 	Update(ctx context.Context, in *IndexCreateRequest, opts ...grpc.CallOption) (*IndexReply, error)
-	// Public API
-	// Delete Index companies
+	// Public API: Delete Index companies
 	Delete(ctx context.Context, in *IndexDeleteRequest, opts ...grpc.CallOption) (*IndexDelete, error)
 }
 
@@ -52,8 +47,8 @@ func (c *indexesClient) Get(ctx context.Context, in *IndexRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *indexesClient) Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexSearchReplies, error) {
-	out := new(IndexSearchReplies)
+func (c *indexesClient) Search(ctx context.Context, in *IndexSearchRequest, opts ...grpc.CallOption) (*IndexReplies, error) {
+	out := new(IndexReplies)
 	err := c.cc.Invoke(ctx, "/indexes.v1.Indexes/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -92,20 +87,15 @@ func (c *indexesClient) Delete(ctx context.Context, in *IndexDeleteRequest, opts
 // All implementations must embed UnimplementedIndexesServer
 // for forward compatibility
 type IndexesServer interface {
-	// Public API
-	// Get Index properties
+	// Public API: Get Index properties
 	Get(context.Context, *IndexRequest) (*IndexReply, error)
-	// Public API
-	// Search Index companies
-	Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error)
-	// Public API
-	// Create Index companies
+	// Public API: Search Index companies
+	Search(context.Context, *IndexSearchRequest) (*IndexReplies, error)
+	// Public API: Create Index companies
 	Create(context.Context, *IndexCreateRequest) (*IndexReply, error)
-	// Public API
-	// Update Index companies
+	// Public API: Update Index companies
 	Update(context.Context, *IndexCreateRequest) (*IndexReply, error)
-	// Public API
-	// Delete Index companies
+	// Public API: Delete Index companies
 	Delete(context.Context, *IndexDeleteRequest) (*IndexDelete, error)
 	mustEmbedUnimplementedIndexesServer()
 }
@@ -117,7 +107,7 @@ type UnimplementedIndexesServer struct {
 func (UnimplementedIndexesServer) Get(context.Context, *IndexRequest) (*IndexReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedIndexesServer) Search(context.Context, *IndexSearchRequest) (*IndexSearchReplies, error) {
+func (UnimplementedIndexesServer) Search(context.Context, *IndexSearchRequest) (*IndexReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedIndexesServer) Create(context.Context, *IndexCreateRequest) (*IndexReply, error) {

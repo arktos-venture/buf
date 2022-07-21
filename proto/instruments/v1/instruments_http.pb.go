@@ -27,13 +27,13 @@ type InstrumentsHTTPServer interface {
 
 func RegisterInstrumentsHTTPServer(s *http.Server, srv InstrumentsHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/instrument/{id}", _Instruments_Get2_HTTP_Handler(srv))
-	r.GET("/v1/instrument/{id}/stats", _Instruments_Stats0_HTTP_Handler(srv))
-	r.GET("/v1/instrument/{id}/strategies", _Instruments_Strategies0_HTTP_Handler(srv))
-	r.POST("/v1/instruments/search", _Instruments_Search2_HTTP_Handler(srv))
+	r.GET("/v1/instrument/{id}", _Instruments_Get9_HTTP_Handler(srv))
+	r.GET("/v1/instrument/{id}/stats", _Instruments_Stats4_HTTP_Handler(srv))
+	r.GET("/v1/instrument/{id}/strategies", _Instruments_Strategies3_HTTP_Handler(srv))
+	r.POST("/v1/instruments/search", _Instruments_Search8_HTTP_Handler(srv))
 }
 
-func _Instruments_Get2_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
+func _Instruments_Get9_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in InstrumentRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -55,7 +55,7 @@ func _Instruments_Get2_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Con
 	}
 }
 
-func _Instruments_Stats0_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
+func _Instruments_Stats4_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in InstrumentRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -77,7 +77,7 @@ func _Instruments_Stats0_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.C
 	}
 }
 
-func _Instruments_Strategies0_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
+func _Instruments_Strategies3_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in InstrumentStrategiesRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -99,7 +99,7 @@ func _Instruments_Strategies0_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx h
 	}
 }
 
-func _Instruments_Search2_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
+func _Instruments_Search8_HTTP_Handler(srv InstrumentsHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in InstrumentSearchRequest
 		if err := ctx.Bind(&in); err != nil {

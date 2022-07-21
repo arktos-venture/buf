@@ -374,6 +374,23 @@
         }
       }
     },
+    "screenerv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "v1Argument": {
       "type": "string",
       "enum": [
@@ -425,23 +442,6 @@
         "FUTURE"
       ],
       "default": "INDEX"
-    },
-    "v1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/v1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "v1InstrumentReplies": {
       "type": "object",
@@ -586,7 +586,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1Filter"
+            "$ref": "#/definitions/screenerv1Filter"
           }
         },
         "sort": {

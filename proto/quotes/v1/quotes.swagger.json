@@ -181,7 +181,24 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1Filter"
+            "$ref": "#/definitions/screenerv1Filter"
+          }
+        }
+      }
+    },
+    "screenerv1Filter": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "$ref": "#/definitions/v1Operator"
+        },
+        "argument": {
+          "$ref": "#/definitions/v1Argument"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -222,23 +239,6 @@
         "Assets"
       ],
       "default": "Ticker"
-    },
-    "v1Filter": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "$ref": "#/definitions/v1Operator"
-        },
-        "argument": {
-          "$ref": "#/definitions/v1Argument"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "v1Interval": {
       "type": "string",

@@ -25,7 +25,7 @@ type QuotesHTTPServer interface {
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/quote/{id}/last", _Quotes_Last1_HTTP_Handler(srv))
-	r.POST("/v1/quotes", _Quotes_Search1_HTTP_Handler(srv))
+	r.POST("/v1/quotes", _Quotes_Search7_HTTP_Handler(srv))
 }
 
 func _Quotes_Last1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
@@ -50,7 +50,7 @@ func _Quotes_Last1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _Quotes_Search1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
+func _Quotes_Search7_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in QuoteSearchRequest
 		if err := ctx.Bind(&in); err != nil {
