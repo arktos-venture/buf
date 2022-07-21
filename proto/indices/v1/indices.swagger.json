@@ -218,6 +218,27 @@
         }
       }
     },
+    "indexesv1Filter": {
+      "type": "object",
+      "properties": {
+        "where": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -324,11 +345,8 @@
         "stats": {
           "$ref": "#/definitions/v1IndiceStatsReply"
         },
-        "companies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1InstrumentRepliesResult"
-          }
+        "filters": {
+          "$ref": "#/definitions/indexesv1Filter"
         },
         "created_at": {
           "type": "string",
@@ -402,41 +420,6 @@
         "avg_90d": {
           "type": "string",
           "format": "int64"
-        }
-      }
-    },
-    "v1InstrumentRepliesResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "ticker": {
-          "type": "string"
-        },
-        "ticker_alternative": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "exchange": {
-          "type": "string"
-        },
-        "isin": {
-          "type": "string"
-        },
-        "asset": {
-          "$ref": "#/definitions/v1Asset"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time"
         }
       }
     },
