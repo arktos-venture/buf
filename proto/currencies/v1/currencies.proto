@@ -84,19 +84,17 @@ message CurrencyReply {
 			google.protobuf.Timestamp since = 2;
 		}
 
-		string ticker = 1;
-		string name = 2;
-		string description = 3;
-		BorrowingRate borrowing_rate = 4;
+		string name = 1;
+		string description = 2;
+		BorrowingRate borrowing_rate = 3;
 	}
 
 	string ticker = 1;
 	CentralBank central_bank = 2;
-	repeated string forexes = 3;
-	repeated exchanges.v1.ExchangeReplies.Result exchanges = 4;
-	repeated countries.v1.CountryReplies.Result countries = 5;
-	google.protobuf.Timestamp created_at = 6;
-	google.protobuf.Timestamp updated_at = 7;
+	repeated exchanges.v1.ExchangeReplies.Result exchanges = 3;
+	repeated countries.v1.CountryReplies.Result countries = 4;
+	google.protobuf.Timestamp created_at = 5;
+	google.protobuf.Timestamp updated_at = 6;
 }
 
 message CurrencyReplies {

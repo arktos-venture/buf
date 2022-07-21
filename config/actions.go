@@ -24,33 +24,33 @@ func LogFlagParse(name string, c *Logger) hclog.Logger {
 	})
 }
 
-func (cfg *Bootstrap) CheckConfig(logger hclog.Logger, data []Service, services, envs []string) {
+func (cfg *Data) CheckConfig(logger hclog.Logger, data []Service, services, envs []string) {
 	var log hclog.Logger = logger.Named("CheckConfig")
 
 	for _, s := range data {
 		switch s {
 		case Service_PostgreSQL:
-			if cfg.GetData().GetPostgres() == nil {
+			if cfg.GetPostgres() == nil {
 				log.Error("failed to read postgres config")
 				os.Exit(1)
 			}
 		case Service_Redis:
-			if cfg.GetData().GetRedis() == nil {
+			if cfg.GetRedis() == nil {
 				log.Error("failed to read redis config")
 				os.Exit(1)
 			}
 		case Service_Nats:
-			if cfg.GetData().GetNats() == nil {
+			if cfg.GetNats() == nil {
 				log.Error("failed to read nats config")
 				os.Exit(1)
 			}
 		case Service_Meilisearch:
-			if cfg.GetData().GetMeilisearch() == nil {
-				log.Error("failed to read keycloak config")
+			if cfg.GetMeilisearch() == nil {
+				log.Error("failed to read meilisearch config")
 				os.Exit(1)
 			}
 		case Service_Keycloak:
-			if cfg.GetData().GetKeycloak() == nil {
+			if cfg.GetKeycloak() == nil {
 				log.Error("failed to read keycloak config")
 				os.Exit(1)
 			}
@@ -60,7 +60,7 @@ func (cfg *Bootstrap) CheckConfig(logger hclog.Logger, data []Service, services,
 	// Check Mandatory services
 	if services != nil {
 		for _, c := range services {
-			if _, ok := cfg.GetData().GetServices()[c]; !ok {
+			if _, ok := cfg.GetServices()[c]; !ok {
 				log.With("config", c).Error("missing config to start, exit")
 				os.Exit(1)
 			}

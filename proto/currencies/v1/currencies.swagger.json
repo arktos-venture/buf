@@ -98,9 +98,6 @@
     "CurrencyReplyCentralBank": {
       "type": "object",
       "properties": {
-        "ticker": {
-          "type": "string"
-        },
         "name": {
           "type": "string"
         },
@@ -182,12 +179,6 @@
         },
         "central_bank": {
           "$ref": "#/definitions/CurrencyReplyCentralBank"
-        },
-        "forexes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "exchanges": {
           "type": "array",
