@@ -197,7 +197,7 @@ service Indicators {
 // 
 
 message IndicatorRequest {
-  quotes.v1.QuoteReply quotes = 1 [(validate.rules).message.required = true];
+  repeated quotes.v1.QuoteReply quotes = 1 [(validate.rules).repeated.min_items = 3];
   map<string, float> parameters = 2 [(validate.rules).map.min_pairs = 1];
 }
 

@@ -100,12 +100,13 @@ message PortfolioSearchRequest {
 
 message PortfolioReply {
   	string currency = 1;
-  	repeated screener.v1.Asset allowed_assets = 2;
-  	repeated exchanges.v1.ExchangeReplies.Result exchanges = 3;
-  	repeated orders.v1.PositionReplies.Result positions = 4;
-  	repeated orders.v1.OrderReply orders = 5;
-  	google.protobuf.Timestamp created_at = 6; 
-  	google.protobuf.Timestamp updated_at = 7; 
+	float size = 2;
+  	repeated screener.v1.Asset allowed_assets = 3;
+  	repeated exchanges.v1.ExchangeReplies.Result exchanges = 4;
+  	repeated orders.v1.PositionReplies.Result positions = 5;
+  	repeated orders.v1.OrderReply orders = 6;
+  	google.protobuf.Timestamp created_at = 7; 
+  	google.protobuf.Timestamp updated_at = 8; 
 }
 
 message PortfolioStatsReply {
@@ -133,9 +134,10 @@ message PortfolioStatsReply {
 message PortfolioReplies {
 	message Result {
 		string currency = 1;
-		repeated screener.v1.Asset allowed_assets = 2;
-		google.protobuf.Timestamp created_at = 3;
-		google.protobuf.Timestamp updated_at = 4; 
+		float size = 2;
+		repeated screener.v1.Asset allowed_assets = 3;
+		google.protobuf.Timestamp created_at = 4;
+		google.protobuf.Timestamp updated_at = 5; 
 	}
 
 	repeated Result results = 1;

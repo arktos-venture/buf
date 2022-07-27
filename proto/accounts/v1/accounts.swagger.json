@@ -193,6 +193,10 @@
         "currency": {
           "type": "string"
         },
+        "size": {
+          "type": "number",
+          "format": "float"
+        },
         "allowed_assets": {
           "type": "array",
           "items": {
