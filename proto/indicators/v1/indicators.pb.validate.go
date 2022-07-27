@@ -57,10 +57,10 @@ func (m *IndicatorRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.GetQuotes() == nil {
+	if len(m.GetQuotes()) < 3 {
 		err := IndicatorRequestValidationError{
 			field:  "Quotes",
-			reason: "value is required",
+			reason: "value must contain at least 3 item(s)",
 		}
 		if !all {
 			return err
@@ -68,33 +68,38 @@ func (m *IndicatorRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetQuotes()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, IndicatorRequestValidationError{
-					field:  "Quotes",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetQuotes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, IndicatorRequestValidationError{
+						field:  fmt.Sprintf("Quotes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, IndicatorRequestValidationError{
+						field:  fmt.Sprintf("Quotes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, IndicatorRequestValidationError{
-					field:  "Quotes",
+				return IndicatorRequestValidationError{
+					field:  fmt.Sprintf("Quotes[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetQuotes()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return IndicatorRequestValidationError{
-				field:  "Quotes",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(m.GetParameters()) < 1 {
