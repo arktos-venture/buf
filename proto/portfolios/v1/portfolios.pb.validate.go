@@ -320,6 +320,8 @@ func (m *PortfolioReply) validate(all bool) error {
 
 	// no validation rules for Currency
 
+	// no validation rules for Size
+
 	for idx, item := range m.GetExchanges() {
 		_, _ = idx, item
 
@@ -1157,6 +1159,8 @@ func (m *PortfolioReplies_Result) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for Currency
+
+	// no validation rules for Size
 
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
