@@ -253,35 +253,6 @@
         }
       }
     },
-    "quotesv1QuoteReply": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "string",
-          "format": "int64"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "v1CountryRepliesResult": {
       "type": "object",
       "properties": {
@@ -369,7 +340,7 @@
           "type": "string"
         },
         "quote": {
-          "$ref": "#/definitions/quotesv1QuoteReply"
+          "$ref": "#/definitions/v1QuoteReply"
         },
         "stats": {
           "$ref": "#/definitions/v1ForexStatsReply"
@@ -470,6 +441,35 @@
         "HOLD"
       ],
       "default": "BUY"
+    },
+    "v1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "v1StrategiesReplies": {
       "type": "object",

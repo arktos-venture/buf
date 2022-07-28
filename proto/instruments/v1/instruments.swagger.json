@@ -333,35 +333,6 @@
         }
       }
     },
-    "instruments_quotesv1QuoteReply": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "string",
-          "format": "int64"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -531,7 +502,7 @@
           }
         },
         "quote": {
-          "$ref": "#/definitions/instruments_quotesv1QuoteReply"
+          "$ref": "#/definitions/v1QuoteReply"
         },
         "dividends": {
           "$ref": "#/definitions/InstrumentReplyDividend"
@@ -693,6 +664,35 @@
         "HOLD"
       ],
       "default": "BUY"
+    },
+    "v1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "v1StrategiesReplies": {
       "type": "object",
