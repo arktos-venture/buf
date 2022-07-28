@@ -3,11 +3,11 @@ syntax = "proto3";
 package instruments_quotes.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 import "proto/screener/v1/screener.proto";
+import "proto/quotes/v1/quotes.proto";
 
 option go_package = "github.com/arktos-venture/buf/proto/instruments-quotes/v1;v1InstrumentsQuotes";
 option java_multiple_files = true;
@@ -48,7 +48,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service quotes {
 	// Public API
 	// Get last Quotes Instrument
-	rpc Last (QuoteRequest) returns (QuoteReply) {
+	rpc Last (QuoteRequest) returns (.quotes.v1.QuoteReply) {
 		option (google.api.http) = {
 			get: "/v1/quote/{id}/last"
 	  	};
@@ -56,7 +56,7 @@ service quotes {
 
 	// Public API
 	// Get Quotes Instrument
-	rpc Search (QuoteSearchRequest) returns (QuoteReplies) {
+	rpc Search (QuoteSearchRequest) returns (.quotes.v1.QuoteReplies) {
 		option (google.api.http) = {
 			post: "/v1/quotes"
 			body: "*"
@@ -75,22 +75,4 @@ message QuoteRequest {
 message QuoteSearchRequest {
 	screener.v1.Interval interval = 1 [(validate.rules).enum = {defined_only: true}];
 	repeated screener.v1.Filter filters = 2 [(validate.rules).repeated.min_items = 1, (validate.rules).repeated.max_items = 20];
-}
-
-// 
-// Reply
-// 
-
-message QuoteReply {
-	float open = 1;
-	float close = 2;
-	float low = 3;
-	float high = 4;
-	int64 volume = 5;
-	google.protobuf.Timestamp created_at = 6;
-}
-
-message QuoteReplies {
-	repeated QuoteReply results = 1;
-	int64 total = 2;
 }

@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-import "proto/instruments-quotes/v1/instruments-quotes.proto";
+import "proto/quotes/v1/quotes.proto";
 import "proto/screener/v1/screener.proto";
 import "proto/strategies/v1/strategies.proto";
 
@@ -152,7 +152,7 @@ message InstrumentReply {
 	string isin = 8;
 	bool adr = 9;
 	map<int64, string> activity = 10;
-	instruments_quotes.v1.QuoteReply quote = 11;
+	quotes.v1.QuoteReply quote = 11;
 	Dividend dividends = 12;
 	Stats stats = 13;
 	int32 employees = 14;

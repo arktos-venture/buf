@@ -6,6 +6,7 @@ package v1InstrumentsQuotes
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/quotes/v1"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -18,8 +19,8 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 type QuotesHTTPServer interface {
-	Last(context.Context, *QuoteRequest) (*QuoteReply, error)
-	Search(context.Context, *QuoteSearchRequest) (*QuoteReplies, error)
+	Last(context.Context, *QuoteRequest) (*v1.QuoteReply, error)
+	Search(context.Context, *QuoteSearchRequest) (*v1.QuoteReplies, error)
 }
 
 func RegisterQuotesHTTPServer(s *http.Server, srv QuotesHTTPServer) {
@@ -45,7 +46,7 @@ func _Quotes_Last1_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) err
 		if err != nil {
 			return err
 		}
-		reply := out.(*QuoteReply)
+		reply := out.(*v1.QuoteReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -64,14 +65,14 @@ func _Quotes_Search7_HTTP_Handler(srv QuotesHTTPServer) func(ctx http.Context) e
 		if err != nil {
 			return err
 		}
-		reply := out.(*QuoteReplies)
+		reply := out.(*v1.QuoteReplies)
 		return ctx.Result(200, reply)
 	}
 }
 
 type QuotesHTTPClient interface {
-	Last(ctx context.Context, req *QuoteRequest, opts ...http.CallOption) (rsp *QuoteReply, err error)
-	Search(ctx context.Context, req *QuoteSearchRequest, opts ...http.CallOption) (rsp *QuoteReplies, err error)
+	Last(ctx context.Context, req *QuoteRequest, opts ...http.CallOption) (rsp *v1.QuoteReply, err error)
+	Search(ctx context.Context, req *QuoteSearchRequest, opts ...http.CallOption) (rsp *v1.QuoteReplies, err error)
 }
 
 type QuotesHTTPClientImpl struct {
@@ -82,8 +83,8 @@ func NewQuotesHTTPClient(client *http.Client) QuotesHTTPClient {
 	return &QuotesHTTPClientImpl{client}
 }
 
-func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuoteRequest, opts ...http.CallOption) (*QuoteReply, error) {
-	var out QuoteReply
+func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuoteRequest, opts ...http.CallOption) (*v1.QuoteReply, error) {
+	var out v1.QuoteReply
 	pattern := "/v1/quote/{id}/last"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/instruments_quotes.v1.quotes/Last"))
@@ -95,8 +96,8 @@ func (c *QuotesHTTPClientImpl) Last(ctx context.Context, in *QuoteRequest, opts 
 	return &out, err
 }
 
-func (c *QuotesHTTPClientImpl) Search(ctx context.Context, in *QuoteSearchRequest, opts ...http.CallOption) (*QuoteReplies, error) {
-	var out QuoteReplies
+func (c *QuotesHTTPClientImpl) Search(ctx context.Context, in *QuoteSearchRequest, opts ...http.CallOption) (*v1.QuoteReplies, error) {
+	var out v1.QuoteReplies
 	pattern := "/v1/quotes"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/instruments_quotes.v1.quotes/Search"))

@@ -4,6 +4,7 @@ package v1InstrumentsQuotes
 
 import (
 	context "context"
+	v1 "github.com/arktos-venture/buf/proto/quotes/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,10 +21,10 @@ const _ = grpc.SupportPackageIsVersion7
 type QuotesClient interface {
 	// Public API
 	// Get last Quotes Instrument
-	Last(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error)
+	Last(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Instrument
-	Search(ctx context.Context, in *QuoteSearchRequest, opts ...grpc.CallOption) (*QuoteReplies, error)
+	Search(ctx context.Context, in *QuoteSearchRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error)
 }
 
 type quotesClient struct {
@@ -34,8 +35,8 @@ func NewQuotesClient(cc grpc.ClientConnInterface) QuotesClient {
 	return &quotesClient{cc}
 }
 
-func (c *quotesClient) Last(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*QuoteReply, error) {
-	out := new(QuoteReply)
+func (c *quotesClient) Last(ctx context.Context, in *QuoteRequest, opts ...grpc.CallOption) (*v1.QuoteReply, error) {
+	out := new(v1.QuoteReply)
 	err := c.cc.Invoke(ctx, "/instruments_quotes.v1.quotes/Last", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -43,8 +44,8 @@ func (c *quotesClient) Last(ctx context.Context, in *QuoteRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *quotesClient) Search(ctx context.Context, in *QuoteSearchRequest, opts ...grpc.CallOption) (*QuoteReplies, error) {
-	out := new(QuoteReplies)
+func (c *quotesClient) Search(ctx context.Context, in *QuoteSearchRequest, opts ...grpc.CallOption) (*v1.QuoteReplies, error) {
+	out := new(v1.QuoteReplies)
 	err := c.cc.Invoke(ctx, "/instruments_quotes.v1.quotes/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -58,10 +59,10 @@ func (c *quotesClient) Search(ctx context.Context, in *QuoteSearchRequest, opts 
 type QuotesServer interface {
 	// Public API
 	// Get last Quotes Instrument
-	Last(context.Context, *QuoteRequest) (*QuoteReply, error)
+	Last(context.Context, *QuoteRequest) (*v1.QuoteReply, error)
 	// Public API
 	// Get Quotes Instrument
-	Search(context.Context, *QuoteSearchRequest) (*QuoteReplies, error)
+	Search(context.Context, *QuoteSearchRequest) (*v1.QuoteReplies, error)
 	mustEmbedUnimplementedQuotesServer()
 }
 
@@ -69,10 +70,10 @@ type QuotesServer interface {
 type UnimplementedQuotesServer struct {
 }
 
-func (UnimplementedQuotesServer) Last(context.Context, *QuoteRequest) (*QuoteReply, error) {
+func (UnimplementedQuotesServer) Last(context.Context, *QuoteRequest) (*v1.QuoteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedQuotesServer) Search(context.Context, *QuoteSearchRequest) (*QuoteReplies, error) {
+func (UnimplementedQuotesServer) Search(context.Context, *QuoteSearchRequest) (*v1.QuoteReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedQuotesServer) mustEmbedUnimplementedQuotesServer() {}

@@ -34,7 +34,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/quotesv1QuoteReply"
+              "$ref": "#/definitions/v1QuoteReply"
             }
           },
           "default": {
@@ -71,7 +71,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/quotesv1QuoteReplies"
+              "$ref": "#/definitions/v1QuoteReplies"
             }
           },
           "default": {
@@ -125,50 +125,6 @@
         "value": {
           "type": "string",
           "format": "byte"
-        }
-      }
-    },
-    "quotesv1QuoteReplies": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/quotesv1QuoteReply"
-          }
-        },
-        "total": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "quotesv1QuoteReply": {
-      "type": "object",
-      "properties": {
-        "open": {
-          "type": "number",
-          "format": "float"
-        },
-        "close": {
-          "type": "number",
-          "format": "float"
-        },
-        "low": {
-          "type": "number",
-          "format": "float"
-        },
-        "high": {
-          "type": "number",
-          "format": "float"
-        },
-        "volume": {
-          "type": "string",
-          "format": "int64"
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time"
         }
       }
     },
@@ -265,6 +221,50 @@
         "Between"
       ],
       "default": "Equal"
+    },
+    "v1QuoteReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1QuoteReply"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1QuoteReply": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "number",
+          "format": "float"
+        },
+        "close": {
+          "type": "number",
+          "format": "float"
+        },
+        "low": {
+          "type": "number",
+          "format": "float"
+        },
+        "high": {
+          "type": "number",
+          "format": "float"
+        },
+        "volume": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     }
   },
   "securityDefinitions": {
