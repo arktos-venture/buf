@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SplitsClient interface {
 	Last(ctx context.Context, in *SplitsLastRequest, opts ...grpc.CallOption) (*SplitsLastReply, error)
-	Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReply, error)
+	Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReplies, error)
 }
 
 type splitsClient struct {
@@ -39,8 +39,8 @@ func (c *splitsClient) Last(ctx context.Context, in *SplitsLastRequest, opts ...
 	return out, nil
 }
 
-func (c *splitsClient) Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReply, error) {
-	out := new(SplitsReply)
+func (c *splitsClient) Search(ctx context.Context, in *SplitsRequest, opts ...grpc.CallOption) (*SplitsReplies, error) {
+	out := new(SplitsReplies)
 	err := c.cc.Invoke(ctx, "/splits.v1.Splits/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (c *splitsClient) Search(ctx context.Context, in *SplitsRequest, opts ...gr
 // for forward compatibility
 type SplitsServer interface {
 	Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error)
-	Search(context.Context, *SplitsRequest) (*SplitsReply, error)
+	Search(context.Context, *SplitsRequest) (*SplitsReplies, error)
 	mustEmbedUnimplementedSplitsServer()
 }
 
@@ -64,7 +64,7 @@ type UnimplementedSplitsServer struct {
 func (UnimplementedSplitsServer) Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Last not implemented")
 }
-func (UnimplementedSplitsServer) Search(context.Context, *SplitsRequest) (*SplitsReply, error) {
+func (UnimplementedSplitsServer) Search(context.Context, *SplitsRequest) (*SplitsReplies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedSplitsServer) mustEmbedUnimplementedSplitsServer() {}

@@ -19,7 +19,7 @@ const _ = http.SupportPackageIsVersion1
 
 type SplitsHTTPServer interface {
 	Last(context.Context, *SplitsLastRequest) (*SplitsLastReply, error)
-	Search(context.Context, *SplitsRequest) (*SplitsReply, error)
+	Search(context.Context, *SplitsRequest) (*SplitsReplies, error)
 }
 
 func RegisterSplitsHTTPServer(s *http.Server, srv SplitsHTTPServer) {
@@ -64,14 +64,14 @@ func _Splits_Search12_HTTP_Handler(srv SplitsHTTPServer) func(ctx http.Context) 
 		if err != nil {
 			return err
 		}
-		reply := out.(*SplitsReply)
+		reply := out.(*SplitsReplies)
 		return ctx.Result(200, reply)
 	}
 }
 
 type SplitsHTTPClient interface {
 	Last(ctx context.Context, req *SplitsLastRequest, opts ...http.CallOption) (rsp *SplitsLastReply, err error)
-	Search(ctx context.Context, req *SplitsRequest, opts ...http.CallOption) (rsp *SplitsReply, err error)
+	Search(ctx context.Context, req *SplitsRequest, opts ...http.CallOption) (rsp *SplitsReplies, err error)
 }
 
 type SplitsHTTPClientImpl struct {
@@ -95,8 +95,8 @@ func (c *SplitsHTTPClientImpl) Last(ctx context.Context, in *SplitsLastRequest, 
 	return &out, err
 }
 
-func (c *SplitsHTTPClientImpl) Search(ctx context.Context, in *SplitsRequest, opts ...http.CallOption) (*SplitsReply, error) {
-	var out SplitsReply
+func (c *SplitsHTTPClientImpl) Search(ctx context.Context, in *SplitsRequest, opts ...http.CallOption) (*SplitsReplies, error) {
+	var out SplitsReplies
 	pattern := "/v1/splits"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/splits.v1.Splits/Search"))
