@@ -51,7 +51,7 @@ service Splits {
     };
   }
 
-  rpc Search (SplitsRequest) returns (SplitsReply)  {
+  rpc Search (SplitsRequest) returns (SplitsReplies)  {
     option (google.api.http) = {
         post: "/v1/splits"
         body: "*"
@@ -83,8 +83,13 @@ message SplitsLastReply {
   google.protobuf.Timestamp created_at = 3;
 }
 
-message SplitsReply {
-  repeated float from = 1;
-  repeated float to = 2;
-  repeated google.protobuf.Timestamp created_at = 3;
+message SplitsReplies {
+  message Result {
+    float from = 1;
+    float to = 2;
+    google.protobuf.Timestamp created_at = 3;
+  }
+
+  repeated Result results = 1;
+  int64 total = 2;
 }

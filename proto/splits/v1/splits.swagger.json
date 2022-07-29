@@ -33,7 +33,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SplitsReply"
+              "$ref": "#/definitions/v1SplitsReplies"
             }
           },
           "default": {
@@ -220,29 +220,35 @@
         }
       }
     },
-    "v1SplitsReply": {
+    "v1SplitsReplies": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1SplitsRepliesResult"
+          }
+        },
+        "total": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1SplitsRepliesResult": {
       "type": "object",
       "properties": {
         "from": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "to": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          }
+          "type": "number",
+          "format": "float"
         },
         "created_at": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
